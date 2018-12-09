@@ -40,6 +40,6 @@ Currently, Ogar3 listens on this port(for now):
 Please note that on some systems, you may have to run the process as root or otherwise elevate your privileges to allow the process to listen on the needed ports.
 
 ## Configuring Ogar3
-Use gameserver.ini in src to modify Ogar3's configurations field if you are hosting the server on the computer and use the gameserver.ini outside src if you host VPS or Heroku.
+Use gameserver.ini in src to modify Ogar3's configurations field.
 
 
