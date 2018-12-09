@@ -18,7 +18,7 @@ The project is nearly complete. Here's a rough list of what's been done and what
 - [ ] More features
 
 
-## How to accsess server
+## How to access server
 Go to localhost:8080 and you will see a button that says "Click here to play" click it to play you Ogar3 server you made
 ## Obtaining and Using
 If you are on Windows, Ogar3 no longer requires an installation of node.js to run. Simply launch the batch file that is included to run the server. This is a beta feature, and if there are any problems, switch back to using Ogar3 with node.js. The rest of this section is for non Windows users.
