@@ -39,6 +39,7 @@ function GameServer() {
         serverGamemode: 0, // Gamemode, 0 = FFA, 1 = Teams
         serverOldColors: 0,// If the server uses colors from the original Ogar
 		serverBots: 3, // Amount of player bots to spawn (Experimental)
+	    rainbowCells: 0,
         serverViewBase: 1024, // Base view distance of players. Warning: high values may cause lag
         borderLeft: 0, // Left border of map (Vanilla value: 0)
         borderRight: 6000, // Right border of map (Vanilla value: 11180.3398875)
