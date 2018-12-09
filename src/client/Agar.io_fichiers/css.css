@@ -1,0 +1,29 @@
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Ubuntu Bold'), local('Ubuntu-Bold'), url(https://fonts.gstatic.com/s/ubuntu/v7/0ihfXUL2emPh0ROJezvraD8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+}
+
+#chatinput {
+  width: 500px; position: absolute; bottom: 13px; right: 13px; opacity: 0.42;
+}
+
+#chatinput:focus {
+   opacity: 0.90;
+  
+}
+
+#chatbox {
+  position: absolute;
+  right: 13px;
+  width: 500px;
+  height: 200px;
+  bottom: 45px;
+  opacity: 0.5;
+}
+
+#chatbox:focus {
+  opacity: 0.90;
+  height: 42%;
+}
