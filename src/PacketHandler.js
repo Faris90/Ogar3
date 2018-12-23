@@ -71,6 +71,7 @@ PacketHandler.prototype.handleMessage = function(message) {
             }
             
             this.gameServer.gainMass(this, message);
+		    break;
         case 21: 
             // W Press - Eject mass
             this.pressW = true;
