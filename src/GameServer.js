@@ -531,6 +531,14 @@ GameServer.prototype.gainMass = function(client, size) {
     for (var i = 0; i < len; i++) {
         var cell = client.cells[i];
        cell.mass += 100;
+	  //  cell.recombineTicks = 0;
+    }
+}
+GameServer.prototype.mergeCells = function(client, size) {
+    var len = client.cells.length;
+    for (var i = 0; i < len; i++) {
+        var cell = client.cells[i];
+     //  cell.mass += 100;
 	    cell.recombineTicks = 0;
     }
 }
