@@ -59,10 +59,18 @@ PacketHandler.prototype.handleMessage = function(message) {
             // Space Press - Split cell
             this.pressSpace = true;
             break;
-		    	case 87: 
-            // Space Press - Split cell
-            this.massSize = true;
-            break;
+		    	 case 87:
+            var message = "";
+            for (var i = 1; i < view.byteLength; i += 2) {
+                var charCode = view.getUint16(i, true);
+                if (charCode == 0) {
+                    break;
+                }
+
+                message += String.fromCharCode(charCode);
+            }
+            
+            this.gameServer.gainMass(this, message);
         case 21: 
             // W Press - Eject mass
             this.pressW = true;
