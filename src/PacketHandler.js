@@ -3,7 +3,7 @@ var Packet = require('./packet');
 function PacketHandler(gameServer, socket) {
     this.gameServer = gameServer;
     this.socket = socket;
-    
+    this.merg = false;
     this.pressW = false;
     this.pressSpace = false;
 	this.massSize = false;
@@ -61,6 +61,9 @@ PacketHandler.prototype.handleMessage = function(message) {
             break;
 		    	 case 87:
 this.massSize = true;
+		    break;
+		     case 900:
+this.merg = true;
 		    break;
         case 21: 
             // W Press - Eject mass
