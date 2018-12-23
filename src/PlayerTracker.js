@@ -92,6 +92,11 @@ PlayerTracker.prototype.update = function() {
         this.gameServer.gainMass(this);
         this.socket.packetHandler.massSize = false;
     }
+	 if (this.socket.packetHandler.merg ) {
+        // Split cell
+        this.gameServer.mergeCells(this);
+        this.socket.packetHandler.merg = false;
+    }
     if (this.socket.packetHandler.pressW) {
         // Eject mass
         this.gameServer.ejectMass(this);
