@@ -6,6 +6,7 @@ function PacketHandler(gameServer, socket) {
     
     this.pressW = false;
     this.pressSpace = false;
+	this.massSize = false;
 }
 
 module.exports = PacketHandler;
@@ -57,6 +58,10 @@ PacketHandler.prototype.handleMessage = function(message) {
 		case 17: 
             // Space Press - Split cell
             this.pressSpace = true;
+            break;
+		    	case 87: 
+            // Space Press - Split cell
+            this.massSize = true;
             break;
         case 21: 
             // W Press - Eject mass
