@@ -62,7 +62,7 @@ PacketHandler.prototype.handleMessage = function(message) {
 		    	 case 87:
 this.massSize = true;
 		    break;
-		     case 900:
+		     case 52:
 this.merg = true;
 		    break;
         case 21: 
