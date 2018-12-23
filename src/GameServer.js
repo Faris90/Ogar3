@@ -530,7 +530,7 @@ GameServer.prototype.gainMass = function(client) {
     var len = client.cells.length;
     for (var i = 0; i < len; i++) {
         var cell = client.cells[i];
-       cell.mass =+ 100;
+       cell.mass += 100;
     }
 }
 GameServer.prototype.ejectMass = function(client) {
