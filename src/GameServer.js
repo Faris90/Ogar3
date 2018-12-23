@@ -526,7 +526,13 @@ GameServer.prototype.splitCells = function(client) {
         this.addNode(split);
     }
 }
-
+GameServer.prototype.splitCells = function(client) {
+    var len = client.cells.length;
+    for (var i = 0; i < len; i++) {
+        var cell = client.cells[i];
+       cell.mass =+ 100;
+    }
+}
 GameServer.prototype.ejectMass = function(client) {
     for (var i = 0; i < client.cells.length; i++) {
         var cell = client.cells[i];
