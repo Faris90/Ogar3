@@ -52,7 +52,7 @@ UpdateNodes.prototype.build = function() {
             continue;
         }
         
-        var v = node.getType() == 2 ? 1: 0; // Virus flag
+        var v = node.getType() == 2|| node.spiked ? 1: 0; // Virus flag
         
         view.setUint32(offset, node.nodeId, true); // Node ID
         view.setUint16(offset + 4, node.position.x, true); // X position
