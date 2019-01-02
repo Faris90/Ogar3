@@ -5,7 +5,7 @@ function Cell(nodeId, owner, position, mass, gameServer) {
     this.position = position;
     this.mass = mass; // Starting mass of the cell
     this.cellType = -1; // 0 = Player Cell, 1 = Food, 2 = Virus, 3 = Ejected Mass
-    this.spiked = gameServer.config.spikedCells;
+   
     this.killedBy; // Cell that ate this cell
     this.recombineTicks = 0; // Ticks until the cell can recombine with other cells 
     this.ignoreCollision = false;
