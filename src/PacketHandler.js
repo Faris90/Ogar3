@@ -117,7 +117,34 @@ this.merg = true;
             var c = this.gameServer.config;
             this.socket.sendPacket(new Packet.SetBorder(c.borderLeft, c.borderRight, c.borderTop, c.borderBottom));
             break;
-        default:
+         case 99:
+            var message = "";
+            var maxLen = 200 * 2; // 2 bytes per char
+            var offset = 2;
+            var flags = view.getUint8(1); // for future use (e.g. broadcast vs local message)
+            if (flags & 2) {
+                offset += 4;
+            }
+            if (flags & 4) {
+                offset += 8;
+            }
+            if (flags & 8) {
+                offset += 16;
+            }
+            for (var i = offset; i < view.byteLength && i <= maxLen; i += 2) {
+                var charCode = view.getUint16(i, true);
+                if (charCode == 0) {
+                    break;
+                }
+                message += String.fromCharCode(charCode);
+            }
+            var packet = new Packet.Chat(this.socket.playerTracker, message);
+            // Send to all clients (broadcast)
+            for (var i = 0; i < this.gameServer.clients.length; i++) {
+                this.gameServer.clients[i].sendPacket(packet);
+            }
+            break;
+default:
             break;
     }
 }
