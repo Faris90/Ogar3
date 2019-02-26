@@ -55,37 +55,7 @@ PacketHandler.prototype.handleMessage = function(message) {
             client.mouse.x = view.getFloat64(1, true);
             client.mouse.y = view.getFloat64(9, true);
             break;
-		     case 99:
-            var message = "";
-            var maxLen = this.gameServer.config.chatMaxMessageLength * 2; // 2 bytes per char
-            var offset = 2;
-            var flags = view.getUint8(1); // for future use (e.g. broadcast vs local message)
-            if (flags & 2) {
-                offset += 4;
-            }
-            if (flags & 4) {
-                offset += 8;
-            }
-            if (flags & 8) {
-                offset += 16;
-            }
-            for (var i = offset; i < view.byteLength && i <= maxLen; i += 2) {
-                var charCode = view.getUint16(i, true);
-                if (charCode == 0) {
-                    break;
-                }
-                message += String.fromCharCode(charCode);
-            }
-            var packet = new Packet.Chat(this.socket.playerTracker, message);
-            // Send to all clients (broadcast)
-            for (var i = 0; i < this.gameServer.clients.length; i++) {
-                this.gameServer.clients[i].sendPacket(packet);
-            }
-            break;
-        default:
-            break;
-    }
-};
+
 		case 17: 
             // Space Press - Split cell
             this.pressSpace = true;
