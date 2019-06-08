@@ -68,7 +68,8 @@ function GameServer() {
         playerMassDecayRate: 4, // Amount of mass lost per tick (Multiplier) (1 tick = 2000 milliseconds)
         playerMinMassDecay: 9, // Minimum mass for decay to occur
         leaderboardUpdateClient: 40, // How often leaderboard data is sent to the client (1 tick = 50 milliseconds)
-	    serverSubdomain: 'marios-best-game'
+	    serverSubdomain: 'marios-best-game',
+	    ejectVirus: 0
     };
     // Parse config
     this.loadConfig();
@@ -575,7 +576,11 @@ GameServer.prototype.ejectMass = function(client) {
         angle += (Math.random() * .5) - .25;
         
         // Create cell
-        ejected = new Entity.EjectedMass(this.getNextNodeId(), null, startPos, this.config.ejectMassGain);
+       if(!this.config.ejectVirus) {
+	    ejected = new Entity.EjectedMass(this.getNextNodeId(), null, startPos, this.config.ejectMassGain);
+       } else {
+      ejected = new Entity.Virus(this.getNextNodeId(), null, startPos, this.config.ejectMassGain);
+       }
         ejected.setAngle(angle);
         ejected.setMoveEngineData(this.config.ejectSpeed, 20);
         ejected.setColor(cell.getColor());
