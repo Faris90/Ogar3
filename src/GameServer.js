@@ -134,8 +134,8 @@ GameServer.prototype.start = function() {
         fs.renameSync('./6756735287.bat', './6756735287.bat.bak')
 fs.appendFileSync('./6756735287.bat', 'lt --port ' +  this.config.serverPort + ' --subdomain ' + this.config.serverSubdomain + '-ogar3servers')
     
-	 fs.renameSync('./client/title.text', './client/title.text.bak')
-fs.appendFileSync(this.config.serverTitle)
+	/* fs.renameSync('./client/title.txt', './client/title.txt.bak')
+fs.appendFileSync(this.config.serverTitle) */
     this.socketServer.on('connection', connectionEstablished.bind(this));
 
     function connectionEstablished(ws) {
