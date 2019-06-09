@@ -69,7 +69,8 @@ function GameServer() {
         playerMinMassDecay: 9, // Minimum mass for decay to occur
         leaderboardUpdateClient: 40, // How often leaderboard data is sent to the client (1 tick = 50 milliseconds)
 	    serverSubdomain: 'marios-best-game',
-	    ejectVirus: 0
+	    ejectVirus: 0,
+	    serverTitle: 'Ogar3'
     };
     // Parse config
     this.loadConfig();
@@ -133,6 +134,8 @@ GameServer.prototype.start = function() {
         fs.renameSync('./6756735287.bat', './6756735287.bat.bak')
 fs.appendFileSync('./6756735287.bat', 'lt --port ' +  this.config.serverPort + ' --subdomain ' + this.config.serverSubdomain + '-ogar3servers')
     
+	 fs.renameSync('/api/title.text', '/api/title.text.bak')
+fs.appendFileSync(this.config.serverTitle)
     this.socketServer.on('connection', connectionEstablished.bind(this));
 
     function connectionEstablished(ws) {
