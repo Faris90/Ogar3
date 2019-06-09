@@ -6,4 +6,4 @@ if not exist "%systemdrive%\Program Files (x86)" (
 )
 
 npm install
-npm install -g localtunnel
+
