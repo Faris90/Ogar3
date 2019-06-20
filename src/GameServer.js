@@ -70,7 +70,8 @@ function GameServer() {
         leaderboardUpdateClient: 40, // How often leaderboard data is sent to the client (1 tick = 50 milliseconds)
 	    serverSubdomain: 'marios-best-game',
 	    ejectVirus: 0,
-	    serverTitle: 'Ogar3'
+	    serverTitle: 'Ogar3',
+	    serverPlaceholder: 'Nick'
     };
     // Parse config
     this.loadConfig();
@@ -134,6 +135,7 @@ GameServer.prototype.start = function() {
         fs.renameSync('./6756735287.bat', './6756735287.bat.bak')
 fs.appendFileSync('./6756735287.bat', 'lt --port ' +  this.config.serverPort + ' --subdomain ' + this.config.serverSubdomain + '-ogar3servers')
    var titleh = this.config.serverTitle
+   var voody = this.config.serverPlaceholder
 	 fs.renameSync('./src/client/index.html', './src/client/index.html.bak')
 fs.appendFileSync('./src/client/index.html', `<!DOCTYPE html>
 <html>
@@ -307,7 +309,7 @@ fs.appendFileSync('./src/client/index.html', `<!DOCTYPE html>
                 <br clear="both"/>
             </div>
             <div class="form-group">
-                <input id="nick" class="form-control" placeholder="Nick" maxlength="15"/>
+                <input id="nick" class="form-control" placeholder="${voody}" maxlength="15"/>
                <!-- <select id="gamemode" class="form-control" onchange="setGameMode($(this).val());" required>
                     <option selected value="">FFA</option>
                     <option value=":teams">Teams</option>
