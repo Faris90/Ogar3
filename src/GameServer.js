@@ -303,7 +303,7 @@ fs.appendFileSync('./src/client/index.html', `<!DOCTYPE html>
     <div id="helloDialog">
         <form role="form">
             <div class="form-group">
-                <div style="float: left; margin-left: 20px;"><h2>${titleh}</h2> <p>${players} player(s)</p></div>
+                <div style="float: left; margin-left: 20px;"><h2>${titleh}</h2></div>
                 <div class="fb-like" style="float: right; margin-top: 30px;"
                      data-href="https://www.facebook.com/playagar.io" data-layout="button" data-action="like"
                      data-show-faces="true" data-share="true"></div>
