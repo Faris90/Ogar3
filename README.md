@@ -30,8 +30,8 @@ Although Ogar3 allows you to run both the Agar.io master server and game server 
 
 ```sh
 ~$ git clone git:github.com/Faris90/Ogar3.git Ogar3
-~$ npm install ./Ogar3
-~$ node Ogar3
+~$ npm install
+~$ npm start
 ```
 
 Currently, Ogar3 listens on this port(for now):
