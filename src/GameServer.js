@@ -483,7 +483,12 @@ GameServer.prototype.getRandomPosition = function() {
         y: Math.floor(Math.random() * (this.config.borderBottom - this.config.borderTop)) + this.config.borderTop
     };
 }
-
+GameServer.prototype.getCertainPosition = function(a, b) {
+    return {
+        x: a,
+        y: b
+    };
+}
 GameServer.prototype.getRandomColor = function() {
   if(this.config.serverOldColors) {
 	  var index = Math.floor(Math.random() * this.colors.length);
@@ -634,7 +639,12 @@ var f = new Entity.Food(this.getNextNodeId(), null, this.getRandomPosition(), Ma
 }
 
 GameServer.prototype.spawnPlayer = function(client) {
-    var pos = this.getRandomPosition();
+   if(this.config.serverGameMode == 2) {
+   var pos = this.getCertainPosition(0,0);
+   } else {
+   var pos = this.getRandomPosition();
+   }
+	
     var startMass = this.config.playerStartMass;
     
     // Check if there are ejected mass in the world. Does not work in team mode
