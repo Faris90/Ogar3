@@ -13,7 +13,7 @@ function BotLoader(gameServer,botAmount) {
 
  array2 = new Array("Aardvark","Addax","Alligator","Alpaca","Anteater","Antelope","Aoudad","Ape","Argali","Armadillo","Ass","Basilisk","Bat","Bear", "Beaver","Bighorn","Bison","Buffalo","Bull","Bunny","Burro","Camel","Canary","Capybara", "Cat","Chameleon","Chamois","Cheetah","Chimpanzee","Chinchilla","Chipmunk","Civet", "Coati","Colt","Cony","Cougar","Cow","Coyote","Crocodile","Crow", "Deer","Dingo","Doe","Dog","Donkey","Dormouse","Dromedary","Duckbill","Dugong","Eland","Elephant","Elk", "Ermine","Ewe","Fawn","Ferret", "Finch","Fish","Fox","Frog Gazelle","Gemsbok","Gila Monster","Giraffe Gnu","Goat","Gopher","Gorilla Grizzly Bear","Ground Hog","Guanaco","Guinea Pig","Hamster","Hare","Hartebeest","Hedgehog","Hippopotamus","Hog","Horse","Hyena","Ibex","Iguana","Impala","Jackal","Jaguar","Jerboa","Kangaroo","Kinkajou","Kitten","Koala","Koodoo","Lamb","Lemur","Leopard","Lion","Lizard","Llama","Lovebird","Lynx","Mandrill","Mare","Marmoset","Marten","Mink","Mole","Mongoose","Monkey","Moose","Mountain Goat","Mouse","Mule","Musk Deer","Musk-Ox","Muskrat","Mustang","Mynah Bird","Newt","Ocelot","Okapi","Opossum","Orangutan","Oryx","Otter","Ox","Panda","Panther","Parakeet","Parrot","Peccary","Pig","Platypus","Polar Bear","Pony","Porcupine","Porpoise","Prairie Dog","Pronghorn","Puma","Quagga","Rabbit","Raccoon","Ram","Rat","Reindeer","Reptile","Rhinoceros","Roebuck","Salamander","Seal","Sheep","Shrew","Silver Fox","Skunk","Sloth","Snake","Springbok","Squirrel","Stallion","Steer","Tapir","Tiger","Toad","Turtle","Vicuna","Walrus","Warthog","Waterbuck","Weasel","Whale","Wildcat","Wolf","Wolverine","Wombat","Woodchuck","Yak","Zebra","Zebu");
 
- strRandomizer=array1[Math.floor(Math.random()*array1.length)] + " " + array2[Math.floor(Math.random()*array2.length)] + " "
+
 
 	for (var i = 0; i < botAmount; i++) {
 		var s = new FakeSocket();
@@ -32,7 +32,7 @@ module.exports = BotLoader;
 
 BotLoader.prototype.getName = function() {
 	var name = "";
-	
+	 strRandomizer=array1[Math.floor(Math.random()*array1.length)] + " " + array2[Math.floor(Math.random()*array2.length)] + " "
 	// Picks a random name for the bot
 	if (this.randomNames.length > 0) {
 		var index = Math.floor(Math.random() * this.randomNames.length);
