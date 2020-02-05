@@ -25,6 +25,7 @@ Demo: [Click here for demo](https://ogar3-demo.herokuapp.com/)
 If you are on Windows, Ogar3 no longer requires an installation of node.js to run. Simply launch the batch file that is included to run the server. This is a beta feature, and if there are any problems, switch back to using Ogar3 with node.js. The rest of this section is for non Windows users.
 ## Server tracker
  [Server Tracker(does not work yet)](http://ogar3tracker.wdr.icu/)
+ ## Info
 As Ogar3 is written in Node.js, you must have Node.js and its "ws" module installed to use it (Unless you are on Windows). You can usually download Node using your distribution's package manager (for *nix-like systems), or from [the Node website](http://nodejs.org). To install the "ws" module that is required, open up your system command line (cmd for windows, terminal for mac) and type "npm install ws".
 
 Although Ogar3 allows you to run both the Agar.io master server and game server separately, it's currently recommended that you run both servers together until the master server is more implemented. Alternatively, you could run the game server only, and use a client-side mod to connect to the IP address of the server.
