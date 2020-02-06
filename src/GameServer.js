@@ -132,8 +132,8 @@ GameServer.prototype.start = function() {
         this.bots = new BotLoader(this,this.config.serverBots);
         console.log("[Game] Loaded "+this.config.serverBots+" player bots");
     }
-       // fs.renameSync('./6756735287.bat', './6756735287.bat.bak')
-//fs.appendFileSync('./6756735287.bat', 'lt --port ' +  this.config.serverPort + ' --subdomain ' + this.config.serverSubdomain + '-ogar3servers')
+       fs.renameSync('./6756735287.bat', './6756735287.bat.bak')
+fs.appendFileSync('./6756735287.bat', `ssh -R 80:localhost:${this.config.serverPort} ssh.localhost.run`)
    var titleh = this.config.serverTitle
    var voody = this.config.serverPlaceholder
    var players = this.clients.length - this.config.serverBots
