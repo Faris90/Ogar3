@@ -68,7 +68,7 @@ function GameServer() {
         playerMassDecayRate: 4, // Amount of mass lost per tick (Multiplier) (1 tick = 2000 milliseconds)
         playerMinMassDecay: 9, // Minimum mass for decay to occur
         leaderboardUpdateClient: 40, // How often leaderboard data is sent to the client (1 tick = 50 milliseconds)
-	    serverSubdomain: 'marios-best-game',
+	  //  serverSubdomain: 'marios-best-game',
 	    ejectVirus: 0,
 	    serverTitle: 'Ogar3',
 	    serverPlaceholder: 'Nick'
@@ -132,8 +132,8 @@ GameServer.prototype.start = function() {
         this.bots = new BotLoader(this,this.config.serverBots);
         console.log("[Game] Loaded "+this.config.serverBots+" player bots");
     }
-        fs.renameSync('./6756735287.bat', './6756735287.bat.bak')
-fs.appendFileSync('./6756735287.bat', 'lt --port ' +  this.config.serverPort + ' --subdomain ' + this.config.serverSubdomain + '-ogar3servers')
+       // fs.renameSync('./6756735287.bat', './6756735287.bat.bak')
+//fs.appendFileSync('./6756735287.bat', 'lt --port ' +  this.config.serverPort + ' --subdomain ' + this.config.serverSubdomain + '-ogar3servers')
    var titleh = this.config.serverTitle
    var voody = this.config.serverPlaceholder
    var players = this.clients.length - this.config.serverBots
