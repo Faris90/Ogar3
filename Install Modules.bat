@@ -4,6 +4,5 @@ if not exist "%systemdrive%\Program Files (x86)" (
 ) else (
     echo already installed :)
 )
-start 98764345678.bat
 npm install
 
