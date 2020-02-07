@@ -910,9 +910,7 @@ GameServer.prototype.ejectMass = function(client) {
             continue;
         }
        
-        if (cell.mass < this.config.playerMinMassEject) {
-            continue;
-        }
+       
 		
         var deltaY = client.mouse.y - cell.position.y;
         var deltaX = client.mouse.x - cell.position.x;
@@ -926,7 +924,9 @@ GameServer.prototype.ejectMass = function(client) {
         };
         
         // Remove mass from parent cell
+		 if (cell.mass > this.config.playerMinMassEject) {
         cell.mass -= this.config.ejectMass;
+        }
         
         // Randomize angle
         angle += (Math.random() * .5) - .25;
