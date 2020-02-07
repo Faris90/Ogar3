@@ -880,7 +880,8 @@ GameServer.prototype.splitCells = function(client) {
         split.setAngle(angle);
         split.setMoveEngineData(40 + (cell.getSpeed() * 4), 20);
         split.calcMergeTime(this.config.playerRecombineTime);
-    	
+    	split.firstSplit = true;
+	   setTimeout(function(){split.firstSplit = false;},1000)
         // Add to moving cells list
         this.setAsMovingNode(split);
         this.addNode(split);
@@ -910,7 +911,9 @@ GameServer.prototype.ejectMass = function(client) {
             continue;
         }
        
-       
+        if (cell.mass < this.config.playerMinMassEject) {
+            continue;
+        }
 		
         var deltaY = client.mouse.y - cell.position.y;
         var deltaX = client.mouse.x - cell.position.x;
@@ -924,9 +927,7 @@ GameServer.prototype.ejectMass = function(client) {
         };
         
         // Remove mass from parent cell
-		 if (cell.mass > this.config.playerMinMassEject) {
         cell.mass -= this.config.ejectMass;
-        }
         
         // Randomize angle
         angle += (Math.random() * .5) - .25;
@@ -1037,6 +1038,9 @@ GameServer.prototype.getCellsInRange = function(cell) {
                         continue;
                     }
                 }
+		if(cell.firstSplit){
+			continue;
+		}
                 break;
             default: 
                 break;
