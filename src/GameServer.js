@@ -796,7 +796,7 @@ GameServer.prototype.updateMoveEngine = function() {
         var list = this.getCellsInRange(cell);
         for (var j = 0; j < list.length ; j++) {
             var check = list[j];
-        	if(cell.hasAte){
+        	if(!cell.hasAte){
             // Consume effect
             check.onConsume(cell,this);
             cell.hasAte = true;
