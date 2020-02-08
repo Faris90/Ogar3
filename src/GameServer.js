@@ -796,7 +796,7 @@ GameServer.prototype.updateMoveEngine = function() {
         var list = this.getCellsInRange(cell);
         for (var j = 0; j < list.length ; j++) {
             var check = list[j];
-        	if(!cell.firstSplit){
+        	//if(!cell.firstSplit){ soon will be used
             // Consume effect
             check.onConsume(cell,this);
             /*cell.hasAte = true;
@@ -804,7 +804,7 @@ GameServer.prototype.updateMoveEngine = function() {
             // Remove cell
             check.setKiller(cell);
             this.removeNode(check); 
-		}
+		//}
         }
     }
 	// A system to move cells not controlled by players (ex. viruses, ejected mass)
