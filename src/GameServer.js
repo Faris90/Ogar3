@@ -796,10 +796,11 @@ GameServer.prototype.updateMoveEngine = function() {
         var list = this.getCellsInRange(cell);
         for (var j = 0; j < list.length ; j++) {
             var check = list[j];
-        	if(!cell.firstSplit){
+        	if(!cell.firstSplit || !cell.hasAte){
             // Consume effect
             check.onConsume(cell,this);
-            
+            cell.hasAte = true;
+			setTimeout(function(){cell.hasAte = false},100);
             // Remove cell
             check.setKiller(cell);
             this.removeNode(check); 
@@ -1039,7 +1040,7 @@ GameServer.prototype.getCellsInRange = function(cell) {
                         continue;
                     }
                 }
-		if(cell.firstSplit){
+		if(cell.firstSplit || cell.hasAte){
 			continue;
 		}
                 break;
