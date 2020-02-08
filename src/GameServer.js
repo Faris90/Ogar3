@@ -796,7 +796,7 @@ GameServer.prototype.updateMoveEngine = function() {
         var list = this.getCellsInRange(cell);
         for (var j = 0; j < list.length ; j++) {
             var check = list[j];
-        	if(!cell.firstSplit || !cell.hasAte){
+        	if(cell.hasAte){
             // Consume effect
             check.onConsume(cell,this);
             cell.hasAte = true;
@@ -884,6 +884,8 @@ GameServer.prototype.splitCells = function(client) {
         split.calcMergeTime(this.config.playerRecombineTime);
     	split.firstSplit = true;
 	   setTimeout(function(){split.firstSplit = false;},1000)
+	    split.hasAte = true;
+			setTimeout(function(){split.hasAte = false},100);
         // Add to moving cells list
         this.setAsMovingNode(split);
         this.addNode(split);
