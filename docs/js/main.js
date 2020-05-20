@@ -1,11 +1,5 @@
 (function (wHandle, wjQuery) {
-	/**
-	 * Enter url in the following format: HOST : PORT
-	 *
-	 * Example: 127.0.0.1:443
-	 *
-	 */
-	var CONNECTION_URL = window.location.hostname + ":8080";
+	var CONNECTION_URL = "agar.emupedia.net";
 	/**
 	 * Enter path to the skin image folder
 	 * To take skins from the official server enter: "http://agar.io/skins/"
@@ -338,7 +332,7 @@
 				setTimeout(attemptConnection, 483);
 			},
 			success: function () {
-				wsConnect("ws://" + CONNECTION_URL);
+				wsConnect("wss://" + CONNECTION_URL);
 			},
 			dataType: "text",
 			method: "POST",
@@ -367,7 +361,7 @@
 			ws = null
 		}
 		var c = CONNECTION_URL;
-		wsUrl = "ws://" + c;
+		wsUrl = "wss://" + c;
 		nodesOnScreen = [];
 		playerCells = [];
 		nodes = {};
@@ -1046,9 +1040,7 @@
 		ustrokecolor && (this._strokeColor = ustrokecolor)
 	}
 
-
-	var localProtocol = wHandle.location.protocol,
-		localProtocolHttps = "https:" == localProtocol;
+	var localProtocol = wHandle.location.protocol, localProtocolHttps = "https:" == localProtocol;
 	var nCanvas, ctx, mainCanvas, lbCanvas, chatCanvas, canvasWidth, canvasHeight, qTree = null,
 		ws = null,
 		nodeX = 0,
@@ -1641,26 +1633,32 @@
 				redCell.color = playerCells[0].color;
 				redCell.setName(playerCells[0].name);
 			}
+
 			ctx.clearRect(0, 0, 32, 32);
 			ctx.save();
 			ctx.translate(16, 16);
 			ctx.scale(.4, .4);
 			redCell.drawOneCell(ctx);
 			ctx.restore();
-			var favicon = document.getElementById("favicon"),
-				oldfavicon = favicon.cloneNode(true);
+
+			var favicon = document.getElementById("favicon");
+			var oldfavicon = favicon.cloneNode(true);
 			oldfavicon.setAttribute("href", favCanvas.toDataURL("image/png"));
 			favicon.parentNode.replaceChild(oldfavicon, favicon)
 		}
 
-		var redCell = new Cell(0, 0, 0, 32, "#ED1C24", ""),
-			favCanvas = document.createElement("canvas");
+		var redCell = new Cell(0, 0, 0, 32, "#ED1C24", "");
+		var favCanvas = document.createElement("canvas");
+
 		favCanvas.width = 32;
 		favCanvas.height = 32;
+
 		var ctx = favCanvas.getContext("2d");
 		renderFavicon();
+
 		setInterval(renderFavicon, 1E3);
 		setInterval(drawChatBoard, 1E3);
 	});
+
 	wHandle.onload = gameLoop
 })(window, window.jQuery);

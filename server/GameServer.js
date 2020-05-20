@@ -96,6 +96,7 @@ GameServer.prototype.start = function() {
 
 
     var http = require('http');
+    var https = require('https');
 
     var finalhandler = require('finalhandler');
     var serveStatic = require('serve-static');
@@ -103,7 +104,12 @@ GameServer.prototype.start = function() {
 
     var serve = serveStatic(__dirname);
 
-    var hserver = http.createServer(function(req, res){
+	const options = {
+		key: fs.readFileSync('./ssl/key.pem'),
+		cert: fs.readFileSync('./ssl/cert.pem')
+	};
+
+    var hserver = https.createServer(options, function(req, res){
       var done = finalhandler(req, res)
       serve(req, res, done)
     });

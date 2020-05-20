@@ -2,6 +2,7 @@
 
 # compiled output
 /tmp
+/server/ssl
 
 # dependencies
 /node_modules
