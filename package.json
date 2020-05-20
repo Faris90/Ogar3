@@ -1,5 +1,5 @@
 {
-  "name": "Ogar",
+  "name": "ogar3",
   "version": "1.0.0",
   "description": "Open source Agar.io server",
   "main": "index.js",
@@ -7,12 +7,12 @@
     "burrow": "0.0.0",
     "finalhandler": "^0.3.6",
     "serve-static": "^1.9.3",
-    "ws": "^3.3.1"
+    "ws": "latest",
+    "asyncconsole": "latest"
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node src/index.js --game",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server/index.js"
   },
   "repository": {
     "type": "git",
