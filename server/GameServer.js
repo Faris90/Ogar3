@@ -118,7 +118,7 @@ GameServer.prototype.start = function () {
 	var serve = serveStatic(__dirname);
 
 	const options = {
-		key: fs.readFileSync('./ssl/key.pem'),
+		key: fs.readFileSync('./ssl/privkey.pem'),
 		cert: fs.readFileSync('./ssl/cert.pem')
 	};
 
