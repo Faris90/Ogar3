@@ -1,5 +1,5 @@
 (function (wHandle, wjQuery) {
-	var CONNECTION_URL = "agar.emupedia.net:444";
+	var CONNECTION_URL = "agar.emupedia.net:443";
 	/**
 	 * Enter path to the skin image folder
 	 * To take skins from the official server enter: "http://agar.io/skins/"
