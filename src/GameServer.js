@@ -132,8 +132,8 @@ GameServer.prototype.start = function() {
         this.bots = new BotLoader(this,this.config.serverBots);
         console.log("[Game] Loaded "+this.config.serverBots+" player bots");
     }
-       fs.renameSync('./6756735287.bat', './6756735287.bat.bak')
-fs.appendFileSync('./6756735287.bat', `.\Downloads\ngrok-stable-windows-amd64\ngrok.exe http ${this.config.serverPort}`)
+       /*fs.renameSync('./6756735287.bat', './6756735287.bat.bak')
+fs.appendFileSync('./6756735287.bat', `.\Downloads\ngrok-stable-windows-amd64\ngrok.exe http ${this.config.serverPort}`)*/
    var titleh = this.config.serverTitle
    var voody = this.config.serverPlaceholder
    var players = this.clients.length - this.config.serverBots
