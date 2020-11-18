@@ -1,4 +1,12 @@
-start 09876543.bat
-echo press any key to publish your Ogar3 server
-pause
-start 6756735287.bat
+@echo off
+:loop
+node src/index.js
+if errorlevel 1 (
+if not errorlevel 3 (
+GOTO END;
+))
+goto loop
+:END
+echo.
+echo Press any key to exit...
+pause >nulpause
