@@ -15,8 +15,10 @@ The project is nearly complete. Here's a rough list of what's been done and what
 - [x] Leaderboard
 - [x] Team mode
 - [x] Spectate mode
-- [ ] Server tracking/publishing
 - [ ] Multi-Server support
+- [ ] Server publishing
+- [ ] Server Tracking
+
 
 
 ## How to access server
