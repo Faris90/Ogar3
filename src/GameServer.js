@@ -11,10 +11,11 @@ var Entity = require('./entity');
 var Gamemode = require('./gamemodes');
 
 // GameServer implementation
-function GameServer(mult) {
+function GameServer(mult, prt) {
     // Start msg
     console.log("[Game] Ogar - An open source Agar.io server implementation");
     this.multi = mult;
+	this.port = prt;
     this.lastNodeId = 1;
     this.clients = [];
     this.nodes = [];
@@ -108,7 +109,7 @@ GameServer.prototype.start = function() {
       serve(req, res, done)
     });
     if(this.multi){
-    hserver.listen(process.env.PORT);
+    hserver.listen(this.port);
     } else {
     hserver.listen(this.config.serverPort);
     }
