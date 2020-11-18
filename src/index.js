@@ -27,6 +27,8 @@ if (runMaster) {
 if (runGame) {
     // Initialize the game server
     var GameServer = require('./GameServer');
-    var game = new GameServer();
+    var game = new GameServer(false);
+    var game2 = new GameServer(true);
     game.start();
+    game2.start();
 }
