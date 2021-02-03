@@ -168,7 +168,7 @@ fs.appendFileSync('./src/client/index.html', `<!DOCTYPE html>
     <link id="favicon" rel="icon" type="image/png" href="favicon-32x32.png"/>
     <link href='https://fonts.googleapis.com/css?family=Ubuntu:700' rel='stylesheet' type='text/css'>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
-    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="Vector2.js"></script>
     <script src="main_out.js?542"></script>
 	<script>/ jshint -W097 /
