@@ -87,7 +87,7 @@ PlayerTracker.prototype.update = function() {
         this.gameServer.splitCells(this);
         this.socket.packetHandler.pressSpace = false;
     }
-	  if (this.socket.packetHandler.massSize ) {
+	 /* if (this.socket.packetHandler.massSize ) {
         // Split cell
         this.gameServer.gainMass(this);
         this.socket.packetHandler.massSize = false;
@@ -96,7 +96,7 @@ PlayerTracker.prototype.update = function() {
         // Split cell
         this.gameServer.mergeCells(this);
         this.socket.packetHandler.merg = false;
-    }
+    }*/
     if (this.socket.packetHandler.pressW) {
         // Eject mass
         this.gameServer.ejectMass(this);
