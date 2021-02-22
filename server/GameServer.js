@@ -728,9 +728,9 @@ GameServer.prototype.getCellsInRange = function (cell) {
 						continue;
 					}
 				}
-				if (cell.firstSplit || cell.hasAte) {
+			/*	if (cell.firstSplit || cell.hasAte) {
 					continue;
-				}
+				}*/
 				break;
 			default:
 				break;
