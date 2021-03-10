@@ -269,6 +269,9 @@
 					e.preventDefault();
 					if (!isSpectating) setNick(document.getElementById('nick').value);
 				}
+			}).off('paste').on('paste', function(e) {
+				e.preventDefault();
+				return false;
 			});
 		</script>
 	</body>
