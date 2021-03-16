@@ -10,7 +10,7 @@
      * Enter path to the skin image folder
      * To take skins from the official server enter: "http://agar.io/skins/"
      */
-    var SKIN_URL = "/skins/";//skins folder
+    var SKIN_URL = "https://emupedia.net/emupedia-game-agar.io/skins/";//skins folder
 
 
     var touchX, touchY,
