@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base >
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Play with your friends! Create your own private room and invite friends!">
+<meta name="keywords" content="agario, agar, io, cell, cells, virus, bacteria, blob, game, games, web game, html5, fun, flash">
+<meta name="robots" content="index, follow">
+<meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta property="fb:app_id" content="677505792353827"/>
+<meta property="og:title" content="Agar.io Party Mode"/>
+<meta property="og:description" content="Play with your friends! Create your own private room and invite friends!"/>
+<meta property="og:url" content="index.html"/>
+<meta property="og:image" content="../../img/1200x630.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:type" content="website"/>
+<title>Agar.io Party Mode</title>
+<link rel="canonical" href="index.html"/>
+<link id="favicon" rel="icon" type="image/png" href="../../..//favicon-32x32.png"/>
+<script type='text/javascript'>
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+window['googletag'] = googletag;
+(function() {
+var gads = document.createElement('script');
+gads.async = true;
+gads.type = 'text/javascript';
+var useSSL = 'https:' == document.location.protocol;
+gads.src = (useSSL ? 'https:' : 'http:') + 
+'//www.googletagservices.com/tag/js/gpt.js';
+var node = document.getElementsByTagName('script')[0];
+node.parentNode.insertBefore(gads, node);
+})();
+</script>
+<script type="text/javascript">
+
+window["isChrome"] = /chrome/.test( navigator.userAgent.toLowerCase() );
+window['ASSETS_ROOT'] = "http://../";
+
+function getUrlVars()
+{
+	var vars = [], hash;
+	var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+	for(var i = 0; i < hashes.length; i++)
+	{
+		hash = hashes[i].split('=');
+		vars.push(hash[0]);
+		vars[hash[0]] = hash[1];
+	}
+	return vars;
+}
+
+var queryVars = getUrlVars();
+if(queryVars['v']!=null)
+{
+	window.location = "/v"+queryVars['v'];
+}
+
+var rpx_params = {
+	kw: '',
+	visitor: {},
+	inventory: {}
+};
+
+var hasBottomAd = false;
+var isInFacebook = window.location.search.indexOf('fb') != -1;
+if(window.innerHeight > 810 && !isInFacebook){
+	hasBottomAd = true;
+}
+
+window.___gcfg = {
+	lang: 'en-US',
+	parsetags: 'explicit'
+  };
+</script>
+<link href='https://fonts.googleapis.com/css?family=Ubuntu:700' rel='stylesheet' type='text/css'>
+<link href="../../..//css/master.css" rel="stylesheet" type='text/css'>
+<script src="../../..//js/master.js"></script>
+<script src="../../..//environmente842.js?v=670"></script>
+<script src="../../..//i18ne842.js?v=670"></script>
+<script src="../../..//main_oute842.js?v=670"></script>
+<script type="text/javascript" src="../../..//mc/agarioe842.js?v=670"></script>
+</head>
+<body>
+<main style="display:none">
+<h1>Party Mode</h1>
+<p>Play with your friends! Create your own private room and invite friends!</p>
+<script type="text/javascript">
+var presetGameMode = ":party";
+</script>
+ 
+</main>
+ 
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "../../../connect.facebook.net/en_US/sdk.js";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+ 
+<div id="debug-overlay"></div>
+<div id="openfl-content"></div>
+<div id="openfl-overlay" class="disabler"></div>
+<a id="modal-payment-link" class="xsolla_container" href="http://../pay/"></a>
+<script src="../../..//js/ada58.js?a&amp;ad_box_"></script>
+ 
+<div id="oferwallContainer" style="position:absolute;width:100%;height:100%;display:none;z-index: 310;">
+<div class="disabler"></div>
+<div class="agario-panel offerwall">
+<div style="position: absolute; right: 10px; top: 4px;">
+<button type="button" class="close" onclick="closeOfferwall(); return false;">×</button>
+</div>
+<div id="offerwallIframeWrapper">
+<iframe id="offerwallIframe" frameborder="0" src="#"></iframe>
+</div>
+</div>
+</div>
+ 
+<div id="videoContainer" style="position:absolute;width:100%;height:100%;display:none;z-index: 320;">
+<div class="disabler"></div>
+<div class="agario-panel" style="z-index: 301;position: absolute;width: 640px; height: 350px;transform: translate(-50%,-50%);left: 50%;top: 50%;">
+<div style="position: absolute; width:700px;right: 10px; top: 4px;">
+<button type="button" class="close" onclick="closeVideoContainer(); return false;">×</button>
+</div>
+<div id="ssaAd" style="z-index:9999;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);"></div>
+</div>
+</div>
+<div id="overlays" style="display:none; position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 200;">
+<div id="controller_alert_connected" class="gamepad_alert" style="display:none">
+<div class="wrapper">
+<span class="controller_icon">&nbsp;</span>
+<span class="alert_text">Controller Connected</span>
+</div>
+</div>
+<div id="controller_alert_disconnected" class="gamepad_alert" style="display:none">
+<div class="wrapper">
+<span class="controller_icon">&nbsp;</span>
+<span class="alert_text">Controller Disconnected</span>
+</div>
+</div>
+<div id="helloContainer" data-logged-in="0" data-has-account-data="0" data-party-state="0" data-results-state="0" data-gamemode="">
+<div class="side-container left-container">
+<div class="agario-panel agario-side-panel agario-profile-panel">
+<div class="clearfix" style="margin-bottom: 16px;">
+<img class="agario-profile-picture" src="../../..//mc/img/profilepic_guest.png"/>
+<div class="agario-profile-name-container">
+<div class="agario-wallet-container">
+<span class="agario-wallet-label">100</span>
+<img src="../../..//mc/img/currency_icon.png" class="agario-wallet-currency"/>
+<div class="agario-wallet-plus">
+<span>+</span>
+</div>
+</div>
+<div class="agario-profile-name">Guest</div>
+</div>
+</div>
+<div style="position: relative; margin-bottom: -15px;" class="clearfix">
+<div class="agario-exp-bar progress">
+<span class="progress-bar-text">0/50</span>
+<div class="progress-bar progress-bar-striped" style="width: 0%;"></div>
+</div>
+<div class="progress-bar-border"></div>
+<div class="progress-bar-star">1</div>
+</div>
+</div>
+ 
+<div class="agario-loggedout-panel">
+<img src="../../..//img/login-perks.png">
+</div>
+ 
+<div class="agario-panel agario-side-panel agario-panel-freecoins" style="position:relative">
+<div id="coins-blocker" class="shop-blocker"></div>
+<button id="freeCoins" onclick="MC.showFreeCoins(); return false;" class="btn btn-primary btn-success btn-freecoins" style="line-height: 24px;" data-itr="menu_main_free_coins">
+</button>
+<br clear="both"/>
+</div>
+ 
+ 
+<div class="agario-panel agario-side-panel agario-shop-panel" style="position:relative;">
+<div id="blocker" class="shop-blocker"><span class="outlined-text" style="display: block;top:100px" data-itr="connecting"></span></div>
+<div class="form-group" id="agario-second-buttons">
+<button id="openShopBtn" onclick="MC.openShop(); return false;" class="btn btn-primary btn-shop" style="line-height: 24px;" data-itr="Shop">
+</button>
+<br clear="both"/>
+</div>
+<div class="shop-left-container">
+<div id="skinButton" class="circle bordered" style="cursor:pointer; height:92px">
+<div class="circle big green" style="top:75px;"><span class="outlined-text plus-text" style="cursor:pointer;line-height: 26px;">+</span></div>
+<img class="circle bordered" src="#" width="96" height="96" style="height: 96px; border: 3px solid rgb(131, 131, 131);display:none;">
+<span id="skinLabel" class="outlined-text" style="display: block;" data-itr="main_menu_skins"></span>
+</div>
+</div>
+<div class="vertical-line" style="min-height:115px;"></div>
+<div class="shop-right-container">
+<div style="position:relative">
+<div id="boostButton" class="shop-power">
+<div class="circle small green"><span class="outlined-text" style="cursor:pointer">+</span></div>
+<img src="../../..//mc/img/xpboost_3x_shop.png" style="vertical-align:top; width:60px; display:block;margin:auto;"/>
+<span class="timer"></span>
+</div>
+<div id="massButton" class="shop-power">
+<div class="circle small green"><span class="outlined-text" style="cursor:pointer">+</span></div>
+<img src="../../..//mc/img/massboost_3x_shop.png" style="vertical-align:top; width:60px; display:block;margin:auto;"/>
+<span class="timer"></span>
+</div>
+</div>
+</div>
+<span class="text-muted"></span>
+<button id="retryBtn" onclick="MC.retryConnection(); return false;" class="btn btn-primary btn-retry" style="display:none;margin-top:10px;" data-itr="Retry"></button>
+</div>
+</div>
+<div id="mainPanel" class="agario-panel">
+<div role="form" novalidate>
+<div class="form-group clearfix">
+<div style="float: left; margin-left: 20px;"><h2>Agar.io</h2></div>
+<div style="float: right; margin-top: 10px; height: 40px;">
+<div id="agarYoutube">
+<div class="g-ytsubscribe" data-channelid="UCC6hurPo_LxL7C0YFYgYnIw" data-layout="default" data-count="default"></div>
+</div>
+<div class="clearfix">
+<div class="fb-like pull-right" data-href="https://www.facebook.com/playagar.io" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+</div>
+</div>
+</div>
+<div class="form-group clearfix">
+<input id="nick" class="form-control" placeholder="Nick" maxlength="15" autofocus />
+<select id="gamemode" class="form-control" onchange="MC.setGameMode($(this).val());" required>
+<option value="" data-itr="gamemode_ffa"></option>
+<option value=":teams" data-itr="gamemode_teams"></option>
+<option value=":experimental" data-itr="gamemode_experimental"></option>
+<option value=":party" selected="selected" data-itr="party"></option>
+</select>
+</div>
+<div id="locationUnknown">
+<select id="region" class="form-control" onchange="MC.setRegion($('#region').val());" required>
+<option selected disabled value="" data-itr="region_select"></option>
+<option value="US-Atlanta" data-itr="region_north_america"></option>
+<option value="BR-Brazil" data-itr="region_south_america"></option>
+<option value="EU-London" data-itr="region_europe"></option>
+<option value="RU-Russia" data-itr="region_russia"></option>
+<option value="TK-Turkey" data-itr="region_turkey"></option>
+<option value="JP-Tokyo" data-itr="region_east_asia"></option>
+<option value="CN-China" data-itr="region_china"></option>
+<option value="SG-Singapore" data-itr="region_oceania"></option>
+</select>
+</div>
+<div class="form-group" id="agario-main-buttons">
+<div class="row">
+<button type="button" onclick="toggleSettings(); return false;" class="btn btn-info btn-settings"><i class="glyphicon glyphicon-cog"></i>
+</button>
+<button disabled type="submit" onclick="MC.setNick(document.getElementById('nick').value); return false;" class="btn btn-play btn-primary btn-needs-server" data-itr="play"></button>
+<button disabled type="submit" onclick="MC.setNick(document.getElementById('nick').value); return false;" class="btn btn-play-guest btn-success btn-needs-server" data-itr="play_as_guest"></button>
+<button disabled type="submit" onclick="toggleSocialLogin(); return false" class="btn btn-warning btn-login-play btn-needs-server" data-itr="login_and_play"></button>
+</div>
+<div id="socialLoginContainer" style="display:none;">
+<div class="row">
+<button onclick="facebookLogin(); return false;" class="btn btn-primary btn-login btn-fb">
+<span class="social social-facebook fb-icon"></span>
+<span class="btn-text" data-itr="menu_login_facebook"></span>
+</button>
+</div>
+<div class="row">
+<button id="gplusLogin" class="btn btn-primary btn-login btn-gplus">
+<span class="gplus-icon"></span>
+<span class="btn-text" data-itr="menu_login_google"></span>
+</button>
+</div>
+</div>
+</div>
+<div id="settings" class="checkbox" style="display:none;">
+<div style="float: left; width: 200px;">
+<div id="locationKnown"></div>
+<div id="settingsChoice" style="margin-top:6px">
+<select id="quality" class="form-control" onchange="MC.setQuality($('#quality').val());" required>
+<option disabled value="" data-itr="page_graphics_title"></option>
+<option value="Retina" selected data-itr="page_graphics_retina"></option>
+<option value="High" selected data-itr="page_graphics_high"></option>
+<option value="Medium" data-itr="page_graphics_medium"></option>
+<option value="Low" data-itr="page_graphics_low"></option>
+</select>
+</div>
+</div>
+<div style="float: right; width: 120px;">
+<button disabled class="btn btn-warning btn-spectate btn-needs-server" data-itr="spectate"></button>
+<button onclick="logout(); return false;" class="btn btn-danger btn-logout" data-itr="logout"></button>
+</div>
+<br clear="both"/>
+<div id="options" style="margin-top: 6px; font-size: 12px; display:flex; flex-wrap: wrap; justify-content: center">
+<label><input type="checkbox" id="noSkins"><span data-itr="option_no_skins"></span></label>
+<label><input type="checkbox" id="noNames"><span data-itr="option_no_names"></span></label>
+<label><input type="checkbox" id="noColors"><span data-itr="option_no_colors"></span></label>
+<label><input type="checkbox" id="showMass"><span data-itr="option_show_mass"></span></label>
+<label><input type="checkbox" id="darkTheme"><span data-itr="option_dark_theme"></span></label>
+<label><input type="checkbox" id="skipStats"><span data-itr="option_skip_stats"></span></label>
+</div>
+<div id="tags-container">
+<span id="user-id-tag"></span>
+<span id="version-tag"></span>
+</div>
+</div>
+</div>
+<div id="instructions">
+<hr style="margin-top:10px;margin-bottom:10px;"/>
+<center><span class="text-muted">
+<span data-itr="instructions_mouse"></span><br/>
+<span data-itr="instructions_space"></span><br/>
+<span data-itr="instructions_w"></span><br/>
+</span></center>
+</div>
+<hr style="margin-top:10px;margin-bottom:10px;"/>
+<center>
+<small class="text-muted" style="display: block; margin-bottom: 16px;" data-itr="advertisement"></small>
+<div id="adbg" style="margin-bottom: 10px; width: 300px; height: 250px;">
+<div id="g300x250" style="display:block;"></div>
+<div id="a300x250" style="display:none;"></div>
+</div>
+</center>
+</div>
+<div id="stats" style="display: none;" class="agario-panel">
+<h2><center>Match Results</center></h2>
+<canvas id="statsGraph" width="350" height="230"></canvas>
+<div id="statsPelletsContainer">
+<span id="statsText" class="stats-food-eaten"></span>
+<span id="statsSubtext" data-itr="stats_food_eaten"></span>
+</div>
+<div id="statsHighestMassContainer">
+<span id="statsText" class="stats-highest-mass"></span>
+<span id="statsSubtext" data-itr="stats_highest_mass"></span>
+</div>
+<div id="statsTimeAliveContainer">
+<span id="statsText" class="stats-time-alive"></span>
+<span id="statsSubtext" data-itr="stats_time_alive"></span>
+</div>
+<div id="statsTimeLeaderboardContainer">
+<span id="statsText" class="stats-leaderboard-time"></span>
+<span id="statsSubtext" data-itr="stats_leaderboard_time"></span>
+</div>
+<div id="statsPlayerCellsEatenContainer">
+<span id="statsText" class="stats-cells-eaten"></span>
+<span id="statsSubtext" data-itr="stats_cells_eaten"></span>
+</div>
+<div id="statsTopPositionContainer">
+<span id="statsText" class="stats-top-position">?</span>
+<span id="statsSubtext" data-itr="stats_top_position"></span>
+</div>
+<hr style="position:absolute;bottom:370px;width:100%;margin:0px;"/>
+<div id="socialStats" style="position: absolute;bottom: 325px;left: 25px;right:25px;">
+<button id="gPlusShare" style="width:49%;float:left;display:none" class="g-interactivepost btn btn-primary btn-gplus" data-contenturl="http://agar.io" data-clientid='' data-cookiepolicy="http://agar.io" data-prefilltext="" data-calltoactionlabel="BEAT" data-calltoactionurl="../../index.html">
+<span class="gplus-icon"></span>
+<span class="btn-text" data-itr="share"></span>
+</button>
+<button id="fbShare" class="btn btn-primary btn-fb" onclick="fbShareStats(); return false" style="position:relative;width:49%;float:left;">
+<span class="social social-facebook fb-icon"></span>
+<span class="btn-text" data-itr="share"></span>
+</button>
+<button class="btn btn-primary btn-twitter" onclick="twitterShareStats(); return false" style="position:relative;width:49%;float:right">
+<span class="twitter-icon"></span>
+<span class="btn-text" data-itr="share"></span>
+</button>
+</div>
+<button id="statsContinue" class="btn btn-primary" data-itr="continue"></button>
+<hr style="position:absolute;bottom:255px;width:100%;"/>
+<div id="s300x250"></div>
+</div>
+<div class="side-container right-container">
+<div class="agario-party">
+<div class="agario-panel agario-side-panel agario-party-0">
+<h4><center data-itr="party"></center></h4>
+<div style="margin-bottom: 12px;" data-itr="party_description"></div>
+<div class="clearfix" style="margin: 0px -10px 0px -10px;">
+<button id="create-party-btn" class="btn btn-primary " style="width: 102.5px; float: left;" data-itr="create_party"></button>
+<button id="pre-join-party-btn" class="btn btn-primary" style="width: 102.5px; float: right;" data-itr="join_party"></button>
+</div>
+</div>
+<div class="agario-panel agario-side-panel agario-party-1">
+<h4><center data-itr="party"></center></h4>
+<div style="margin-bottom: 12px;" data-itr="create_party_instructions"></div>
+<div class="clearfix">
+<input type="text" value="??????" readonly class="partyToken form-control" style="cursor: text; width: 130px; float: left; border-radius: 4px 0px 0px 4px;"/>
+<button class="btn btn-primary copy-party-token" style="float: right; width: 60px; border-radius: 0px 4px 4px 0px;">Copy</button>
+</div>
+<div class="copyWarning" style="font-size:11px"></div>
+</div>
+<div class="agario-panel agario-side-panel agario-party-2">
+<h4><center data-itr="party"></center></h4>
+<div style="margin-bottom: 12px;" data-itr="join_party_instructions"></div>
+<input id="joinPartyToken" type="text" value="" class="form-control"/>
+<div class="clearfix" style="margin: 10px -10px 0px -10px;">
+<button id="join-party-btn" class="btn btn-primary" style="width: 210px; float: right;" data-itr="join_party"></button>
+</div>
+</div>
+<div class="agario-panel agario-side-panel agario-party-3" style="padding: 0px; overflow: hidden; position: relative;">
+<canvas width="220" height="100" class="cell-spinner" data-size="26"></canvas>
+<div class="creating-party-text" data-itr="creating_party"></div>
+</div>
+<div class="agario-panel agario-side-panel agario-party-4" style="padding: 0px; overflow: hidden; position: relative;">
+<canvas width="220" height="100" class="cell-spinner" data-size="26"></canvas>
+<div class="creating-party-text" data-itr="joining_party"></div>
+</div>
+<div class="agario-panel agario-side-panel agario-party-5">
+<h4><center data-itr="party"></center></h4>
+<div style="margin-bottom: 12px;" data-itr="joined_party_instructions"></div>
+<div class="clearfix">
+<input type="text" value="??????" readonly class="partyToken form-control" style="cursor: text; width: 125px; float: left;"/>
+<button class="btn btn-primary copy-party-token" style="float: right; width: 60px;">Copy</button>
+</div>
+<div class="copyWarning" style="font-size:11px"></div>
+</div>
+<div class="agario-panel agario-side-panel agario-party-6">
+<h4><center data-itr="party"></center></h4>
+<div style="margin-bottom: 12px;" data-itr="party_join_error"></div>
+<div class="clearfix" style="margin: 10px -10px 0px -10px;">
+<button class="btn btn-primary btn-block" onclick="$('#helloContainer').attr('data-party-state', '0');" data-itr="back_button"></button>
+</div>
+</div>
+<div style="position: absolute; right: 10px; top: 4px;">
+<button id="cancel-party-btn" type="button" class="close">&times;</button>
+</div>
+</div>
+<div class="agario-promo" style="padding: 0px; width: 293px; height: 366px; position: relative; background-image: url(../../..//img/promo_hoc.png);">
+<div style="text-align: center; position: absolute; bottom: 10px; width: 100%;">
+<a href="https://itunes.apple.com/app/agar.io/id995999703?mt=8&amp;at=1l3vajp" target="_blank" onclick="ga('send', 'event', 'MobilePromo', 'AppStore');"><img src="../../..//img/appstore.png" alt="Download on the App Store"/></a>
+<a href="https://play.google.com/store/apps/details?id=com.miniclip.agar.io" target="_blank" onclick="ga('send', 'event', 'MobilePromo', 'PlayStore');"><img src="../../..//img/google_play.png" alt="Get it on Google play"/></a>
+</div>
+</div>
+<div id="agario-web-incentive" style="display:none;padding: 0px; width: 293px; height: 396px; position: relative; background-image: url(../../..//img/incentive_hoc.png);">
+<div style="text-align: center; position: absolute; bottom: 10px; width: 100%;">
+<a href="https://itunes.apple.com/app/agar.io/id995999703?mt=8&amp;at=1l3vajp" target="_blank" onclick="ga('send', 'event', 'MobilePromo', 'AppStore');"><img src="../../..//img/appstore.png" alt="Download on the App Store"/></a>
+<a href="https://play.google.com/store/apps/details?id=com.miniclip.agar.io" target="_blank" onclick="ga('send', 'event', 'MobilePromo', 'PlayStore');"><img src="../../..//img/google_play.png" alt="Get it on Google play"/></a>
+</div>
+</div>
+</div>
+</div>
+<script>
+	if(hasBottomAd){
+		document.write('<div id="adsBottom" style="z-index: 200;display:block;"><div id="adsBottomInner"><div id="g728x90"></div><div id="a728x90"></div></div></div>');
+	}
+
+	</script>
+<footer class="tosBox left">
+<center>
+<a href="http://../ffa/" class="text-muted" data-itr="gamemode_ffa" title="Free-for-all action: eat other players to be the biggest cell on the block!"></a>
+|
+<a href="http://../teams/" class="text-muted" data-itr="gamemode_teams" title="Join up for team mode group action: co-operate, compete, eat!"></a>
+|
+<a href="http://../experimental/" class="text-muted" data-itr="gamemode_experimental" title="Experimental game mode with a strange new food-producing virus."></a>
+|
+<a href="http://../party/" class="text-muted" data-itr="party" title="Play with your friends! Create your own private room and invite friends!"></a>
+</center>
+</footer>
+<footer class="tosBox right">
+<center>
+<a href="http://../privacy.txt" class="text-muted" data-itr="privacy_policy"></a>
+|
+<a href="http://../terms.txt" class="text-muted" data-itr="terms_of_service"></a>
+|
+<a href="http://../changelog.txt" class="text-muted" data-itr="changelog"></a>
+</center>
+</footer>
+</div>
+<div id="connecting" style="display: none; position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 100;">
+<div class="connecting-panel" style="width: 350px; background-color: #FFFFFF; margin: auto auto auto -175px; border-radius: 15px; padding: 5px 15px 5px 15px;">
+<h2 data-itr="connecting"></h2>
+<p data-itr="connect_help"></p>
+</div>
+</div>
+<button id="externalGShare" style="display:none" class="g-interactivepost" data-contenturl="http://agar.io" data-clientid='' data-cookiepolicy="http://agar.io" data-prefilltext="" data-calltoactionlabel="BEAT" data-calltoactionurl="../../index.html">
+</button>
+<canvas id="canvas" width="800" height="600"></canvas>
+<script src="../../..//agario.core.js" async></script>
+<div style="font-family:'Ubuntu'">&nbsp;</div>
+ 
+<script type="text/javascript">
+var hasAdblock = (document.getElementById("tester") == null);
+
+if(hasAdblock){
+	$('#adbg').css('background-image', "url('../../..//blocker.png')");
+}
+
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','../../../www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-62402209-1', 'auto');
+ga('send', 'pageview');
+ga('send', 'event', 'HasAdblock', hasAdblock ? 'Yes' : 'No', {'nonInteraction': 1});
+</script>
+ 
+<script type="text/javascript">
+(function(d,t){
+var g = d.createElement(t), s = d.getElementsByTagName(t)[0]; g.async = true;
+g.src = ('https:' != location.protocol ? 'http://jsd.supersonicads.com' :
+'https://a248.e.akamai.net/ssastatic.s3.amazonaws.com') +
+'/inlineDelivery/delivery.min.gz.js';
+s.parentNode.insertBefore(g,s);
+}(document,'script'));
+
+var ssa_json = {
+	'applicationKey':  EnvConfig['supersonic_app_key'],
+	'onCampaignsReady': window['supersonicAds']['BrandConnectReadyEvent'], // for auto popup use the string: 'popup',
+	'onCampaignsDone': window['supersonicAds']['BrandConnectDoneEvent'], // will be fired when user completed all the available offers
+	'onCampaignOpen': window['supersonicAds']['BrandConnectOpenEvent'], // will be fired every time an offer was opened
+	'onCampaignClose': window['supersonicAds']['BrandConnectCloseEvent'], // will be fired every time an offer was closed
+	'onCampaignCompleted': window['supersonicAds']['BrandConnectCompletedEvent'] // will be fired every time an offer was completed
+};
+</script>
+<script>
+
+$(function(){
+
+	var MC = new MiniclipAPI("openfl-content","openfl-overlay");
+	MC.loadEnvironment(EnvConfig);
+	lime.embed ("openfl-content", 880, 1024, "transparent", "http://../mc/");
+
+	window["MC"]=MC;
+	window.MC = window.MC || {};
+})
+
+function resize(){
+	var canvas = document.getElementById('canvas');
+	canvas.width = window.innerWidth * 1;
+	canvas.height = window.innerHeight * 1;
+}
+	
+resize();
+
+</script>
+</body>
+</html>

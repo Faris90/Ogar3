@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:91edf80d434fad93cf9dad411736d9e4:ace1b29db0346686e9164a204ace91cb:5add28dfee4cda28600f2c8d13916e4d$ -->
+<TextureAtlas imagePath="main_shop.png">
+    <SubTexture name="Close" x="798" y="243" width="18" height="17" frameX="-1" frameY="-3" frameWidth="20" frameHeight="20"/>
+    <SubTexture name="Close_disabled" x="817" y="277" width="15" height="14" frameX="-3" frameY="-3" frameWidth="20" frameHeight="20"/>
+    <SubTexture name="Exp_Star" x="669" y="484" width="124" height="117" frameX="-1" frameY="-4" frameWidth="125" frameHeight="125"/>
+    <SubTexture name="appstore" x="351" y="758" width="124" height="47"/>
+    <SubTexture name="arrow" x="799" y="41" width="24" height="119"/>
+    <SubTexture name="back_button" x="587" y="738" width="39" height="39"/>
+    <SubTexture name="coins_button" x="401" y="2" width="396" height="239"/>
+    <SubTexture name="currency_icon" x="799" y="222" width="19" height="19"/>
+    <SubTexture name="fast_play" x="798" y="262" width="18" height="13"/>
+    <SubTexture name="fb_icon" x="822" y="188" width="9" height="18"/>
+    <SubTexture name="freecoins_video" x="799" y="2" width="33" height="37"/>
+    <SubTexture name="giant_coin" x="2" y="484" width="160" height="155"/>
+    <SubTexture name="gifts_icon" x="2" y="641" width="223" height="151"/>
+    <SubTexture name="google_play" x="477" y="758" width="108" height="47"/>
+    <SubTexture name="gplus_icon" x="799" y="207" width="21" height="13"/>
+    <SubTexture name="hint" x="799" y="162" width="24" height="24"/>
+    <SubTexture name="locket" x="798" y="277" width="17" height="23"/>
+    <SubTexture name="mass_button" x="2" y="243" width="396" height="239"/>
+    <SubTexture name="massboost_2x_shop" x="227" y="630" width="163" height="126"/>
+    <SubTexture name="massboost_3x_shop" x="392" y="630" width="162" height="126"/>
+    <SubTexture name="multiplier_stamp" x="227" y="758" width="70" height="55"/>
+    <SubTexture name="not_for_guests" x="164" y="484" width="329" height="144"/>
+    <SubTexture name="play" x="820" y="222" width="11" height="13"/>
+    <SubTexture name="progress_striped" x="2" y="794" width="140" height="26"/>
+    <SubTexture name="skins_button" x="2" y="2" width="397" height="239"/>
+    <SubTexture name="sticker" x="299" y="758" width="50" height="49"/>
+    <SubTexture name="twitter_icon" x="799" y="188" width="21" height="17"/>
+    <SubTexture name="xp_button" x="400" y="243" width="396" height="239"/>
+    <SubTexture name="xpboost_2x_shop" x="495" y="484" width="172" height="125"/>
+    <SubTexture name="xpboost_3x_shop" x="556" y="611" width="171" height="125"/>
+</TextureAtlas>

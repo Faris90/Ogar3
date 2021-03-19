@@ -1,0 +1,13 @@
+{
+  "name": "OgarUl-Client",
+  "version": "1.0.0",
+  "description": "Client",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.12.4",
+    "socket.io": "^1.3.5",
+    "socket.io-client": "^1.3.5",
+    "webpack": "^1.10.1",
+    "webpack-stream": "^2.0.0"
+  }
+}
