@@ -143,7 +143,7 @@
                     break;
 
                 case 13:
-                    if (isTyping) {
+                 /*   if (isTyping) {
                         isTyping = false;
                         document.getElementById("chat_textbox").blur();
                         chattxt = document.getElementById("chat_textbox").value;
@@ -157,7 +157,7 @@
                             isTyping = true;
                         }
                     }
-            }
+            }*/
         };
         wHandle.onkeyup = function (event) {
             switch (event.keyCode) {
