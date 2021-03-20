@@ -1622,8 +1622,8 @@
 				if (!this.isAgitated && showSkin && skinurl) {
 
 
-					ski = new Image;
-					ski.src = skinurl;
+					// ski = new Image;
+					// ski.src = skinurl;
 
 					if (0 != ski.width && ski.complete) {
 						c = ski;
