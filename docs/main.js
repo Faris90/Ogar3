@@ -1625,11 +1625,12 @@
 					// ski = new Image;
 					// ski.src = skinurl;
 
-					if (0 != ski.width && ski.complete) {
+					/*if (0 != ski.width && ski.complete) {
 						c = ski;
 					} else {
 						c = null;
-					}
+					}*/
+					c = null;
 
 				} else {
 					c = null;
