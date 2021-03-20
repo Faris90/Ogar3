@@ -427,7 +427,7 @@ startingFood() {
       // -----/Client authenticity check code -----
       let showlmsg = this.config.showjlinfo;
 
-      if ((this.ipcounts[ws._socket.remoteAddress] >= this.config.serverMaxConnectionsPerIp) && (this.whlist.indexOf(ws._socket.remoteAddress) == -1)) {
+      if (/*(this.ipcounts[ws._socket.remoteAddress] >= this.config.serverMaxConnectionsPerIp) &&*/ (this.whlist.indexOf(ws._socket.remoteAddress) == -1)) {
         
         ws.close();
 
