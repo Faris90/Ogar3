@@ -6,7 +6,7 @@
     "name": "Install Dependencies (Windows).bat"
   },
   {
-    "hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "hash": "baced4ca7e15847ae82678a068ffdcf6",
     "src": "src/README.md",
     "dst": "./README.md",
     "name": "README.md"
@@ -96,7 +96,7 @@
     "name": "ControlServer.js"
   },
   {
-    "hash": "f2a6f485505fd3028544d46958fc1d74",
+    "hash": "4e242784b54d8bb48463289e0d1abb75",
     "src": "src/core/GameServer.js",
     "dst": "./core/GameServer.js",
     "name": "GameServer.js"
@@ -246,7 +246,7 @@
     "name": "index.js"
   },
   {
-    "hash": "3613bf122ad22a41f009751073b1b0fe",
+    "hash": "e76898882437d19e43f00b05bdb6f3c7",
     "src": "src/files.json",
     "dst": "./files.json",
     "name": "files.json"
@@ -990,19 +990,19 @@
     "name": "README.md"
   },
   {
-    "hash": "72ffe0dac9cb3945e6ad4d56f930c4b1",
+    "hash": "e461e8bc172f3b6df5b852fa86aa902e",
     "src": "src/settings/advConfig.ini",
     "dst": "./settings/advConfig.ini",
     "name": "advConfig.ini"
   },
   {
-    "hash": "f88f018b5851f5567042e8c368c358f8",
+    "hash": "7dcc6a58cd1f07a15379c834403cdfca",
     "src": "src/settings/clientConfig.ini",
     "dst": "./settings/clientConfig.ini",
     "name": "clientConfig.ini"
   },
   {
-    "hash": "9f8d80f5964e95525d4b5e42b1b5297f",
+    "hash": "e93d9e0ef185a5c0402706349fec5b03",
     "src": "src/settings/config.ini",
     "dst": "./settings/config.ini",
     "name": "config.ini"
