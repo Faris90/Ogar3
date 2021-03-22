@@ -1323,8 +1323,8 @@
 		splitIcon = new Image,
 		ejectIcon = new Image,
 		noRanking = false;
-	splitIcon.src = "split.png";
-	ejectIcon.src = "feed.png";
+	splitIcon.src = "img/split.png";
+	ejectIcon.src = "img/feed.png";
 	var wCanvas = document.createElement("canvas");
 	var playerStat = null;
 	wHandle.isSpectating = false;
