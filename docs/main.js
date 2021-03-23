@@ -127,7 +127,7 @@
 					break;
 
 				case 13:
-					if (isTyping) {
+					/*if (isTyping) {
 						isTyping = false;
 						document.getElementById("chat_textbox").blur();
 						chattxt = document.getElementById("chat_textbox").value;
@@ -163,7 +163,7 @@
 					if (qPressed) {
 						sendUint8(19);
 						qPressed = false;
-					}
+					}*/
 					break;
 			}
 		};
