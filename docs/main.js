@@ -1213,7 +1213,7 @@
 		this.points = [];
 		this.pointsAcc = [];
 		this.createPoints();
-		this.setName(uname)
+		this.setName(uname);
 	}
 
 	function UText(usize, ucolor, ustroke, ustrokecolor) {
@@ -1323,8 +1323,8 @@
 		splitIcon = new Image,
 		ejectIcon = new Image,
 		noRanking = false;
-	splitIcon.src = "split.png";
-	ejectIcon.src = "feed.png";
+	splitIcon.src = "img/split.png";
+	ejectIcon.src = "img/feed.png";
 	var wCanvas = document.createElement("canvas");
 	var playerStat = null;
 	wHandle.isSpectating = false;
@@ -1608,33 +1608,34 @@
 				}
 				ctx.closePath();
 
+				var skinName = this.name.toLowerCase();
 				var skinurl = '';
+
 				if (this.skin) {
 					var fir = this.skin.charAt(0);
-					if (fir == "%") {
-						skinurl = SKIN_URL + this.skin.substring(1) + ".png";
-
-					} else if (fir == ":") {
+					if (fir === '%') {
+						skinurl = SKIN_URL + this.skin.substring(1) + '.png';
+					} else if (fir === ':') {
 						skinurl = this.skin.substring(1);
-
 					}
 				}
-				if (!this.isAgitated && showSkin && skinurl) {
 
+				if (!this.isAgitated && showSkin && skinurl !== '') {
+					if (!skins.hasOwnProperty(skinName)) {
+						skins[skinName] = new Image;
+						skins[skinName].src = skinurl;
+						console.log(skinurl);
+					}
 
-					// ski = new Image;
-					// ski.src = skinurl;
-
-					/*if (0 != ski.width && ski.complete) {
-						c = ski;
+					if (0 !== skins[skinName].width && skins[skinName].complete) {
+						c = skins[skinName];
 					} else {
 						c = null;
-					}*/
-					c = null;
-
+					}
 				} else {
 					c = null;
 				}
+
 				c = (e = c) ? true : false;
 				b || ctx.stroke();
 				ctx.fill();
