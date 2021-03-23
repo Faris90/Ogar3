@@ -1874,6 +1874,5 @@
 		}
 	};
 
-	wHandle.onload = gameLoop
-	//console.log(knownNameDict);
+	wHandle.onload = gameLoop;
 })(window, window.jQuery);
