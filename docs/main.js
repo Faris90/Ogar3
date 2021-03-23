@@ -79,7 +79,6 @@
 		wHandle.onkeydown = function (event) {
 			switch (event.keyCode) {
 				case 32: // split
-					event.preventDefault()
 					if ((!spacePressed) && (!isTyping)) {
 						sendMouseMove();
 						sendUint8(17);
@@ -87,14 +86,12 @@
 					}
 					break;
 				case 81: // key q pressed
-					event.preventDefault()
 					if ((!qPressed) && (!isTyping)) {
 						sendUint8(18);
 						if (!qMacro) qPressed = true;
 					}
 					break;
 				case 87: // eject mass
-					event.preventDefault()
 					if ((!wPressed) && (!isTyping)) {
 						sendMouseMove();
 						sendUint8(21);
@@ -102,7 +99,6 @@
 					}
 					break;
 				case 69: // e key
-					event.preventDefault()
 					if (!ePressed && (!isTyping)) {
 						sendMouseMove();
 						sendUint8(22);
@@ -111,7 +107,6 @@
 					}
 					break;
 				case 82: // r key
-					event.preventDefault()
 					if (!rPressed && (!isTyping)) {
 						sendMouseMove();
 						sendUint8(23);
@@ -120,7 +115,6 @@
 					}
 					break;
 				case 84: // T key
-					event.preventDefault()
 					if (!rPressed && (!isTyping)) {
 						sendMouseMove();
 						sendUint8(24);
@@ -129,7 +123,6 @@
 					}
 					break;
 				case 27: // quit
-					event.preventDefault()
 					showOverlays(true);
 					wHandle.isSpectating = false;
 					break;
@@ -154,27 +147,21 @@
 		wHandle.onkeyup = function (event) {
 			switch (event.keyCode) {
 				case 32:
-					event.preventDefault()
 					spacePressed = false;
 					break;
 				case 87:
-					event.preventDefault()
 					wPressed = false;
 					break;
 				case 69:
-					event.preventDefault()
 					ePressed = false;
 					break;
 				case 82:
-					event.preventDefault()
 					rPressed = false;
 					break;
 				case 84:
-					event.preventDefault()
 					tPressed = false;
 					break;
 				case 81:
-					event.preventDefault()
 					if (qPressed) {
 						sendUint8(19);
 						qPressed = false;
