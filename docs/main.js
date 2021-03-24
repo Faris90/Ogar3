@@ -1000,7 +1000,7 @@
 				ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 				ctx.globalAlpha = 1;
 			}
-		} else if (!hideGrid) {
+		} else {
 			drawGrid();
 		}
 		nodelist.sort(function (a, b) {
@@ -1109,25 +1109,28 @@
 	function drawGrid() {
 		ctx.fillStyle = showDarkTheme ? "#111111" : "#F2FBFF";
 		ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-		ctx.save();
-		ctx.strokeStyle = showDarkTheme ? "#AAAAAA" : "#000000";
-		ctx.globalAlpha = .2;
-		ctx.scale(viewZoom, viewZoom);
-		var a = canvasWidth / viewZoom,
-			b = canvasHeight / viewZoom;
-		for (var c = -.5 + (-nodeX + a / 2) % 50; c < a; c += 50) {
-			ctx.beginPath();
-			ctx.moveTo(c, 0);
-			ctx.lineTo(c, b);
-			ctx.stroke();
+
+		if (!hideGrid) {
+			ctx.save();
+			ctx.strokeStyle = showDarkTheme ? "#AAAAAA" : "#000000";
+			ctx.globalAlpha = .2;
+			ctx.scale(viewZoom, viewZoom);
+			var a = canvasWidth / viewZoom,
+				b = canvasHeight / viewZoom;
+			for (var c = -.5 + (-nodeX + a / 2) % 50; c < a; c += 50) {
+				ctx.beginPath();
+				ctx.moveTo(c, 0);
+				ctx.lineTo(c, b);
+				ctx.stroke();
+			}
+			for (c = -.5 + (-nodeY + b / 2) % 50; c < b; c += 50) {
+				ctx.beginPath();
+				ctx.moveTo(0, c);
+				ctx.lineTo(a, c);
+				ctx.stroke();
+			}
+			ctx.restore();
 		}
-		for (c = -.5 + (-nodeY + b / 2) % 50; c < b; c += 50) {
-			ctx.beginPath();
-			ctx.moveTo(0, c);
-			ctx.lineTo(a, c);
-			ctx.stroke();
-		}
-		ctx.restore()
 	}
 
 	function drawSplitIcon(ctx) {
