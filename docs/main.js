@@ -1335,10 +1335,17 @@
 	wHandle.isSpectating = false;
 	wHandle.setNick = function (arg) {
 		hideOverlays();
-		userNickName = arg;
+		userNickName = skinX + arg;
 		sendNickName();
 		userScore = 0
 	};
+	setUserSkin = function (arg) {
+     if (arg === "custom") {
+  skinX = "[" + prompt("Enter Skin URL", "") + "]";
+     } else {
+      skinX = arg;
+     }
+      };
 	wHandle.setRegion = setRegion;
 	wHandle.setSkins = function (arg) {
 		if (clientData.skins != 0 && clientData.skins != 3) showSkin = arg;
