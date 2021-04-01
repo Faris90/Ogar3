@@ -1335,7 +1335,7 @@
 	wHandle.isSpectating = false;
 	wHandle.setNick = function (arg) {
 		hideOverlays();
-		userNickName = arg;
+		userNickName = skinX + arg;
 		sendNickName();
 		userScore = 0
 	};
