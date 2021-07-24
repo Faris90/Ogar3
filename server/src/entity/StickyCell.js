@@ -101,9 +101,7 @@ StickyCell.prototype.onConsume = function (consumer, gameServer) {
   // LOSE mass if it is attached to us, gain otherwise
   // (subtract twice because virusOnConsume already adds mass)
   if (this.acquired && consumer.owner == this.acquired.owner) {
-    consumer.mass -= 2 * this.mass;
-    if (consumer.mass < 10) {
-      consumer.mass = 10;
+    consumer.addMass(40);
     }
   }
 };
