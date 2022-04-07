@@ -1,0 +1,181 @@
+html, body {
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+	-webkit-text-size-adjust: none;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+}
+
+input[type=checkbox] {
+	cursor: pointer;
+}
+
+#overlays, #connecting {
+	opacity: 0;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 200;
+}
+
+#connecting {
+	z-index: 100;
+}
+
+#connecting-content {
+	width: 350px;
+	background-color: #fff;
+	margin: 100px auto;
+	border-radius: 15px;
+	padding: 5px 15px;
+}
+
+#title {
+	padding: 10px;
+	text-align: center;
+}
+
+#nick {
+	width: 65%;
+}
+
+#skin {
+	width: 33%;
+	float: right;
+}
+
+#nick, #skin {
+	display: inline;
+}
+
+#gamemode {
+	display: none;
+	margin-top: 5px;
+	width: 100%;
+}
+
+#helloDialog {
+	width: 350px;
+	background-color: #fff;
+	margin: 10px auto;
+	border-radius: 15px;
+	padding: 5px 15px 5px 15px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#chat_textbox {
+	transition: all .5s ease-in-out;
+	position: absolute;
+	z-index: 1;
+	bottom: 10px;
+	background: rgba(0, 0, 0, .2);
+	border: 0px;
+	outline: none;
+	color: #fff;
+	height: 30px;
+	text-indent: 12px;
+	left: 10px;
+	width: 300px;
+	font-family: "Ubuntu";
+}
+
+#chat_textbox:focus {
+	background: rgba(0, 0, 0, .5);
+}
+
+#footer {
+	text-align: center;
+	margin-bottom: 10px;
+	margin-top: -10px;
+}
+
+#play-btn {
+	width: 55%;
+	margin-bottom: 10px;
+	margin-right: 10px;
+}
+
+#spectate-btn {
+	/*width: 13%;*/
+	float: right;
+	top: 0;
+}
+
+#play-btn, #spectate-button {
+	display: inline;
+}
+
+#gallery-btn {
+	width: 100%;
+	margin-bottom: 5px;
+	display: none; /* Visible when skins are loaded */
+}
+
+#touchpad, #touchCircle, #splitBtn, #ejectBtn {
+	position: fixed;
+}
+
+#touchpad, #splitBtn, #ejectBtn {
+	z-index: 2;
+}
+
+#touchpad {
+	background: #000;
+	opacity: 0.3;
+	width: 20vw;
+	height: 20vh;
+	left: 0;
+	bottom: 0;
+}
+
+#touchCircle {
+	width: 4vw;
+	height: 4vw;
+	border-radius: 2vw;
+	background: #f00;
+	opacity: 0.3;
+	z-index: 3;
+}
+
+#splitBtn, #ejectBtn {
+	width: 8vw;
+	height: 8vw;
+	border-radius: 4vw;
+	background: #777;
+	opacity: 0.5;
+}
+
+#splitBtn {
+	right: 18vw;
+	bottom: 0;
+}
+
+#ejectBtn {
+	bottom: 18vw;
+	right: 0;
+}
+
+#playSounds:checked + #soundsVolume {
+	display: inline;
+}
+
+#soundsVolume {
+	display: none;
+	width: 100px;
+	height: 18px;
+	padding: 0; /* IE fix */
+	vertical-align: middle;
+}
+
+#settings label {
+	margin-right: 10px;
+	user-select: none;
+}
