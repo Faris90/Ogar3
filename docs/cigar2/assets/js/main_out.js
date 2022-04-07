@@ -220,7 +220,7 @@
 
     const WEBSOCKET_URL = null;
     const SKIN_URL = './skins/';
-    const USE_HTTPS = 'https:' !== window.location.protocol;
+    const USE_HTTPS = 'https:' === window.location.protocol;
     const EMPTY_NAME = 'An unnamed cell';
     const QUADTREE_MAX_POINTS = 32;
     const CELL_POINTS_MIN = 5;
@@ -239,17 +239,17 @@
         23: new Uint8Array([23]),
         24: new Uint8Array([24]),
         25: new Uint8Array([25]),
-        254: new Uint8Array([254]),
+        254: new Uint8Array([254])
     };
     const KEY_TO_OPCODE = {
         e: UINT8_CACHE[22],
         r: UINT8_CACHE[23],
         t: UINT8_CACHE[24],
-        p: UINT8_CACHE[25],
+        p: UINT8_CACHE[25]
     };
     const IE_KEYS = {
         spacebar: ' ',
-        esc: 'escape',
+        esc: 'escape'
     };
     const CODE_TO_KEY = {
         Space: ' ',
@@ -258,7 +258,7 @@
         KeyE: 'e',
         KeyR: 'r',
         KeyT: 't',
-        KeyP: 'p',
+        KeyP: 'p'
     };
 
     function wsCleanup() {
