@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "burrow": "0.0.0",
-    "finalhandler": "^0.3.6",
+    "finalhandler": "^1.2.0",
     "serve-static": "^1.9.3",
     "ws": "^3.3.1",
     "localtunnel":"2.0.0",
