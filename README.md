@@ -23,7 +23,7 @@ The project is nearly complete. Here's a rough list of what's been done and what
 
 ## How to access server
 Go to localhost if you set the port to 80 go to localhost:80
-Demo: [Click here for demo](https://ogar3-demo.herokuapp.com/)
+Demo: [Click here for demo](https://ogar3.glitch.me/)
 ## Obtaining and Using
 If you are on Windows, Ogar3 no longer requires an installation of node.js to run. Simply launch the batch file that is included to run the server. This is a beta feature, and if there are any problems, switch back to using Ogar3 with node.js. The rest of this section is for non Windows users.
 ## Server tracker
