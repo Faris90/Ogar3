@@ -1,6 +1,6 @@
 # Ogar3
 An open source Agar.io server implementation, written in Node.js.
-## POSSIBLE REWRITE IN FUTURE
+## REWRITE IN THE WORKS
 ## Project Status
 The project is nearly complete. Here's a rough list of what's been done and what needs to be done:
 
@@ -15,10 +15,7 @@ The project is nearly complete. Here's a rough list of what's been done and what
 - [x] Leaderboard
 - [x] Team mode
 - [x] Spectate mode
-- [ ] Multi-Server support
-- [ ] Server publishing
-- [ ] Server Tracking
-
+- [ ] Rewrite
 
 
 ## How to access server
