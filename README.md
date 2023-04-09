@@ -9,7 +9,7 @@ This project is still being updated
 
 ## How to access server
 Go to localhost if you set the port to 80 go to localhost:80
-Demo: [Replit](https://ogar3-demo.faris90.repl.co)
+Demo: [Replit](https://ogar3.faris90.repl.co)
 ## Obtaining and Using
 ## Server tracker
  [Server Tracker(does not work yet)](http://ogar3tracker.wdr.icu/)
