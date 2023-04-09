@@ -1,0 +1,4 @@
+OGar Server - Game Mode: Free For All - Running Time: 1sec
+ID:    1, Nick: [BOT] Yaranaika, Score:     12, Cells:  1, Status: 1 IP: BOT
+ID:    2, Nick: [BOT] Patriarchy, Score:     10, Cells:  1, Status: 1 IP: BOT
+ID:    3, Nick: [BOT] USA      , Score:     11, Cells:  1, Status: 1 IP: BOT
