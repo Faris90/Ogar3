@@ -184,18 +184,6 @@ TeamZ.prototype.turnToZombie = function (client) {
     // add to zombie list
     this.zombies.push(client);
 };
-TeamZ.prototype.turnToHuman = function (client) {
-    client.team = 1; // team H
-    setColor(client.color);
-    // remove from human list
-    var index = this.zombies.indexOf(client);
-    if (index >= 0) {
-        this.zombies.splice(index, 1);
-    }
-    
-    // add to zombie list
-    this.humans.push(client);
-};
 
 TeamZ.prototype.boostSpeedCell = function (cell) {
     if (typeof cell.originalSpeed == 'undefined' || cell.originalSpeed == null) {
@@ -322,7 +310,7 @@ TeamZ.prototype.onServerInit = function (gameServer) {
     //OVERWRITE GLOBAL FUNCTIONs to adapt Zombie Team mode
 
     // Change to AGARIO colorful scheme 
-    /*GameServer.prototype.getRandomColor = function () {
+   /* GameServer.prototype.getRandomColor = function () {
         var colorRGB = [0xFF, 0x07, (Math.random() * 256) >> 0];
         colorRGB.sort(function () { return 0.5 - Math.random() });
         return {
@@ -330,7 +318,7 @@ TeamZ.prototype.onServerInit = function (gameServer) {
             b: colorRGB[1],
             g: colorRGB[2]
         };
-    };*/
+    }; */
 
     GameServer.prototype.getNearestVirus = function (cell) {
         // More like getNearbyVirus
@@ -421,7 +409,7 @@ TeamZ.prototype.onServerInit = function (gameServer) {
             // HERO and BRAIN checking
             if (cell.owner.getTeam() == 0) {
                 // Z team
-               // if (check.getType() == CellType.HERO)
+                if (check.getType() == CellType.HERO)
                     continue;
             }
             else {
@@ -544,11 +532,13 @@ TeamZ.prototype.onServerInit = function (gameServer) {
             var split = new Entity.PlayerCell(this.getNextNodeId(), client, startPos, newMass);
             split.setAngle(angle);
             split.setMoveEngineData(splitSpeed, 32, 0.85);
+			if(this.config.playerSmoothSplit) {
+			split.ignoreCollision = true;
+			split.restoreCollisionTicks = 8;
+			}
             split.calcMergeTime(this.config.playerRecombineTime);
-            if(this.config.playerSmoothSplit) {
-		split.ignoreCollision = true;
-        split.restoreCollisionTicks = 8;
-		}
+			
+            
             // boost speed if zombie eats brain
             if (this.gameMode.hasEatenBrain(client) || this.gameMode.isCrazy(client)) {
                 this.gameMode.boostSpeedCell(split);
@@ -556,7 +546,7 @@ TeamZ.prototype.onServerInit = function (gameServer) {
             // gain effect if human eat hero
             else if (this.gameMode.hasEatenHero(client)) {
                 // fix "unable to split" bug: cell can be merged after finish moving (2nd param in setMoveEngineData)
-                split.recombineTicks = 1; // main-ticks, 1 main-tick = 1 s
+                split.recombineTicks = 2; // main-ticks, 1 main-tick = 1 s
             }
             
             // Add to moving cells list
@@ -643,7 +633,7 @@ TeamZ.prototype.onServerInit = function (gameServer) {
         }
 
         if (gameServer.gameMode.hasEatenHero(client))
-            consumer.recombineTicks = 1;
+            consumer.recombineTicks = 0;
         else
             consumer.calcMergeTime(gameServer.config.playerRecombineTime);
     };
@@ -1094,7 +1084,7 @@ Hero.prototype.onConsume = function (consumer, gameServer) {
         // Merge immediately
         for (var i = 0; i < client.cells.length; i++) {
             var cell = client.cells[i];
-            cell.recombineTicks = 1;
+            cell.recombineTicks = 0;
         }
 
     }
