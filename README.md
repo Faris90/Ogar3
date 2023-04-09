@@ -1,28 +1,13 @@
 # Ogar3
-An open source Agar.io server implementation, written in Node.js.
-## REWRITE IN THE WORKS
+An open source Agar.io server implementation, based on Jaralowell's ogarserv & Cigar client
 ## Project Status
-The project is nearly complete. Here's a rough list of what's been done and what needs to be done:
-
-- [x] Master server basic implementation
-- [x] Game server basic implementation (clients can connect)
-- [x] Single-cell movement
-- [x] Randomly generated cells and viruses
-- [x] Ejecting mass
-- [x] Splitting
-- [x] Multi-cell player movement
-- [x] Cells eating other cells
-- [x] Leaderboard
-- [x] Team mode
-- [x] Spectate mode
-- [ ] Rewrite
+This project is still being updated
 
 
 ## How to access server
 Go to localhost if you set the port to 80 go to localhost:80
 Demo: [Click here for demo](https://ogar3.glitch.me/)
 ## Obtaining and Using
-If you are on Windows, Ogar3 no longer requires an installation of node.js to run. Simply launch the batch file that is included to run the server. This is a beta feature, and if there are any problems, switch back to using Ogar3 with node.js. The rest of this section is for non Windows users.
 ## Server tracker
  [Server Tracker(does not work yet)](http://ogar3tracker.wdr.icu/)
  ## Info
