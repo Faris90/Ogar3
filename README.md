@@ -1,6 +1,6 @@
 # Ogar3
 An open source Agar.io server implementation, based on Jaralowell's [Ogarserv](https://github.com/JaraLowell/OgarServ/releases/tag/1.5.9) & [Cigar](https://github.com/CigarProject/Cigar)
-#Want old version?
+##Want old version?
 [Here you go!](https://github.com/Faris90/Ogar3/tree/old-ogar3)
 ## Project Status
 This project is still being updated
