@@ -1,27 +1,27 @@
 {
-  "name": "ogarconsole",
-  "version": "1.0.2",
-  "description": "OgarConsole >> Control Your Ogar Servers",
-  "main": "cmd.js",
+  "name": "Ogar3",
+  "version": "1.0.0",
+  "description": "Open source Agar.io server",
+  "main": "index.js",
   "dependencies": {
-	"socket.io":"latest",
-	"fs":"latest",
-	"http":"latest",
-	"express":"latest"
-  
+    "burrow": "0.0.0",
+    "finalhandler": "^0.3.6",
+    "serve-static": "^1.9.3",
+    "ws": "^0.7.2"
   },
   "devDependencies": {},
   "scripts": {
-    "StartConsole": "node cmd"
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LegitSoulja/OgarConsole.git"
+    "url": "https://github.com/Faris90/Ogar3"
   },
-  "author": "LegitSoulja",
-  "license": "MIT",
+  "author": "Faris90",
+  "license": "Apache License 2.0",
   "bugs": {
-    "url": "https://github.com/LegitSoulja/OgarConsole/issues"
+    "url": "https://github.com/Faris90/Ogar3/issues"
   },
-  "homepage": "https://github.com/LegitSoulja/OgarConsole#readme"
+  "homepage": "https://github.com/Faris90/Ogar3"
 }
