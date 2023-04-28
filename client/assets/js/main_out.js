@@ -1116,19 +1116,14 @@
     var data = {
         "action": "test"
     };
-    wjQuery.ajax({
-        type: "POST",
-        dataType: "json",
-        url: "checkdir.php",
-        data: data,
-        success: function(data) {
-            response = JSON.parse(data["names"]);
-            for (var i = 0; i < response.length; i++) {
-                if (-1 == knownNameDict.indexOf(response[i])) {
-                    knownNameDict.push(response[i]);
+    fetch('skinList.txt').then(resp => resp.text()).then(data => {
+        const skins = data.split(',').filter(name => name.length > 0);
+		console.log(skins);
+        for (var i = 0; i < skins.length; i++) {
+                if (-1 == knownNameDict.indexOf(skins[i])) {
+                    knownNameDict.push(skins[i]);
                 }
-            }
-        }
+		}
     });
 
     var delay = 500,
