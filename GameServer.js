@@ -59,6 +59,7 @@ function GameServer() {
     };
     this.config = {                   // Border - Right: X increases, Down: Y increases (as of 2015-05-20)
         serverMaxConnections: 64,     // Maximum amount of connections to the server.
+	serverMaxConnPerIp: 9, 
         serverPort: 8080,            // Server port
         serverVersion: 1,             // Protocol to use, 1 for new (v561.20 and up) and 0 for old 
         serverGamemode: 0,            // Gamemode, 0 = FFA, 1 = Teams
@@ -187,6 +188,17 @@ this.socketServer = new WebSocket.Server({server: hserver, perMessageDeflate: fa
         }
 
 				var origin = ws.upgradeReq.headers.origin;
+	    if (this.config.serverMaxConnPerIp) {
+            for (var cons = 1, i = 0, llen = this.clients.length; i < llen; i++) {
+                if (this.clients[i].remoteAddress == ws._socket.remoteAddress) {
+                    cons++;
+                }
+            }
+            if (cons > this.config.serverMaxConnPerIp ) {
+                ws.close();
+                return;
+            }
+        }
 
         function close(error) {
             this.server.log.onDisconnect(this.socket.remoteAddress);
