@@ -1583,7 +1583,7 @@
         ctx.restore();
     }
     function processKey(event) {
-        let key = CODE_TO_KEY[event.code] || event.key.toLowerCase();
+        let key = CODE_TO_KEY[event.code] || event?.key?.toLowerCase();
         if (Object.hasOwnProperty.call(IE_KEYS, key)) key = IE_KEYS[key]; // IE fix
         return key;
     }
@@ -1643,7 +1643,7 @@
         document.addEventListener('wheel', handleScroll, {passive: true});
         byId('play-btn').addEventListener('click', () => {
             const skin = settings.skin;
-            sendPlay((skin ? `<${skin}>` : '') + settings.nick);
+            sendPlay((skin ? `<${skin}>` : '') + settings.nick.substring(0, 16));
             hideESCOverlay();
         });
         window.onkeydown = keydown;
