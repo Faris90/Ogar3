@@ -88,6 +88,7 @@ function GameServer() {
         virusMaxAmount: 50,           // Maximum amount of viruses on the map. If this amount is reached, then ejected cells will pass through viruses.
         virusStartMass: 100,          // Starting virus size (In mass)
         virusFeedAmount: 7,           // Amount of times you need to feed a virus to shoot it
+		motherCellMinMass: 200,
 	    motherCellMaxMass: 2000,
         ejectMass: 12,                // Mass of ejected cells
         ejectMassLoss: 16,            // Mass lost when ejecting cells

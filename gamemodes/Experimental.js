@@ -77,7 +77,7 @@ Experimental.prototype.spawnMotherCell = function(gameServer) {
         }
 
         // Spawn if no cells are colliding
-        var m = new MotherCell(gameServer.getNextNodeId(), null, pos, this.motherCellMass);
+        var m = new MotherCell(gameServer.getNextNodeId(), null, pos, gameServer.config.motherCellMinMass);
         gameServer.addNode(m); 
     }
 };
@@ -157,7 +157,7 @@ MotherCell.prototype.update = function(gameServer) {
     // Spawn food
     var maxFood = 10; // Max food spawned per tick
     var i = 0; // Food spawn counter
-    while ((this.mass > gameServer.gameMode.motherCellMass) && (i < maxFood))  {
+    while ((this.mass > gameServer.config.motherCellMinMass) && (i < maxFood))  {
         // Only spawn if food cap hasn been reached
         if (gameServer.currentFood < gameServer.config.foodMaxAmount) {
             this.spawnFood(gameServer);
@@ -211,6 +211,9 @@ MotherCell.prototype.checkEat = function(gameServer) {
             this.mass += check.mass;
         }
     }
+	if(this.mass > gameServer.config.motherCellMaxMass) {
+        this.mass = gameServer.config.motherCellMaxMass;
+        }
 }
 
 MotherCell.prototype.abs = function(n) {
