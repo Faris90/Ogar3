@@ -1,0 +1,10 @@
+lib/
+node_modules/
+prev/
+build/
+.DS_Store
+ext/
+.vscode/
+package/
+client/public/
+replit.nix
