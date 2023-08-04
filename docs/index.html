@@ -183,8 +183,8 @@
 						<div><h2 class="text-center">Agar.io</h2></div>
 					</div>
 					<div class="form-group">
-						<input id="nick" class="form-control" style="display: inline-block;" placeholder="Nick" maxlength="30" pattern="[a-zA-Z0-9 ]+" oninvalid="this.setCustomValidity('Only letters and numbers allowed')" onchange="try{setCustomValidity('')}catch(e){}" />
-						<input id="skin" class="form-control" style="display: inline-block;" placeholder="Skin Name" pattern="[a-zA-Z0-9 ]+" oninvalid="this.setCustomValidity('Only letters and numbers allowed')" onchange="try{setCustomValidity('')}catch(e){}" />
+						<input id="nick" class="form-control" style="display: inline-block;" placeholder="Nick" maxlength="15" pattern="[a-zA-Z0-9 ]+" oninvalid="this.setCustomValidity('Only letters and numbers allowed')" onchange="try{setCustomValidity('')}catch(e){}" />
+						<input id="skin" class="form-control" style="display: inline-block;" placeholder="Skin Name" maxlength="15" pattern="[a-zA-Z0-9 ]+" oninvalid="this.setCustomValidity('Only letters and numbers allowed')" onchange="try{setCustomValidity('')}catch(e){}" />
 					</div>
 					<div id="locationUnknown">
 						<script>connect('wss://agar.emupedia.net:443/ws/', true);</script>
