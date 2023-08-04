@@ -1619,7 +1619,13 @@
 				}
 
 				if (this.skin) {
-					skinurl = SKIN_URL + this.skin + '.png';
+					var fir = this.skin.charAt(0);
+
+					if (fir === '%') {
+						skinurl = SKIN_URL + this.skin.substring(1) + '.png';
+					} else if (fir === ':') {
+						skinurl = this.skin.substring(1);
+					}
 				}
 
 				if (!this.isAgitated && showSkin && skinurl !== '') {
@@ -1630,7 +1636,6 @@
 
 					if (0 !== skins[skinName].width && skins[skinName].complete) {
 						c = skins[skinName];
-						this.skin = skinName;
 					} else {
 						c = null;
 					}
