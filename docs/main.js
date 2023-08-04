@@ -77,6 +77,8 @@
 			wPressed = false;
 
 		wHandle.onkeydown = function (event) {
+			if (typeof event['isTrusted'] !== 'boolean') return;
+
 			switch (event.keyCode) {
 				case 32: // split
 					if ((!spacePressed) && (!isTyping)) {
@@ -144,7 +146,10 @@
 					break;
 			}
 		};
+
 		wHandle.onkeyup = function (event) {
+			if (typeof event['isTrusted'] !== 'boolean') return;
+
 			switch (event.keyCode) {
 				case 32:
 					spacePressed = false;
@@ -169,7 +174,7 @@
 					break;
 			}
 		};
-		wHandle.onblur = function () {
+		wHandle.onblur = function (event) {
 			sendUint8(19);
 			wPressed = qPressed = spacePressed = false
 		};
@@ -672,7 +677,7 @@
 			if (!det[2] || det[2] == "undefined") det[2] = defaultPort;
 
 			wjQuery('#gamemode')
-				.append($("<option></option>")
+				.append(wjQuery("<option></option>")
 					.attr("value", det[0])
 					.text(det[1]));
 			var pu = {
