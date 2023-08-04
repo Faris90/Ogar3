@@ -1289,7 +1289,7 @@
 			minimap: 0,
 
 			// Others
-			maxName: 40,
+			maxName: 15,
 			customHTML: "",
 			title: "",
 			defaultusername: "",
