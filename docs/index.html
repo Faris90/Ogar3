@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/> <!-- Mobile Fix -->
-    <meta property="og:image" content="img/1200x630.png"/>
-    <meta property="og:image:width" content="1200"/>
-    <meta property="og:image:height" content="630"/>
-    <meta property="og:type" content="website"/>
-    <title>Agar.io</title>
-    <link id="fav" rel="icon" type="image/png" href="favicon-32x32.png"/>
-    <link href='https://fonts.googleapis.com/css?family=Ubuntu:700' rel='stylesheet' type='text/css'>
-    <link href="css/bootstrap-3.3.4.min.css" rel="stylesheet">
-    <script src="js/jquery-1.11.3.min.js"></script>
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/> <!-- Mobile Fix -->
+	<meta property="og:image" content="img/1200x630.png"/>
+	<meta property="og:image:width" content="1200"/>
+	<meta property="og:image:height" content="630"/>
+	<meta property="og:type" content="website"/>
+	<title>Agar.io</title>
+	<link id="fav" rel="icon" type="image/png" href="favicon-32x32.png"/>
+	<link href='https://fonts.googleapis.com/css?family=Ubuntu:700' rel='stylesheet' type='text/css'>
+	<link href="css/bootstrap-3.3.4.min.css" rel="stylesheet">
+	<script src="js/jquery-1.11.3.min.js"></script>
 	<script src="js/vector2.js"></script>
-    <script src="main.js"></script>
-    <style>
+	<script src="main.js"></script>
+	<style>
 		#adsBottom, #canvas {
 			left: 0;
 			right: 0;
@@ -118,6 +118,15 @@
 			background: rgba(0, 0, 0, .5)
 		}
 
+		#nick {
+			width: 65%;
+		}
+
+		#skin {
+			width: 33%;
+			float: right;
+		}
+
 		#a300x250 {
 			width: 300px;
 			height: 250px;
@@ -128,7 +137,7 @@
 
 		.ui-dialog {
 			background-color: #141414;
-			background-image: url(http://agariohub.tk/assets/img/texture.png);
+			/*background-image: url(http://agariohub.tk/assets/img/texture.png);*/
 			z-index: 100000
 		}
 
@@ -164,71 +173,91 @@
 			-o-transform: scale(2.25);
 			transform: scale(2.25)
 		}
-    </style>
-  </head>
-  <body>
-      <div id="overlays" style="display:none; position: absolute; left: 0; right: 0; top: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 200;">
-          <div id="helloDialog">
-              <form role="form">
-				  <div class="form-group">
-					  <div><h2 class="text-center">Agar.io</h2></div>
-				  </div>
-				  <div class="form-group">
-					  <input id="nick" class="form-control" placeholder="Nick" maxlength="15" />
-				  </div>
-				  <div id="locationUnknown">
-					  <script>connect('wss://agar.emupedia.net:443/ws/', true);</script>
-				  </div>
-                  <div class="form-group clearfix">
-					  <button class="btn btn-play btn-primary pull-left" onclick="setNick(document.getElementById('nick').value); return false;" >Play</button>
-					  <button id="spectateBtn" class="btn btn-warning btn-spectate pull-left" onclick="spectate(); return false;">Spectate</button>
-					  <button class="btn btn-info btn-settings pull-right" onclick="$('#settings').toggle(); return false;" ><i class="glyphicon glyphicon-cog"></i></button>
-                  </div>
-                  <div id="cantc" style="display:none;">
-                      <h4>Cannot connect to server, click the reconnect button below to try again</h4><br>
-                  </div>
-                  <div class="checkbox" id="settings" style="display:none;">
-                      <div style="margin: 6px;">
-                          <label><input id="cskin" onchange="setSkins(!$(this).is(':checked'));" type="checkbox"> No skins</label> <label><input id="cname" onchange="setNames(!$(this).is(':checked'));"
-                          type="checkbox"> No names</label> <label><input id="cdark" onchange="setDarkTheme($(this).is(':checked'));" type="checkbox"> Dark Theme</label> <label><input id="ccolor"
-                          onchange="setColors($(this).is(':checked'));" type="checkbox"> No colors</label> <label><input id="cmass" onchange="setShowMass($(this).is(':checked'));" type="checkbox"> Show
-                          mass</label> <label><input id="cchat" onchange="setHideChat($(this).is(':checked'));" type="checkbox"> Hide chat</label> <label><input id="csmooth" onchange=
-                          "setSmooth($(this).is(':checked'));" type="checkbox"> Smooth Render</label> <label><input id="cacid" onchange="setAcid($(this).is(':checked'));" type="checkbox"> Acid
-                          mode</label> <label><input id="cgrid" onchange="setHideGrid($(this).is(':checked'));" type="checkbox">Hide Grid</label>
-                      </div>
-                  </div>
-              </form>
-			  <div id="instructions" class="text-center text-muted">
-				  <div>Move your mouse to control your cell</div>
-				  <div>Press <b>Space</b> to split</div>
-				  <div>Press <b>W</b> to eject some mass</div>
-			  </div>
-			  <hr />
-          </div>
-      </div>
-      <div id="connecting" style="display:none;position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 100; background-color: rgba(0,0,0,0.5);">
-          <div style="width: 350px; background-color: #FFFFFF; margin: 100px auto; border-radius: 15px; padding: 5px 15px 5px 15px;">
-              <h2>Connecting</h2>
-              <p>If you cannot connect to the servers, check if you have some anti virus or firewall blocking the connection.</p>
-          </div>
-      </div>
-      <canvas height="600" id="canvas" width="800"></canvas>
-      <form>
-          <input id="chat_textbox" maxlength="40" autocomplete="off" placeholder="Press Enter to chat!" type="text">
-      </form>
-      <div id="skins" style="display: none" title="Skins List (Click Your Skin)"></div>
-	  <script type="text/javascript">
-		  $(document).ready(function() {
-			  $('input').keypress(function(e) {
-				  if (e.which === '13') {
-					  e.preventDefault();
-					  if (!isSpectating) setNick(document.getElementById('nick').value);
-				  }
-			  });
-		  }).off('paste').on('paste', function(e) {
-			  e.preventDefault();
-			  return false;
-		  });
-	  </script>
-  </body>
+	</style>
+	</head>
+	<body>
+		<div id="overlays" style="display:none; position: absolute; left: 0; right: 0; top: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 200;">
+			<div id="helloDialog">
+				<form id="form" role="form">
+					<div class="form-group">
+						<div><h2 class="text-center">Agar.io</h2></div>
+					</div>
+					<div class="form-group">
+						<input id="nick" class="form-control" style="display: inline-block;" placeholder="Nick" maxlength="16" pattern="[a-zA-Z0-9 ]+" oninvalid="this.setCustomValidity('Only letters and numbers allowed')" onchange="try{setCustomValidity('')}catch(e){}" />
+						<input id="skin" class="form-control" style="display: inline-block;" placeholder="Skin Name" pattern="[a-zA-Z0-9 ]+" oninvalid="this.setCustomValidity('Only letters and numbers allowed')" onchange="try{setCustomValidity('')}catch(e){}" />
+					</div>
+					<div id="locationUnknown">
+						<script>connect('wss://agar.emupedia.net:443/ws/', true);</script>
+					</div>
+					<div class="form-group clearfix">
+						<button class="btn btn-play btn-primary pull-left" onclick="start(); return false;" >Play</button>
+						<button id="spectateBtn" class="btn btn-warning btn-spectate pull-left" onclick="spectate(); return false;">Spectate</button>
+						<button class="btn btn-info btn-settings pull-right" onclick="$('#settings').toggle(); return false;" ><i class="glyphicon glyphicon-cog"></i></button>
+					</div>
+					<div id="cantc" style="display:none;">
+						<h4>Cannot connect to server, click the reconnect button below to try again</h4><br>
+					</div>
+					<div class="checkbox" id="settings" style="display:none;">
+						<div style="margin: 6px;">
+							<label><input id="cskin" onchange="setSkins(!$(this).is(':checked'));" type="checkbox"> No skins</label> <label><input id="cname" onchange="setNames(!$(this).is(':checked'));"
+							type="checkbox"> No names</label> <label><input id="cdark" onchange="setDarkTheme($(this).is(':checked'));" type="checkbox"> Dark Theme</label> <label><input id="ccolor"
+							onchange="setColors($(this).is(':checked'));" type="checkbox"> No colors</label> <label><input id="cmass" onchange="setShowMass($(this).is(':checked'));" type="checkbox"> Show
+							mass</label> <label><input id="cchat" onchange="setHideChat($(this).is(':checked'));" type="checkbox"> Hide chat</label> <label><input id="csmooth" onchange=
+							"setSmooth($(this).is(':checked'));" type="checkbox"> Smooth Render</label> <label><input id="cacid" onchange="setAcid($(this).is(':checked'));" type="checkbox"> Acid
+							mode</label> <label><input id="cgrid" onchange="setHideGrid($(this).is(':checked'));" type="checkbox">Hide Grid</label>
+						</div>
+					</div>
+				</form>
+				<div id="instructions" class="text-center text-muted">
+					<div>Move your mouse to control your cell</div>
+					<div>Press <b>Space</b> to split</div>
+					<div>Press <b>W</b> to eject some mass</div>
+				</div>
+				<hr />
+			</div>
+		</div>
+
+		<div id="connecting" style="display:none; position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 100; background-color: rgba(0,0,0,0.5);">
+			<div style="width: 350px; background-color: #fff; margin: 100px auto; border-radius: 15px; padding: 5px 15px 5px 15px;">
+				<h2>Connecting</h2>
+				<p>If you cannot connect to the servers, check if you have some antivirus or firewall blocking the connection.</p>
+			</div>
+		</div>
+
+		<canvas height="600" id="canvas" width="800"></canvas>
+
+		<form>
+			<input id="chat_textbox" maxlength="40" autocomplete="off" placeholder="Press Enter to chat!" type="text">
+		</form>
+
+		<div id="skins" style="display: none;" title="Skins List (Click Your Skin)"></div>
+
+		<script type="text/javascript">
+			function sanitizeNick(str) {
+				return str.replace(/[^a-zA-Z0-9 ]/gim, '').trim();
+			}
+
+			function start() {
+				var form = document.getElementById('form');
+
+				if (form && typeof form['reportValidity'] === 'function' && form.reportValidity()) {
+					setNick(sanitizeNick(document.getElementById('nick').value) + (document.getElementById('skin').value !== '' ?  '<' : '') + document.getElementById('skin').value + (document.getElementById('skin').value !== '' ?  '>' : ''));
+				}
+			}
+
+			$(document).ready(function() {
+				$('input').keypress(function(e) {
+					if (e.which === '13') {
+						e.preventDefault();
+						if (!isSpectating) {
+							setNick(sanitizeNick(document.getElementById('nick').value) + (document.getElementById('skin').value !== '' ?  '<' : '') + document.getElementById('skin').value + (document.getElementById('skin').value !== '' ?  '>' : ''));
+						}
+					}
+				});
+			}).off('paste').on('paste', function(e) {
+				e.preventDefault();
+				return false;
+			});
+		</script>
+	</body>
 </html>

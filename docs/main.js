@@ -699,7 +699,6 @@
 		var rawData = getString();
 		var Data = JSON.parse(rawData);
 		for (var i in Data) {
-
 			if (Data[i]) clientData[i] = Data[i];
 		}
 		/*
@@ -1228,8 +1227,7 @@
 		ustrokecolor && (this._strokeColor = ustrokecolor)
 	}
 
-	var localProtocol = wHandle.location.protocol,
-		localProtocolHttps = "https:" == localProtocol;
+	var localProtocol = wHandle.location.protocol, localProtocolHttps = "https:" == localProtocol;
 
 	var nCanvas, ctx, mainCanvas, lbCanvas, chatCanvas, canvasWidth, canvasHeight, qTree = null,
 		ws = null,
@@ -1330,7 +1328,7 @@
 		noRanking = false;
 	splitIcon.src = "img/split.png";
 	ejectIcon.src = "img/feed.png";
-	var wCanvas = document.createElement("canvas");
+	// var wCanvas = document.createElement("canvas");
 	var playerStat = null;
 	wHandle.isSpectating = false;
 	wHandle.setNick = function (arg) {
@@ -1616,24 +1614,23 @@
 				var skinName = this.name.toLowerCase();
 				var skinurl = '';
 
+				if (knownNameDict.indexOf(skinName) !== -1) {
+					skinurl = SKIN_URL + skinName + '.png';
+				}
+
 				if (this.skin) {
-					var fir = this.skin.charAt(0);
-					if (fir === '%') {
-						skinurl = SKIN_URL + this.skin.substring(1) + '.png';
-					} else if (fir === ':') {
-						skinurl = this.skin.substring(1);
-					}
+					skinurl = SKIN_URL + this.skin + '.png';
 				}
 
 				if (!this.isAgitated && showSkin && skinurl !== '') {
 					if (!skins.hasOwnProperty(skinName)) {
 						skins[skinName] = new Image;
 						skins[skinName].src = skinurl;
-						console.log(skinurl);
 					}
 
 					if (0 !== skins[skinName].width && skins[skinName].complete) {
 						c = skins[skinName];
+						this.skin = skinName;
 					} else {
 						c = null;
 					}
@@ -1744,8 +1741,7 @@
 					font = fontsize + 'px Ubuntu';
 				ctx.font = font;
 				var h = ~~(.2 * fontsize);
-				canvas.width = (ctx.measureText(value).width +
-					6) * scale;
+				canvas.width = (ctx.measureText(value).width + 6) * scale;
 				canvas.height = (fontsize + h) * scale;
 				ctx.font = font;
 				ctx.scale(scale, scale);
