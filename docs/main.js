@@ -77,7 +77,7 @@
 			wPressed = false;
 
 		wHandle.onkeydown = function (event) {
-			if (typeof event['isTrusted'] !== 'boolean') return;
+			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 
 			switch (event.keyCode) {
 				case 32: // split
@@ -148,7 +148,7 @@
 		};
 
 		wHandle.onkeyup = function (event) {
-			if (typeof event['isTrusted'] !== 'boolean') return;
+			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 
 			switch (event.keyCode) {
 				case 32:
