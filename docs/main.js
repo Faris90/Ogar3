@@ -1614,10 +1614,6 @@
 				var skinName = this.name.toLowerCase();
 				var skinurl = '';
 
-				if (knownNameDict.indexOf(skinName) !== -1) {
-					skinurl = SKIN_URL + skinName + '.png';
-				}
-
 				if (this.skin) {
 					var fir = this.skin.charAt(0);
 
