@@ -38,6 +38,8 @@
 			sendMouseMove()
 		};*/
 		mainCanvas.onmousemove = function (event) {
+			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
+
 			rawMouseX = event.clientX;
 			rawMouseY = event.clientY;
 			mouseCoordinateChange()
@@ -49,8 +51,10 @@
 			mainCanvas.addEventListener('touchend', onTouchEnd, false);
 		}
 
-		mainCanvas.onmouseup = function () {
+		mainCanvas.onmouseup = function (event) {
+			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 		};
+
 		if (/firefox/i.test(navigator.userAgent)) {
 			document.addEventListener("DOMMouseScroll", handleWheel, false);
 		} else {
@@ -206,6 +210,8 @@
 	}
 
 	function onTouchStart(e) {
+		if (typeof e['isTrusted'] !== 'boolean' || e['isTrusted'] === false) return;
+
 		for (var i = 0; i < e.changedTouches.length; i++) {
 			var touch = e.changedTouches[i];
 			//console.log(leftTouchID + " "
@@ -234,6 +240,8 @@
 		// Prevent the browser from doing its default thing (scroll, zoom)
 		e.preventDefault();
 
+		if (typeof e['isTrusted'] !== 'boolean' || e['isTrusted'] === false) return;
+
 		for (var i = 0; i < e.changedTouches.length; i++) {
 			var touch = e.changedTouches[i];
 			if (leftTouchID == touch.identifier) {
@@ -251,6 +259,8 @@
 	}
 
 	function onTouchEnd(e) {
+		if (typeof e['isTrusted'] !== 'boolean' || e['isTrusted'] === false) return;
+
 		touches = e.touches;
 
 		for (var i = 0; i < e.changedTouches.length; i++) {
