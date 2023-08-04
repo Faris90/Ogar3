@@ -315,14 +315,15 @@
 				$('input').keypress(function(e) {
 					if (e.which === '13') {
 						e.preventDefault();
+
 						if (!isSpectating) {
 							setNick((document.getElementById('skin').value !== '' ? '<' : '') + sanitizeString(document.getElementById('skin').value) + (document.getElementById('skin').value !== '' ?  '>' : '') + sanitizeString(document.getElementById('nick').value));
 						}
 					}
-				});
-			}).off('paste').on('paste', function(e) {
-				e.preventDefault();
-				return false;
+				})/*.off('paste').on('paste', function(e) {
+					e.preventDefault();
+					return false;
+				});*/
 			});
 		</script>
 	</body>
