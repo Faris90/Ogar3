@@ -12,9 +12,11 @@
 	<link id="fav" rel="icon" type="image/png" href="favicon-32x32.png"/>
 	<link href='https://fonts.googleapis.com/css?family=Ubuntu:700' rel='stylesheet' type='text/css'>
 	<link href="css/bootstrap-3.3.4.min.css" rel="stylesheet">
+	<link href="css/gallery.css" rel="stylesheet">
 	<script src="js/jquery-1.11.3.min.js"></script>
 	<script src="js/vector2.js"></script>
 	<script src="main.js"></script>
+
 	<style>
 		#adsBottom, #canvas {
 			left: 0;
@@ -78,6 +80,7 @@
 		.btn-play {
 			width: 55%;
 			margin-right: 10px;
+			margin-bottom: 10px;
 		}
 
 		.btn-settings {
@@ -125,6 +128,12 @@
 		#skin {
 			width: 33%;
 			float: right;
+		}
+
+		#gallery-btn {
+			width: 100%;
+			margin-bottom: 5px;
+			display: none; /* Visible when skins are loaded */
 		}
 
 		#footer {
@@ -182,6 +191,12 @@
 	</style>
 	</head>
 	<body>
+		<div id="gallery" onclick="if (event.target === this) this.style.display = 'none';" style="display: none;">
+			<div id="gallery-content">
+				<div id="gallery-header">Skins</div>
+				<div id="gallery-body"></div>
+			</div>
+		</div>
 		<div id="overlays" style="display:none; position: absolute; left: 0; right: 0; top: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 200;">
 			<div id="helloDialog">
 				<form id="form" role="form">
@@ -189,8 +204,8 @@
 						<div><h2 class="text-center">Agar.io</h2></div>
 					</div>
 					<div class="form-group">
-						<input id="nick" class="form-control" style="display: inline-block;" placeholder="Nick" maxlength="15" pattern="[a-zA-Z0-9 ]+" oninvalid="this.setCustomValidity('Only letters and numbers allowed')" onchange="try{setCustomValidity('')}catch(e){}" />
-						<input id="skin" class="form-control" style="display: inline-block;" placeholder="Skin Name" maxlength="15" pattern="[a-zA-Z0-9 ]+" oninvalid="this.setCustomValidity('Only letters and numbers allowed')" onchange="try{setCustomValidity('')}catch(e){}" />
+						<input id="nick" class="form-control" style="display: inline-block;" placeholder="Nick" maxlength="15" pattern="[a-zA-Z0-9_\- ]+" oninvalid="this.setCustomValidity('Only letters, numbers, spaces and \'_\' and \'-\') allowed')" onchange="try{setCustomValidity('')}catch(e){}" />
+						<input id="skin" class="form-control" style="display: inline-block;" placeholder="Skin Name" maxlength="15" pattern="[a-zA-Z0-9_\- ]+" oninvalid="this.setCustomValidity('Only letters, numbers, spaces and \'_\' and \'-\') allowed')" onchange="try{setCustomValidity('')}catch(e){}" />
 					</div>
 					<div id="locationUnknown">
 						<script>connect('wss://agar.emupedia.net:443/ws/', true);</script>
@@ -199,6 +214,7 @@
 						<button class="btn btn-play btn-primary pull-left" onclick="start(); return false;" >Play</button>
 						<button id="spectateBtn" class="btn btn-warning btn-spectate pull-left" onclick="spectate(); return false;">Spectate</button>
 						<button class="btn btn-info btn-settings pull-right" onclick="$('#settings').toggle(); return false;" ><i class="glyphicon glyphicon-cog"></i></button>
+						<button id="gallery-btn" onclick="openSkinsList(); return false;" class="btn btn-play btn-primary btn-needs-server btn-info">Choose Skin</button>
 					</div>
 					<div id="cantc" style="display:none;">
 						<h4>Cannot connect to server, click the reconnect button below to try again</h4><br>
@@ -214,6 +230,7 @@
 						</div>
 					</div>
 				</form>
+				<hr />
 				<div id="instructions" class="text-center text-muted">
 					<div>Move your mouse to control your cell</div>
 					<div>Press <b>Space</b> to split</div>
@@ -242,24 +259,64 @@
 		<div id="skins" style="display: none;" title="Skins List (Click Your Skin)"></div>
 
 		<script type="text/javascript">
-			function sanitizeNick(str) {
-				return str.replace(/[^a-zA-Z0-9 ]/gim, '').trim();
+			var knownSkins = [];
+
+			function sanitizeString(str) {
+				return str.replace(/[^a-zA-Z0-9_\- ]/gim, '').trim();
+			}
+
+			function openSkinsList() {
+				if (document.getElementById('gallery-body').innerHTML === '') {
+					buildGallery();
+				}
+
+				document.getElementById('gallery').style.display = 'flex';
 			}
 
 			function start() {
 				var form = document.getElementById('form');
 
 				if (form && typeof form['reportValidity'] === 'function' && form.reportValidity()) {
-					setNick((document.getElementById('skin').value !== '' ?  '<' : '') + document.getElementById('skin').value + (document.getElementById('skin').value !== '' ?  '>' : '') + sanitizeNick(document.getElementById('nick').value));
+					setNick((document.getElementById('skin').value !== '' ?  '<' : '') + sanitizeString(document.getElementById('skin').value) + (document.getElementById('skin').value !== '' ?  '>' : '') + sanitizeString(document.getElementById('nick').value));
 				}
 			}
 
+			function changeSkin(skin) {
+				document.getElementById('skin').value = sanitizeString(skin);
+				document.getElementById('gallery').style.display = 'none';
+			}
+
+			function buildGallery() {
+				var sortedSkins = knownSkins.sort();
+				var c = '';
+
+				for (var skin in sortedSkins) {
+					if (sortedSkins[skin] !== '') {
+						c += '<li class="skin" onclick="changeSkin(\'' + sortedSkins[skin] + '\')">';
+							c += '<img class="circular" src="./skins/' + sortedSkins[skin] + '.png">';
+							c += '<h4 class="skinName">' + sortedSkins[skin] + '</h4>';
+						c += '</li>';
+					}
+				}
+
+				document.getElementById('gallery-body').innerHTML = '<ul id="skinsUL">' + c + '</ul>';
+			}
+
 			$(document).ready(function() {
+				$.get('skinList.txt', function(data, status) {
+					if (status === 'success') {
+						var skins = data.split(',');
+						if (skins.length === 0) return;
+						knownSkins = skins
+						document.getElementById('gallery-btn').style.display = 'inline-block';
+					}
+				});
+
 				$('input').keypress(function(e) {
 					if (e.which === '13') {
 						e.preventDefault();
 						if (!isSpectating) {
-							setNick((document.getElementById('skin').value !== '' ? '<' : '') + document.getElementById('skin').value + (document.getElementById('skin').value !== '' ?  '>' : '') + sanitizeNick(document.getElementById('nick').value));
+							setNick((document.getElementById('skin').value !== '' ? '<' : '') + sanitizeString(document.getElementById('skin').value) + (document.getElementById('skin').value !== '' ?  '>' : '') + sanitizeString(document.getElementById('nick').value));
 						}
 					}
 				});
