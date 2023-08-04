@@ -209,7 +209,7 @@
 					</div>
 					<div class="form-group">
 						<input id="nick" class="form-control" style="display: inline-block;" placeholder="Nick" maxlength="15" pattern="[a-zA-Z0-9_\- ]+" oninvalid="this.setCustomValidity('Only letters, numbers, spaces and \'_\' and \'-\') allowed')" onchange="try{setCustomValidity('')}catch(e){}" />
-						<input id="skin" class="form-control" style="display: inline-block;" placeholder="Skin Name" maxlength="15" pattern="[a-zA-Z0-9_\- ]+" oninvalid="this.setCustomValidity('Only letters, numbers, spaces and \'_\' and \'-\') allowed')" onchange="try{setCustomValidity('')}catch(e){}" />
+						<input id="skin" class="form-control" style="display: inline-block;" placeholder="Skin Name" maxlength="25" pattern="[a-zA-Z0-9_\- ]+" oninvalid="this.setCustomValidity('Only letters, numbers, spaces and \'_\' and \'-\') allowed')" onchange="try{setCustomValidity('')}catch(e){}" />
 					</div>
 					<div id="locationUnknown">
 						<script>connect('wss://agar.emupedia.net:443/ws/', true);</script>
