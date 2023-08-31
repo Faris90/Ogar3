@@ -1,5 +1,4 @@
-OGar Server - Game Mode: Experimental - Running Time: 276sec
-ID:    1, Nick: [BOT] Thailand , Score:   1893, Cells: 16, Status: 1 IP: BOT
-ID:    2, Nick: [BOT] USA      , Score:    500, Cells: 16, Status: 1 IP: BOT
-ID:    3, Nick: [BOT] Germany  , Score:  16912, Cells: 16, Status: 1 IP: BOT
-ID:    4, Nick: doge           , Score:  11261, Cells: 16, Status: 1 IP: 127.0.0.1
+OGar Server - Game Mode: Free For All - Running Time: 9420sec
+ID:    1, Nick: [BOT] Belgium  , Score:   8736, Cells: 16, Status: 1 IP: BOT
+ID:    2, Nick: [BOT] Pewdiepie, Score:    742, Cells: 16, Status: 1 IP: BOT
+ID:    3, Nick: [BOT] China    , Score:   5186, Cells: 16, Status: 1 IP: BOT

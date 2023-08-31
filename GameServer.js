@@ -59,15 +59,15 @@ function GameServer() {
     };
     this.config = {                   // Border - Right: X increases, Down: Y increases (as of 2015-05-20)
         serverMaxConnections: 64,     // Maximum amount of connections to the server.
-	serverMaxConnPerIp: 9, 
+	    serverMaxConnPerIp: 9, 
         serverPort: 8080,            // Server port
-        serverVersion: 1,             // Protocol to use, 1 for new (v561.20 and up) and 0 for old 
         serverGamemode: 0,            // Gamemode, 0 = FFA, 1 = Teams
         serverResetTime: 24,          // Time in hours to reset (0 is off)
-        serverName: '',               // The name to display on the tracker (leave empty will show ip:port)
+        serverName: 'Ogar3 Server',               // The name to display on the tracker (leave empty will show ip:port)
         serverAdminPass: '',          // Remote console commands password
         serverBots: 3,                // Amount of player bots to spawn
-		serverOldColors: 0,           // If the server uses colors from the original Ogar
+		serverVersion: 1,
+        serverOldColors: 0,           // If the server uses colors from the original Ogar
         serverViewBaseX: 1024,        // Base view distance of players. Warning: high values may cause lag
         serverViewBaseY: 592,
         serverStatsPort: 88,          // Port for stats server. Having a negative number will disable the stats server.
@@ -154,6 +154,7 @@ this.config.serverPort = this.config.serverPort || process.env.PORT;
 // here
     // Start the server
     var hserver = http.createServer( function(req, res){
+    res.setHeader('Access-Control-Allow-Origin', '*');
       var done = finalhandler(req, res)
 	 // res.end({title:12})
       serve(req, res, done)
@@ -439,8 +440,9 @@ GameServer.prototype.mainLoop = function() {
         // Loop main functions
         if (this.run) {
             this.cellTick();
-           this.spawnTick();
+            this.spawnTick();
             this.gamemodeTick();
+            this.MasterPing();
         }
 
         // Update the client's maps
@@ -1021,7 +1023,12 @@ GameServer.prototype.switchSpectator = function(player) {
 };
 
 GameServer.prototype.MasterPing = function() {
-   
+    try {
+    fs.renameSync('./client/api/stats.txt', './client/api/stats.txt.bak');
+    fs.appendFileSync('./client/api/stats.txt',String(this.stats));
+    } catch(error) {
+        fs.appendFileSync('./client/api/stats.txt',String(this.stats));
+    }
 }
 
 // Stats server
@@ -1059,7 +1066,8 @@ GameServer.prototype.getStats = function() {
         'spectators': spectate,
         'max_players': this.config.serverMaxConnections,
         'gamemode': this.gameMode.name,
-        'start_time': this.startTime
+        'start_time': this.startTime,
+        'title': this.config.serverName
     };
     this.stats = JSON.stringify(s);
 };
