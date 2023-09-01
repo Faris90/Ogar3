@@ -1,6 +1,8 @@
 (function(wHandle, wjQuery) {
-    var CONNECTION_URL = location.host, // Default Connection
-        SKIN_URL = "./skins/"; // Skin Directory
+    ONLY_CLIENT = false;
+    var CONNECTION_URL = location.host
+        SKIN_URL = "./skins/", // Skin Directory
+        STATS = ""
 
     wHandle.setserver = function(arg) {
         if (arg != CONNECTION_URL) {
@@ -338,6 +340,14 @@
         ws.send(a.buffer)
     }
 
+    function httpGet(theUrl) {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+
+
     function onWsOpen() {
         var msg;
         delay = 500;
@@ -351,6 +361,9 @@
         msg.setUint32(1, 0, true);
         wsSend(msg);
         sendNickName();
+        STATS = JSON.parse(httpGet((useHttps ? "https://" : "http://") + location.host + '/api/stats.txt'));
+        document.getElementById("title").innerHTML = STATS.title;
+        document.title = STATS.title
         log.info("Connection successful!")
     }
 

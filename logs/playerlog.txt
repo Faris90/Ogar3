@@ -1,5 +1,4 @@
-OGar Server - Game Mode: Free For All - Running Time: 9555sec
-ID:    1, Nick: [BOT] Belgium  , Score:   9206, Cells: 16, Status: 1 IP: BOT
-ID:    2, Nick: [BOT] Pewdiepie, Score:    742, Cells: 16, Status: 1 IP: BOT
-ID:    3, Nick: [BOT] China    , Score:   5186, Cells: 16, Status: 1 IP: BOT
-ID:    9, Nick: An unnamed cell, Score:     13, Cells:  1, Status: 0 IP: 127.0.0.1
+OGar Server - Game Mode: Free For All - Running Time: 5sec
+ID:    1, Nick: [BOT] USA      , Score:     21, Cells:  1, Status: 1 IP: BOT
+ID:    2, Nick: [BOT] Jamaica  , Score:     18, Cells:  1, Status: 1 IP: BOT
+ID:    3, Nick: [BOT] Byzantium, Score:     19, Cells:  1, Status: 1 IP: BOT
