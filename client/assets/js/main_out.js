@@ -1,8 +1,6 @@
 (function(wHandle, wjQuery) {
-    ONLY_CLIENT = false;
-    var CONNECTION_URL = !ONLY_CLIENT ? location.host : prompt('URL',"ws://localhost:8080"), // Default Connection
-        SKIN_URL = "./skins/", // Skin Directory
-        STATS = ""
+    var CONNECTION_URL = location.host, // Default Connection
+        SKIN_URL = "./skins/"; // Skin Directory
 
     wHandle.setserver = function(arg) {
         if (arg != CONNECTION_URL) {
@@ -300,11 +298,7 @@
     function showConnecting() {
         if (ma) {
             wjQuery("#connecting").show();
-            if(ONLY_CLIENT){
-                wsConnect(CONNECTION_URL)
-            } else {
             wsConnect((useHttps ? "wss://" : "ws://") + CONNECTION_URL)
-            }
         }
     }
 
@@ -319,11 +313,7 @@
             ws = null
         }
         var c = CONNECTION_URL;
-        if (ONLY_CLIENT) {
         wsUrl = (useHttps ? "wss://" : "ws://") + c;
-        } else {
-        wsUrl = c;
-        }
         nodesOnScreen = [];
         playerCells = [];
         nodes = {};
@@ -348,14 +338,6 @@
         ws.send(a.buffer)
     }
 
-    function httpGet(theUrl) {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
-    xmlHttp.send( null );
-    return xmlHttp.responseText;
-}
-
-
     function onWsOpen() {
         var msg;
         delay = 500;
@@ -369,9 +351,6 @@
         msg.setUint32(1, 0, true);
         wsSend(msg);
         sendNickName();
-        STATS = JSON.parse(httpGet((useHttps ? "https://" : "http://") + location.host + '/api/stats.txt'));
-        document.getElementById("title").innerHTML = STATS.title;
-        document.title = STATS.title
         log.info("Connection successful!")
     }
 
