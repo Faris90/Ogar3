@@ -4,7 +4,7 @@ An open source Agar.io server implementation, based on Jaralowell's [Ogarserv](h
 ## Want old version?
 [Here you go!](https://github.com/Faris90/Ogar3/tree/old-ogar3)
 ## Project Status
-This project is still being updated
+The [Server Tracker](http://ogar3tracker.wdr.icu/) is up and running
 
 
 ## How to access server
@@ -13,7 +13,7 @@ Go to localhost if you set the port to 80 go to localhost:80
 [Replit](https://ogar3.faris90.repl.co)
 ## Obtaining and Using
 ## Server tracker
- [Server Tracker(does not work yet)](http://ogar3tracker.wdr.icu/)
+ [Server Tracker](http://ogar3tracker.wdr.icu/)
  ## Info
 As Ogar3 is written in Node.js, you must have Node.js and its "ws" module installed to use it (Unless you are on Windows). You can usually download Node using your distribution's package manager (for *nix-like systems), or from [the Node website](http://nodejs.org). To install the "ws" module that is required, open up your system command line (cmd for windows, terminal for mac) and type "npm install ws".
 
