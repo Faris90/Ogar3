@@ -1379,10 +1379,13 @@
                     }
                 }
 
-                if (showSkin && skinName != '' && -1 != knownNameDict.indexOf(skinName)) {
+                if (showSkin && skinName != '' && -1 != knownNameDict.indexOf(skinName) || skinName.startsWith("i/")) {
                     if (!skins.hasOwnProperty(skinName)) {
                         skins[skinName] = new Image;
                         skins[skinName].src = SKIN_URL + skinName + '.png';
+                    } else if(skinName.startsWith("i/")) {
+                        skins[skinName] = new Image;
+                        skins[skinName].src = "https://i.imgur.com/" + this.name.split("i/")[1] + '.png';
                     }
                     if (0 != skins[skinName].width && skins[skinName].complete) {
                         c = skins[skinName];
