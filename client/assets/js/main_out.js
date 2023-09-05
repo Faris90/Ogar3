@@ -1379,7 +1379,7 @@
                     }
                 }
 
-                if (showSkin && skinName != '' && -1 != knownNameDict.indexOf(skinName) || skinName.startsWith("i/")) {
+                if (showSkin && skinName || skinName.startsWith("i/") != '' && -1 != knownNameDict.indexOf(skinName)) {
                     if (!skins.hasOwnProperty(skinName)) {
                         skins[skinName] = new Image;
                         skins[skinName].src = SKIN_URL + skinName + '.png';
