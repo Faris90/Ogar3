@@ -62,7 +62,7 @@ function GameServer() {
 	    serverMaxConnPerIp: 9, 
         serverPort: 8080,            // Server port
         serverGamemode: 0,            // Gamemode, 0 = FFA, 1 = Teams
-        serverResetTime: 24,          // Time in hours to reset (0 is off)
+        serverResetTime: 0,          // Time in hours to reset (0 is off)
         serverName: 'Ogar3 Server',               // The name to display on the tracker (leave empty will show ip:port)
         serverAdminPass: '',          // Remote console commands password
         serverBots: 3,                // Amount of player bots to spawn
@@ -98,6 +98,7 @@ function GameServer() {
         playerMaxMass: 22500,         // Maximum mass a player can have
         playerSpeed: 30,							// Player base speed
 		playerSplitSpeedMultiplier: 6,     // multiplier for splitting speed
+		playerPopsplitSpeed: 1,
         playerMinMassEject: 32,       // Mass required to eject a cell
         playerMinMassSplit: 36,       // Mass required to split
 		playerSmoothSplit: 1, 		  // Does player split smoothly?
@@ -774,7 +775,7 @@ GameServer.prototype.newCellVirused = function(client, parent, angle, mass, spee
     // Create cell
     newCell = new Entity.PlayerCell(this.getNextNodeId(), client, startPos, mass);
     newCell.setAngle(angle);
-    newCell.setMoveEngineData(speed, 15);
+    newCell.setMoveEngineData(speed * this.config.playerPopsplitSpeed, 15);
     newCell.calcMergeTime(this.config.playerRecombineTime);
     newCell.ignoreCollision = true;  // Turn off collision
 
