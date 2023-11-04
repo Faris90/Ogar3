@@ -550,7 +550,7 @@ GameServer.prototype.spawnPlayer = function(player,pos,mass) {
  */
         if( this.config.serverResetTime > 0 )
         {
-            var packet = new Packet.BroadCast("Remeber, This server auto restarts after " + this.config.serverResetTime  + " hours uptime!");
+            var packet = new Packet.BroadCast("Remember, This server auto restarts after " + this.config.serverResetTime  + " hours uptime!");
             player.socket.sendPacket(packet);
         }
 
