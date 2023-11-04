@@ -1,4 +1,5 @@
-OGar Server - Game Mode: Free For All - Running Time: 5sec
-ID:    1, Nick: [BOT] USA      , Score:     21, Cells:  1, Status: 1 IP: BOT
-ID:    2, Nick: [BOT] Jamaica  , Score:     18, Cells:  1, Status: 1 IP: BOT
-ID:    3, Nick: [BOT] Byzantium, Score:     19, Cells:  1, Status: 1 IP: BOT
+OGar Server - Game Mode: Free For All - Running Time: 43sec
+ID:    1, Nick: [BOT] KC       , Score:    122, Cells:  1, Status: 1 IP: BOT
+ID:    2, Nick: [BOT] Stalin   , Score:     64, Cells:  1, Status: 1 IP: BOT
+ID:    3, Nick: [BOT] Feminism , Score:     98, Cells:  1, Status: 1 IP: BOT
+ID:    4, Nick: i/UE26ilZ      , Score:     23, Cells:  1, Status: 1 IP: 127.0.0.1
