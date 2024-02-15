@@ -1583,11 +1583,13 @@
         ctx.restore();
     }
     function processKey(event) {
+        if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
         let key = CODE_TO_KEY[event.code] || event?.key?.toLowerCase();
         if (Object.hasOwnProperty.call(IE_KEYS, key)) key = IE_KEYS[key]; // IE fix
         return key;
     }
     function keydown(event) {
+        if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
         const key = processKey(event);
         if (pressed[key]) return;
         if (Object.hasOwnProperty.call(pressed, key)) pressed[key] = true;
@@ -1620,11 +1622,13 @@
         }
     }
     function keyup(event) {
+        if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
         const key = processKey(event);
         if (Object.hasOwnProperty.call(pressed, key)) pressed[key] = false;
         if (key === 'w') clearInterval(macroIntervalID);
     }
     function handleScroll(event) {
+        if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
         if (event.target !== mainCanvas) return;
         camera.userZoom *= event.deltaY > 0 ? 0.8 : 1.2;
         camera.userZoom = Math.max(camera.userZoom, settings.moreZoom ? 0.1 : 1);
@@ -1657,6 +1661,7 @@
             drawChat();
         };
         mainCanvas.onmousemove = (event) => {
+            if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
             mouseX = event.clientX;
             mouseY = event.clientY;
         };
@@ -1679,6 +1684,8 @@
         const touchSize = .2;
         let touched = false;
         const touchmove = (event) => {
+            if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
+
             const touch = event.touches[0];
             const width = innerWidth * touchSize;
             const height = innerHeight * touchSize;
@@ -1695,6 +1702,8 @@
         };
         window.addEventListener('touchmove', touchmove);
         window.addEventListener('touchstart', (event) => {
+            if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
+
             if (!touched) {
                 touched = true;
                 mobileStuff.show();
@@ -1709,6 +1718,8 @@
             touchCircle.show();
         });
         window.addEventListener('touchend', (event) => {
+            if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
+
             if (event.touches.length === 0) {
                 touchCircle.hide();
             }
