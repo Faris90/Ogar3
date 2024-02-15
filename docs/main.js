@@ -274,6 +274,8 @@
 	}
 
 	function handleWheel(event) {
+		if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
+
 		zoom *= Math.pow(.9, event.wheelDelta / -120 || event.detail || 0);
 		1 > zoom && (zoom = 1);
 		zoom > 4 / viewZoom && (zoom = 4 / viewZoom)
