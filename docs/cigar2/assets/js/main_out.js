@@ -36,33 +36,30 @@
 		return res;
 	}
 
-	function encrypt(str) {
-		var skinName = ``;
-		const symbol = String.fromCharCode(36)
+	function encode(str) {
+		const symbol = '$';
+		var skinName = '';
 
 		if (str.startsWith(symbol)) {
 			for (var i = 1; i < str.length; i++) {
 				let chr = str.charAt(i);
-				let cChr = ``;
+				let cChr = '';
 				let code = chr.toLowerCase().charCodeAt(0) - 97;
 
 				if ('abcdexyz'.includes(chr.toLowerCase())) {
 					cChr = code;
-				}
-
-				else {
+				} else {
 					if (isEven(code)) {
 						const strA = String.fromCharCode(97 + code - 2).toUpperCase();
 						const strB = String.fromCharCode(97 + code - 1);
 						cChr = strA + strB;
-					}
-					else cChr = String.fromCharCode(97 + code + 1);
+					} else cChr = String.fromCharCode(97 + code + 1);
 				}
 				skinName += cChr;
 			}
-
 			skinName = cutter(skinName);
-			return String.fromCharCode(36) + skinName;
+
+			return symbol + skinName;
 		}
 	}
 
@@ -569,6 +566,7 @@
 			}
 		}
 	}
+
 	function sendMouseMove(x, y) {
 		const writer = new Writer(true);
 		writer.setUint8(0x10);
@@ -577,12 +575,14 @@
 		writer._b.push(0, 0, 0, 0);
 		wsSend(writer);
 	}
+
 	function sendPlay(name) {
 		const writer = new Writer(true);
 		writer.setUint8(0x00);
 		writer.setStringUTF8(name);
 		wsSend(writer);
 	}
+
 	function sendChat(text) {
 		const writer = new Writer();
 		writer.setUint8(0x63);
@@ -612,6 +612,7 @@
 		byId: new Map(),
 		list: [],
 	};
+
 	const border = {
 		left: -2000,
 		right: 2000,
@@ -622,18 +623,21 @@
 		centerX: -1,
 		centerY: -1
 	};
+
 	const leaderboard = Object.create({
 		type: null,
 		items: null,
 		canvas: document.createElement('canvas'),
 		teams: ['#F33', '#3F3', '#33F']
 	});
+
 	const chat = Object.create({
 		messages: [],
 		waitUntil: 0,
 		canvas: document.createElement('canvas'),
 		visible: false,
 	});
+
 	const stats = Object.create({
 		fps: 0,
 		latency: NaN,
@@ -649,7 +653,7 @@
 
 	const knownSkins = new Map();
 	const loadedSkins = new Map();
-	const macroCooldown = 1000 / 7;
+	const macroCooldown = 0;
 	const camera = {
 		x: 0,
 		y: 0,
@@ -743,6 +747,7 @@
 		escOverlayShown = false;
 		byId('overlays').hide();
 	}
+
 	function showESCOverlay() {
 		escOverlayShown = true;
 		byId('overlays').show(0.5);
@@ -753,12 +758,15 @@
 		scaleForth(ctx);
 		ctx.translate(-camera.x, -camera.y);
 	}
+
 	function scaleForth(ctx) {
 		ctx.scale(camera.scale, camera.scale);
 	}
+
 	function scaleBack(ctx) {
 		ctx.scale(1 / camera.scale, 1 / camera.scale);
 	}
+
 	function fromCamera(ctx) {
 		ctx.translate(camera.x, camera.y);
 		scaleBack(ctx);
@@ -977,6 +985,7 @@
 			}
 		}
 	}
+
 	function drawGrid() {
 		mainCtx.save();
 		mainCtx.lineWidth = 1;
@@ -1001,6 +1010,7 @@
 		mainCtx.stroke();
 		mainCtx.restore();
 	}
+
 	function drawBackgroundSectors() {
 		if (border === undefined || border.width === undefined) return;
 		mainCtx.save();
@@ -1026,6 +1036,7 @@
 		}
 		mainCtx.restore();
 	}
+
 	function drawMinimap() {
 		if (border.centerX !== 0 || border.centerY !== 0 || !settings.showMinimap) return;
 		mainCtx.save();
@@ -1242,9 +1253,11 @@
 		}
 		camera.scale += (camera.target.scale - camera.scale) / 9;
 	}
+
 	function sqDist(a, b) {
 		return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
 	}
+
 	function updateQuadtree() {
 		const w = 1920 / camera.sizeScale;
 		const h = 1080 / camera.sizeScale;
@@ -1406,9 +1419,9 @@
 			}
 		}
 		setSkin(value) {
-			this.skin = (value && value[0] === '%' ? value.slice(1) : value) || this.skin;
+			this.skin = (value && value[0] === '%' ? value.slice(1) : (value[0] === '$' ? encode(encode(value)) : value)) || this.skin;
 
-			if (typeof this.skin === 'undefined' || this.skin === null || this.skin === '' /*|| !knownSkins.has(this.skin)*/ || loadedSkins.has(this.skin)) return;
+			if (typeof this.skin === 'undefined' || this.skin === null || this.skin === '' || loadedSkins.has(this.skin)) return;
 
 			const skin = new Image();
 
@@ -1541,6 +1554,7 @@
 		(ctx.lineWidth !== 1) && ctx.strokeText(text, 0, 0);
 		ctx.fillText(text, 0, 0);
 	}
+
 	function drawRaw(ctx, x, y, text, size) {
 		ctx.font = size + 'px Ubuntu';
 		ctx.textBaseline = 'middle';
@@ -1552,6 +1566,7 @@
 		ctx.fillText(text, x, y);
 		ctx.restore();
 	}
+
 	function newNameCache(value, size) {
 		const canvas = document.createElement('canvas');
 		const ctx = canvas.getContext('2d');
@@ -1568,6 +1583,7 @@
 		cachedNames.get(value).set(size, cache);
 		return cache;
 	}
+
 	function newMassCache(size) {
 		const canvases = {
 			0: { }, 1: { }, 2: { }, 3: { }, 4: { },
@@ -1590,9 +1606,11 @@
 		cachedMass.set(size, cache);
 		return cache;
 	}
+
 	function toleranceTest(a, b, tolerance) {
 		return (a - tolerance) <= b && b <= (a + tolerance);
 	}
+
 	function getNameCache(value, size) {
 		if (!cachedNames.has(value)) return newNameCache(value, size);
 		const sizes = Array.from(cachedNames.get(value).keys());
@@ -1603,6 +1621,7 @@
 		}
 		return newNameCache(value, size);
 	}
+
 	function getMassCache(size) {
 		const sizes = Array.from(cachedMass.keys());
 		for (let i = 0, l = sizes.length; i < l; i++) {
@@ -1650,12 +1669,14 @@
 		}
 		ctx.restore();
 	}
+
 	function processKey(event) {
 		if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 		let key = CODE_TO_KEY[event.code] || event?.key?.toLowerCase();
 		if (Object.hasOwnProperty.call(IE_KEYS, key)) key = IE_KEYS[key]; // IE fix
 		return key;
 	}
+
 	function keydown(event) {
 		if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 		const key = processKey(event);
@@ -1674,27 +1695,39 @@
 			escOverlayShown ? hideESCOverlay() : showESCOverlay();
 		} else {
 			if (isTyping || escOverlayShown) return;
+
 			let code = KEY_TO_OPCODE[key];
-			if (code !== undefined) wsSend(code);
+
+			if (typeof code !== 'undefined') wsSend(code);
+
 			if (key === 'w') {
 				code = UINT8_CACHE[minionControlled ? 0x17 : 0x15];
 				macroIntervalID = setInterval(() => wsSend(code), macroCooldown);
 				wsSend(code);
 			}
-			if (key === ' ')
-				wsSend(UINT8_CACHE[minionControlled ? 0x16 : 0x11]);
+
+			if (key === ' ') {
+				code = UINT8_CACHE[minionControlled ? 0x16 : 0x11];
+				wsSend(code);
+			}
+
 			if (key === 'q') {
 				wsSend(UINT8_CACHE[0x12]);
 				minionControlled = !minionControlled;
 			}
 		}
 	}
+
 	function keyup(event) {
 		if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
+
 		const key = processKey(event);
+
 		if (Object.hasOwnProperty.call(pressed, key)) pressed[key] = false;
+
 		if (key === 'w') clearInterval(macroIntervalID);
 	}
+
 	function handleScroll(event) {
 		if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 		if (event.target !== mainCanvas) return;
@@ -1713,13 +1746,19 @@
 		loadSettings();
 
 		if (typeof settings['skin'] !== 'undefined' && settings['skin'] !== '') {
+			let saved_skin = settings['skin'];
+
+			if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
+
 			byId('preview').onerror = () => {
 				byId('preview').onerror = () => {
 					byId('preview').src = `./assets/img/checkerboard.png`;
 				};
-				byId('preview').src = `${SKIN_URL}custom/${settings['skin']}.png`;
+				byId('preview').src = `${SKIN_URL}custom/${saved_skin}.png`;
 			};
-			byId('preview').src = `${SKIN_URL}${settings['skin']}.png`
+			byId('preview').src = `${SKIN_URL}${saved_skin}.png`
+		} else {
+			byId('preview').src = `./assets/img/checkerboard.png`;
 		}
 
 		byId('skin').addEventListener('change', e => changeSkin(e.target.value));
@@ -1732,6 +1771,7 @@
 			const skin = settings.skin;
 			sendPlay((skin ? `<${skin}>` : '') + settings.nick.substring(0, 16));
 			hideESCOverlay();
+			storeSettings();
 		});
 
 		window.onkeydown = keydown;
@@ -1764,7 +1804,7 @@
 		window.onresize();
 
 		const mobileStuff = byId('mobileStuff');
-		// eslint-disable-next-line
+
 		const touchpad = byId('touchpad');
 		const touchCircle = byId('touchCircle');
 		const touchSize = .2;
@@ -1852,14 +1892,26 @@
 		}
 
 		settings.skin = a;
-		byId('preview').onerror = () => {
+
+		let saved_skin = settings.skin;
+
+		if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
+
+		if (saved_skin === '') {
+			byId('preview').src = `./assets/img/checkerboard.png`;
+		} else {
 			byId('preview').onerror = () => {
-				byId('preview').src = `./assets/img/checkerboard.png`;
+				byId('preview').onerror = () => {
+					byId('preview').src = `./assets/img/checkerboard.png`;
+				};
+				byId('preview').src = `${SKIN_URL}custom/${saved_skin}.png`;
 			};
-			byId('preview').src = `${SKIN_URL}custom/${settings['skin']}.png`;
-		};
-		byId('preview').src = `${SKIN_URL}${settings['skin']}.png`
+			byId('preview').src = `${SKIN_URL}${saved_skin}.png`
+		}
+
 		byId('gallery').hide();
+
+		storeSettings();
 	};
 
 	window.openSkinsList = () => {
