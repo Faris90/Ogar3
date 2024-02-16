@@ -8,6 +8,10 @@ html, body {
 	position: fixed;
 }
 
+ul {
+	padding-left: 20px;
+}
+
 input[type=checkbox] {
 	cursor: pointer;
 }
@@ -61,6 +65,7 @@ input[type=checkbox] {
 
 #helloDialog {
 	width: 350px;
+	height: 650px;
 	background-color: #fff;
 	margin: 10px auto;
 	border-radius: 15px;
@@ -69,6 +74,54 @@ input[type=checkbox] {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
+}
+
+#gameplay {
+	position: absolute;
+	top: 0;
+	left: 105%;
+	width: 350px;
+	height: 650px;
+	background-color: #fff;
+	border-radius: 15px;
+	padding: 5px 15px 5px 15px;
+}
+
+#news {
+	position: absolute;
+	top: 0;
+	left: -105%;
+	width: 350px;
+	height: 650px;
+	background-color: #fff;
+	border-radius: 15px;
+	padding: 5px 15px 5px 15px;
+}
+
+#news .text, #gameplay .text {
+	overflow: scroll;
+	height: 550px;
+	font-size: 12px;
+}
+
+#preview {
+	width: 100%;
+	border-radius: 50%;
+	box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+	background-image: url(../img/checkerboard.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+@media screen and (max-width: 800px) {
+	/*#mobileStuff {
+		display: block;
+	}*/
+
+	#gameplay, #news {
+		display: none;
+	}
 }
 
 #chat_textbox {
@@ -130,8 +183,8 @@ input[type=checkbox] {
 #touchpad {
 	background: #000;
 	opacity: 0.3;
-	width: 20vw;
-	height: 20vh;
+	width: 50vw;
+	height: 40vh;
 	left: 0;
 	bottom: 0;
 }
@@ -146,16 +199,16 @@ input[type=checkbox] {
 }
 
 #splitBtn, #ejectBtn {
-	width: 8vw;
-	height: 8vw;
-	border-radius: 4vw;
+	width: 12vw;
+	height: 12vw;
+	border-radius: 6vw;
 	background: #777;
 	opacity: 0.5;
 }
 
 #splitBtn {
 	right: 18vw;
-	bottom: 0;
+	bottom: 11vh;
 }
 
 #ejectBtn {
