@@ -653,7 +653,6 @@
 
 	const knownSkins = new Map();
 	const loadedSkins = new Map();
-	const macroCooldown = 0;
 	const camera = {
 		x: 0,
 		y: 0,
@@ -716,6 +715,7 @@
 		fillSkin: true,
 		backgroundSectors: false,
 		jellyPhysics: true,
+		feedMacro: true,
 	};
 	const pressed = {
 		' ': false,
@@ -1702,6 +1702,7 @@
 
 			if (key === 'w') {
 				code = UINT8_CACHE[minionControlled ? 0x17 : 0x15];
+				let macroCooldown = settings.feedMacro ? 0 : 1000 / 7;
 				macroIntervalID = setInterval(() => wsSend(code), macroCooldown);
 				wsSend(code);
 			}
