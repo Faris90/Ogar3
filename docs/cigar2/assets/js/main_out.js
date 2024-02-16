@@ -1400,7 +1400,10 @@
 		setName(rawName) {
 			const {name, skin} = Cell.parseName(rawName);
 			this.name = name;
-			this.setSkin(skin);
+
+			if (typeof skin !== 'undefined' && skin !== null && skin !== '' && skin !== name) {
+				this.setSkin(skin);
+			}
 		}
 		setSkin(value) {
 			this.skin = (value && value[0] === '%' ? value.slice(1) : value) || this.skin;
