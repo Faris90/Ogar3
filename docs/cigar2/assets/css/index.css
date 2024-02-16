@@ -8,6 +8,10 @@ html, body {
 	position: fixed;
 }
 
+h5 {
+	font-weight: bold;
+}
+
 ul {
 	padding-left: 20px;
 }
