@@ -8,6 +8,10 @@ html, body {
 	position: fixed;
 }
 
+hr {
+	border-top: 2px solid #000;
+}
+
 h2 {
 	margin-top: 0;
 }
@@ -95,13 +99,14 @@ input[type=checkbox] {
 #helloDialog {
 	width: 350px;
 	height: 650px;
-	background-color: #fff;
+	background-color: rgba(255,255,255,0.91);
 	margin: 10px auto;
 	border-radius: 15px;
 	position: absolute;
 	top: 43%;
 	left: 50%;
 	transform: translate(-50%, -50%) scale(0.8);
+	box-shadow: 0 0 9px #243342;
 }
 
 #helloDialogContent {
@@ -116,9 +121,10 @@ input[type=checkbox] {
 	left: 105%;
 	width: 350px;
 	height: 650px;
-	background-color: #fff;
+	background-color: rgba(255,255,255,0.91);
 	border-radius: 15px;
 	padding: 5px 15px 5px 15px;
+	box-shadow: 0 0 9px #243342;
 }
 
 #news {
@@ -127,9 +133,10 @@ input[type=checkbox] {
 	left: -105%;
 	width: 350px;
 	height: 650px;
-	background-color: #fff;
+	background-color: rgba(255,255,255,0.91);
 	border-radius: 15px;
 	padding: 5px 15px 5px 15px;
+	box-shadow: 0 0 9px #243342;
 }
 
 #news .text, #gameplay .text {
@@ -294,4 +301,15 @@ input[type=checkbox] {
 #settings label {
 	margin-right: 10px;
 	user-select: none;
+}
+
+.darkTheme #helloDialog, .darkTheme #gameplay, .darkTheme #news {
+	background-color: rgba(9,13,23,0.6);
+	color: #fff;
+	border: 2px solid rgba(36,51,66,0.9);
+	box-shadow: 0 0 9px #243342;
+}
+
+.darkTheme hr {
+	border-top: 2px solid #fff;
 }

@@ -1858,6 +1858,16 @@
 
 		loadSettings();
 
+		const changeDarkTheme = e => {
+			if (settings.darkTheme) {
+				document.documentElement.classList.add('darkTheme');
+			} else {
+				document.documentElement.classList.remove('darkTheme');
+			}
+		}
+
+		changeDarkTheme();
+
 		buildList('nicknames', settings.nicknames);
 		buildList('skinnames', settings.skinnames);
 
@@ -2003,6 +2013,8 @@
 			}
 		}
 
+
+
 		byId('previewName').innerHTML = settings.nick;
 
 		if (settings.nameColor !== '#ffffff') {
@@ -2035,6 +2047,7 @@
 		byId('borderColor').addEventListener('change', changeBorderColor);
 		byId('showColor').addEventListener('change', changeShowColor);
 		byId('showSkins').addEventListener('change', changeShowSkins);
+		byId('darkTheme').addEventListener('change', changeDarkTheme);
 
 		window.addEventListener('beforeunload', storeSettings);
 
