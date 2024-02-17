@@ -745,7 +745,9 @@
 
 	const settings = {
 		nick: '',
+		nicknames: [],
 		skin: '',
+		skinnames: [],
 		gamemode: '',
 		showSkins: true,
 		showNames: true,
@@ -876,14 +878,29 @@
 
 	function buildGallery() {
 		const sortedSkins = Array.from(knownSkins.keys()).sort();
-		let c = '';
+
+		let html = '';
+
 		for (const skin of sortedSkins) {
-			c += `<li class="skin" onclick="changeSkin('${skin}')">`;
-			c += `<img class="circular" src="./skins/${skin}.png">`;
-			c += `<h4 class="skinName">${skin}</h4>`;
-			c += '</li>';
+			html += `<li class="skin" onclick="changeSkin(null, '${skin}')">`;
+			html += `<img class="circular" src="./skins/${skin}.png">`;
+			html += `<h4 class="skinName">${skin}</h4>`;
+			html += '</li>';
 		}
-		byId('gallery-body').innerHTML = `<ul id="skinsUL">${c}</ul>`;
+
+		byId('gallery-body').innerHTML = `<ul id="skinsUL">${html}</ul>`;
+	}
+
+	function buildList(target, list) {
+		if (typeof list !== 'undefined' && Array.isArray(list)) {
+			let html = '';
+
+			for (const item of list) {
+				html += `<option value="${item}"></option>`;
+			}
+
+			byId(target).innerHTML = html;
+		}
 	}
 
 	function drawChat() {
@@ -1813,11 +1830,23 @@
 
 		loadSettings();
 
+		buildList('nicknames', settings.nicknames);
+		buildList('skinnames', settings.skinnames);
+
 		const randomColor = Color.randomColor();
 
 		const changeNick = e => {
 			byId('previewName').innerHTML = e.target.value;
-			storeSettings();
+		};
+
+		const saveNick = e => {
+			if (e.target.value !== '' && settings.nicknames.indexOf(e.target.value) === -1) {
+				settings.nicknames.push(e.target.value);
+				buildList('nicknames', settings.nicknames);
+				storeSettings();
+			}
+
+			e.target.blur();
 		};
 
 		const changeNameColor = e => {
@@ -1908,52 +1937,25 @@
 		}
 
 		const changeShowSkins = e => {
-			if (settings.cellColor !== '#ffffff') {
-				byId('cellColor').value = settings.cellColor;
-				byId('previewSkin').style.backgroundColor = settings.showColor ? settings.cellColor : '#fff';
-				byId('previewSkin').style.borderColor = settings.showColor ? Color.fromHex(settings.cellColor).darker().toHex() : Color.fromHex('#ffffff').darker().toHex();
+			if (settings.showSkins) {
+				let saved_skin = settings.skin;
 
-				if (settings.showSkins) {
-					let saved_skin = settings.skin;
+				if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
 
-					if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
-
-					if (saved_skin !== '') {
-						byId('previewSkin').onerror = () => {
-							byId('previewSkin').onerror = null;
-							byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
-						};
-						byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
-					} else {
-						byId('previewSkin').src = './assets/img/transparent.png';
-						byId('previewSkin').style.backgroundImage = 'none';
-					}
+				if (saved_skin !== '') {
+					byId('previewSkin').onerror = () => {
+						byId('previewSkin').onerror = null;
+						byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
+					};
+					byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
 				} else {
 					byId('previewSkin').src = './assets/img/transparent.png';
 					byId('previewSkin').style.backgroundImage = 'none';
 				}
 			} else {
-				if (settings.showSkins) {
-					let saved_skin = settings.skin;
-
-					if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
-
-					if (saved_skin !== '') {
-						byId('previewSkin').onerror = () => {
-							byId('previewSkin').onerror = null;
-							byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
-						};
-						byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
-					} else {
-						byId('previewSkin').src = './assets/img/transparent.png';
-						byId('previewSkin').style.backgroundImage = 'none';
-						byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
-					}
-				} else {
-					byId('previewSkin').src = './assets/img/transparent.png'
-					byId('previewSkin').style.backgroundImage = 'none';
-					byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
-				}
+				byId('previewSkin').src = './assets/img/transparent.png';
+				byId('previewSkin').style.backgroundImage = 'none';
+				byId('previewSkin').style.backgroundColor = settings.showColor ? settings.cellColor : '#fff';
 			}
 		}
 
@@ -1994,7 +1996,8 @@
 		changeFillSkin();
 
 		byId('nick').addEventListener('input', changeNick);
-		byId('skin').addEventListener('change', e => changeSkin(e.target.value));
+		byId('nick').addEventListener('change', saveNick);
+		byId('skin').addEventListener('change', changeSkin);
 		byId('fillSkin').addEventListener('change', changeFillSkin);
 		byId('nameColor').addEventListener('input', changeNameColor);
 		byId('nameColor').addEventListener('change', changeNameColor);
@@ -2133,16 +2136,27 @@
 		hideESCOverlay();
 	};
 
-	window.changeSkin = (a) => {
-		if (a !== byId('skin').value) {
-			byId('skin').value = a;
+	window.changeSkin = (e, s) => {
+		let sk = '';
+
+		if (e === null) {
+			sk = s;
+		} else {
+			sk = e.target.value;
 		}
 
-		settings.skin = a;
+		if (sk !== byId('skin').value) {
+			byId('skin').value = sk;
+		}
 
-		const randomColor = Color.randomColor();
+		settings.skin = sk;
 
-		byId('previewSkin').style.backgroundColor = settings.showColor ? settings.cellColor : '#fff';
+		if (sk !== '' && settings.skinnames.indexOf(sk) === -1) {
+			settings.skinnames.push(sk);
+			buildList('skinnames', settings.skinnames);
+		}
+
+		if (e !== null) e.target.blur();
 
 		if (settings.showSkins) {
 			let saved_skin = settings.skin;
@@ -2155,31 +2169,9 @@
 					byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 				};
 				byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
-
-				if (settings.fillSkin) {
-					byId('previewSkin').style.backgroundImage = 'none';
-				} else {
-					if (saved_skin === '') {
-						byId('previewSkin').src = './assets/img/transparent.png'
-						byId('previewSkin').style.backgroundImage = 'none';
-						byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
-						byId('previewSkin').style.borderColor = settings.showColor ? Color.fromHex(randomColor).darker().toHex() : Color.fromHex('#ffffff').darker().toHex();
-						byId('previewSkin').style.borderWidth = '16px';
-					}
-				}
 			} else {
-				byId('previewSkin').src = './assets/img/transparent.png';
-				byId('previewSkin').style.backgroundImage = 'none';
-				byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
-				byId('previewSkin').style.borderColor = settings.showColor ? Color.fromHex(randomColor).darker().toHex() : Color.fromHex('#ffffff').darker().toHex();
-				byId('previewSkin').style.borderWidth = '16px';
+				byId('previewSkin').src = './assets/img/transparent.png'
 			}
-		} else {
-			byId('previewSkin').src = './assets/img/transparent.png';
-			byId('previewSkin').style.backgroundImage = 'none';
-			byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
-			byId('previewSkin').style.borderColor = settings.showColor ? Color.fromHex(randomColor).darker().toHex() : Color.fromHex('#ffffff').darker().toHex();
-			byId('previewSkin').style.borderWidth = '16px';
 		}
 
 		byId('gallery').hide();

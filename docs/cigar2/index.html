@@ -35,8 +35,10 @@
 					</div>
 
 					<div class="form-group">
-						<input id="nick" class="form-control" placeholder="Nickname" maxlength="16">
-						<input id="skin" class="form-control" placeholder="Skin Name">
+						<input id="nick" list="nicknames" class="form-control" onfocus="this.value=''" placeholder="Nickname" maxlength="16" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+						<datalist id="nicknames"></datalist>
+						<input id="skin" list="skinnames" class="form-control" onfocus="this.value=''" placeholder="Skin Name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+						<datalist id="skinnames"></datalist>
 						<select id="gamemode" class="form-control" onchange="setserver(this.value)" required>
 							<option value="agar.emupedia.net:443/ws2/" selected>Emupedia</option>
 							<option value="127.0.0.1:5000">Local</option>
@@ -111,6 +113,8 @@
 							<a class="text-center" style="display: block;" href="https://discord.gg/emupedia-510149138491506688">Join us on Discord if you have suggestions</a>
 							<hr /><b>17/02/2024</b>
 							<ul>
+								<li>Added <b>Nickname</b> picker</li>
+								<li>Added <b>Skin Name</b> picker</li>
 								<li>Added custom <b>Cell Name Color</b> picker</li>
 								<li>Added custom <b>Cell Background Color</b> picker</li>
 								<li>Added custom <b>Cell Border Color</b> picker</li>
@@ -157,6 +161,6 @@
 		<input type="text" id="chat_textbox" placeholder="Press enter to chat" maxlength="100" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
 		<script src="assets/js/jquery-1.11.3.min.js"></script>
 		<script src="assets/js/quadtree.js"></script>
-		<script src="assets/js/main.min.js?v=10"></script>
+		<script src="assets/js/main.min.js?v=11"></script>
 	</body>
 </html>
