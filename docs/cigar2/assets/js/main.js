@@ -328,7 +328,8 @@
 		KeyE: 'e',
 		KeyR: 'r',
 		KeyT: 't',
-		KeyP: 'p'
+		KeyP: 'p',
+		KeyZ: 'z'
 	};
 
 	function wsCleanup() {
@@ -740,7 +741,8 @@
 	let minionControlled = false;
 	let mouseX = NaN;
 	let mouseY = NaN;
-	let macroIntervalID;
+	let feedMacroIntervalID;
+	let splitMacroIntervalID;
 	let quadtree;
 
 	const settings = {
@@ -774,6 +776,7 @@
 		backgroundSectors: false,
 		jellyPhysics: true,
 		feedMacro: true,
+		splitMacro: true,
 		nameColor: '#ffffff',
 		cellColor: '#ffffff',
 		borderColor: '#ffffff'
@@ -787,8 +790,9 @@
 		t: false,
 		p: false,
 		q: false,
+		z: false,
 		enter: false,
-		escape: false,
+		escape: false
 	};
 
 	const eatSound = new Sound('./assets/sound/eat.mp3', 0.5, 10);
@@ -796,10 +800,15 @@
 
 	fetch('skinList.txt').then(resp => resp.text()).then(data => {
 		const skins = data.split(',').filter(name => name.length > 0);
+
 		if (skins.length === 0) return;
+
 		byId('gallery-btn').style.display = 'inline-block';
+
 		const stamp = Date.now();
+
 		for (const skin of skins) knownSkins.set(skin, stamp);
+
 		for (const i of knownSkins.keys()) {
 			if (knownSkins.get(i) !== stamp) knownSkins.delete(i);
 		}
@@ -1764,8 +1773,11 @@
 	function keydown(event) {
 		if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 		const key = processKey(event);
+
 		if (pressed[key]) return;
+
 		if (Object.hasOwnProperty.call(pressed, key)) pressed[key] = true;
+
 		if (key === 'enter') {
 			if (escOverlayShown || !settings.showChat) return;
 			if (isTyping) {
@@ -1787,12 +1799,19 @@
 			if (key === 'w') {
 				code = UINT8_CACHE[minionControlled ? 0x17 : 0x15];
 				let macroCooldown = settings.feedMacro ? 0 : 1000 / 7;
-				macroIntervalID = setInterval(() => wsSend(code), macroCooldown);
+				feedMacroIntervalID = setInterval(() => wsSend(code), macroCooldown);
 				wsSend(code);
 			}
 
 			if (key === ' ') {
 				code = UINT8_CACHE[minionControlled ? 0x16 : 0x11];
+				wsSend(code);
+			}
+
+			if (key === 'z') {
+				code = UINT8_CACHE[minionControlled ? 0x16 : 0x11];
+				let macroCooldown = settings.splitMacro ? 0 : 1000 / 7;
+				splitMacroIntervalID = setInterval(() => wsSend(code), macroCooldown);
 				wsSend(code);
 			}
 
@@ -1810,7 +1829,8 @@
 
 		if (Object.hasOwnProperty.call(pressed, key)) pressed[key] = false;
 
-		if (key === 'w') clearInterval(macroIntervalID);
+		if (key === 'w') clearInterval(feedMacroIntervalID);
+		if (key === 'z') clearInterval(splitMacroIntervalID);
 	}
 
 	function handleScroll(event) {
@@ -2061,7 +2081,7 @@
 
 		let touched = false;
 
-		const touchmove = (event) => {
+		const touchmove = event => {
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 
 			const touch = event.touches[0];
@@ -2083,7 +2103,7 @@
 
 		window.addEventListener('touchmove', touchmove);
 
-		window.addEventListener('touchstart', (event) => {
+		window.addEventListener('touchstart', event => {
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 
 			if (!touched) {
@@ -2100,7 +2120,7 @@
 			touchCircle.show();
 		});
 
-		window.addEventListener('touchend', (event) => {
+		window.addEventListener('touchend', event => {
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 
 			if (event.touches.length === 0) {
@@ -2125,7 +2145,7 @@
 		Logger.info(`Init done in ${Date.now() - LOAD_START}ms`);
 	}
 
-	window.setserver = (url) => {
+	window.setserver = url => {
 		if (url === wsUrl && ws && ws.readyState <= WebSocket.OPEN) return;
 		wsInit(url);
 	};

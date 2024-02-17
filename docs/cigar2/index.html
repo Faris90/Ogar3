@@ -71,6 +71,7 @@
 								<input id="soundsVolume" type="range" min="0" max="1" step="any">
 							</label>
 							<label><input id="feedMacro" type="checkbox" />Feed Macro</label>
+							<label><input id="splitMacro" type="checkbox" />Split Macro</label>
 						</div>
 					</div>
 
@@ -89,19 +90,31 @@
 				<div id="gameplay">
 					<div>
 						<h2 id="title">Gameplay</h2>
+						<hr />
 						<div class="text">
+							<p class="text-center">
+								Move your <kbd>MOUSE</kbd> to control your Cell<br />
+								Keep pressed <kbd>W</kbd> to Eject Mass<br />
+								Press <kbd>SPACE</kbd> to Split once<br />
+								Keep pressed <kbd>Z</kbd> to do a Multi Trick Split<br />
+							</p>
+							<hr />
 							<b>Objective:</b> The objective of Agar.io is to grow your cell by consuming smaller cells and avoiding larger ones. As you grow, you'll become more formidable and be able to consume even larger cells.<br /><br />
 							<b>Starting Out:</b> When you first join the game, you'll start as a small cell. Move around using your mouse to collect the colorful pellets scattered across the map. Eating pellets increases your size and mass.<br /><br />
 							<b>Movement:</b> To move your cell, you simply move your mouse cursor in the direction you want your cell to go. Your cell will follow the movement of your mouse cursor on the screen.<br /><br />
 							<b>Consume Smaller Cells:</b> Keep an eye out for smaller cells roaming nearby. As you grow larger, you'll be able to engulf these smaller cells to increase your mass. Approach them strategically to avoid being eaten by larger cells.<br /><br />
 							<b>Avoid Larger Cells:</b> Be cautious of larger cells, as they can consume you if you're smaller than them. Watch out for players who split to capture smaller cells, and try to anticipate their movements to stay safe.<br /><br />
-							<b>Splitting:</b> You can split your cell into multiple smaller pieces by pressing the <kbd>SPACE</kbd>. Use this tactic to capture smaller cells or to escape from larger ones. Remember, splitting also makes you more vulnerable, so use it wisely.<br /><br />
+							<b>Splitting:</b> You can split your cell into multiple smaller pieces by pressing the <kbd>SPACE</kbd>. Use this tactic to capture smaller cells or to escape from larger ones. You can also do a tricksplit by pressing <kbd>Z</kbd>. Remember, splitting also makes you more vulnerable, so use it wisely.<br /><br />
 							<b>Ejecting Mass:</b> While ejecting mass by pressing the <kbd>W</kbd> can be beneficial, it also comes with risks. Ejected mass can be consumed by other players, including potential rivals. Additionally, ejecting mass reduces your cell's overall size, which may make you more vulnerable to being consumed by larger cells.<br /><br />
 							<b>Team Play (Optional):</b> In team mode, you can collaborate with other players to dominate the leaderboard. Team up with friends or other players to outmaneuver your opponents and conquer the game together.<br /><br />
 							<b>Grow and Dominate:</b> As you consume smaller cells and avoid being eaten, your cell will continue to grow in size. Aim to become the largest cell on the server and dominate the leaderboard.<br /><br />
 							<b>Watch Out for Viruses:</b> Throughout the map, you'll encounter green spiky circles known as viruses. Avoid colliding with these, as they can split your cell into smaller pieces if you're larger than them.<br /><br />
 							<b>Be Strategic:</b> Agar.io is as much about strategy as it is about skill. Pay attention to your surroundings, anticipate your opponents' moves, and use tactics like splitting and merging wisely to outsmart your rivals.<hr />
-							<b>That's it for the basics of Agar.io! Now it's time to jump into the game and start growing your cell to become the biggest and most dominant player on the server.<br /><h5 class="text-center">Good luck, and have fun!<h5></b>
+							<p class="text-center">
+								That's it for the basics of Agar.io! Now it's time to jump into the game and start growing your cell to become the biggest and most dominant player on the server.
+							</p>
+							<hr />
+							<h5 class="text-center">Good luck, and have fun!<h5></p>
 						</div>
 					</div>
 				</div>
@@ -113,6 +126,8 @@
 							<a class="text-center" style="display: block;" href="https://discord.gg/emupedia-510149138491506688">Join us on Discord if you have suggestions</a>
 							<hr /><b>17/02/2024</b>
 							<ul>
+								<li>Added toggle checkbox in <b>Settings</b> for <b>Split Macro</b></li>
+								<li>You can use <b>Split Macro</b> by pressing <kbd>Z</kbd></li>
 								<li>Added <b>Nickname</b> picker</li>
 								<li>Added <b>Skin Name</b> picker</li>
 								<li>Added custom <b>Cell Name Color</b> picker</li>
@@ -125,10 +140,10 @@
 								<li>Fixed random background colors when using <b>Jelly Physics</b></li>
 								<li>Improved Touch controls for mobile</li>
 								<li>Added toggle checkbox in <b>Settings</b> for <b>Feed Macro</b></li>
+								<li>You can use <b>Feed Macro</b> by pressing <kbd>W</kbd> and having <b>Feed Macro</b> checkbox checked in <b>Settings</b></li>
 								<li>Added <b>News</b> section</li>
 								<li>Added <b>Gameplay</b> section</li>
-								<li>Increased <b>Eject Mass</b> speed to maximum</li>
-								<li>Implemented skins that start with <kbd>$</kdb></li>
+								<li>Implemented skins that start with <kbd>$</kbd></li>
 								<li>Prevented synthetic events generated by injected scripts</li>
 								<li>Disallowed all other custom clients</li>
 							</ul>
@@ -161,6 +176,6 @@
 		<input type="text" id="chat_textbox" placeholder="Press enter to chat" maxlength="100" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
 		<script src="assets/js/jquery-1.11.3.min.js"></script>
 		<script src="assets/js/quadtree.js"></script>
-		<script src="assets/js/main.min.js?v=11"></script>
+		<script src="assets/js/main.min.js?v=13"></script>
 	</body>
 </html>
