@@ -129,7 +129,7 @@ input[type=checkbox] {
 }
 
 #news .text, #gameplay .text {
-	overflow: scroll;
+	overflow-y: scroll;
 	height: 550px;
 	font-size: 15px;
 	scrollbar-width: thin;
