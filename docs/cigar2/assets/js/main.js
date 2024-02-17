@@ -1842,8 +1842,7 @@
 
 					if (saved_skin !== '') {
 						byId('previewSkin').onerror = () => {
-							byId('previewSkin').onerror = null;
-							byId('previewSkin').src = './assets/img/checkerboard.png';
+							byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 						};
 						byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
 
@@ -1868,8 +1867,7 @@
 
 					if (saved_skin !== '') {
 						byId('previewSkin').onerror = () => {
-							byId('previewSkin').onerror = null;
-							byId('previewSkin').src = './assets/img/checkerboard.png';
+							byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 						};
 						byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
 
@@ -1921,8 +1919,7 @@
 
 					if (saved_skin !== '') {
 						byId('previewSkin').onerror = () => {
-							byId('previewSkin').onerror = null;
-							byId('previewSkin').src = './assets/img/checkerboard.png';
+							byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 						};
 						byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
 					} else {
@@ -1943,13 +1940,13 @@
 
 					if (saved_skin !== '') {
 						byId('previewSkin').onerror = () => {
-							byId('previewSkin').onerror = null;
-							byId('previewSkin').src = './assets/img/checkerboard.png';
+							byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 						};
 						byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
 					} else {
 						byId('previewSkin').src = './assets/img/transparent.png';
 						byId('previewSkin').style.backgroundImage = 'none';
+						byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
 					}
 				} else {
 					byId('previewSkin').src = './assets/img/transparent.png'
@@ -1964,7 +1961,11 @@
 				if (settings.fillSkin) {
 					byId('previewSkin').style.backgroundImage = 'none';
 				} else {
-					byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
+					if (settings.skin === '') {
+						byId('previewSkin').src = './assets/img/transparent.png'
+						byId('previewSkin').style.backgroundImage = 'none';
+						byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
+					}
 				}
 			}
 		}
@@ -2147,23 +2148,28 @@
 
 			if (saved_skin !== '') {
 				byId('previewSkin').onerror = () => {
-					byId('previewSkin').onerror = null;
-					byId('previewSkin').src = './assets/img/checkerboard.png';
+					byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 				};
 				byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
 
 				if (settings.fillSkin) {
 					byId('previewSkin').style.backgroundImage = 'none';
 				} else {
-					byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
+					if (settings.skin === '') {
+						byId('previewSkin').src = './assets/img/transparent.png'
+						byId('previewSkin').style.backgroundImage = 'none';
+						byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
+					}
 				}
 			} else {
 				byId('previewSkin').src = './assets/img/transparent.png';
 				byId('previewSkin').style.backgroundImage = 'none';
+				byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
 			}
 		} else {
 			byId('previewSkin').src = './assets/img/transparent.png';
 			byId('previewSkin').style.backgroundImage = 'none';
+			byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
 		}
 
 		byId('gallery').hide();
