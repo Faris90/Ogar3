@@ -329,6 +329,7 @@
 		KeyR: 'r',
 		KeyT: 't',
 		KeyP: 'p',
+		KeyX: 'x',
 		KeyZ: 'z'
 	};
 
@@ -790,6 +791,7 @@
 		t: false,
 		p: false,
 		q: false,
+		x: false,
 		z: false,
 		enter: false,
 		escape: false
@@ -1805,6 +1807,12 @@
 
 			if (key === ' ') {
 				code = UINT8_CACHE[minionControlled ? 0x16 : 0x11];
+				wsSend(code);
+			}
+
+			if (key === 'x') {
+				code = UINT8_CACHE[minionControlled ? 0x16 : 0x11];
+				wsSend(code);
 				wsSend(code);
 			}
 
