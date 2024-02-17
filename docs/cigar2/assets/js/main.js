@@ -135,6 +135,24 @@
 		darker(grade = 1) {
 			return this.clone().darken(grade);
 		}
+		static randomColor() {
+			switch (~~(Math.random() * 6)) {
+				case 0: return Color.toColor((~~(Math.random() * 0x100) << 16) | (0xFF << 8) | 0x10);
+				case 1: return Color.toColor((~~(Math.random() * 0x100) << 16) | (0x10 << 8) | 0xFF);
+				case 2: return Color.toColor((0xFF << 16) | (~~(Math.random() * 0x100) << 8) | 0x10);
+				case 3: return Color.toColor((0x10 << 16) | (~~(Math.random() * 0x100) << 8) | 0xFF);
+				case 4: return Color.toColor((0x10 << 16) | (0xFF << 8) | ~~(Math.random() * 0x100));
+				case 5: return Color.toColor((0xFF << 16) | (0x10 << 8) | ~~(Math.random() * 0x100));
+			}
+		}
+		static toColor(num) {
+			return '#' + (num & 0x00FFFFFF).toString(16).padStart(6, '0');
+		}
+		static toRGBA(num) {
+			num >>>= 0;
+			var b = num & 0xFF, g = (num & 0xFF00) >>> 8, r = (num & 0xFF0000) >>> 16, a = ( (num & 0xFF000000) >>> 24 ) / 255;
+			return 'rgba(' + [r, g, b, a].join(',') + ')';
+		}
 	}
 
 	function cleanupObject(object) {
@@ -287,6 +305,7 @@
 		0xFE: new Uint8Array([0xFE])
 	};
 
+	const NAME_PARSER = /^(?:<([^}]*)>)?([^]*)/;
 	const SEND_254 = new Uint8Array([0xFE, 6, 0, 0, 0]);
 	const SEND_255 = new Uint8Array([0xFF, 1, 0, 0, 0]);
 
@@ -366,26 +385,31 @@
 		syncUpdStamp = Date.now();
 		const reader = new Reader(new DataView(data.data), 0, true);
 		const packetId = reader.getUint8();
+
 		switch (packetId) {
+			// update nodes
 			case 0x10: {
-				// update nodes
 				// consume records
 				const addedCount = reader.getUint16();
+
 				for (let i = 0; i < addedCount; i++) {
 					const killer = reader.getUint32();
 					const killed = reader.getUint32();
+
 					if (!cells.byId.has(killer) || !cells.byId.has(killed))
 						continue;
+
 					if (settings.playSounds && cells.mine.includes(killer)) {
 						(cells.byId.get(killed).s < 20 ? pelletSound : eatSound).play(parseFloat(soundsVolume.value));
 					}
+
 					cells.byId.get(killed).destroy(killer);
 				}
 
 				// update records
-				// eslint-disable-next-line no-constant-condition
 				while (true) {
 					const id = reader.getUint32();
+
 					if (id === 0) break;
 
 					const x = reader.getInt32();
@@ -393,6 +417,7 @@
 					const s = reader.getUint16();
 
 					const flagMask = reader.getUint8();
+
 					const flags = {
 						updColor: !!(flagMask & 0x02),
 						updSkin: !!(flagMask & 0x04),
@@ -415,26 +440,31 @@
 						cell.nx = x;
 						cell.ny = y;
 						cell.ns = s;
-						if (color) cell.setColor(color);
-						if (name) cell.setName(name);
+
+						if (color) cell.cellColor = color;
+						if (name) cell.name = name;
 						if (skin) cell.setSkin(skin);
 					} else {
-						const cell = new Cell(id, x, y, s, name, color, skin, flags);
+						const cell = new Cell(id, x, y, s, name, name === settings.nick && settings.nameColor !== '#ffffff' ? Color.fromHex(settings.nameColor) : null, name === settings.nick && settings.cellColor !== '#ffffff' ? Color.fromHex(settings.cellColor) : color, name === settings.nick && settings.borderColor !== '#ffffff' ? Color.fromHex(settings.borderColor) : color.darker(), skin, flags, name === settings.nick);
 						cells.byId.set(id, cell);
 						cells.list.push(cell);
 					}
 				}
+
 				// dissapear records
 				const removedCount = reader.getUint16();
+
 				for (let i = 0; i < removedCount; i++) {
 					const killed = reader.getUint32();
+
 					if (cells.byId.has(killed) && !cells.byId.get(killed).destroyed) {
 						cells.byId.get(killed).destroy(null);
 					}
 				}
 				break;
 			}
-			case 0x11: { // update pos
+			// update pos
+			case 0x11: {
 				camera.target.x = reader.getFloat32();
 				camera.target.y = reader.getFloat32();
 				camera.target.scale = reader.getFloat32();
@@ -442,41 +472,50 @@
 				camera.target.scale *= camera.userZoom;
 				break;
 			}
-			case 0x12: { // clear all
+			// clear all
+			case 0x12: {
 				for (const cell of cells.byId.values()) {
 					cell.destroy(null);
 				}
 				cells.mine = [];
 				break;
 			}
-			case 0x14: { // clear my cells
+			// clear my cells
+			case 0x14: {
 				cells.mine = [];
 				break;
 			}
-			case 0x15: { // draw line
+			// draw line
+			case 0x15: {
 				Logger.warn('got packet 0x15 (draw line) which is unsupported');
 				break;
 			}
-			case 0x20: { // new cell
+			// new cell
+			case 0x20: {
 				cells.mine.push(reader.getUint32());
 				break;
 			}
-			case 0x30: { // text list
+			// text list
+			case 0x30: {
 				leaderboard.items = [];
 				leaderboard.type = 'text';
 
 				const lbCount = reader.getUint32();
+
 				for (let i = 0; i < lbCount; ++i) {
 					leaderboard.items.push(reader.getStringUTF8());
 				}
+
 				drawLeaderboard();
 				break;
 			}
-			case 0x31: { // ffa list
+			// ffa list
+			case 0x31: {
 				leaderboard.items = [];
 				leaderboard.type = 'ffa';
 
 				const count = reader.getUint32();
+
 				for (let i = 0; i < count; ++i) {
 					const isMe = !!reader.getUint32();
 					const lbName = reader.getStringUTF8();
@@ -485,21 +524,26 @@
 						name: Cell.parseName(lbName).name || EMPTY_NAME
 					});
 				}
+
 				drawLeaderboard();
 				break;
 			}
-			case 0x32: { // pie chart
+			// pie chart
+			case 0x32: {
 				leaderboard.items = [];
 				leaderboard.type = 'pie';
 
 				const teamsCount = reader.getUint32();
+
 				for (let i = 0; i < teamsCount; ++i) {
 					leaderboard.items.push(reader.getFloat32());
 				}
+
 				drawLeaderboard();
 				break;
 			}
-			case 0x40: { // set border
+			// set border
+			case 0x40: {
 				border.left = reader.getFloat64();
 				border.top = reader.getFloat64();
 				border.right = reader.getFloat64();
@@ -508,28 +552,36 @@
 				border.height = border.bottom - border.top;
 				border.centerX = (border.left + border.right) / 2;
 				border.centerY = (border.top + border.bottom) / 2;
+
 				if (data.data.byteLength === 33) break;
+
 				if (!mapCenterSet) {
 					mapCenterSet = true;
 					camera.x = camera.target.x = border.centerX;
 					camera.y = camera.target.y = border.centerY;
 					camera.scale = camera.target.scale = 1;
 				}
+
 				reader.getUint32(); // game type
+
 				if (!/MultiOgar|OgarII/.test(reader.getStringUTF8()) || stats.pingLoopId) break;
+
 				stats.pingLoopId = setInterval(() => {
 					wsSend(UINT8_CACHE[0xFE]);
 					stats.pingLoopStamp = Date.now();
 				}, 2000);
 				break;
 			}
-			case 0x63: { // chat message
+			// chat message
+			case 0x63: {
 				const flagMask = reader.getUint8();
+
 				const flags = {
 					server: !!(flagMask & 0x80),
 					admin: !!(flagMask & 0x40),
 					mod: !!(flagMask & 0x20),
 				};
+
 				const color = new Color(reader.getUint8(), reader.getUint8(), reader.getUint8());
 				const rawName = reader.getStringUTF8();
 				const message = reader.getStringUTF8();
@@ -542,6 +594,7 @@
 
 				const wait = Math.max(3000, 1000 + message.length * 150);
 				chat.waitUntil = syncUpdStamp - chat.waitUntil > 1000 ? syncUpdStamp + wait : chat.waitUntil + wait;
+
 				chat.messages.push({
 					color,
 					name,
@@ -551,16 +604,19 @@
 					admin: flags.admin,
 					mod: flags.mod,
 				});
+
 				if (settings.showChat) drawChat();
 				break;
 			}
-			case 0xFE: { // server stat
+			// server stat
+			case 0xFE: {
 				stats.info = JSON.parse(reader.getStringUTF8());
 				stats.latency = syncUpdStamp - stats.pingLoopStamp;
 				drawStats();
 				break;
 			}
-			default: { // invalid packet
+			// invalid packet
+			default: {
 				wsCleanup();
 				break;
 			}
@@ -716,7 +772,11 @@
 		backgroundSectors: false,
 		jellyPhysics: true,
 		feedMacro: true,
+		nameColor: '#ffffff',
+		cellColor: '#ffffff',
+		borderColor: '#ffffff'
 	};
+
 	const pressed = {
 		' ': false,
 		w: false,
@@ -835,15 +895,13 @@
 		const latestMessages = chat.messages.slice(-15);
 		const lines = [];
 		for (let i = 0; i < latestMessages.length; i++) {
-			lines.push([
-				{
-					text: latestMessages[i].name,
-					color: latestMessages[i].color
-				}, {
-					text: ` ${latestMessages[i].message}`,
-					color: Color.fromHex(settings.darkTheme ? '#FFF' : '#000')
-				}
-			]);
+			lines.push([{
+				text: latestMessages[i].name,
+				color: latestMessages[i].color
+			} , {
+				text: ` ${latestMessages[i].message}`,
+				color: Color.fromHex(settings.darkTheme ? '#FFF' : '#000')
+			}]);
 		}
 		window.lines = lines;
 		let width = 0;
@@ -865,7 +923,7 @@
 			let complexes = lines[i];
 			for (let j = 0; j < complexes.length; j++) {
 				ctx.font = '18px Ubuntu';
-				ctx.fillStyle = complexes[j].color.toHex();
+				ctx.fillStyle = settings.showColor ? complexes[j].color.toHex() : '#FFF';
 				ctx.fillText(complexes[j].text, width, 20 * (1 + i));
 				width += complexes[j].width;
 			}
@@ -1093,7 +1151,7 @@
 			for (const id of cells.mine) {
 				const cell = cells.byId.get(id);
 				if (!cell) continue;
-				mainCtx.fillStyle = cell.color.toHex(); // repeat assignment of same color is OK
+				mainCtx.fillStyle = cell.cellColor.toHex(); // repeat assignment of same color is OK
 				const x = beginX + (cell.x + halfWidth) * xScale;
 				const y = beginY + (cell.y + halfHeight) * yScale;
 				const r = Math.max(cell.s, 200) * (xScale + yScale) / 2;
@@ -1108,8 +1166,9 @@
 
 		// draw name above user's pos if they have a cell on the screen
 		const cell = cells.byId.get(cells.mine.find(id => cells.byId.has(id)));
+
 		if (cell) {
-			mainCtx.fillStyle = settings.darkTheme ? '#DDD' : '#222';
+			mainCtx.fillStyle = settings.showColor && typeof cell['nameColor'] !== 'undefined' && cell.nameColor !== '' && cell.nameColor !== null ? cell.nameColor.toHex() : (settings.darkTheme ? '#DDD' : '#222');
 			mainCtx.font = `${sectorNameSize}px Ubuntu`;
 			mainCtx.fillText(cell.name || EMPTY_NAME, myPosX, myPosY - 7 - sectorNameSize / 2);
 		}
@@ -1137,10 +1196,14 @@
 		syncAppStamp = Date.now();
 
 		const drawList = cells.list.slice(0).sort(cellSort);
+
 		for (const cell of drawList) cell.update(syncAppStamp);
+
 		cameraUpdate();
+
 		if (settings.jellyPhysics) {
 			updateQuadtree();
+
 			for (const cell of drawList) {
 				cell.updateNumPoints();
 				cell.movePoints();
@@ -1152,13 +1215,16 @@
 
 		mainCtx.fillStyle = settings.darkTheme ? '#111' : '#F2FBFF';
 		mainCtx.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
+
 		if (settings.showGrid) drawGrid();
 		if (settings.backgroundSectors) drawBackgroundSectors();
 
 		toCamera(mainCtx);
 		drawBorders();
 
-		for (const cell of drawList) cell.draw(mainCtx);
+		for (const cell of drawList) {
+			cell.draw(mainCtx);
+		}
 
 		fromCamera(mainCtx);
 		quadtree = null;
@@ -1167,34 +1233,34 @@
 		let height = 2;
 		mainCtx.fillStyle = settings.darkTheme ? '#FFF' : '#000';
 		mainCtx.textBaseline = 'top';
+
 		if (!isNaN(stats.score)) {
 			mainCtx.font = '30px Ubuntu';
 			mainCtx.fillText(`Score: ${stats.score}`, 2, height);
 			height += 30;
 		}
+
 		mainCtx.font = '20px Ubuntu';
+
 		const gameStatsText = `${~~stats.fps} FPS` + (isNaN(stats.latency) ? '' : ` ${stats.latency}ms ping`);
+
 		mainCtx.fillText(gameStatsText, 2, height);
 		height += 24;
 
 		if (stats.visible) {
 			mainCtx.drawImage(stats.canvas, 2, height);
 		}
+
 		if (leaderboard.visible) {
-			mainCtx.drawImage(
-				leaderboard.canvas,
-				mainCanvas.width / camera.viewportScale - 10 - leaderboard.canvas.width,
-				10);
+			mainCtx.drawImage(leaderboard.canvas, mainCanvas.width / camera.viewportScale - 10 - leaderboard.canvas.width, 10);
 		}
+
 		if (settings.showChat && (chat.visible || isTyping)) {
 			mainCtx.globalAlpha = isTyping ? 1 : Math.max(1000 - syncAppStamp + chat.waitUntil, 0) / 1000;
-			mainCtx.drawImage(
-				chat.canvas,
-				10 / camera.viewportScale,
-				(mainCanvas.height - 55) / camera.viewportScale - chat.canvas.height
-			);
+			mainCtx.drawImage(chat.canvas, 10 / camera.viewportScale, (mainCanvas.height - 55) / camera.viewportScale - chat.canvas.height);
 			mainCtx.globalAlpha = 1;
 		}
+
 		drawMinimap();
 		drawPosition();
 
@@ -1271,14 +1337,16 @@
 
 	class Cell {
 		static parseName(value) { // static method
-			let [, skin, name] = /^(?:<([^}]*)>)?([^]*)/.exec(value || '');
-			name = name.trim();
+			let [_, skin, name] = NAME_PARSER.exec(value || '');
+
+			name = (name || '').trim();
+
 			return {
-				name: name,
-				skin: (skin || '').trim() || name,
+				name,
+				skin: (skin || '').trim() || name
 			};
 		}
-		constructor(id, x, y, s, name, color, skin, flags) {
+		constructor(id, x, y, s, name, nameColor, cellColor, borderColor, skin, flags, me) {
 			this.destroyed = false;
 			this.diedBy = 0;
 			this.nameSize = 0;
@@ -1295,9 +1363,12 @@
 			this.os = s;
 			this.s = s;
 			this.ns = s;
-			this.setColor(color);
-			this.setName(name);
+			this.name = name;
+			this.nameColor = nameColor;
+			this.cellColor = cellColor;
+			this.borderColor = borderColor || cellColor.darker();
 			this.setSkin(skin);
+			this.me = me;
 			this.jagged = flags.jagged;
 			this.ejected = flags.ejected;
 			this.born = syncUpdStamp;
@@ -1318,17 +1389,23 @@
 			const prevFrameSize = this.s;
 			const dt = Math.max(Math.min((relativeTime - this.updated) / 120, 1), 0);
 			let diedBy;
+
 			if (this.destroyed && Date.now() > this.dead + 200) {
 				cells.list.remove(this);
 			} else if (this.diedBy && (diedBy = cells.byId.get(this.diedBy))) {
 				this.nx = diedBy.x;
 				this.ny = diedBy.y;
 			}
+
 			this.x = this.ox + (this.nx - this.ox) * dt;
 			this.y = this.oy + (this.ny - this.oy) * dt;
 			this.s = this.os + (this.ns - this.os) * dt;
 			this.nameSize = ~~(~~(Math.max(~~(0.3 * this.ns), 24)) / 3) * 3;
 			this.drawNameSize = ~~(~~(Math.max(~~(0.3 * this.s), 24)) / 3) * 3;
+
+			if (this.updated) {
+				this.me = this.name === settings.nick;
+			}
 
 			/*TODO: find out why this causes random background color
 			if (settings.jellyPhysics && this.points.length) {
@@ -1341,30 +1418,23 @@
 		updateNumPoints() {
 			let numPoints = Math.min(Math.max(this.s * camera.scale | 0, CELL_POINTS_MIN), CELL_POINTS_MAX);
 			if (this.jagged) numPoints = VIRUS_POINTS;
+
 			while (this.points.length > numPoints) {
 				const i = Math.random() * this.points.length | 0;
 				this.points.splice(i, 1);
 				this.pointsVel.splice(i, 1);
 			}
+
 			if (this.points.length === 0 && numPoints !== 0) {
-				this.points.push({
-					x: this.x,
-					y: this.y,
-					rl: this.s,
-					parent: this,
-				});
+				this.points.push({ x: this.x, y: this.y, rl: this.s, parent: this });
 				this.pointsVel.push(Math.random() - 0.5);
 			}
+
 			while (this.points.length < numPoints) {
 				const i = Math.random() * this.points.length | 0;
 				const point = this.points[i];
 				const vel = this.pointsVel[i];
-				this.points.splice(i, 0, {
-					x: point.x,
-					y: point.y,
-					rl: point.rl,
-					parent: this
-				});
+				this.points.splice(i, 0, { x: point.x, y: point.y, rl: point.rl, parent: this });
 				this.pointsVel.splice(i, 0, vel);
 			}
 		}
@@ -1410,18 +1480,24 @@
 				curP.y = this.y + Math.sin(angle) * rl;
 			}
 		}
-		setName(rawName) {
-			const {name, skin} = Cell.parseName(rawName);
-			this.name = name;
-
-			if (typeof skin !== 'undefined' && skin !== null && skin !== '' && skin !== name) {
-				this.setSkin(skin);
-			}
-		}
 		setSkin(value) {
-			this.skin = (value && value[0] === '%' ? value.slice(1) : (value[0] === '$' ? encode(encode(value)) : value)) || this.skin;
+			if (typeof value === 'undefined' || value === null || value === '') return;
 
-			if (typeof this.skin === 'undefined' || this.skin === null || this.skin === '' || loadedSkins.has(this.skin)) return;
+			if (value.indexOf('|') !== -1) {
+				value = value.split('|')[0];
+			}
+
+			this.skin = (value[0] === '%' ? value.slice(1) : (value[0] === '$' ? encode(encode(value)) : value)) || value;
+
+			/*if (value !== '') {
+				if (value[0] === '$') {
+					console.log(`${value} = ${this.skin}`);
+				} else {
+					console.log(value);
+				}
+			}*/
+
+			if (loadedSkins.has(this.skin)) return;
 
 			const skin = new Image();
 
@@ -1438,14 +1514,6 @@
 
 			loadedSkins.set(this.skin, skin);
 		}
-		setColor(value) {
-			if (!value) {
-				Logger.warn('Got no color');
-				return;
-			}
-			this.color = value;
-			this.sColor = value.darker();
-		}
 		draw(ctx) {
 			ctx.save();
 			this.drawShape(ctx);
@@ -1453,9 +1521,10 @@
 			ctx.restore();
 		}
 		drawShape(ctx) {
-			ctx.fillStyle = settings.showColor ? this.color.toHex() : '#FFFFFF';
-			ctx.strokeStyle = settings.showColor ? this.sColor.toHex() : '#E5E5E5';
+			ctx.fillStyle = settings.showColor ? this.cellColor.toHex() : '#FFFFFF';
+			ctx.strokeStyle = settings.showColor ? this.borderColor.toHex() : '#E5E5E5';
 			ctx.lineWidth = Math.max(~~(this.s / 50), 10);
+
 			if (this.s > 20) {
 				this.s -= ctx.lineWidth / 2;
 			}
@@ -1488,8 +1557,7 @@
 			}
 
 			const skinImage = loadedSkins.get(this.skin);
-			if (settings.showSkins && this.skin && skinImage &&
-				skinImage.complete && skinImage.width && skinImage.height) {
+			if (settings.showSkins && this.skin && skinImage && skinImage.complete && skinImage.width && skinImage.height) {
 				if (settings.fillSkin) ctx.fill();
 				ctx.save(); // for the clip
 				ctx.clip();
@@ -1506,13 +1574,12 @@
 		drawText(ctx) {
 			if (this.s < 20 || this.jagged) return;
 			if (this.name && settings.showNames) {
-				drawText(ctx, false, this.x, this.y, this.nameSize, this.drawNameSize, this.name);
+				drawText(ctx, false, this.x, this.y, this.nameSize, this.drawNameSize, this.name, this.nameColor);
 			}
 			if (settings.showMass && (cells.mine.indexOf(this.id) !== -1 || cells.mine.length === 0)) {
 				const mass = (~~(this.s * this.s / 100)).toString();
 				let y = this.y;
-				if (this.name && settings.showNames)
-					y += Math.max(this.s / 4.5, this.nameSize / 1.5);
+				if (this.name && settings.showNames) y += Math.max(this.s / 4.5, this.nameSize / 1.5);
 				drawText(ctx, true, this.x, y, this.nameSize / 2, this.drawNameSize / 2, mass);
 			}
 		}
@@ -1535,11 +1602,11 @@
 
 	// 2-var draw-stay cache
 	const cachedNames = new Map();
-	const cachedMass  = new Map();
+	const cachedMass = new Map();
 	window.cachedNames = cachedNames;
 	window.cachedMass = cachedMass;
 
-	function drawTextOnto(canvas, ctx, text, size) {
+	function drawTextOnto(canvas, ctx, text, size, color = '#FFF') {
 		ctx.font = size + 'px Ubuntu';
 		ctx.lineWidth = Math.max(~~(size / 10), 2);
 		canvas.width = ctx.measureText(text).width + 2 * ctx.lineWidth;
@@ -1548,29 +1615,29 @@
 		ctx.lineWidth = Math.max(~~(size / 10), 2);
 		ctx.textBaseline = 'middle';
 		ctx.textAlign = 'center';
-		ctx.fillStyle = '#FFF'
+		ctx.fillStyle = color;
 		ctx.strokeStyle = '#000';
 		ctx.translate(canvas.width / 2, 2 * size);
 		(ctx.lineWidth !== 1) && ctx.strokeText(text, 0, 0);
 		ctx.fillText(text, 0, 0);
 	}
 
-	function drawRaw(ctx, x, y, text, size) {
+	function drawRaw(ctx, x, y, text, size, color = '#FFF') {
 		ctx.font = size + 'px Ubuntu';
 		ctx.textBaseline = 'middle';
 		ctx.textAlign = 'center';
 		ctx.lineWidth = Math.max(~~(size / 10), 2);
-		ctx.fillStyle = '#FFF'
+		ctx.fillStyle = color;
 		ctx.strokeStyle = '#000';
 		(ctx.lineWidth !== 1) && ctx.strokeText(text, x, y);
 		ctx.fillText(text, x, y);
 		ctx.restore();
 	}
 
-	function newNameCache(value, size) {
+	function newNameCache(value, size, color = '#FFF') {
 		const canvas = document.createElement('canvas');
 		const ctx = canvas.getContext('2d');
-		drawTextOnto(canvas, ctx, value, size);
+		drawTextOnto(canvas, ctx, value, size, color);
 		if (!cachedNames.has(value)) cachedNames.set(value, new Map());
 		const cache = {
 			width: canvas.width,
@@ -1578,6 +1645,7 @@
 			canvas: canvas,
 			value: value,
 			size: size,
+			color: color,
 			accessTime: syncAppStamp
 		};
 		cachedNames.get(value).set(size, cache);
@@ -1632,9 +1700,9 @@
 		return newMassCache(size);
 	}
 
-	function drawText(ctx, isMass, x, y, size, drawSize, value) {
+	function drawText(ctx, isMass, x, y, size, drawSize, value, color = '#FFF') {
 		ctx.save();
-		if (size > 500) return drawRaw(ctx, x, y, value, drawSize);
+		if (size > 500) return drawRaw(ctx, x, y, value, drawSize, color);
 		ctx.imageSmoothingQuality = 'high';
 		if (isMass) {
 			const cache = getMassCache(size);
@@ -1746,31 +1814,169 @@
 
 		loadSettings();
 
+		byId('previewName').innerHTML = settings.nick;
+
+		const changeNick = e => {
+			byId('previewName').innerHTML = e.target.value;
+		};
+
 		if (typeof settings['skin'] !== 'undefined' && settings['skin'] !== '') {
-			let saved_skin = settings['skin'];
+			let saved_skin = settings.skin;
 
 			if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
 
-			byId('preview').onerror = () => {
-				byId('preview').onerror = () => {
-					byId('preview').src = `./assets/img/checkerboard.png`;
+			if (!settings.showSkins || saved_skin === '') {
+				byId('previewSkin').src = './assets/img/transparent.png';
+				byId('previewSkin').style.backgroundImage = 'none';
+			} else {
+				if (settings.fillSkin) {
+					byId('previewSkin').style.backgroundImage = 'none';
+				} else {
+					byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
+				}
+
+				byId('previewSkin').onerror = () => {
+					byId('previewSkin').onerror = () => {
+						byId('previewSkin').src = './assets/img/checkerboard.png';
+					};
+					byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 				};
-				byId('preview').src = `${SKIN_URL}custom/${saved_skin}.png`;
-			};
-			byId('preview').src = `${SKIN_URL}${saved_skin}.png`
-		} else {
-			byId('preview').src = `./assets/img/checkerboard.png`;
+				byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`
+			}
 		}
 
+		if (settings.nameColor !== '#ffffff') {
+			byId('nameColor').value = settings.nameColor;
+			byId('previewName').style.color = settings.nameColor;
+		}
+
+		const changeNameColor = e => {
+			byId('previewName').style.color = e.target.value;
+			settings['nameColor'] = e.target.value;
+			storeSettings();
+		};
+
+		if (settings.cellColor !== '#ffffff') {
+			byId('cellColor').value = settings.cellColor;
+
+			if (!settings.showSkins || settings['skin'] === '') {
+				byId('previewSkin').src = './assets/img/transparent.png'
+				byId('previewSkin').style.backgroundImage = 'none';
+			}
+
+			byId('previewSkin').style.backgroundColor = settings.cellColor;
+		} else {
+			const randomColor = Color.randomColor();
+			byId('previewSkin').style.backgroundColor = randomColor;
+			byId('previewSkin').style.borderWidth = '16px';
+			byId('previewSkin').style.borderColor = Color.fromHex(randomColor).darker().toHex();
+		}
+
+		const changeCellColor1 = e => {
+			byId('previewSkin').src = './assets/img/transparent.png'
+			byId('previewSkin').style.backgroundImage = 'none';
+			byId('previewSkin').style.backgroundColor = e.target.value;
+			settings['cellColor'] = e.target.value;
+		};
+
+		const changeCellColor2 = e => {
+			let saved_skin = settings.skin;
+
+			if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
+
+			if (!settings.showSkins || saved_skin === '') {
+				byId('previewSkin').src = './assets/img/transparent.png';
+				byId('previewSkin').style.backgroundImage = 'none';
+			} else {
+				if (settings.fillSkin) {
+					byId('previewSkin').style.backgroundImage = 'none';
+				} else {
+					byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
+				}
+
+				byId('previewSkin').onerror = () => {
+					byId('previewSkin').onerror = () => {
+						byId('previewSkin').src = './assets/img/checkerboard.png';
+					};
+					byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
+				};
+				byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`
+			}
+
+			byId('previewSkin').style.backgroundColor = e.target.value;
+			settings['cellColor'] = e.target.value;
+			storeSettings();
+		};
+
+		if (settings.borderColor !== '#ffffff') {
+			byId('borderColor').value = settings.borderColor;
+			byId('previewSkin').style.borderColor = settings.borderColor;
+			byId('previewSkin').style.borderWidth = '16px';
+		}
+
+		const changeBorderColor = e => {
+			byId('previewSkin').style.borderWidth = '16px';
+			byId('previewSkin').style.borderColor = e.target.value;
+			settings['borderColor'] = e.target.value;
+			storeSettings();
+		};
+
+		const changeShowSkins = e => {
+			let saved_skin = settings.skin;
+
+			if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
+
+			if (!settings.showSkins || saved_skin === '') {
+				byId('previewSkin').src = './assets/img/transparent.png';
+				byId('previewSkin').style.backgroundImage = 'none';
+			} else {
+				if (settings.fillSkin) {
+					byId('previewSkin').style.backgroundImage = 'none';
+				} else {
+					byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
+				}
+
+				byId('previewSkin').onerror = () => {
+					byId('previewSkin').onerror = () => {
+						byId('previewSkin').src = './assets/img/checkerboard.png';
+					};
+					byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
+				};
+				byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`
+			}
+		}
+
+		const changeFillSkin = e => {
+			if (settings.fillSkin) {
+				byId('previewSkin').style.backgroundImage = 'none';
+			} else {
+				byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
+			}
+		}
+
+		byId('nick').addEventListener('input', changeNick);
 		byId('skin').addEventListener('change', e => changeSkin(e.target.value));
+		byId('fillSkin').addEventListener('change', changeFillSkin);
+		byId('nameColor').addEventListener('input', changeNameColor);
+		byId('nameColor').addEventListener('change', changeNameColor);
+		byId('cellColor').addEventListener('input', changeCellColor1);
+		byId('cellColor').addEventListener('change', changeCellColor2);
+		byId('borderColor').addEventListener('input', changeBorderColor);
+		byId('borderColor').addEventListener('change', changeBorderColor);
+		byId('showSkins').addEventListener('change', changeShowSkins);
 
 		window.addEventListener('beforeunload', storeSettings);
 
-		document.addEventListener('wheel', handleScroll, {passive: true});
+		document.addEventListener('wheel', handleScroll, { passive: true });
 
 		byId('play-btn').addEventListener('click', () => {
 			const skin = settings.skin;
-			sendPlay((skin ? `<${skin}>` : '') + settings.nick.substring(0, 16));
+			const nameColor = settings.nameColor;
+			const cellColor = settings.cellColor;
+			const borderColor = settings.borderColor;
+
+			sendPlay('<' + (skin ? `${skin}` : '') + '|' + (nameColor ? `${nameColor}` : '') + '|' + (cellColor ? `${cellColor}` : '') + '|' + (borderColor ? `${borderColor}` : '') + '>' + settings.nick.substring(0, 16));
+
 			hideESCOverlay();
 			storeSettings();
 		});
@@ -1898,16 +2104,23 @@
 
 		if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
 
-		if (saved_skin === '') {
-			byId('preview').src = `./assets/img/checkerboard.png`;
+		if (!settings.showSkins || saved_skin === '') {
+			byId('previewSkin').src = './assets/img/transparent.png';
+			byId('previewSkin').style.backgroundImage = 'none';
 		} else {
-			byId('preview').onerror = () => {
-				byId('preview').onerror = () => {
-					byId('preview').src = `./assets/img/checkerboard.png`;
+			if (settings.fillSkin) {
+				byId('previewSkin').style.backgroundImage = 'none';
+			} else {
+				byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
+			}
+
+			byId('previewSkin').onerror = () => {
+				byId('previewSkin').onerror = () => {
+					byId('previewSkin').src = './assets/img/checkerboard.png';
 				};
-				byId('preview').src = `${SKIN_URL}custom/${saved_skin}.png`;
+				byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 			};
-			byId('preview').src = `${SKIN_URL}${saved_skin}.png`
+			byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`
 		}
 
 		byId('gallery').hide();

@@ -50,31 +50,37 @@
 
 					<div id="settings" class="checkbox" style="display:none;">
 						<div style="margin: 6px;">
-							<label><input id="showSkins" type="checkbox">Skins</label>
-							<label><input id="showNames" type="checkbox">Names</label>
-							<label><input id="darkTheme" type="checkbox">Dark</label>
-							<label><input id="showColor" type="checkbox">Color</label>
-							<label><input id="showMass" type="checkbox">Mass</label>
-							<label><input id="showChat" type="checkbox">Chat</label>
-							<label><input id="showMinimap" type="checkbox">Minimap</label>
-							<label><input id="showPosition" type="checkbox">Position</label>
-							<label><input id="showBorder" type="checkbox">Border</label>
-							<label><input id="showGrid" type="checkbox">Grid</label>
-							<label><input id="moreZoom" type="checkbox">Zoom Out</label>
-							<label><input id="fillSkin" type="checkbox">Fill Skin</label>
-							<label><input id="backgroundSectors" type="checkbox">Background Sectors</label>
-							<label><input id="jellyPhysics" type="checkbox">Jelly Physics</label>
+							<label><input id="showSkins" type="checkbox" />Skins</label>
+							<label><input id="fillSkin" type="checkbox" />Fill Skin</label>
+							<label><input id="showNames" type="checkbox" />Names</label>
+							<label><input id="darkTheme" type="checkbox" />Dark</label>
+							<label><input id="showColor" type="checkbox" />Color</label>
+							<label><input id="showMass" type="checkbox" />Mass</label>
+							<label><input id="showChat" type="checkbox" />Chat</label>
+							<label><input id="showMinimap" type="checkbox" />Minimap</label>
+							<label><input id="showPosition" type="checkbox" />Position</label>
+							<label><input id="showBorder" type="checkbox" />Border</label>
+							<label><input id="showGrid" type="checkbox" />Grid</label>
+							<label><input id="moreZoom" type="checkbox" />Zoom Out</label>
+							<label><input id="backgroundSectors" type="checkbox" />Background Sectors</label>
+							<label><input id="jellyPhysics" type="checkbox" />Jelly Physics</label>
 							<label>
-								<input id="playSounds" type="checkbox">Sounds
+								<input id="playSounds" type="checkbox" />Sounds
 								<input id="soundsVolume" type="range" min="0" max="1" step="any">
 							</label>
-							<label><input id="feedMacro" type="checkbox">Feed Macro</label>
+							<label><input id="feedMacro" type="checkbox" />Feed Macro</label>
 						</div>
 					</div>
 
-					<div>
-						<h4 id="title">Selected Skin</h4>
-						<img id="preview" src="">
+					<div id="preview">
+						<img id="previewSkin" src="assets/img/transparent.png">
+						<div id="previewName"></div>
+					</div>
+
+					<div id="colors">
+						<label><input id="nameColor" type="color" value="#ffffff" /><span>Name</span></label>
+						<label><input id="cellColor" type="color" value="#ffffff" /><span>Background</span></label>
+						<label><input id="borderColor" type="color" value="#ffffff" /><span>Border</span></label>
 					</div>
 				</div>
 
@@ -103,6 +109,12 @@
 						<h2 id="title">News</h2>
 						<div class="text">
 							<a class="text-center" style="display: block;" href="https://discord.gg/emupedia-510149138491506688">Join us on Discord if you have suggestions</a>
+							<hr /><b>17/02/2024</b>
+							<ul>
+								<li>Added custom <b>Cell Name Color</b> picker</li>
+								<li>Added custom <b>Cell Background Color</b> picker</li>
+								<li>Added custom <b>Cell Border Color</b> picker</li>
+							</ul>
 							<hr /><b>16/02/2024</b>
 							<ul>
 								<li>Started working on new <b>Custom Skin</b> upload feature</li>
@@ -145,6 +157,6 @@
 		<input type="text" id="chat_textbox" placeholder="Press enter to chat" maxlength="100" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
 		<script src="assets/js/jquery-1.11.3.min.js"></script>
 		<script src="assets/js/quadtree.js"></script>
-		<script src="assets/js/main.min.js?v=2"></script>
+		<script src="assets/js/main.min.js?v=3"></script>
 	</body>
 </html>
