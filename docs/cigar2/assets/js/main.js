@@ -1883,7 +1883,6 @@
 				} else {
 					byId('previewSkin').src = './assets/img/transparent.png'
 					byId('previewSkin').style.backgroundImage = 'none';
-					byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
 				}
 			}
 
@@ -1932,8 +1931,6 @@
 				}
 			} else {
 				if (settings.showSkins) {
-					byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
-
 					let saved_skin = settings.skin;
 
 					if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
@@ -1961,7 +1958,9 @@
 				if (settings.fillSkin) {
 					byId('previewSkin').style.backgroundImage = 'none';
 				} else {
-					if (settings.skin === '') {
+					if (settings.skin !== '') {
+						byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
+					} else {
 						byId('previewSkin').src = './assets/img/transparent.png'
 						byId('previewSkin').style.backgroundImage = 'none';
 						byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
@@ -2155,21 +2154,27 @@
 				if (settings.fillSkin) {
 					byId('previewSkin').style.backgroundImage = 'none';
 				} else {
-					if (settings.skin === '') {
+					if (saved_skin === '') {
 						byId('previewSkin').src = './assets/img/transparent.png'
 						byId('previewSkin').style.backgroundImage = 'none';
 						byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
+						byId('previewSkin').style.borderColor = settings.showColor ? Color.fromHex(randomColor).darker().toHex() : Color.fromHex('#ffffff').darker().toHex();
+						byId('previewSkin').style.borderWidth = '16px';
 					}
 				}
 			} else {
 				byId('previewSkin').src = './assets/img/transparent.png';
 				byId('previewSkin').style.backgroundImage = 'none';
 				byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
+				byId('previewSkin').style.borderColor = settings.showColor ? Color.fromHex(randomColor).darker().toHex() : Color.fromHex('#ffffff').darker().toHex();
+				byId('previewSkin').style.borderWidth = '16px';
 			}
 		} else {
 			byId('previewSkin').src = './assets/img/transparent.png';
 			byId('previewSkin').style.backgroundImage = 'none';
 			byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
+			byId('previewSkin').style.borderColor = settings.showColor ? Color.fromHex(randomColor).darker().toHex() : Color.fromHex('#ffffff').darker().toHex();
+			byId('previewSkin').style.borderWidth = '16px';
 		}
 
 		byId('gallery').hide();
