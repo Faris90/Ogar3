@@ -1859,7 +1859,7 @@
 		if (settings.cellColor !== '#ffffff') {
 			byId('cellColor').value = settings.cellColor;
 
-			if (!settings.showSkins || settings['skin'] === '') {
+			if (!settings.showSkins || settings.skin === '') {
 				byId('previewSkin').src = './assets/img/transparent.png'
 				byId('previewSkin').style.backgroundImage = 'none';
 			}
@@ -1867,6 +1867,8 @@
 			byId('previewSkin').style.backgroundColor = settings.cellColor;
 		} else {
 			const randomColor = Color.randomColor();
+			byId('previewSkin').src = './assets/img/transparent.png'
+			byId('previewSkin').style.backgroundImage = 'none';
 			byId('previewSkin').style.backgroundColor = randomColor;
 			byId('previewSkin').style.borderWidth = '16px';
 			byId('previewSkin').style.borderColor = Color.fromHex(randomColor).darker().toHex();
