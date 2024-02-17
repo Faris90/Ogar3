@@ -95,7 +95,7 @@ input[type=checkbox] {
 	margin: 10px auto;
 	border-radius: 15px;
 	position: absolute;
-	top: 40%;
+	top: 43%;
 	left: 50%;
 	transform: translate(-50%, -50%) scale(0.8);
 }
