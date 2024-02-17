@@ -1377,9 +1377,12 @@
 		}
 		destroy(killerId) {
 			cells.byId.delete(this.id);
+
 			if (cells.mine.remove(this.id) && cells.mine.length === 0) showESCOverlay();
+
 			this.destroyed = true;
 			this.dead = syncUpdStamp;
+
 			if (killerId && !this.diedBy) {
 				this.diedBy = killerId;
 				this.updated = syncUpdStamp;
@@ -1417,6 +1420,7 @@
 		}
 		updateNumPoints() {
 			let numPoints = Math.min(Math.max(this.s * camera.scale | 0, CELL_POINTS_MIN), CELL_POINTS_MAX);
+
 			if (this.jagged) numPoints = VIRUS_POINTS;
 
 			while (this.points.length > numPoints) {
@@ -1440,32 +1444,30 @@
 		}
 		movePoints() {
 			const pointsVel = this.pointsVel.slice();
+
 			for (let i = 0; i < this.points.length; ++i) {
 				const prevVel = pointsVel[(i - 1 + this.points.length) % this.points.length];
 				const nextVel = pointsVel[(i + 1) % this.points.length];
 				const newVel = Math.max(Math.min((this.pointsVel[i] + Math.random() - 0.5) * 0.7, 10), -10);
 				this.pointsVel[i] = (prevVel + nextVel + 8 * newVel) / 10;
 			}
+
 			for (let i = 0; i < this.points.length; ++i) {
 				const curP = this.points[i];
 				const prevRl = this.points[(i - 1 + this.points.length) % this.points.length].rl;
 				const nextRl = this.points[(i + 1) % this.points.length].rl; // here
 				let curRl = curP.rl;
-				let affected = quadtree.some({
-					x: curP.x - 5,
-					y: curP.y - 5,
-					w: 10,
-					h: 10
-				}, (item) => item.parent !== this && sqDist(item, curP) <= 25);
-				if (!affected &&
-					(curP.x < border.left || curP.y < border.top ||
-					curP.x > border.right || curP.y > border.bottom))
-				{
+
+				let affected = quadtree.some({ x: curP.x - 5, y: curP.y - 5, w: 10, h: 10 }, item => item.parent !== this && sqDist(item, curP) <= 25);
+
+				if (!affected && (curP.x < border.left || curP.y < border.top || curP.x > border.right || curP.y > border.bottom)) {
 					affected = true;
 				}
+
 				if (affected) {
 					this.pointsVel[i] = Math.min(this.pointsVel[i], 0) - 1;
 				}
+
 				curRl += this.pointsVel[i];
 				curRl = Math.max(curRl, 0);
 				curRl = (9 * curRl + this.s) / 10;
@@ -1473,9 +1475,11 @@
 
 				const angle = 2 * Math.PI * i / this.points.length;
 				let rl = curP.rl;
+
 				if (this.jagged && i % 2 === 0) {
 					rl += 5;
 				}
+
 				curP.x = this.x + Math.cos(angle) * rl;
 				curP.y = this.y + Math.sin(angle) * rl;
 			}
@@ -1501,15 +1505,10 @@
 
 			const skin = new Image();
 
-			skin.onerror = () => {
-				skin.onerror = null;
-				skin.src = `${SKIN_URL}custom/${this.skin}.png`;
-			};
-
 			if (this.skin.includes('//')) {
 				skin.src = this.skin;
 			} else {
-				skin.src = `${SKIN_URL}${this.skin}.png`;
+				skin.src = this.skin[0] === '$' ? `${SKIN_URL}custom/${this.skin}.png` : `${SKIN_URL}${this.skin}.png`;
 			}
 
 			loadedSkins.set(this.skin, skin);
@@ -1814,157 +1813,192 @@
 
 		loadSettings();
 
-		byId('previewName').innerHTML = settings.nick;
+		const randomColor = Color.randomColor();
 
 		const changeNick = e => {
 			byId('previewName').innerHTML = e.target.value;
+			storeSettings();
 		};
-
-		if (typeof settings['skin'] !== 'undefined' && settings['skin'] !== '') {
-			let saved_skin = settings.skin;
-
-			if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
-
-			if (!settings.showSkins || saved_skin === '') {
-				byId('previewSkin').src = './assets/img/transparent.png';
-				byId('previewSkin').style.backgroundImage = 'none';
-			} else {
-				if (settings.fillSkin) {
-					byId('previewSkin').style.backgroundImage = 'none';
-				} else {
-					byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
-				}
-
-				byId('previewSkin').onerror = () => {
-					byId('previewSkin').onerror = () => {
-						byId('previewSkin').src = './assets/img/checkerboard.png';
-					};
-					byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
-				};
-				byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`
-			}
-		}
-
-		if (settings.nameColor !== '#ffffff') {
-			byId('nameColor').value = settings.nameColor;
-			byId('previewName').style.color = settings.nameColor;
-		}
 
 		const changeNameColor = e => {
 			byId('previewName').style.color = e.target.value;
-			settings['nameColor'] = e.target.value;
+			settings.nameColor = e.target.value;
 			storeSettings();
 		};
 
-		if (settings.cellColor !== '#ffffff') {
-			byId('cellColor').value = settings.cellColor;
-
-			if (!settings.showSkins || settings.skin === '') {
-				byId('previewSkin').src = './assets/img/transparent.png'
-				byId('previewSkin').style.backgroundImage = 'none';
-			}
-
-			byId('previewSkin').style.backgroundColor = settings.cellColor;
-		} else {
-			const randomColor = Color.randomColor();
+		const changeCellColor = e => {
 			byId('previewSkin').src = './assets/img/transparent.png'
 			byId('previewSkin').style.backgroundImage = 'none';
-			byId('previewSkin').style.backgroundColor = randomColor;
-			byId('previewSkin').style.borderWidth = '16px';
-			byId('previewSkin').style.borderColor = Color.fromHex(randomColor).darker().toHex();
-		}
+			byId('previewSkin').style.backgroundColor = settings.showColor ? e.target.value : '#fff';
+			settings.cellColor = e.target.value;
 
-		const changeCellColor1 = e => {
-			byId('previewSkin').src = './assets/img/transparent.png'
-			byId('previewSkin').style.backgroundImage = 'none';
-			byId('previewSkin').style.backgroundColor = e.target.value;
-			settings['cellColor'] = e.target.value;
-		};
+			if (settings.cellColor !== '#ffffff') {
+				byId('previewSkin').style.backgroundColor = settings.showColor ? e.target.value : '#fff';
 
-		const changeCellColor2 = e => {
-			let saved_skin = settings.skin;
+				if (settings.showSkins) {
+					let saved_skin = settings.skin;
 
-			if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
+					if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
 
-			if (!settings.showSkins || saved_skin === '') {
-				byId('previewSkin').src = './assets/img/transparent.png';
-				byId('previewSkin').style.backgroundImage = 'none';
-			} else {
-				if (settings.fillSkin) {
-					byId('previewSkin').style.backgroundImage = 'none';
+					if (saved_skin !== '') {
+						byId('previewSkin').onerror = () => {
+							byId('previewSkin').onerror = null;
+							byId('previewSkin').src = './assets/img/checkerboard.png';
+						};
+						byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
+
+						if (settings.fillSkin) {
+							byId('previewSkin').style.backgroundImage = 'none';
+						} else {
+							byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
+						}
+					} else {
+						byId('previewSkin').src = './assets/img/transparent.png';
+						byId('previewSkin').style.backgroundImage = 'none';
+					}
 				} else {
-					byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
+					byId('previewSkin').src = './assets/img/transparent.png';
+					byId('previewSkin').style.backgroundImage = 'none';
 				}
+			} else {
+				if (settings.showSkins) {
+					let saved_skin = settings.skin;
 
-				byId('previewSkin').onerror = () => {
-					byId('previewSkin').onerror = () => {
-						byId('previewSkin').src = './assets/img/checkerboard.png';
-					};
-					byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
-				};
-				byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`
+					if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
+
+					if (saved_skin !== '') {
+						byId('previewSkin').onerror = () => {
+							byId('previewSkin').onerror = null;
+							byId('previewSkin').src = './assets/img/checkerboard.png';
+						};
+						byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
+
+						if (settings.fillSkin) {
+							byId('previewSkin').style.backgroundImage = 'none';
+						} else {
+							byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
+						}
+					} else {
+						byId('previewSkin').src = './assets/img/transparent.png';
+						byId('previewSkin').style.backgroundImage = 'none';
+					}
+				} else {
+					byId('previewSkin').src = './assets/img/transparent.png'
+					byId('previewSkin').style.backgroundImage = 'none';
+					byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
+				}
 			}
 
-			byId('previewSkin').style.backgroundColor = e.target.value;
-			settings['cellColor'] = e.target.value;
 			storeSettings();
 		};
-
-		if (settings.borderColor !== '#ffffff') {
-			byId('borderColor').value = settings.borderColor;
-			byId('previewSkin').style.borderColor = settings.borderColor;
-			byId('previewSkin').style.borderWidth = '16px';
-		}
 
 		const changeBorderColor = e => {
+			byId('previewSkin').style.borderColor = settings.showColor ? (e.target.value !== '#ffffff' ? e.target.value : Color.fromHex(randomColor).darker().toHex()) : Color.fromHex('#ffffff').darker().toHex();
 			byId('previewSkin').style.borderWidth = '16px';
-			byId('previewSkin').style.borderColor = e.target.value;
-			settings['borderColor'] = e.target.value;
+
+			if (byId('previewSkin').style.borderColor !== '#ffffff') {
+				settings.borderColor = e.target.value;
+			}
 			storeSettings();
 		};
 
+		const changeShowColor = e => {
+			byId('previewName').style.color = settings.showColor ? settings.nameColor : '#fff';
+			byId('previewSkin').style.backgroundColor = settings.showColor ? settings.cellColor : '#fff';
+			byId('previewSkin').style.borderColor = settings.showColor ? (settings.borderColor !== '#ffffff' ? settings.borderColor : Color.fromHex(randomColor).darker().toHex()) : Color.fromHex('#ffffff').darker().toHex();
+		}
+
 		const changeShowSkins = e => {
-			let saved_skin = settings.skin;
+			if (settings.cellColor !== '#ffffff') {
+				byId('cellColor').value = settings.cellColor;
+				byId('previewSkin').style.backgroundColor = settings.showColor ? settings.cellColor : '#fff';
+				byId('previewSkin').style.borderColor = settings.showColor ? Color.fromHex(settings.cellColor).darker().toHex() : Color.fromHex('#ffffff').darker().toHex();
 
-			if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
+				if (settings.showSkins) {
+					let saved_skin = settings.skin;
 
-			if (!settings.showSkins || saved_skin === '') {
-				byId('previewSkin').src = './assets/img/transparent.png';
-				byId('previewSkin').style.backgroundImage = 'none';
-			} else {
-				if (settings.fillSkin) {
-					byId('previewSkin').style.backgroundImage = 'none';
+					if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
+
+					if (saved_skin !== '') {
+						byId('previewSkin').onerror = () => {
+							byId('previewSkin').onerror = null;
+							byId('previewSkin').src = './assets/img/checkerboard.png';
+						};
+						byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
+					} else {
+						byId('previewSkin').src = './assets/img/transparent.png';
+						byId('previewSkin').style.backgroundImage = 'none';
+					}
 				} else {
-					byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
+					byId('previewSkin').src = './assets/img/transparent.png';
+					byId('previewSkin').style.backgroundImage = 'none';
 				}
+			} else {
+				if (settings.showSkins) {
+					byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
 
-				byId('previewSkin').onerror = () => {
-					byId('previewSkin').onerror = () => {
-						byId('previewSkin').src = './assets/img/checkerboard.png';
-					};
-					byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
-				};
-				byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`
+					let saved_skin = settings.skin;
+
+					if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
+
+					if (saved_skin !== '') {
+						byId('previewSkin').onerror = () => {
+							byId('previewSkin').onerror = null;
+							byId('previewSkin').src = './assets/img/checkerboard.png';
+						};
+						byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
+					} else {
+						byId('previewSkin').src = './assets/img/transparent.png';
+						byId('previewSkin').style.backgroundImage = 'none';
+					}
+				} else {
+					byId('previewSkin').src = './assets/img/transparent.png'
+					byId('previewSkin').style.backgroundImage = 'none';
+					byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
+				}
 			}
 		}
 
 		const changeFillSkin = e => {
-			if (settings.fillSkin) {
-				byId('previewSkin').style.backgroundImage = 'none';
-			} else {
-				byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
+			if (settings.showSkins) {
+				if (settings.fillSkin) {
+					byId('previewSkin').style.backgroundImage = 'none';
+				} else {
+					byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
+				}
 			}
 		}
+
+		byId('previewName').innerHTML = settings.nick;
+
+		if (settings.nameColor !== '#ffffff') {
+			byId('nameColor').value = settings.nameColor;
+			byId('previewName').style.color = settings.showColor ? settings.nameColor : '#fff';
+		}
+
+		changeShowSkins();
+
+		if (settings.borderColor !== '#ffffff') {
+			byId('borderColor').value = settings.borderColor;
+			byId('previewSkin').style.borderColor = settings.showColor ? settings.borderColor : Color.fromHex('#ffffff').darker().toHex();
+			byId('previewSkin').style.borderWidth = '16px';
+		} else {
+			byId('previewSkin').style.borderColor = settings.showColor ? Color.fromHex(randomColor).darker().toHex() : Color.fromHex('#ffffff').darker().toHex();
+			byId('previewSkin').style.borderWidth = '16px';
+		}
+
+		changeFillSkin();
 
 		byId('nick').addEventListener('input', changeNick);
 		byId('skin').addEventListener('change', e => changeSkin(e.target.value));
 		byId('fillSkin').addEventListener('change', changeFillSkin);
 		byId('nameColor').addEventListener('input', changeNameColor);
 		byId('nameColor').addEventListener('change', changeNameColor);
-		byId('cellColor').addEventListener('input', changeCellColor1);
-		byId('cellColor').addEventListener('change', changeCellColor2);
+		byId('cellColor').addEventListener('input', changeCellColor);
+		byId('cellColor').addEventListener('change', changeCellColor);
 		byId('borderColor').addEventListener('input', changeBorderColor);
 		byId('borderColor').addEventListener('change', changeBorderColor);
+		byId('showColor').addEventListener('change', changeShowColor);
 		byId('showSkins').addEventListener('change', changeShowSkins);
 
 		window.addEventListener('beforeunload', storeSettings);
@@ -2102,27 +2136,34 @@
 
 		settings.skin = a;
 
-		let saved_skin = settings.skin;
+		const randomColor = Color.randomColor();
 
-		if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
+		byId('previewSkin').style.backgroundColor = settings.showColor ? settings.cellColor : '#fff';
 
-		if (!settings.showSkins || saved_skin === '') {
-			byId('previewSkin').src = './assets/img/transparent.png';
-			byId('previewSkin').style.backgroundImage = 'none';
-		} else {
-			if (settings.fillSkin) {
-				byId('previewSkin').style.backgroundImage = 'none';
-			} else {
-				byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
-			}
+		if (settings.showSkins) {
+			let saved_skin = settings.skin;
 
-			byId('previewSkin').onerror = () => {
+			if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
+
+			if (saved_skin !== '') {
 				byId('previewSkin').onerror = () => {
+					byId('previewSkin').onerror = null;
 					byId('previewSkin').src = './assets/img/checkerboard.png';
 				};
-				byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
-			};
-			byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`
+				byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
+
+				if (settings.fillSkin) {
+					byId('previewSkin').style.backgroundImage = 'none';
+				} else {
+					byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
+				}
+			} else {
+				byId('previewSkin').src = './assets/img/transparent.png';
+				byId('previewSkin').style.backgroundImage = 'none';
+			}
+		} else {
+			byId('previewSkin').src = './assets/img/transparent.png';
+			byId('previewSkin').style.backgroundImage = 'none';
 		}
 
 		byId('gallery').hide();

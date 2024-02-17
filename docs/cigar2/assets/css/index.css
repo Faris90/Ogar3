@@ -8,6 +8,10 @@ html, body {
 	position: fixed;
 }
 
+h2 {
+	margin-top: 0;
+}
+
 h5 {
 	font-weight: bold;
 	font-size: 17px;
@@ -68,7 +72,7 @@ input[type=checkbox] {
 	justify-content: space-around;
 	align-items: center;
 	text-align: center;
-	margin-top: 20px;
+	margin-top: 5px;
 }
 
 #colors label {
@@ -228,7 +232,7 @@ input[type=checkbox] {
 #gallery-btn {
 	display: none;
 	width: 100%;
-	margin-bottom: 20px;
+	margin-bottom: 5px;
 }
 
 #touchpad, #touchCircle, #splitBtn, #ejectBtn {
