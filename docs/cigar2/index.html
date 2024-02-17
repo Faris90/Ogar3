@@ -35,9 +35,9 @@
 					</div>
 
 					<div class="form-group">
-						<input id="nick" list="nicknames" class="form-control" onfocus="this.value=''" placeholder="Nickname" maxlength="16" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+						<input id="nick" list="nicknames" class="form-control" onfocus="this.oldvalue=this.value;this.value=''" onblur="if(this.value==='')this.value=this.oldvalue || ''" placeholder="Nickname" maxlength="16" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
 						<datalist id="nicknames"></datalist>
-						<input id="skin" list="skinnames" class="form-control" onfocus="this.value=''" placeholder="Skin Name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+						<input id="skin" list="skinnames" class="form-control" onfocus="this.oldvalue=this.value;this.value=''" onblur="if(this.value==='')this.value=this.oldvalue || ''" placeholder="Skin Name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
 						<datalist id="skinnames"></datalist>
 						<select id="gamemode" class="form-control" onchange="setserver(this.value)" required>
 							<option value="agar.emupedia.net:443/ws2/" selected>Emupedia</option>
