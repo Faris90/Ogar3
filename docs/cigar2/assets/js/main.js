@@ -806,7 +806,6 @@
 		e: false,
 		r: false,
 		t: false,
-		p: false,
 		q: false,
 		x: false,
 		z: false,
@@ -1814,6 +1813,7 @@
 
 	function keydown(event) {
 		if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
+
 		const key = processKey(event);
 
 		if (pressed[key]) return;
@@ -1822,6 +1822,7 @@
 
 		if (key === 'enter') {
 			if (escOverlayShown || !settings.showChat) return;
+
 			if (isTyping) {
 				chatBox.blur();
 				if (chatBox.value.length > 0) sendChat(chatBox.value);
@@ -2097,6 +2098,52 @@
 		window.addEventListener('beforeunload', storeSettings);
 
 		document.addEventListener('wheel', handleScroll, { passive: true });
+
+		document.addEventListener('mousedown', event => {
+			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
+
+			switch (event.button) {
+				case 0: {
+						let code = UINT8_CACHE[minionControlled ? 0x17 : 0x15];
+						let macroCooldown = settings.feedMacro ? 0 : 1000 / 7;
+						feedMacroIntervalID = setInterval(() => wsSend(code), macroCooldown);
+						wsSend(code);
+					}
+					break;
+				case 1: {
+						let code = UINT8_CACHE[minionControlled ? 0x16 : 0x11];
+						let macroCooldown = settings.splitMacro ? 0 : 1000 / 7;
+						splitMacroIntervalID = setInterval(() => wsSend(code), macroCooldown);
+						wsSend(code);
+					}
+					break;
+			}
+		});
+
+		document.addEventListener('mouseup', event => {
+			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
+
+			switch (event.button) {
+				case 0:
+					clearInterval(feedMacroIntervalID);
+					break;
+				case 1:
+					clearInterval(splitMacroIntervalID);
+					break;
+			}
+		});
+
+		document.addEventListener('contextmenu', event => {
+			event.preventDefault();
+
+			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
+
+			if (event.button === 2) {
+				let code = UINT8_CACHE[minionControlled ? 0x16 : 0x11];
+				wsSend(code);
+				wsSend(code);
+			}
+		});
 
 		byId('play-btn').addEventListener('click', () => {
 			const skin = settings.skin.trim();
