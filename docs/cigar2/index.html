@@ -38,9 +38,13 @@
 
 					<div class="form-group">
 						<input id="nick" list="nicknames" class="form-control" onfocus="this.oldvalue=this.value;this.value=''" onblur="if(this.value==='')this.value=this.oldvalue || ''" placeholder="Nickname" maxlength="16" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-						<datalist id="nicknames"></datalist>
+						<datalist id="nicknames">
+							<option value=""> </option>
+						</datalist>
 						<input id="skin" list="skinnames" class="form-control" onfocus="this.oldvalue=this.value;this.value=''" onblur="if(this.value==='')this.value=this.oldvalue || ''" placeholder="Skin Name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-						<datalist id="skinnames"></datalist>
+						<datalist id="skinnames">
+							<option value=""> </option>
+						</datalist>
 						<select id="gamemode" class="form-control" onchange="setserver(this.value)" required>
 							<option value="agar.emupedia.net:443/ws2/" selected>Emupedia</option>
 							<option value="127.0.0.1:5000">Local</option>
@@ -181,6 +185,6 @@
 		<input type="text" id="chat_textbox" placeholder="Press enter to chat" maxlength="100" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
 		<script src="assets/js/jquery-1.11.3.min.js"></script>
 		<script src="assets/js/quadtree.js"></script>
-		<script src="assets/js/main.min.js?v=18"></script>
+		<script src="assets/js/main.min.js?v=19"></script>
 	</body>
 </html>

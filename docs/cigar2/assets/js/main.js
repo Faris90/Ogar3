@@ -406,6 +406,8 @@
 					cells.byId.get(killed).destroy(killer);
 				}
 
+				let skinParts = ['', '#ffffff', '#ffffff', '#ffffff'];
+
 				// update records
 				while (true) {
 					const id = reader.getUint32();
@@ -442,10 +444,27 @@
 						cell.ns = s;
 
 						if (color) cell.cellColor = color;
-						if (name) cell.name = name;
-						if (skin) cell.setSkin(skin);
+
+						if (name) cell.name = Cell.parseName(name);
+
+						if (skin) {
+							cell.setSkin(skin);
+							skinParts = skin.split('|');
+							console.log(skinParts);
+							cell.nameColor = skinParts[1] !== '#ffffff' ? Color.fromHex(skinParts[1]) : color;
+							cell.cellColor = skinParts[2] !== '#ffffff' ? Color.fromHex(skinParts[2]) : color;
+							cell.borderColor = skinParts[3] !== '#ffffff' ? Color.fromHex(skinParts[3]) : color.darker();
+						}
 					} else {
-						const cell = new Cell(id, x, y, s, name, name === settings.nick && settings.nameColor !== '#ffffff' ? Color.fromHex(settings.nameColor) : null, name === settings.nick && settings.cellColor !== '#ffffff' ? Color.fromHex(settings.cellColor) : color, name === settings.nick && settings.borderColor !== '#ffffff' ? Color.fromHex(settings.borderColor) : color.darker(), skin, flags, name === settings.nick);
+						const cell = new Cell(id, x, y, s, name, color, color, color?.darker(), skin, flags);
+
+						if (skin) {
+							skinParts = skin.split('|');
+							cell.nameColor = skinParts[1] !== '#ffffff' ? Color.fromHex(skinParts[1]) : color;
+							cell.cellColor = skinParts[2] !== '#ffffff' ? Color.fromHex(skinParts[2]) : color;
+							cell.borderColor = skinParts[3] !== '#ffffff' ? Color.fromHex(skinParts[3]) : color.darker();
+						}
+
 						cells.byId.set(id, cell);
 						cells.list.push(cell);
 					}
@@ -521,7 +540,7 @@
 					const lbName = reader.getStringUTF8();
 					leaderboard.items.push({
 						me: isMe,
-						name: Cell.parseName(lbName).name || EMPTY_NAME
+						name: Cell.parseName(lbName) || EMPTY_NAME
 					});
 				}
 
@@ -586,7 +605,7 @@
 				const rawName = reader.getStringUTF8();
 				const message = reader.getStringUTF8();
 
-				let name = Cell.parseName(rawName).name || EMPTY_NAME;
+				let name = Cell.parseName(rawName) || EMPTY_NAME;
 
 				if (flags.server && name !== 'SERVER') name = `[SERVER] ${name}`;
 				if (flags.admin) name = `[ADMIN] ${name}`;
@@ -902,7 +921,7 @@
 
 	function buildList(target, list) {
 		if (typeof list !== 'undefined' && Array.isArray(list)) {
-			let html = '';
+			let html = '<option value=" "></option>';
 
 			for (const item of list) {
 				html += `<option value="${item}"></option>`;
@@ -925,7 +944,7 @@
 
 		for (let i = 0; i < latestMessages.length; i++) {
 			lines.push([{
-				text: latestMessages[i].name.replace(/[<>|]/g, '').substring(0, 16),
+				text: latestMessages[i].name,
 				color: latestMessages[i].color
 			} , {
 				text: ` ${latestMessages[i].message}`,
@@ -1073,7 +1092,7 @@
 				if (leaderboard.type === "text") {
 					text = leaderboard.items[i];
 				} else {
-					text = leaderboard.items[i].name.replace(/[<>|]/g, '').substring(0, 16);
+					text = leaderboard.items[i].name;
 					isMe = leaderboard.items[i].me;
 				}
 
@@ -1379,17 +1398,14 @@
 	}
 
 	class Cell {
-		static parseName(value) { // static method
-			let [_, skin, name] = NAME_PARSER.exec(value || '');
+		static parseName(name) { // static method
+			if (typeof name !== 'undefined' && name !== null && name !== '') {
+				return name.trim().replace(/[<>|]/g, '').substring(0, 16);
+			}
 
-			name = (name || '').trim();
-
-			return {
-				name,
-				skin: (skin || '').trim() || name
-			};
+			return name;
 		}
-		constructor(id, x, y, s, name, nameColor, cellColor, borderColor, skin, flags, me) {
+		constructor(id, x, y, s, name, nameColor, cellColor, borderColor, skin, flags) {
 			this.destroyed = false;
 			this.diedBy = 0;
 			this.nameSize = 0;
@@ -1406,12 +1422,11 @@
 			this.os = s;
 			this.s = s;
 			this.ns = s;
-			this.name = name.replace(/[<>|]/g, '').substring(0, 16);
-			this.nameColor = nameColor;
-			this.cellColor = cellColor;
-			this.borderColor = borderColor || cellColor.darker();
+			this.name = Cell.parseName(name);
+			this.nameColor = nameColor || Color.fromHex('#ffffff');
+			this.cellColor = cellColor || Color.fromHex('#ffffff');
+			this.borderColor = borderColor || (cellColor ? cellColor.darker() : Color.fromHex('#ffffff'));
 			this.setSkin(skin);
-			this.me = me;
 			this.jagged = flags.jagged;
 			this.ejected = flags.ejected;
 			this.born = syncUpdStamp;
@@ -1448,10 +1463,6 @@
 			this.s = this.os + (this.ns - this.os) * dt;
 			this.nameSize = ~~(~~(Math.max(~~(0.3 * this.ns), 24)) / 3) * 3;
 			this.drawNameSize = ~~(~~(Math.max(~~(0.3 * this.s), 24)) / 3) * 3;
-
-			if (this.updated) {
-				this.me = this.name === settings.nick;
-			}
 
 			/*TODO: find out why this causes random background color
 			if (settings.jellyPhysics && this.points.length) {
@@ -1528,6 +1539,8 @@
 			}
 		}
 		setSkin(value) {
+			value = value.trim();
+
 			if (typeof value === 'undefined' || value === null || value === '') return;
 
 			if (value.indexOf('|') !== -1) {
@@ -1551,6 +1564,10 @@
 			if (this.skin.includes('//')) {
 				skin.src = this.skin;
 			} else {
+				skin.onerror = () => {
+					skin.onerror = null;
+					skin.src = `${SKIN_URL}custom/${this.skin}.png`;
+				};
 				skin.src = this.skin[0] === '$' ? `${SKIN_URL}custom/${this.skin}.png` : `${SKIN_URL}${this.skin}.png`;
 			}
 
@@ -1616,7 +1633,7 @@
 		drawText(ctx) {
 			if (this.s < 20 || this.jagged) return;
 			if (this.name && settings.showNames) {
-				drawText(ctx, false, this.x, this.y, this.nameSize, this.drawNameSize, this.name, this.nameColor);
+				drawText(ctx, false, this.x, this.y, this.nameSize, this.drawNameSize, this.name, this.nameColor ? this.nameColor.toHex().toUpperCase() : '#FFF');
 			}
 			if (settings.showMass && (cells.mine.indexOf(this.id) !== -1 || cells.mine.length === 0)) {
 				const mass = (~~(this.s * this.s / 100)).toString();
@@ -1721,15 +1738,15 @@
 		return (a - tolerance) <= b && b <= (a + tolerance);
 	}
 
-	function getNameCache(value, size) {
-		if (!cachedNames.has(value)) return newNameCache(value, size);
+	function getNameCache(value, size, color = '#FFF') {
+		if (!cachedNames.has(value)) return newNameCache(value, size, color);
 		const sizes = Array.from(cachedNames.get(value).keys());
 		for (let i = 0, l = sizes.length; i < l; i++) {
 			if (toleranceTest(size, sizes[i], size / 4)) {
 				return cachedNames.get(value).get(sizes[i]);
 			}
 		}
-		return newNameCache(value, size);
+		return newNameCache(value, size, color);
 	}
 
 	function getMassCache(size) {
@@ -1744,7 +1761,7 @@
 
 	function drawText(ctx, isMass, x, y, size, drawSize, value, color = '#FFF') {
 		ctx.save();
-
+		// console.log(value + ' ' + color);
 		if (size > 500) return drawRaw(ctx, x, y, value, drawSize, color);
 
 		ctx.imageSmoothingQuality = 'high';
@@ -1772,7 +1789,7 @@
 				x += item.width - 2 * cache.lineWidth;
 			}
 		} else {
-			const cache = getNameCache(value, size);
+			const cache = getNameCache(value, size, color);
 			cache.accessTime = syncAppStamp;
 			const canvas = cache.canvas;
 			const correctionScale = drawSize / cache.size;
@@ -1894,11 +1911,11 @@
 		const randomColor = Color.randomColor();
 
 		const changeNick = e => {
-			byId('previewName').innerHTML = e.target.value.replace(/[<>|]/g, '').substring(0, 16);
+			byId('previewName').innerHTML = Cell.parseName(e.target.value);
 		};
 
 		const saveNick = e => {
-			let nick = e.target.value.replace(/[<>|]/g, '').substring(0, 16);
+			let nick = Cell.parseName(e.target.value);
 
 			if (nick !== '' && settings.nicknames.indexOf(nick) === -1) {
 				settings.nicknames.push(nick);
@@ -1925,7 +1942,7 @@
 				byId('previewSkin').style.backgroundColor = settings.showColor ? e.target.value : '#fff';
 
 				if (settings.showSkins) {
-					let saved_skin = settings.skin;
+					let saved_skin = settings.skin.trim();
 
 					if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
 
@@ -1951,7 +1968,7 @@
 				}
 			} else {
 				if (settings.showSkins) {
-					let saved_skin = settings.skin;
+					let saved_skin = settings.skin.trim();
 
 					if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
 
@@ -1998,7 +2015,7 @@
 
 		const changeShowSkins = e => {
 			if (settings.showSkins) {
-				let saved_skin = settings.skin;
+				let saved_skin = settings.skin.trim();
 
 				if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
 
@@ -2011,6 +2028,7 @@
 				} else {
 					byId('previewSkin').src = './assets/img/transparent.png';
 					byId('previewSkin').style.backgroundImage = 'none';
+					byId('previewSkin').style.backgroundColor = settings.showColor ? settings.cellColor : '#fff';
 				}
 			} else {
 				byId('previewSkin').src = './assets/img/transparent.png';
@@ -2035,7 +2053,7 @@
 			}
 		}
 
-		byId('previewName').innerHTML = settings.nick;
+		byId('previewName').innerHTML = Cell.parseName(settings.nick);
 
 		if (settings.nameColor !== '#ffffff') {
 			byId('nameColor').value = settings.nameColor;
@@ -2074,12 +2092,12 @@
 		document.addEventListener('wheel', handleScroll, { passive: true });
 
 		byId('play-btn').addEventListener('click', () => {
-			const skin = settings.skin;
+			const skin = settings.skin.trim();
 			const nameColor = settings.nameColor;
 			const cellColor = settings.cellColor;
 			const borderColor = settings.borderColor;
 
-			sendPlay('<' + (skin ? `${skin}` : '') + '|' + (nameColor ? `${nameColor}` : '') + '|' + (cellColor ? `${cellColor}` : '') + '|' + (borderColor ? `${borderColor}` : '') + '>' + settings.nick.substring(0, 16));
+			sendPlay('<' + (skin ? `${skin}` : '') + '|' + (nameColor ? `${nameColor}` : '') + '|' + (cellColor ? `${cellColor}` : '') + '|' + (borderColor ? `${borderColor}` : '') + '>' + Cell.parseName(settings.nick));
 
 			hideESCOverlay();
 			storeSettings();
@@ -2201,9 +2219,9 @@
 		let sk = '';
 
 		if (e === null) {
-			sk = s;
+			sk = s.trim();
 		} else {
-			sk = e.target.value;
+			sk = e.target.value.trim();
 		}
 
 		if (sk !== byId('skin').value) {
@@ -2220,7 +2238,7 @@
 		if (e !== null) e.target.blur();
 
 		if (settings.showSkins) {
-			let saved_skin = settings.skin;
+			let saved_skin = settings.skin.trim();
 
 			if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
 
