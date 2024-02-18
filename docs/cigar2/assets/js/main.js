@@ -1367,7 +1367,7 @@
 		static parseName(value) { // static method
 			let [_, skin, name] = NAME_PARSER.exec(value || '');
 
-			name = (name || '').trim();
+			name = (name || '').trim().substring(0, 16);
 
 			return {
 				name,
@@ -1391,7 +1391,7 @@
 			this.os = s;
 			this.s = s;
 			this.ns = s;
-			this.name = name;
+			this.name = name.substring(0, 16);
 			this.nameColor = nameColor;
 			this.cellColor = cellColor;
 			this.borderColor = borderColor || cellColor.darker();
@@ -1729,8 +1729,11 @@
 
 	function drawText(ctx, isMass, x, y, size, drawSize, value, color = '#FFF') {
 		ctx.save();
+
 		if (size > 500) return drawRaw(ctx, x, y, value, drawSize, color);
+
 		ctx.imageSmoothingQuality = 'high';
+
 		if (isMass) {
 			const cache = getMassCache(size);
 			cache.accessTime = syncAppStamp;
@@ -1747,6 +1750,7 @@
 			x /= correctionScale;
 			y /= correctionScale;
 			x -= width / 2;
+
 			for (let i = 0; i < value.length; i++) {
 				const item = canvases[value[i]];
 				ctx.drawImage(item.canvas, x, y - item.height / 2);
@@ -1762,6 +1766,7 @@
 			y /= correctionScale;
 			ctx.drawImage(canvas, x - canvas.width / 2, y - canvas.height / 2);
 		}
+
 		ctx.restore();
 	}
 
@@ -2012,8 +2017,6 @@
 				}
 			}
 		}
-
-
 
 		byId('previewName').innerHTML = settings.nick;
 
