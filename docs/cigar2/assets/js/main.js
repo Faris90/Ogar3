@@ -1840,6 +1840,7 @@
 			if (typeof code !== 'undefined') wsSend(code);
 
 			if (key === 'w') {
+				clearInterval(feedMacroIntervalID);
 				code = UINT8_CACHE[minionControlled ? 0x17 : 0x15];
 				let macroCooldown = settings.feedMacro ? 0 : 1000 / 7;
 				feedMacroIntervalID = setInterval(() => wsSend(code), macroCooldown);
@@ -1858,6 +1859,7 @@
 			}
 
 			if (key === 'z') {
+				clearInterval(splitMacroIntervalID);
 				code = UINT8_CACHE[minionControlled ? 0x16 : 0x11];
 				let macroCooldown = settings.splitMacro ? 0 : 1000 / 7;
 				splitMacroIntervalID = setInterval(() => wsSend(code), macroCooldown);
@@ -2104,6 +2106,7 @@
 
 			switch (event.button) {
 				case 0: {
+						clearInterval(feedMacroIntervalID);
 						let code = UINT8_CACHE[minionControlled ? 0x17 : 0x15];
 						let macroCooldown = settings.feedMacro ? 0 : 1000 / 7;
 						feedMacroIntervalID = setInterval(() => wsSend(code), macroCooldown);
@@ -2111,6 +2114,7 @@
 					}
 					break;
 				case 1: {
+						clearInterval(splitMacroIntervalID);
 						let code = UINT8_CACHE[minionControlled ? 0x16 : 0x11];
 						let macroCooldown = settings.splitMacro ? 0 : 1000 / 7;
 						splitMacroIntervalID = setInterval(() => wsSend(code), macroCooldown);
