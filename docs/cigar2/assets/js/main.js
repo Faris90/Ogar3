@@ -915,38 +915,48 @@
 	function drawChat() {
 		if (chat.messages.length === 0 && settings.showChat)
 			return chat.visible = false;
+
 		chat.visible = true;
+
 		const canvas = chat.canvas;
 		const ctx = canvas.getContext('2d');
 		const latestMessages = chat.messages.slice(-15);
 		const lines = [];
+
 		for (let i = 0; i < latestMessages.length; i++) {
 			lines.push([{
-				text: latestMessages[i].name,
+				text: latestMessages[i].name.replace(/[<>|]/g, '').substring(0, 16),
 				color: latestMessages[i].color
 			} , {
 				text: ` ${latestMessages[i].message}`,
 				color: Color.fromHex(settings.darkTheme ? '#FFF' : '#000')
 			}]);
 		}
+
 		window.lines = lines;
+
 		let width = 0;
 		let height = 20 * lines.length + 2;
+
 		for (let i = 0; i < lines.length; i++) {
 			let thisLineWidth = 10;
 			let complexes = lines[i];
+
 			for (let j = 0; j < complexes.length; j++) {
 				ctx.font = '18px Ubuntu';
 				complexes[j].width = ctx.measureText(complexes[j].text).width;
 				thisLineWidth += complexes[j].width;
 			}
+
 			width = Math.max(thisLineWidth, width);
 		}
 		canvas.width = width;
 		canvas.height = height;
+
 		for (let i = 0; i < lines.length; i++) {
 			let width = 0;
 			let complexes = lines[i];
+
 			for (let j = 0; j < complexes.length; j++) {
 				ctx.font = '18px Ubuntu';
 				ctx.fillStyle = settings.showColor ? complexes[j].color.toHex() : '#FFF';
@@ -1021,9 +1031,11 @@
 
 	function drawLeaderboard() {
 		if (leaderboard.type === null) return leaderboard.visible = false;
+
 		if (!settings.showNames || leaderboard.items.length === 0) {
 			return leaderboard.visible = false;
 		}
+
 		leaderboard.visible = true;
 		const canvas = leaderboard.canvas;
 		const ctx = canvas.getContext('2d');
@@ -1042,6 +1054,7 @@
 
 		if (leaderboard.type === 'pie') {
 			let last = 0;
+
 			for (let i = 0; i < leaderboard.items.length; i++) {
 				ctx.fillStyle = leaderboard.teams[i];
 				ctx.beginPath();
@@ -1052,16 +1065,20 @@
 			}
 		} else {
 			ctx.font = '20px Ubuntu';
+
 			for (let i = 0; i < leaderboard.items.length; i++) {
 				let isMe = false;
 				let text;
+
 				if (leaderboard.type === "text") {
 					text = leaderboard.items[i];
 				} else {
-					text = leaderboard.items[i].name,
+					text = leaderboard.items[i].name.replace(/[<>|]/g, '').substring(0, 16);
 					isMe = leaderboard.items[i].me;
 				}
+
 				if (leaderboard.type === 'ffa') text = `${i + 1}. ${text}`;
+
 				ctx.fillStyle = isMe ? '#FAA' : '#FFF';
 				const width = ctx.measureText(text).width;
 				const start = width > 200 ? 2 : 100 - width * 0.5;
@@ -1365,7 +1382,7 @@
 		static parseName(value) { // static method
 			let [_, skin, name] = NAME_PARSER.exec(value || '');
 
-			name = (name || '').trim().substring(0, 16);
+			name = (name || '').trim();
 
 			return {
 				name,
@@ -1389,7 +1406,7 @@
 			this.os = s;
 			this.s = s;
 			this.ns = s;
-			this.name = name.substring(0, 16);
+			this.name = name.replace(/[<>|]/g, '').substring(0, 16);
 			this.nameColor = nameColor;
 			this.cellColor = cellColor;
 			this.borderColor = borderColor || cellColor.darker();
@@ -1877,12 +1894,14 @@
 		const randomColor = Color.randomColor();
 
 		const changeNick = e => {
-			byId('previewName').innerHTML = e.target.value;
+			byId('previewName').innerHTML = e.target.value.replace(/[<>|]/g, '').substring(0, 16);
 		};
 
 		const saveNick = e => {
-			if (e.target.value !== '' && settings.nicknames.indexOf(e.target.value) === -1) {
-				settings.nicknames.push(e.target.value);
+			let nick = e.target.value.replace(/[<>|]/g, '').substring(0, 16);
+
+			if (nick !== '' && settings.nicknames.indexOf(nick) === -1) {
+				settings.nicknames.push(nick);
 				buildList('nicknames', settings.nicknames);
 				storeSettings();
 			}
