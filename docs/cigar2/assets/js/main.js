@@ -312,8 +312,7 @@
 	const KEY_TO_OPCODE = {
 		e: UINT8_CACHE[0x16],
 		r: UINT8_CACHE[0x17],
-		t: UINT8_CACHE[0x18],
-		p: UINT8_CACHE[0x19]
+		t: UINT8_CACHE[0x18]
 	};
 
 	const IE_KEYS = {
@@ -328,7 +327,6 @@
 		KeyE: 'e',
 		KeyR: 'r',
 		KeyT: 't',
-		KeyP: 'p',
 		KeyX: 'x',
 		KeyZ: 'z'
 	};
