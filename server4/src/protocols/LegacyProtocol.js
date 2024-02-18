@@ -279,8 +279,7 @@ const pieLeaderboard = {
     19: pieLeaderboard4,
     20: pieLeaderboard4,
     21: pieLeaderboard21,
-    22: pieLeaderboard21,
-    23: pieLeaderboard21
+    22: pieLeaderboard21
 };
 /**
  * @param {Writer} writer
@@ -331,8 +330,7 @@ const ffaLeaderboard = {
     19: ffaLeaderboard11,
     20: ffaLeaderboard11,
     21: ffaLeaderboard11,
-    22: ffaLeaderboard11,
-    23: ffaLeaderboard11
+    22: ffaLeaderboard11
 };
 /**
  * @param {Writer} writer
@@ -392,8 +390,7 @@ const textBoard = {
     19: textBoard14,
     20: textBoard14,
     21: textBoard14,
-    22: textBoard14,
-    23: textBoard14
+    22: textBoard14
 };
 /**
  * @param {Writer} writer
@@ -441,8 +438,7 @@ const writeCellData = {
     19: writeCellData11,
     20: writeCellData11,
     21: writeCellData11,
-    22: writeCellData11,
-    23: writeCellData11
+    22: writeCellData11
 };
 /**
  * @param {Writer} writer
@@ -458,8 +454,8 @@ const writeCellData = {
  */
 function writeCellData4(writer, source, protocol, cell, includeType, includeSize, includePos, includeColor, includeName, includeSkin) {
     writer.writeUInt32(cell.id);
-    writer[protocol === 4 ? "writeInt16" : "writeUInt32"](cell.x);
-    writer[protocol === 4 ? "writeInt16" : "writeUInt32"](cell.y);
+    writer[protocol === 4 ? "writeInt16" : "writeInt32"](cell.x);
+    writer[protocol === 4 ? "writeInt16" : "writeInt32"](cell.y);
     writer.writeUInt16(cell.size);
     writer.writeColor(cell.color);
 

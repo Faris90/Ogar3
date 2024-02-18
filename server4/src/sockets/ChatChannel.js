@@ -53,8 +53,9 @@ class ChatChannel {
      * @param {string} message
      */
     broadcast(source, message) {
-        if (this.shouldFilter(message))
-            return;
+        if (this.shouldFilter(message)) {
+            return this.directMessage(null, source, "Your message contains banned words.");
+        }
         const sourceInfo = source == null ? serverSource : getSourceFromConnection(source);
         for (let i = 0, l = this.connections.length; i < l; i++)
             this.connections[i].protocol.onChatMessage(sourceInfo, message);
@@ -65,8 +66,9 @@ class ChatChannel {
      * @param {string} message
      */
     directMessage(source, recipient, message) {
-        if (this.shouldFilter(message))
-            return;
+        if (this.shouldFilter(message)) {
+            return this.directMessage(null, source, "Your message contains banned words.");
+        }
         const sourceInfo = source == null ? serverSource : getSourceFromConnection(source);
         recipient.protocol.onChatMessage(sourceInfo, message);
     }

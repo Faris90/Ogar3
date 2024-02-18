@@ -96,11 +96,14 @@ class Connection extends Router {
         const lastChatTime = this.lastChatTime;
         this.lastChatTime = Date.now();
         if (message.length >= 2 && message[0] === "/") {
-            if (!this.handle.chatCommands.execute(this, message.slice(1)))
-                globalChat.directMessage(null, this, "unknown command, execute /help for the list of commands");
+            if (!this.handle.chatCommands.execute(this, message.slice(1))) globalChat.directMessage(null, this, "unknown command, execute /help for the list of commands");
+        } else {
+            if (Date.now() - lastChatTime >= this.settings.chatCooldown) {
+                 globalChat.broadcast(this, message);
+            } else {
+                 globalChat.directMessage(null, this, "Please don't spam.");
+            }
         }
-        else if (Date.now() - lastChatTime >= this.settings.chatCooldown)
-            globalChat.broadcast(this, message);
     }
     onQPress() {
         if (!this.hasPlayer) return;
