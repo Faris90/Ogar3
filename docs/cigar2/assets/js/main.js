@@ -866,6 +866,7 @@
 	function initSetting(id, elm) {
 		function simpleAssignListen(id, elm, prop) {
 			if (settings[id] !== '') elm[prop] = settings[id];
+
 			elm.addEventListener('change', () => {
 				settings[id] = elm[prop];
 			});
@@ -891,8 +892,10 @@
 	function loadSettings() {
 		const text = localStorage.getItem('settings');
 		const obj = text ? JSON.parse(text) : settings;
+
 		for (const prop in settings) {
 			const elm = byId(prop.charAt(0) === '_' ? prop.slice(1) : prop);
+
 			if (elm) {
 				if (Object.hasOwnProperty.call(obj, prop)) settings[prop] = obj[prop];
 				initSetting(prop, elm);
@@ -2060,7 +2063,10 @@
 			byId('previewName').style.color = settings.showColor ? settings.nameColor : '#fff';
 		}
 
-		changeShowSkins();
+		if (settings.cellColor !== '#ffffff') {
+			byId('cellColor').value = settings.cellColor;
+			byId('previewSkin').style.backgroundColor = settings.showColor ? settings.cellColor : '#fff';
+		}
 
 		if (settings.borderColor !== '#ffffff') {
 			byId('borderColor').value = settings.borderColor;
@@ -2071,6 +2077,7 @@
 			byId('previewSkin').style.borderWidth = '16px';
 		}
 
+		changeShowSkins();
 		changeFillSkin();
 
 		byId('nick').addEventListener('input', changeNick);
