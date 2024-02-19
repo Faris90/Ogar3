@@ -449,16 +449,18 @@
 
 						if (skin) {
 							cell.setSkin(skin);
-							skinParts = skin.split('|');
-							console.log(skinParts);
-							cell.nameColor = skinParts[1] !== '#ffffff' ? Color.fromHex(skinParts[1]) : color;
-							cell.cellColor = skinParts[2] !== '#ffffff' ? Color.fromHex(skinParts[2]) : color;
-							cell.borderColor = skinParts[3] !== '#ffffff' ? Color.fromHex(skinParts[3]) : color.darker();
+
+							if (skin && Array.isArray(skin.split('|')) && skin.split('|').length > 1) {
+								skinParts = skin.split('|');
+								cell.nameColor = skinParts[1] !== '#ffffff' ? Color.fromHex(skinParts[1]) : color;
+								cell.cellColor = skinParts[2] !== '#ffffff' ? Color.fromHex(skinParts[2]) : color;
+								cell.borderColor = skinParts[3] !== '#ffffff' ? Color.fromHex(skinParts[3]) : color.darker();
+							}
 						}
 					} else {
 						const cell = new Cell(id, x, y, s, name, color, color, color?.darker(), skin, flags);
 
-						if (skin) {
+						if (skin && Array.isArray(skin.split('|')) && skin.split('|').length > 1) {
 							skinParts = skin.split('|');
 							cell.nameColor = skinParts[1] !== '#ffffff' ? Color.fromHex(skinParts[1]) : color;
 							cell.cellColor = skinParts[2] !== '#ffffff' ? Color.fromHex(skinParts[2]) : color;
@@ -1541,13 +1543,15 @@
 			}
 		}
 		setSkin(value) {
-			value = value.trim();
+			if (typeof value !== 'undefined' && value !== null && value !== '') {
+				value = value.trim();
+
+				if (value.indexOf('|') !== -1) {
+					value = value.split('|')[0];
+				}
+			}
 
 			if (typeof value === 'undefined' || value === null || value === '') return;
-
-			if (value.indexOf('|') !== -1) {
-				value = value.split('|')[0];
-			}
 
 			this.skin = (value[0] === '%' ? value.slice(1) : (value[0] === '$' ? encode(encode(value)) : value)) || value;
 
