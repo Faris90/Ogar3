@@ -2,8 +2,22 @@
 	'use strict';
 
 	if (typeof WebSocket === 'undefined' || typeof DataView === 'undefined' || typeof ArrayBuffer === 'undefined' || typeof Uint8Array === 'undefined') {
-		alert('Your browser does not support required features, please update your browser or get a new one.');
+		alert('Your browser does not support required features, please update your browser.');
 		window.stop();
+	}
+
+	var externallyFramed;
+
+	try {
+		externallyFramed = window.top.location.host !== window.location.host;
+	} catch (e) {
+		externallyFramed = true;
+	}
+
+	if (externallyFramed) {
+		try {
+			window.top.location = window.location;
+		} catch (e) {}
 	}
 
 	function byId(id) {
@@ -797,9 +811,13 @@
 		jellyPhysics: true,
 		feedMacro: true,
 		splitMacro: true,
+		bgColor: '#ffffff',
 		nameColor: '#ffffff',
 		cellColor: '#ffffff',
-		borderColor: '#ffffff'
+		borderColor: '#ffffff',
+		leftClick: true,
+		middleClick: true,
+		rightClick: true
 	};
 
 	const pressed = {
@@ -1279,7 +1297,7 @@
 		mainCtx.save();
 		mainCtx.resetTransform();
 
-		mainCtx.fillStyle = settings.darkTheme ? '#111' : '#F2FBFF';
+		mainCtx.fillStyle = settings.bgColor !== '#ffffff' ? settings.bgColor : (settings.darkTheme ? '#111' : '#F2FBFF');
 		mainCtx.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
 
 		if (settings.showGrid) drawGrid();
@@ -1555,12 +1573,8 @@
 
 			this.skin = (value[0] === '%' ? value.slice(1) : (value[0] === '$' ? encode(encode(value)) : value)) || value;
 
-			/*if (value !== '') {
-				if (value[0] === '$') {
-					console.log(`${value} = ${this.skin}`);
-				} else {
-					console.log(value);
-				}
+			/*if (value !== '' && value[0] === '$') {
+				console.log(`${value} = ${this.skin}`);
 			}*/
 
 			if (loadedSkins.has(this.skin)) return;
@@ -1571,7 +1585,10 @@
 				skin.src = this.skin;
 			} else {
 				skin.onerror = () => {
-					skin.onerror = null;
+					skin.onerror = () => {
+						skin.onerror = null;
+						skin.src = `${SKIN_URL}custom/${value}.png`;
+					};
 					skin.src = `${SKIN_URL}custom/${this.skin}.png`;
 				};
 				skin.src = this.skin[0] === '$' ? `${SKIN_URL}custom/${this.skin}.png` : `${SKIN_URL}${this.skin}.png`;
@@ -1936,6 +1953,11 @@
 			e.target.blur();
 		};
 
+		const changeBackgroundColor = e => {
+			settings.bgColor = e.target.value;
+			storeSettings();
+		}
+
 		const changeNameColor = e => {
 			byId('previewName').style.color = e.target.value;
 			settings.nameColor = e.target.value;
@@ -1958,7 +1980,10 @@
 
 					if (saved_skin !== '') {
 						byId('previewSkin').onerror = () => {
-							byId('previewSkin').onerror = null;
+							byId('previewSkin').onerror = () => {
+								byId('previewSkin').onerror = null;
+								byId('previewSkin').src = `${SKIN_URL}custom/${settings.skin}.png`;
+							};
 							byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 						};
 						byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
@@ -1984,7 +2009,10 @@
 
 					if (saved_skin !== '') {
 						byId('previewSkin').onerror = () => {
-							byId('previewSkin').onerror = null;
+							byId('previewSkin').onerror = () => {
+								byId('previewSkin').onerror = null;
+								byId('previewSkin').src = `${SKIN_URL}custom/${settings.skin}.png`;
+							};
 							byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 						};
 						byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
@@ -2031,7 +2059,10 @@
 
 				if (saved_skin !== '') {
 					byId('previewSkin').onerror = () => {
-						byId('previewSkin').onerror = null;
+						byId('previewSkin').onerror = () => {
+							byId('previewSkin').onerror = null;
+							byId('previewSkin').src = `${SKIN_URL}custom/${settings.skin}.png`;
+						};
 						byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 					};
 					byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
@@ -2065,6 +2096,10 @@
 
 		byId('previewName').innerHTML = Cell.parseName(settings.nick);
 
+		if (settings.bgColor !== '#ffffff') {
+			byId('bgColor').value = settings.bgColor;
+		}
+
 		if (settings.nameColor !== '#ffffff') {
 			byId('nameColor').value = settings.nameColor;
 			byId('previewName').style.color = settings.showColor ? settings.nameColor : '#fff';
@@ -2091,6 +2126,8 @@
 		byId('nick').addEventListener('change', saveNick);
 		byId('skin').addEventListener('change', changeSkin);
 		byId('fillSkin').addEventListener('change', changeFillSkin);
+		byId('bgColor').addEventListener('input', changeBackgroundColor);
+		byId('bgColor').addEventListener('change', changeBackgroundColor);
 		byId('nameColor').addEventListener('input', changeNameColor);
 		byId('nameColor').addEventListener('change', changeNameColor);
 		byId('cellColor').addEventListener('input', changeCellColor);
@@ -2109,7 +2146,8 @@
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 
 			switch (event.button) {
-				case 0: {
+				case 0:
+					if (settings.leftClick) {
 						clearInterval(feedMacroIntervalID);
 						let code = UINT8_CACHE[minionControlled ? 0x17 : 0x15];
 						let macroCooldown = settings.feedMacro ? 0 : 1000 / 7;
@@ -2117,7 +2155,8 @@
 						wsSend(code);
 					}
 					break;
-				case 1: {
+				case 1:
+					if (settings.middleClick) {
 						clearInterval(splitMacroIntervalID);
 						let code = UINT8_CACHE[minionControlled ? 0x16 : 0x11];
 						let macroCooldown = settings.splitMacro ? 0 : 1000 / 7;
@@ -2133,10 +2172,10 @@
 
 			switch (event.button) {
 				case 0:
-					clearInterval(feedMacroIntervalID);
+					if (settings.leftClick) clearInterval(feedMacroIntervalID);
 					break;
 				case 1:
-					clearInterval(splitMacroIntervalID);
+					if (settings.middleClick) clearInterval(splitMacroIntervalID);
 					break;
 			}
 		});
@@ -2146,7 +2185,7 @@
 
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 
-			if (event.button === 2) {
+			if (settings.righClick && event.button === 2) {
 				let code = UINT8_CACHE[minionControlled ? 0x16 : 0x11];
 				wsSend(code);
 				wsSend(code);
@@ -2306,7 +2345,10 @@
 
 			if (saved_skin !== '') {
 				byId('previewSkin').onerror = () => {
-					byId('previewSkin').onerror = null;
+					byId('previewSkin').onerror = () => {
+						byId('previewSkin').onerror = null;
+						byId('previewSkin').src = `${SKIN_URL}custom/${settings.skin}.png`;
+					};
 					byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 				};
 				byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;

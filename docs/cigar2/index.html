@@ -78,6 +78,9 @@
 							</label>
 							<label><input id="feedMacro" type="checkbox" />Feed Macro</label>
 							<label><input id="splitMacro" type="checkbox" />Split Macro</label>
+							<label><input id="leftClick" type="checkbox" />Left Click</label>
+							<label><input id="middleClick" type="checkbox" />Middle Click</label>
+							<label><input id="rightClick" type="checkbox" />Right Click</label>
 						</div>
 					</div>
 
@@ -87,8 +90,9 @@
 					</div>
 
 					<div id="colors">
+						<label><input id="bgColor" type="color" value="#ffffff" /><span>Background</span></label>
 						<label><input id="nameColor" type="color" value="#ffffff" /><span>Name</span></label>
-						<label><input id="cellColor" type="color" value="#ffffff" /><span>Background</span></label>
+						<label><input id="cellColor" type="color" value="#ffffff" /><span>Color</span></label>
 						<label><input id="borderColor" type="color" value="#ffffff" /><span>Border</span></label>
 					</div>
 				</div>
@@ -131,7 +135,12 @@
 						<h2 id="title">News</h2>
 						<hr class="top" />
 						<div class="text">
-							<b>17/02/2024</b>
+							<b>20/02/2024</b>
+							<ul>
+								<li>Added toggle checkbox in <b>Settings</b> for enabling/disabling individual mouse clicks</li>
+								<li>Added custom <b>Background Color</b> picker</li>
+							</ul>
+							<hr /><b>17/02/2024</b>
 							<ul>
 								<li>Added <b>Double Split</b>, you can use <b>Double Split</b> by pressing <kbd>X</kbd> or <kbd>Right Click</kbd></li>
 								<li>Added <b>Multi Split Macro</b>, you can use <b>Multi Split Macro</b> by pressing <kbd>Z</kbd> or <kbd>Middle Click</kbd></li>
@@ -185,6 +194,6 @@
 		<input type="text" id="chat_textbox" placeholder="Press enter to chat" maxlength="100" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
 		<script src="assets/js/jquery-1.11.3.min.js"></script>
 		<script src="assets/js/quadtree.js"></script>
-		<script src="assets/js/main.min.js?v=24"></script>
+		<script src="assets/js/main.min.js?v=25"></script>
 	</body>
 </html>
