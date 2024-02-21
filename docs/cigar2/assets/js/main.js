@@ -2185,7 +2185,7 @@
 
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 
-			if (settings.righClick && event.button === 2) {
+			if (settings.rightClick && event.button === 2) {
 				let code = UINT8_CACHE[minionControlled ? 0x16 : 0x11];
 				wsSend(code);
 				wsSend(code);
