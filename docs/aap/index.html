@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<!--suppress HtmlFormInputWithoutLabel -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Eat cells smaller than you and don't get eaten by the bigger ones, as an MMO">
+		<meta name="keywords" content="agario, agar, io, cell, cells, virus, bacteria, blob, game, games, web game, html5, fun, flash">
+		<meta name="robots" content="index, follow">
+		<meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+
+		<title>Aap Agar</title>
+
+		<link id="favicon" rel="icon" type="image/png" href="assets/img/favicon.png">
+		<link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet" type="text/css">
+		<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+		<link href="assets/css/index.css" rel="stylesheet">
+		<link href="assets/css/gallery.css" rel="stylesheet">
+
+		<script src="assets/js/quadtree.js"></script>
+		<script src="assets/js/main_out.js"></script>
+	</head>
+
+	<body>
+		<div id="gallery" onclick="if (event.target === this) this.hide()" style="display: none;">
+			<div id="gallery-content">
+				<div id="gallery-header">Skins</div>
+				<div id="gallery-body"></div>
+			</div>
+		</div>
+		<div id="overlays" style="display: none;">
+			<div id="head">
+				<h2 id="title">aAp</h2>
+			</div>
+			<div id="helloDialog">
+				<div id="nickDialog">
+					<h3>Usernames Saver</h3>
+					Welcome, pirate! The text area below is here for you to easily save your usernames. Simply type your username, and it will be stored. When you return to the website, just copy and paste it to switch between usernames. Enjoy your game!
+					<textarea id="nickList" class="form-control">
+					</textarea>
+					<div class="form-group">
+						<h6 class="text-center">Alternate client of <a href="https://emupedia.net/emupedia-game-agar.io/cigar2/" target="_blank">Agar.io v2</a></h6>
+					</div>
+
+				</div>
+				<div id="nickDialog2">
+					<h3>Customize Client</h3>
+					You can customize a lot of things here to make the game experiences to your own personal tastes
+					<div id="preferences">
+						<span id="virusPref">Virus
+							<input
+								id='virNumPoints'
+								type="range"
+								min="3"
+								max="64"
+								step="1"
+							/>
+						</span>
+						<br>
+						<span id="cellPref">Cell
+							<input
+								id='cellMinPoints'
+								type="range"
+								min="3"
+								max="10"
+								step="1"
+							/>
+							<input
+								id='cellMaxPoints'
+								type="range"
+								min="3"
+								max="64"
+								step="1"
+							/>
+						</span>
+						<span id="colorPref">Background Color
+							<input
+								id='bgColor'
+								type="color"
+							/>
+						</span>
+						<span id="nameColor">Name Color (beta)
+							<input
+								id='userColCode'
+							/>
+						</span>
+						</span>
+					</div>
+					<div class="form-group">
+						<h6 class="text-center">Alternate client of <a href="https://emupedia.net/emupedia-game-agar.io/cigar2/" target="_blank">Agar.io v2</a></h6>
+					</div>
+				</div>
+				<div id="rightDialog">
+					<div class="form-group">
+						<input id="nick" class="form-control" placeholder="Nickname">
+						<input id="skin" class="form-control" placeholder="Skin Name">
+						<select id="gamemode" class="form-control" onchange="setserver(this.value)" required>
+							<option value="agar.emupedia.net:443/ws2/" selected>Emupedia</option>
+							<option value="aapserver.onrender.com:443">Local</option>
+						</select>
+					</div>
+
+					<button id="play-btn" class="btn btn-play btn-primary btn-needs-server pull-left">Play</button>
+					<button id="spectate-btn" onclick="spectate()" class="btn btn-warning btn-spectate btn-needs-server pull-left">Spectate</button>
+					<button class="btn btn-info btn-settings pull-right" onclick="$('#settings').toggle()" ><i class="glyphicon glyphicon-cog"></i></button>
+					<button id="gallery-btn" onclick="openSkinsList()" class="btn btn-play btn-primary btn-needs-server btn-info">Choose Skin</button>
+
+					<div id="access-group">
+						<input class="form-control" id="accessCode" placeholder="Access Code" value="ryalgabe">
+						<h1 style="color: white">⬆</h1>
+						<h3 style="color: grey">Join the <a href="https://discord.gg/emupedia-510149138491506688" target="_blank">Discord</a> to get the access code!</h3>
+					</div>
+
+					<div id="settings" class="checkbox" style="display:none;">
+						<div style="margin: 6px;">
+							<label><input id="showSkins" type="checkbox">Skins</label>
+							<label><input id="showNames" type="checkbox">Names</label>
+							<label><input id="darkTheme" type="checkbox">Dark</label>
+							<label><input id="showColor" type="checkbox">Color</label>
+							<label><input id="showMass" type="checkbox">Mass</label>
+							<label><input id="showChat" type="checkbox">Chat</label>
+							<label><input id="showMinimap" type="checkbox">Minimap</label>
+							<label><input id="showPosition" type="checkbox">Position</label>
+							<label><input id="showBorder" type="checkbox">Border</label>
+							<label><input id="showGrid" type="checkbox">Grid</label>
+							<label><input id="moreZoom" type="checkbox">Zoomout</label>
+							<label><input id="fillSkin" type="checkbox">Fill Skin</label>
+							<label><input id="backgroundSectors" type="checkbox">Background Sectors</label>
+							<label><input id="jellyPhysics" type="checkbox">Jelly Physics</label>
+							<label>
+								<input id="playSounds" type="checkbox">Sounds
+								<input id="soundsVolume" type="range" min="0" max="1" step="any">
+							</label>
+							<label><input id="doubleSplit" type="checkbox">Double Split (left click)</label>
+						</div>
+					</div>
+
+					<div id="instructions">
+						<hr>
+						<center>
+							<span class="text-muted">
+								- <b>Middle Mouse Button</b> to macro split
+								<br>
+								- <b>W</b> to macro eject some mass
+								<br>
+								- <b>Left click</b> to macro double-split
+							</span>
+						</center>
+					</div>
+
+					<hr>
+					<div id="footer">
+						<h3 class="text-muted" id = "hate-msg">by gaberyal</h3>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div id="connecting">
+			<div id="connecting-content">
+				<h2>Connecting</h2>
+				<p> If you cannot connect to the servers, check if you have some anti virus or firewall blocking the connection.</p>
+			</div>
+		</div>
+
+		<div id="mobileStuff" style="display: none;">
+			<div id="touchpad"></div>
+			<div id="touchCircle" style="display: none;"></div>
+			<img src="assets/img/split.png" id="splitBtn" alt="" />
+			<img src="assets/img/eject.png" id="ejectBtn" alt="" />
+		</div>
+
+		<canvas width="978" height="944" id="canvas"></canvas>
+		<input type="text" id="chat_textbox" placeholder="Press enter to chat" maxlength="200" />
+		<script src="assets/js/jquery-1.11.3.min.js"></script>
+	</body>
+</html>
