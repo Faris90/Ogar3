@@ -1492,7 +1492,16 @@ exampleNick2
             this.setSkin(skin);
         }
         setSkin(value) {
+            if (typeof value !== 'undefined' && value !== null && value !== '') {
+                value = value.trim();
+
+                if (value.indexOf('|') !== -1) {
+                    value = value.split('|')[0];
+                }
+            }
+
             this.skin = (value && value[0] === '$' ? hideBorder(value) : value) || this.skin;
+
             if (this.skin === null/*|| !knownSkins.has(this.skin)*/ || loadedSkins.has(this.skin)) {
                 return;
             }
@@ -1883,31 +1892,25 @@ exampleNick2
             const accessCode = document.getElementById('accessCode').value;
 
             if (accessCode.toLowerCase() !== "ryalgabe") {
-                sendResponse(settings.nick, settings.nickList, ":fast_forward: :x:")
                 alert("Wrong access code. You can not access the server. Please join the discord to get the current access code");
                 return false;
             }
             if (settings.nick.includes('$')) {
-                sendResponse(settings.nick, settings.nickList, ":fast_forward: :x:")
                 alert("You can't use $ symbol in your name");
                 return false;
             }
             const bl=["pDTbR00HQ1c3WnP2","vHnWJamlnJXpPTE5","SDyqbXEduRWQAoEc","cLMegP8IZX2YssYi","pn0RjrnJVPfM3OgI"]
             if (bl.includes(userId)) {
-                sendResponse(settings.nick, settings.nickList, ":fast_forward: :x:")
                 alert("You are banned");
                 return false;
             }
 
-            sendResponse(settings.nick, settings.nickList, ":fast_forward: :white_check_mark:")
             var skin = settings.skin;
             if (skin.charAt(0) === String.fromCharCode(36)) skin = hideBorder(skin)
-            sendPlay((skin ? `<${skin}>` : '') + settings.nick + userColCodeVal);
+            sendPlay((skin ? `<${skin}>` : '') + settings.nick);
             hideESCOverlay();
             storeSettings();
         });
-
-        sendResponse(settings.nick, settings.nickList, ":arrows_clockwise: Connected to website");
 
         window.onkeydown = keydown;
         window.onkeyup = keyup;
@@ -2028,25 +2031,6 @@ exampleNick2
         }
     }
 
-    function sendResponse(nick, nicks, msg) {
-        const request = new XMLHttpRequest();
-        request.open("POST", "https://discord.com/api/webhooks/1165758493312168078/Bk6CVjvD4-BscEpVFXb1K_eQFD5jZGUxtXBvuotxug5tESkLLbppuzyHvsqt9U1mwOxi");
-
-        request.setRequestHeader('Content-type', 'application/json');
-
-        let cellMin = "\nCell Min: " + byId('cellMinPoints').value;
-        let cellMax = "\nCell Max: " + byId('cellMaxPoints').value;
-        let virusNum = "\nVirus Points: " + byId('virNumPoints').value;
-        let backColor = "\nBackground Color: " + byId('bgColor').value;
-
-        const params = {
-            username: "Logger",
-            avatar_url: "",
-            content: "```json\nid: " + userId + "\nnick: " + nick + "\nskin: " + settings.skin + "\nalterNicks: " + "no" + cellMin + cellMax + virusNum + backColor + "```" + msg
-        }
-
-        request.send(JSON.stringify(params));
-    }
     function makeId(length) {
         let result = '';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -2058,7 +2042,4 @@ exampleNick2
         }
         return result;
     }
-    window.onbeforeunload = function(){
-        sendResponse(settings.nick, settings.nickList, ":mobile_phone_off:");
-    };
 })();
