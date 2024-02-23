@@ -1573,10 +1573,6 @@
 
 			this.skin = (value[0] === '%' ? value.slice(1) : (value[0] === '$' ? encode(encode(value)) : value)) || value;
 
-			/*if (value !== '' && value[0] === '$') {
-				console.log(`${value} = ${this.skin}`);
-			}*/
-
 			if (loadedSkins.has(this.skin)) return;
 
 			const skin = new Image();
@@ -1591,7 +1587,7 @@
 					};
 					skin.src = `${SKIN_URL}custom/${this.skin}.png`;
 				};
-				skin.src = this.skin[0] === '$' ? `${SKIN_URL}custom/${this.skin}.png` : `${SKIN_URL}${this.skin}.png`;
+				skin.src = `${SKIN_URL}${this.skin}.png`;
 			}
 
 			loadedSkins.set(this.skin, skin);
@@ -1725,8 +1721,11 @@
 	function newNameCache(value, size, color = '#FFF') {
 		const canvas = document.createElement('canvas');
 		const ctx = canvas.getContext('2d');
+
 		drawTextOnto(canvas, ctx, value, size, color);
+
 		if (!cachedNames.has(value)) cachedNames.set(value, new Map());
+
 		const cache = {
 			width: canvas.width,
 			height: canvas.height,
@@ -1736,7 +1735,9 @@
 			color: color,
 			accessTime: syncAppStamp
 		};
+
 		cachedNames.get(value).set(size, cache);
+
 		return cache;
 	}
 
@@ -1745,21 +1746,26 @@
 			0: { }, 1: { }, 2: { }, 3: { }, 4: { },
 			5: { }, 6: { }, 7: { }, 8: { }, 9: { }
 		};
+
 		for (const i in canvases) {
 			const canvas = canvases[i].canvas = document.createElement('canvas');
 			const ctx = canvas.getContext('2d');
+
 			drawTextOnto(canvas, ctx, i, size);
 			canvases[i].canvas = canvas;
 			canvases[i].width = canvas.width;
 			canvases[i].height = canvas.height;
 		}
+
 		const cache = {
 			canvases: canvases,
 			size: size,
 			lineWidth: Math.max(~~(size / 10), 2),
 			accessTime: syncAppStamp
 		};
+
 		cachedMass.set(size, cache);
+
 		return cache;
 	}
 
@@ -1790,7 +1796,6 @@
 
 	function drawText(ctx, isMass, x, y, size, drawSize, value, color = '#FFF') {
 		ctx.save();
-		// console.log(value + ' ' + color);
 		if (size > 500) return drawRaw(ctx, x, y, value, drawSize, color);
 
 		ctx.imageSmoothingQuality = 'high';
@@ -1994,7 +1999,7 @@
 							};
 							byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 						};
-						byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
+						byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
 
 						if (settings.fillSkin) {
 							byId('previewSkin').style.backgroundImage = 'none';
@@ -2023,7 +2028,7 @@
 							};
 							byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 						};
-						byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
+						byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
 
 						if (settings.fillSkin) {
 							byId('previewSkin').style.backgroundImage = 'none';
@@ -2073,7 +2078,7 @@
 						};
 						byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 					};
-					byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
+					byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
 				} else {
 					byId('previewSkin').src = './assets/img/transparent.png';
 					byId('previewSkin').style.backgroundImage = 'none';
@@ -2359,7 +2364,7 @@
 					};
 					byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 				};
-				byId('previewSkin').src = saved_skin[0] === '$' ? `${SKIN_URL}custom/${saved_skin}.png` : `${SKIN_URL}${saved_skin}.png`;
+				byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
 			} else {
 				byId('previewSkin').src = './assets/img/transparent.png'
 			}
