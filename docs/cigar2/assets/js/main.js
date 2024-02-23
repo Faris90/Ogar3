@@ -1682,6 +1682,12 @@
 		}
 	}
 
+	function removeNameCache(name) {
+		if (cachedNames.has(name)) {
+			cachedNames.delete(name);
+		}
+	}
+
 	// 2-var draw-stay cache
 	const cachedNames = new Map();
 	const cachedMass = new Map();
@@ -1947,6 +1953,7 @@
 			if (nick !== '' && settings.nicknames.indexOf(nick) === -1) {
 				settings.nicknames.push(nick);
 				buildList('nicknames', settings.nicknames);
+				removeNameCache(settings.nick);
 				storeSettings();
 			}
 
@@ -1961,6 +1968,7 @@
 		const changeNameColor = e => {
 			byId('previewName').style.color = e.target.value;
 			settings.nameColor = e.target.value;
+			removeNameCache(settings.nick);
 			storeSettings();
 		};
 
