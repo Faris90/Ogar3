@@ -1958,7 +1958,11 @@
 					if (typeof result['image'] !== 'undefined') {
 						if (typeof result['image']['url'] !== 'undefined') {
 							if (result.image.url !== null && result.image.url !== '') {
-								changeSkin(null, result.image.url);
+								if (result.image.nsfw === 0) {
+									changeSkin(null, result.image.url);
+								} else {
+									alert('Failed to upload file [0]');
+								}
 							} else {
 								alert('Failed to upload file [1]');
 							}
