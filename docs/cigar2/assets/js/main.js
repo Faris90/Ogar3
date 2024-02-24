@@ -744,6 +744,7 @@
 
 	const knownSkins = new Map();
 	const loadedSkins = new Map();
+	const encodedSkins = new Set();
 	const camera = {
 		x: 0,
 		y: 0,
@@ -1571,13 +1572,21 @@
 
 			if (typeof value === 'undefined' || value === null || value === '') return;
 
+			/*if (!encodedSkins.has(value)) {
+				encodedSkins.add(value);
+
+				if (value[0] === '$') {
+					console.log(`${value} = ${encode(encode(value))}`);
+				}
+			}*/
+
 			this.skin = (value[0] === '%' ? value.slice(1) : (value[0] === '$' ? encode(encode(value)) : value)) || value;
 
 			if (loadedSkins.has(this.skin)) return;
 
 			const skin = new Image();
 
-			if (this.skin.includes('//')) {
+			if (this.skin.startsWith('https://iili.io/')) {
 				skin.src = this.skin;
 			} else {
 				skin.onerror = () => {
@@ -1724,7 +1733,9 @@
 
 		drawTextOnto(canvas, ctx, value, size, color);
 
-		if (!cachedNames.has(value)) cachedNames.set(value, new Map());
+		if (!cachedNames.has(value)) {
+			cachedNames.set(value, new Map());
+		}
 
 		const cache = {
 			width: canvas.width,
@@ -1774,13 +1785,18 @@
 	}
 
 	function getNameCache(value, size, color = '#FFF') {
-		if (!cachedNames.has(value)) return newNameCache(value, size, color);
+		if (!cachedNames.has(value)) {
+			return newNameCache(value, size, color);
+		}
+
 		const sizes = Array.from(cachedNames.get(value).keys());
+
 		for (let i = 0, l = sizes.length; i < l; i++) {
 			if (toleranceTest(size, sizes[i], size / 4)) {
 				return cachedNames.get(value).get(sizes[i]);
 			}
 		}
+
 		return newNameCache(value, size, color);
 	}
 
@@ -1796,7 +1812,10 @@
 
 	function drawText(ctx, isMass, x, y, size, drawSize, value, color = '#FFF') {
 		ctx.save();
-		if (size > 500) return drawRaw(ctx, x, y, value, drawSize, color);
+
+		if (size > 500) {
+			return drawRaw(ctx, x, y, value, drawSize, color);
+		}
 
 		ctx.imageSmoothingQuality = 'high';
 
@@ -1924,6 +1943,59 @@
 		camera.userZoom = Math.min(camera.userZoom, 4);
 	}
 
+	function uploadImage(image) {
+		$.ajax({
+			url: 'https://corsproxy.io/?' + encodeURIComponent('https://freeimage.host/api/1/upload?key=6d207e02198a847aa98d0a2a901485a5'),
+			type: 'POST',
+			headers: {
+				Accept: 'application/json'
+			},
+			data: {
+				source: image
+			},
+			success: result => {
+				if (typeof result !== 'undefined') {
+					if (typeof result['image'] !== 'undefined') {
+						if (typeof result['image']['url'] !== 'undefined') {
+							if (result.image.url !== null && result.image.url !== '') {
+								changeSkin(null, result.image.url);
+							} else {
+								alert('Failed to upload file [1]');
+							}
+						} else {
+							alert('Failed to upload file [2]');
+						}
+					} else {
+						alert('Failed to upload file [3]');
+					}
+				} else {
+					alert('Failed to upload file [4]');
+				}
+			},
+			error: () => {
+				alert('Failed to upload file [5]');
+			}
+		});
+	}
+
+	function getBase64(file, cb) {
+		var reader = new FileReader();
+
+		reader.readAsDataURL(file);
+
+		reader.onload = () => {
+			if (typeof cb === 'function') {
+				cb(reader.result.split(',')[1]);
+			} else {
+				alert('Failed to upload file [6]');
+			}
+		};
+
+		reader.onerror = error => {
+			alert('Failed to upload file [7]');
+		};
+	}
+
 	function init() {
 		mainCanvas = document.getElementById('canvas');
 		mainCtx = mainCanvas.getContext('2d');
@@ -1987,19 +2059,23 @@
 				byId('previewSkin').style.backgroundColor = settings.showColor ? e.target.value : '#fff';
 
 				if (settings.showSkins) {
-					let saved_skin = settings.skin.trim();
+					let saved_skin = settings.skin;
 
 					if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
 
 					if (saved_skin !== '') {
-						byId('previewSkin').onerror = () => {
+						if (saved_skin.startsWith('https://iili.io/')) {
+							byId('previewSkin').src = saved_skin;
+						} else {
 							byId('previewSkin').onerror = () => {
-								byId('previewSkin').onerror = null;
-								byId('previewSkin').src = `${SKIN_URL}custom/${settings.skin}.png`;
+								byId('previewSkin').onerror = () => {
+									byId('previewSkin').onerror = null;
+									byId('previewSkin').src = `${SKIN_URL}custom/${settings.skin}.png`;
+								};
+								byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 							};
-							byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
-						};
-						byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
+							byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
+						}
 
 						if (settings.fillSkin) {
 							byId('previewSkin').style.backgroundImage = 'none';
@@ -2016,19 +2092,23 @@
 				}
 			} else {
 				if (settings.showSkins) {
-					let saved_skin = settings.skin.trim();
+					let saved_skin = settings.skin;
 
 					if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
 
 					if (saved_skin !== '') {
-						byId('previewSkin').onerror = () => {
+						if (saved_skin.startsWith('https://iili.io/')) {
+							byId('previewSkin').src = saved_skin;
+						} else {
 							byId('previewSkin').onerror = () => {
-								byId('previewSkin').onerror = null;
-								byId('previewSkin').src = `${SKIN_URL}custom/${settings.skin}.png`;
+								byId('previewSkin').onerror = () => {
+									byId('previewSkin').onerror = null;
+									byId('previewSkin').src = `${SKIN_URL}custom/${settings.skin}.png`;
+								};
+								byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 							};
-							byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
-						};
-						byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
+							byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
+						}
 
 						if (settings.fillSkin) {
 							byId('previewSkin').style.backgroundImage = 'none';
@@ -2066,19 +2146,23 @@
 
 		const changeShowSkins = e => {
 			if (settings.showSkins) {
-				let saved_skin = settings.skin.trim();
+				let saved_skin = settings.skin;
 
 				if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
 
 				if (saved_skin !== '') {
-					byId('previewSkin').onerror = () => {
+					if (saved_skin.startsWith('https://iili.io/')) {
+						byId('previewSkin').src = saved_skin;
+					} else {
 						byId('previewSkin').onerror = () => {
-							byId('previewSkin').onerror = null;
-							byId('previewSkin').src = `${SKIN_URL}custom/${settings.skin}.png`;
+							byId('previewSkin').onerror = () => {
+								byId('previewSkin').onerror = null;
+								byId('previewSkin').src = `${SKIN_URL}custom/${settings.skin}.png`;
+							};
+							byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 						};
-						byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
-					};
-					byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
+						byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
+					}
 				} else {
 					byId('previewSkin').src = './assets/img/transparent.png';
 					byId('previewSkin').style.backgroundImage = 'none';
@@ -2106,6 +2190,8 @@
 				}
 			}
 		}
+
+		const changeUploadSkin = e => getBase64(e.target.files[0], b64 => uploadImage(b64))
 
 		byId('previewName').innerHTML = Cell.parseName(settings.nick);
 
@@ -2150,6 +2236,7 @@
 		byId('showColor').addEventListener('change', changeShowColor);
 		byId('showSkins').addEventListener('change', changeShowSkins);
 		byId('darkTheme').addEventListener('change', changeDarkTheme);
+		byId('upload-btn').addEventListener('change', changeUploadSkin);
 
 		window.addEventListener('beforeunload', storeSettings);
 
@@ -2206,7 +2293,7 @@
 		});
 
 		byId('play-btn').addEventListener('click', () => {
-			const skin = settings.skin.trim();
+			const skin = settings.skin;
 			const nameColor = settings.nameColor;
 			const cellColor = settings.cellColor;
 			const borderColor = settings.borderColor;
@@ -2333,9 +2420,9 @@
 		let sk = '';
 
 		if (e === null) {
-			sk = s.trim();
+			sk = s;
 		} else {
-			sk = e.target.value.trim();
+			sk = e.target.value;
 		}
 
 		if (sk !== byId('skin').value) {
@@ -2352,19 +2439,23 @@
 		if (e !== null) e.target.blur();
 
 		if (settings.showSkins) {
-			let saved_skin = settings.skin.trim();
+			let saved_skin = settings.skin;
 
 			if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
 
 			if (saved_skin !== '') {
-				byId('previewSkin').onerror = () => {
+				if (saved_skin.startsWith('https://iili.io/')) {
+					byId('previewSkin').src = saved_skin;
+				} else {
 					byId('previewSkin').onerror = () => {
-						byId('previewSkin').onerror = null;
-						byId('previewSkin').src = `${SKIN_URL}custom/${settings.skin}.png`;
+						byId('previewSkin').onerror = () => {
+							byId('previewSkin').onerror = null;
+							byId('previewSkin').src = `${SKIN_URL}custom/${settings.skin}.png`;
+						};
+						byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
 					};
-					byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
-				};
-				byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
+					byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
+				}
 			} else {
 				byId('previewSkin').src = './assets/img/transparent.png'
 			}

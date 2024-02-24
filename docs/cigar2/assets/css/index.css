@@ -8,6 +8,11 @@ html, body {
 	position: fixed;
 }
 
+a {
+	color: #000;
+	text-decoration: underline;
+}
+
 hr {
 	border-top: 2px solid #000;
 }
@@ -168,6 +173,7 @@ input[type=checkbox] {
 	border-width: 0;
 	border-color: transparent;
 	border-style: solid;
+	aspect-ratio: 1 / 1;
 	user-select: none;
 }
 
@@ -242,9 +248,7 @@ input[type=checkbox] {
 }
 
 #gallery-btn {
-	display: none;
 	width: 100%;
-	margin-bottom: 5px;
 }
 
 #touchpad, #touchCircle, #splitBtn, #ejectBtn {
@@ -308,11 +312,47 @@ input[type=checkbox] {
 	user-select: none;
 }
 
+.skin-wrapper {
+	display: flex;
+	gap: 10px;
+	width: 100%;
+	clear: both;
+	margin-bottom: 5px;
+}
+
+.upload-btn-wrapper {
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.upload-btn-wrapper button {
+	width: 100%;
+}
+
+.upload-btn-wrapper input[type=file] {
+	position: absolute;
+	left: 0;
+	top: 0;
+	opacity: 0;
+	font-size: 24px;
+}
+
+.upload-btn-wrapper input[type=file]::file-selector-button {
+	cursor: pointer;
+}
+
 .darkTheme #helloDialog, .darkTheme #gameplay, .darkTheme #news {
 	background-color: rgba(9,13,23,0.6);
 	color: #fff;
 	border: 2px solid rgba(36,51,66,0.9);
 	box-shadow: 0 0 9px #243342;
+}
+
+.darkTheme a {
+	color: #fff;
 }
 
 .darkTheme hr {

@@ -16,7 +16,7 @@
 		<link id="favicon" rel="icon" type="image/png" href="assets/img/favicon.png">
 		<link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet" type="text/css">
 		<link href="assets/css/bootstrap.min.css" rel="stylesheet">
-		<link href="assets/css/index.css?v=4" rel="stylesheet">
+		<link href="assets/css/index.css?v=6" rel="stylesheet">
 		<link href="assets/css/gallery.css" rel="stylesheet">
 	</head>
 
@@ -54,7 +54,13 @@
 					<button id="play-btn" class="btn btn-play btn-primary btn-needs-server pull-left">Play</button>
 					<button id="spectate-btn" onclick="spectate()" class="btn btn-warning btn-spectate btn-needs-server pull-left">Spectate</button>
 					<button class="btn btn-success btn-settings pull-right" onclick="$('#settings').toggle()" ><i class="glyphicon glyphicon-cog"></i></button>
-					<button id="gallery-btn" onclick="openSkinsList()" class="btn btn-play btn-primary btn-needs-server btn-info">Choose Skin</button>
+					<div class="skin-wrapper">
+						<button id="gallery-btn" onclick="openSkinsList()" class="btn btn-play btn-primary btn-needs-server btn-info">Choose Skin</button>
+						<div class="upload-btn-wrapper">
+							<button class="btn btn-play btn-primary btn-needs-server btn-info">Upload Skin</button>
+							<input id="upload-btn" type="file" name="source" />
+						</div>
+					</div>
 
 					<div id="settings" class="checkbox" style="display:none;">
 						<div style="margin: 6px;">
@@ -135,7 +141,11 @@
 						<h2 id="title">News</h2>
 						<hr class="top" />
 						<div class="text">
-							<b>20/02/2024</b>
+							<b>24/02/2024</b>
+							<ul>
+								<li>Implemented experimental <b>Upload Skin</b> feature <a href="https://discord.gg/emupedia-510149138491506688" target="_blank">(you can give some feedback on Discord if it's not working properly)</a></li>
+							</ul>
+							<hr /><b>20/02/2024</b>
 							<ul>
 								<li>Added toggle checkbox in <b>Settings</b> for enabling/disabling individual mouse clicks</li>
 								<li>Added custom <b>Background Color</b> picker</li>
@@ -154,7 +164,7 @@
 							</ul>
 							<hr /><b>16/02/2024</b>
 							<ul>
-								<li>Started working on new <b>Custom Skin</b> upload feature</li>
+								<li>Started working on new <b>Upload Skin</b> feature</li>
 								<li>Fixed random background colors when using <b>Jelly Physics</b></li>
 								<li>Improved Touch controls for mobile</li>
 								<li>Added <b>Feed Macro</b>, you can use <b>Feed Macro</b> by pressing <kbd>W</kbd> or <kbd>Left Click</kbd> and having <b>Feed Macro</b> checkbox checked in <b>Settings</b></li>
@@ -194,6 +204,6 @@
 		<input type="text" id="chat_textbox" placeholder="Press enter to chat" maxlength="100" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
 		<script src="assets/js/jquery-1.11.3.min.js"></script>
 		<script src="assets/js/quadtree.js"></script>
-		<script src="assets/js/main.min.js?v=28"></script>
+		<script src="assets/js/main.min.js?v=29"></script>
 	</body>
 </html>
