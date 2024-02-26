@@ -744,6 +744,7 @@
 
 	const knownSkins = new Map();
 	const loadedSkins = new Map();
+	const bannedSkins = new Set();
 	const encodedSkins = new Set();
 	const camera = {
 		x: 0,
@@ -1582,7 +1583,7 @@
 
 			this.skin = (value[0] === '%' ? value.slice(1) : (value[0] === '$' ? encode(encode(value)) : value)) || value;
 
-			if (loadedSkins.has(this.skin)) return;
+			if (loadedSkins.has(this.skin) || bannedSkins.has(this.skin)) return;
 
 			const skin = new Image();
 
@@ -1961,23 +1962,58 @@
 								if (result.image.nsfw === 0) {
 									changeSkin(null, result.image.url);
 								} else {
-									alert('Failed to upload file [0]');
+									alert('Failed to upload file [0][0]');
 								}
 							} else {
-								alert('Failed to upload file [1]');
+								alert('Failed to upload file [0][1]');
 							}
 						} else {
-							alert('Failed to upload file [2]');
+							alert('Failed to upload file [0][2]');
 						}
 					} else {
-						alert('Failed to upload file [3]');
+						alert('Failed to upload file [0][3]');
 					}
 				} else {
-					alert('Failed to upload file [4]');
+					alert('Failed to upload file [0][4]');
 				}
 			},
 			error: () => {
-				alert('Failed to upload file [5]');
+				$.ajax({
+					url: 'https://agar.emupedia.net/skin/?key=6d207e02198a847aa98d0a2a901485a5',
+					type: 'POST',
+					headers: {
+						Accept: 'application/json'
+					},
+					data: {
+						source: image
+					},
+					success: result => {
+						if (typeof result !== 'undefined') {
+							if (typeof result['image'] !== 'undefined') {
+								if (typeof result['image']['url'] !== 'undefined') {
+									if (result.image.url !== null && result.image.url !== '') {
+										if (result.image.nsfw === 0) {
+											changeSkin(null, result.image.url);
+										} else {
+											alert('Failed to upload file [1][0]');
+										}
+									} else {
+										alert('Failed to upload file [1][1]');
+									}
+								} else {
+									alert('Failed to upload file [1][2]');
+								}
+							} else {
+								alert('Failed to upload file [1][3]');
+							}
+						} else {
+							alert('Failed to upload file [1][4]');
+						}
+					},
+					error: () => {
+						alert('Failed to upload file [1][5]');
+					}
+				});
 			}
 		});
 	}
