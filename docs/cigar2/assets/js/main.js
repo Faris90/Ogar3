@@ -854,6 +854,14 @@
 		}
 	});
 
+	fetch('banList.txt').then(resp => resp.text()).then(data => {
+		const skins = data.split(',').filter(name => name.length > 0);
+
+		if (skins.length === 0) return;
+
+		for (const skin of skins) bannedSkins.add(skin);
+	});
+
 	function hideESCOverlay() {
 		escOverlayShown = false;
 		byId('overlays').hide();
