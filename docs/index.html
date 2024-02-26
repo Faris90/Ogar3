@@ -298,7 +298,7 @@
 				for (var skin in sortedSkins) {
 					if (sortedSkins[skin] !== '') {
 						c += '<li class="skin" onclick="changeSkin(\'' + sortedSkins[skin] + '\')">';
-							c += '<img class="circular" src="./skins/' + sortedSkins[skin] + '.png">';
+							c += '<img class="circular" loading="lazy" src="./skins/' + sortedSkins[skin] + '.png">';
 							c += '<h4 class="skinName">' + sortedSkins[skin] + '</h4>';
 						c += '</li>';
 					}
@@ -312,7 +312,7 @@
 					if (status === 'success') {
 						var skins = data.split(',');
 						if (skins.length === 0) return;
-						knownSkins = skins
+						knownSkins = skins;
 						document.getElementById('gallery-btn').style.display = 'inline-block';
 					}
 				});

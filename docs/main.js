@@ -785,7 +785,6 @@
 		if (clientData.names == 0 || clientData.names == 3) wjQuery('#cname').attr('disabled', true); else wjQuery('#cname').attr('disabled', false);
 		if (clientData.showMass == 0 || clientData.showMass == 3) wjQuery('#cmass').attr('disabled', true); else wjQuery('#cmass').attr('disabled', false);
 		if (clientData.smooth == 0 || clientData.smooth == 3) wjQuery('#csmooth').attr('disabled', true); else wjQuery('#csmooth').attr('disabled', false);
-
 	}
 
 	function updateNodes(view, offset) {
@@ -1247,102 +1246,102 @@
 	var localProtocol = wHandle.location.protocol, localProtocolHttps = "https:" == localProtocol;
 
 	var nCanvas, ctx, mainCanvas, lbCanvas, chatCanvas, canvasWidth, canvasHeight, qTree = null,
-		ws = null,
-		nodeX = 0,
-		nodeY = 0,
-		nodesOnScreen = [],
-		playerCells = [],
-		nodes = {}, nodelist = [],
-		Cells = [],
-		leaderBoard = [],
-		chatBoard = [],
-		rawMouseX = 0,
-		rawMouseY = 0,
-		X = -1,
-		Y = -1,
-		cb = 0,
-		timestamp = 0,
-		userNickName = null,
-		leftPos = 0,
-		topPos = 0,
-		rightPos = 1E4,
-		bottomPos = 1E4,
-		viewZoom = 1,
-		w = null,
-		showSkin = true,
-		showName = true,
-		showColor = false,
-		hideGrid = false,
-		ua = false,
-		userScore = 0,
-		sMacro = false,
-		wMacro = false,
-		qMacro = false,
-		eMacro = false,
-		rMacro = false,
-		mouseinterval = false,
-		clientData = { // Levels of "permission": 0 = not allowed, 1 = checked off but changeable, 2 = checked on but changeable, 3 = always on
+	ws = null,
+	nodeX = 0,
+	nodeY = 0,
+	nodesOnScreen = [],
+	playerCells = [],
+	nodes = {}, nodelist = [],
+	Cells = [],
+	leaderBoard = [],
+	chatBoard = [],
+	rawMouseX = 0,
+	rawMouseY = 0,
+	X = -1,
+	Y = -1,
+	cb = 0,
+	timestamp = 0,
+	userNickName = null,
+	leftPos = 0,
+	topPos = 0,
+	rightPos = 1E4,
+	bottomPos = 1E4,
+	viewZoom = 1,
+	w = null,
+	showSkin = true,
+	showName = true,
+	showColor = false,
+	hideGrid = false,
+	ua = false,
+	userScore = 0,
+	sMacro = false,
+	wMacro = false,
+	qMacro = false,
+	eMacro = false,
+	rMacro = false,
+	mouseinterval = false,
+	clientData = { // Levels of "permission": 0 = not allowed, 1 = checked off but changeable, 2 = checked on but changeable, 3 = always on
 
-			// Macros
-			sMacro: 0,
-			wMacro: 0,
-			qMacro: 0,
-			eMacro: 0,
-			rMacro: 0,
+		// Macros
+		sMacro: 0,
+		wMacro: 0,
+		qMacro: 0,
+		eMacro: 0,
+		rMacro: 0,
 
-			// Current client configs
-			darkBG: 1,
-			chat: 2,
-			skins: 2,
-			grid: 2,
-			acid: 1,
-			colors: 2,
-			names: 2,
-			showMass: 1,
-			smooth: 1,
+		// Current client configs
+		darkBG: 1,
+		chat: 2,
+		skins: 2,
+		grid: 2,
+		acid: 1,
+		colors: 2,
+		names: 2,
+		showMass: 1,
+		smooth: 1,
 
-			// Future feature
-			minionCount: 0,
-			minimap: 0,
+		// Future feature
+		minionCount: 0,
+		minimap: 0,
 
-			// Others
-			maxName: 15,
-			customHTML: "",
-			title: "",
-			defaultusername: "",
-			nickplaceholder: "",
-			leavemessage: "",
-			instructions: "Control your cell using the mouse, w for eject, space for split. Add &lt;skinname&gt; in your username for skins."
-		},
-		showDarkTheme = false,
-		showMass = false,
-		connectUrl = "",
-		isNewProto = false,
-		defaultPort = 0,
-		knownServers = [],
-		idList = [],
-		smoothRender = .4,
-		hideChat = false,
-		posX = nodeX = ~~((leftPos + rightPos) / 2),
-		posY = nodeY = ~~((topPos + bottomPos) / 2),
-		posSize = 1,
-		gameMode = "",
-		teamScores = null,
-		ma = false,
-		hasOverlay = true,
-		drawLine = false,
-		lineX = 0,
-		lineY = 0,
-		drawLineX = 0,
-		drawLineY = 0,
-		Ra = 0,
-		teamColor = ["#333333", "#FF3333", "#33FF33", "#3333FF"],
-		xa = false,
-		zoom = 1,
-		isTouchStart = "ontouchstart" in wHandle && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
-		splitIcon = new Image,
-		ejectIcon = new Image,
-		noRanking = false;
+		// Others
+		maxName: 15,
+		customHTML: "",
+		title: "",
+		defaultusername: "",
+		nickplaceholder: "",
+		leavemessage: "",
+		instructions: "Control your cell using the mouse, w for eject, space for split. Add &lt;skinname&gt; in your username for skins."
+	},
+	showDarkTheme = false,
+	showMass = false,
+	connectUrl = "",
+	isNewProto = false,
+	defaultPort = 0,
+	knownServers = [],
+	idList = [],
+	smoothRender = .4,
+	hideChat = false,
+	posX = nodeX = ~~((leftPos + rightPos) / 2),
+	posY = nodeY = ~~((topPos + bottomPos) / 2),
+	posSize = 1,
+	gameMode = "",
+	teamScores = null,
+	ma = false,
+	hasOverlay = true,
+	drawLine = false,
+	lineX = 0,
+	lineY = 0,
+	drawLineX = 0,
+	drawLineY = 0,
+	Ra = 0,
+	teamColor = ["#333333", "#FF3333", "#33FF33", "#3333FF"],
+	xa = false,
+	zoom = 1,
+	isTouchStart = "ontouchstart" in wHandle && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+	splitIcon = new Image,
+	ejectIcon = new Image,
+	noRanking = false;
 	splitIcon.src = "img/split.png";
 	ejectIcon.src = "img/feed.png";
 	// var wCanvas = document.createElement("canvas");
@@ -1401,6 +1400,7 @@
 		if (clientData.acid != 0 && clientData.acid != 3) xa = arg
 	};
 	wHandle.connect = wsConnect;
+
 	if (null != wHandle.localStorage) {
 		if (null == wHandle.localStorage.AB8) {
 			wHandle.localStorage.AB8 = ~~(100 * Math.random());
@@ -1408,25 +1408,17 @@
 		Ra = +wHandle.localStorage.AB8;
 		wHandle.ABGroup = Ra;
 	}
-	/*wjQuery.get(localProtocol + "//gc.agar.io", function (a) {
-	 var b = a.split(" ");
-	 a = b[0];
-	 b = b[1] || "";
-	 -1 == "DE IL PL HU BR AT UA".split(" ").indexOf(a) && knownNameDict.push("nazi");
-	 -1 == ["UA"].indexOf(a) && knownNameDict.push("ussr");
-	 T.hasOwnProperty(a) && ("string" == typeof T[a] ? w || setRegion(T[a]) : T[a].hasOwnProperty(b) && (w || setRegion(T[a][b])))
-	 }, "text");*/
 
 	var delay = 500,
-		oldX = -1,
-		oldY = -1,
-		Canvas = null,
-		z = 1,
-		scoreText = null,
-		skins = {},
-		knownNameDict = "2ch;3lkoos;4chan;52k;8;8ch;9gag;argentina;ashwin;austria;ayy-lmao;babadook;bait;bangladesh;belgium;berlusconi;blatter;boris;bosnia;botswana;brax;brazil;bulba;bulgaria;bush;byzantium;cambodia;cameron;canada;char;chavez;chile;china;cia;clinton;confederate;croatia;cuba;denmark;dilma;doge;ea;earth;estonia;european-union;f4;facebook;facepunch;fidel;gdk-xmas;german-empire;germany;getdeadkid;greece;guri;hillary;hitler;hollande;hong-kong;hungary;imperial-japan;india;indiana;indonesia;iran;iraq;ireland;italy;jamaica;japan;kbkb;kc;kim-jong-un;latvia;lithuania;luxembourg;m4j;majnoon;maldivas;mars;matriarchy;merkel;mexico;mistik;moon;nasa;nazi;netherlands;nigeria;north-korea;norway;obama;origin;pakistan;palin;patriarchy;peru;pewdiepie;piccolo;pika;pokerface;poland;portugal;prodota;prussia;putin;qing-dynasty;quebec;queen;receita-federal;reddit;romania;russia;sanik;scotland;sealand;sir;skills;snay-chocolate;snay-gang;snay;sneddy-gaming;somalia;sonic;south-korea;spain;squi;stalin;statik;steam;strike;stussy;sweden;switzerland;taiwan;texas;thailand;timid;togomanyt;trump;tsarist-russia;tsipras;tumblr;turkey;ukraine;united-kingdom;usa;ussr;venezuela;vinesauce;wojak;woobs;xxnetro;xxnetro2;yaranaika;yemeni;zone".split(";"),
-		knownNameDict_noDisp = ["8", "nasa"],
-		ib = ["_canvas'blob"];
+	oldX = -1,
+	oldY = -1,
+	Canvas = null,
+	z = 1,
+	scoreText = null,
+	skins = {},
+	knownNameDict = "2ch;3lkoos;4chan;52k;8;8ch;9gag;argentina;ashwin;austria;ayy-lmao;babadook;bait;bangladesh;belgium;berlusconi;blatter;boris;bosnia;botswana;brax;brazil;bulba;bulgaria;bush;byzantium;cambodia;cameron;canada;char;chavez;chile;china;cia;clinton;confederate;croatia;cuba;denmark;dilma;doge;ea;earth;estonia;european-union;f4;facebook;facepunch;fidel;gdk-xmas;german-empire;germany;getdeadkid;greece;guri;hillary;hitler;hollande;hong-kong;hungary;imperial-japan;india;indiana;indonesia;iran;iraq;ireland;italy;jamaica;japan;kbkb;kc;kim-jong-un;latvia;lithuania;luxembourg;m4j;majnoon;maldivas;mars;matriarchy;merkel;mexico;mistik;moon;nasa;nazi;netherlands;nigeria;north-korea;norway;obama;origin;pakistan;palin;patriarchy;peru;pewdiepie;piccolo;pika;pokerface;poland;portugal;prodota;prussia;putin;qing-dynasty;quebec;queen;receita-federal;reddit;romania;russia;sanik;scotland;sealand;sir;skills;snay-chocolate;snay-gang;snay;sneddy-gaming;somalia;sonic;south-korea;spain;squi;stalin;statik;steam;strike;stussy;sweden;switzerland;taiwan;texas;thailand;timid;togomanyt;trump;tsarist-russia;tsipras;tumblr;turkey;ukraine;united-kingdom;usa;ussr;venezuela;vinesauce;wojak;woobs;xxnetro;xxnetro2;yaranaika;yemeni;zone".split(";"),
+	knownNameDict_noDisp = ["8", "nasa"],
+	ib = ["_canvas'blob"];
 
 	Cell.prototype = {
 		id: 0,
@@ -1710,6 +1702,7 @@
 			}
 		}
 	};
+
 	UText.prototype = {
 		_value: "",
 		_color: "#000000",
@@ -1777,9 +1770,11 @@
 				6);
 		}
 	};
+
 	Date.now || (Date.now = function () {
 		return (new Date).getTime()
 	});
+
 	var Quad = {
 		init: function (args) {
 			function Node(x, y, w, h, depth) {
