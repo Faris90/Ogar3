@@ -46,12 +46,12 @@ input[type=checkbox] {
 	right: 0;
 	top: 0;
 	bottom: 0;
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgba(0, 0, 0, 0.3);
 	z-index: 200;
 }
 
 #connecting {
-	z-index: 100;
+	z-index: 201;
 }
 
 #connecting-content {
@@ -357,4 +357,11 @@ input[type=checkbox] {
 
 .darkTheme hr {
 	border-top: 2px solid #fff;
+}
+
+.darkTheme #connecting-content {
+	background-color: rgba(9,13,23,0.6);
+	color: #fff;
+	border: 2px solid rgba(36,51,66,0.9);
+	box-shadow: 0 0 9px #243342;
 }
