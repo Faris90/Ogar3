@@ -838,30 +838,6 @@
 	const eatSound = new Sound('./assets/sound/eat.mp3', 0.5, 10);
 	const pelletSound = new Sound('./assets/sound/pellet.mp3', 0.5, 10);
 
-	fetch('skinList.txt').then(resp => resp.text()).then(data => {
-		const skins = data.split(',').filter(name => name.length > 0);
-
-		if (skins.length === 0) return;
-
-		byId('gallery-btn').style.display = 'inline-block';
-
-		const stamp = Date.now();
-
-		for (const skin of skins) knownSkins.set(skin, stamp);
-
-		for (const i of knownSkins.keys()) {
-			if (knownSkins.get(i) !== stamp) knownSkins.delete(i);
-		}
-	});
-
-	fetch('banList.txt').then(resp => resp.text()).then(data => {
-		const skins = data.split(',').filter(name => name.length > 0);
-
-		if (skins.length === 0) return;
-
-		for (const skin of skins) bannedSkins.add(skin);
-	});
-
 	function hideESCOverlay() {
 		escOverlayShown = false;
 		byId('overlays').hide();
@@ -2113,7 +2089,11 @@
 
 					if (saved_skin !== '') {
 						if (saved_skin.startsWith('https://iili.io/')) {
-							byId('previewSkin').src = saved_skin;
+							if (!bannedSkins.has(saved_skin)) {
+								byId('previewSkin').src = saved_skin;
+							} else {
+								byId('previewSkin').src = './assets/img/banned.png';
+							}
 						} else {
 							byId('previewSkin').onerror = () => {
 								byId('previewSkin').onerror = () => {
@@ -2146,7 +2126,11 @@
 
 					if (saved_skin !== '') {
 						if (saved_skin.startsWith('https://iili.io/')) {
-							byId('previewSkin').src = saved_skin;
+							if (!bannedSkins.has(saved_skin)) {
+								byId('previewSkin').src = saved_skin;
+							} else {
+								byId('previewSkin').src = './assets/img/banned.png';
+							}
 						} else {
 							byId('previewSkin').onerror = () => {
 								byId('previewSkin').onerror = () => {
@@ -2200,7 +2184,11 @@
 
 				if (saved_skin !== '') {
 					if (saved_skin.startsWith('https://iili.io/')) {
-						byId('previewSkin').src = saved_skin;
+						if (!bannedSkins.has(saved_skin)) {
+							byId('previewSkin').src = saved_skin;
+						} else {
+							byId('previewSkin').src = './assets/img/banned.png';
+						}
 					} else {
 						byId('previewSkin').onerror = () => {
 							byId('previewSkin').onerror = () => {
@@ -2453,6 +2441,39 @@
 		Logger.info(`Init done in ${Date.now() - LOAD_START}ms`);
 	}
 
+	function start() {
+		try {
+			fetch('skinList.txt').then(resp => resp.text()).then(data => {
+				const skins = data.split(',').filter(name => name.length > 0);
+
+				if (skins.length === 0) return;
+
+				byId('gallery-btn').style.display = 'inline-block';
+
+				const stamp = Date.now();
+
+				for (const skin of skins) knownSkins.set(skin, stamp);
+
+				for (const i of knownSkins.keys()) {
+					if (knownSkins.get(i) !== stamp) knownSkins.delete(i);
+				}
+
+				fetch('banList.txt').then(resp => resp.text()).then(data => {
+					const skins = data.split(',').filter(name => name.length > 0);
+
+					if (skins.length === 0) return;
+
+					for (const skin of skins) bannedSkins.add(skin);
+
+					init();
+				});
+			});
+		} catch (error) {
+			console.error(error);
+			init();
+		}
+	}
+
 	window.setserver = url => {
 		if (url === wsUrl && ws && ws.readyState <= WebSocket.OPEN) return;
 		wsInit(url);
@@ -2493,7 +2514,11 @@
 
 			if (saved_skin !== '') {
 				if (saved_skin.startsWith('https://iili.io/')) {
-					byId('previewSkin').src = saved_skin;
+					if (!bannedSkins.has(saved_skin)) {
+						byId('previewSkin').src = saved_skin;
+					} else {
+						byId('previewSkin').src = './assets/img/banned.png';
+					}
 				} else {
 					byId('previewSkin').onerror = () => {
 						byId('previewSkin').onerror = () => {
@@ -2519,5 +2544,5 @@
 		byId('gallery').show(0.5);
 	};
 
-	window.addEventListener('DOMContentLoaded', init);
+	window.addEventListener('DOMContentLoaded', start);
 })();
