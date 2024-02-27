@@ -2020,6 +2020,22 @@
 		};
 	}
 
+	function checkBanCounter() {
+		let banCounter = 0;
+
+		for (let skin in settings.skinnames) {
+			if (typeof settings.skinnames[skin] === 'string' && settings.skinnames[skin] !== '') {
+				bannedSkins.forEach((value1, value2, set) => {
+					if (settings.skinnames[skin] === value2) {
+						banCounter++;
+					}
+				});
+			}
+		}
+
+		return banCounter;
+	}
+
 	function init() {
 		mainCanvas = document.getElementById('canvas');
 		mainCtx = mainCanvas.getContext('2d');
@@ -2227,7 +2243,13 @@
 			}
 		}
 
-		const changeUploadSkin = e => getBase64(e.target.files[0], b64 => uploadImage(b64))
+		const changeUploadSkin = e => {
+			if (checkBanCounter() > 2) {
+				byClass('upload-btn-wrapper')[0].remove();
+			} else {
+				getBase64(e.target.files[0], b64 => uploadImage(b64));
+			}
+		}
 
 		byId('previewName').innerHTML = Cell.parseName(settings.nick);
 
@@ -2273,6 +2295,10 @@
 		byId('showSkins').addEventListener('change', changeShowSkins);
 		byId('darkTheme').addEventListener('change', changeDarkTheme);
 		byId('upload-btn').addEventListener('change', changeUploadSkin);
+
+		if (checkBanCounter() > 2) {
+			byClass('upload-btn-wrapper')[0].remove();
+		}
 
 		window.addEventListener('beforeunload', storeSettings);
 
@@ -2537,6 +2563,10 @@
 		byId('gallery').hide();
 
 		storeSettings();
+
+		if (checkBanCounter() > 2) {
+			byClass('upload-btn-wrapper')[0].remove();
+		}
 	};
 
 	window.openSkinsList = () => {
