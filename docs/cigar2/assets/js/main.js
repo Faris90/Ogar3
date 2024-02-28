@@ -2494,6 +2494,9 @@
 					detectIncognito().then(result => {
 						if (!result.isPrivate) {
 							init();
+						} else {
+							byId('connecting-content').innerHTML = `<h3>Incognito/Private detected</h3><hr /><p>This game doesn't runs in Incognito/Private mode. Please run this game normally without using Incognito/Private mode</p>`
+							byId('connecting').show(0.5);
 						}
 					});
 				});
@@ -2504,6 +2507,9 @@
 			detectIncognito().then(result => {
 				if (!result.isPrivate) {
 					init();
+				} else {
+					byId('connecting-content').innerHTML = `<h3>Incognito/Private detected</h3><hr /><p>This game doesn't runs in Incognito/Private mode. Please run this game normally without using Incognito/Private mode</p>`
+					byId('connecting').show(0.5);
 				}
 			});
 		}
