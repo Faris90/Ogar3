@@ -2491,12 +2491,21 @@
 
 					for (const skin of skins) bannedSkins.add(skin);
 
-					init();
+					detectIncognito().then(result => {
+						if (!result.isPrivate) {
+							init();
+						}
+					});
 				});
 			});
 		} catch (error) {
 			console.error(error);
-			init();
+
+			detectIncognito().then(result => {
+				if (!result.isPrivate) {
+					init();
+				}
+			});
 		}
 	}
 
