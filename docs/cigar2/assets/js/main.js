@@ -6,75 +6,12 @@
 		window.stop();
 	}
 
-	var externallyFramed;
-
-	try {
-		externallyFramed = window.top.location.host !== window.location.host;
-	} catch (e) {
-		externallyFramed = true;
-	}
-
-	if (externallyFramed) {
-		try {
-			window.top.location = window.location;
-		} catch (e) {}
-	}
-
 	function byId(id) {
 		return document.getElementById(id);
 	}
 
 	function byClass(clss, parent) {
 		return (parent || document).getElementsByClassName(clss);
-	}
-
-	function isEven(value) {
-		return value % 2 === 0;
-	}
-
-	function cutter(str) {
-		var size = str.length;
-		var res = str;
-
-		if (isEven(size)) {
-			let firstHalf = str.slice(0, size / 2);
-			let secondHalf = str.slice(size / 2, size)
-			res = secondHalf + firstHalf
-		}
-
-		if (res.length >= 16) {
-			let half = size / 2
-			return res.slice(half - 8, half + 8);
-		}
-
-		return res;
-	}
-
-	function encode(str) {
-		const symbol = '$';
-		var skinName = '';
-
-		if (str.startsWith(symbol)) {
-			for (var i = 1; i < str.length; i++) {
-				let chr = str.charAt(i);
-				let cChr = '';
-				let code = chr.toLowerCase().charCodeAt(0) - 97;
-
-				if ('abcdexyz'.includes(chr.toLowerCase())) {
-					cChr = code;
-				} else {
-					if (isEven(code)) {
-						const strA = String.fromCharCode(97 + code - 2).toUpperCase();
-						const strB = String.fromCharCode(97 + code - 1);
-						cChr = strA + strB;
-					} else cChr = String.fromCharCode(97 + code + 1);
-				}
-				skinName += cChr;
-			}
-			skinName = cutter(skinName);
-
-			return symbol + skinName;
-		}
 	}
 
 	class Sound {
@@ -745,7 +682,6 @@
 	const knownSkins = new Map();
 	const loadedSkins = new Map();
 	const bannedSkins = new Set();
-	const encodedSkins = new Set();
 	const camera = {
 		x: 0,
 		y: 0,
@@ -1557,30 +1493,15 @@
 
 			if (typeof value === 'undefined' || value === null || value === '') return;
 
-			/*if (!encodedSkins.has(value)) {
-				encodedSkins.add(value);
-
-				if (value[0] === '$') {
-					console.log(`${value} = ${encode(encode(value))}`);
-				}
-			}*/
-
-			this.skin = (value[0] === '%' ? value.slice(1) : (value[0] === '$' ? encode(encode(value)) : value)) || value;
+			this.skin = value[0] === '%' ? value.slice(1) : value;
 
 			if (loadedSkins.has(this.skin) || bannedSkins.has(this.skin)) return;
 
 			const skin = new Image();
 
-			if (this.skin.startsWith('https://iili.io/')) {
+			if (this.skin.startsWith('https://iili.io/') && !this.skin.endsWith('.gif')) {
 				skin.src = this.skin;
 			} else {
-				skin.onerror = () => {
-					skin.onerror = () => {
-						skin.onerror = null;
-						skin.src = `${SKIN_URL}custom/${value}.png`;
-					};
-					skin.src = `${SKIN_URL}custom/${this.skin}.png`;
-				};
 				skin.src = `${SKIN_URL}${this.skin}.png`;
 			}
 
@@ -2101,23 +2022,14 @@
 				if (settings.showSkins) {
 					let saved_skin = settings.skin;
 
-					if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
-
 					if (saved_skin !== '' && saved_skin !== ' ') {
-						if (saved_skin.startsWith('https://iili.io/')) {
+						if (saved_skin.startsWith('https://iili.io/') && !saved_skin.endsWith('.gif')) {
 							if (!bannedSkins.has(saved_skin)) {
 								byId('previewSkin').src = saved_skin;
 							} else {
 								byId('previewSkin').src = './assets/img/banned.png';
 							}
 						} else {
-							byId('previewSkin').onerror = () => {
-								byId('previewSkin').onerror = () => {
-									byId('previewSkin').onerror = null;
-									byId('previewSkin').src = `${SKIN_URL}custom/${settings.skin}.png`;
-								};
-								byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
-							};
 							byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
 						}
 
@@ -2138,23 +2050,14 @@
 				if (settings.showSkins) {
 					let saved_skin = settings.skin;
 
-					if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
-
 					if (saved_skin !== '' && saved_skin !== ' ') {
-						if (saved_skin.startsWith('https://iili.io/')) {
+						if (saved_skin.startsWith('https://iili.io/') && !saved_skin.endsWith('.gif')) {
 							if (!bannedSkins.has(saved_skin)) {
 								byId('previewSkin').src = saved_skin;
 							} else {
 								byId('previewSkin').src = './assets/img/banned.png';
 							}
 						} else {
-							byId('previewSkin').onerror = () => {
-								byId('previewSkin').onerror = () => {
-									byId('previewSkin').onerror = null;
-									byId('previewSkin').src = `${SKIN_URL}custom/${settings.skin}.png`;
-								};
-								byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
-							};
 							byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
 						}
 
@@ -2196,23 +2099,14 @@
 			if (settings.showSkins) {
 				let saved_skin = settings.skin;
 
-				if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
-
 				if (saved_skin !== '' && saved_skin !== ' ') {
-					if (saved_skin.startsWith('https://iili.io/')) {
+					if (saved_skin.startsWith('https://iili.io/') && !saved_skin.endsWith('.gif')) {
 						if (!bannedSkins.has(saved_skin)) {
 							byId('previewSkin').src = saved_skin;
 						} else {
 							byId('previewSkin').src = './assets/img/banned.png';
 						}
 					} else {
-						byId('previewSkin').onerror = () => {
-							byId('previewSkin').onerror = () => {
-								byId('previewSkin').onerror = null;
-								byId('previewSkin').src = `${SKIN_URL}custom/${settings.skin}.png`;
-							};
-							byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
-						};
 						byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
 					}
 				} else {
@@ -2468,6 +2362,20 @@
 	}
 
 	function start() {
+		let externallyFramed;
+
+		try {
+			externallyFramed = window.top.location.host !== window.location.host;
+		} catch (e) {
+			externallyFramed = true;
+		}
+
+		if (externallyFramed) {
+			try {
+				window.top.location = window.location;
+			} catch (e) {}
+		}
+
 		try {
 			fetch('skinList.txt').then(resp => resp.text()).then(data => {
 				const skins = data.split(',').filter(name => name.length > 0);
@@ -2492,30 +2400,14 @@
 					for (const skin of skins) bannedSkins.add(skin);
 
 					init();
-
-					/*detectIncognito().then(result => {
-						if (!result.isPrivate) {
-							init();
-						} else {
-							byId('connecting-content').innerHTML = `<h3>Incognito/Private detected</h3><hr /><p>This game doesn't runs in Incognito/Private mode. Please run this game normally without using Incognito/Private mode</p>`
-							byId('connecting').show(0.5);
-						}
-					});*/
 				});
 			});
 		} catch (error) {
 			console.error(error);
 
-			/*detectIncognito().then(result => {
-				if (!result.isPrivate) {
-					init();
-				} else {
-					byId('connecting-content').innerHTML = `<h3>Incognito/Private detected</h3><hr /><p>This game doesn't runs in Incognito/Private mode. Please run this game normally without using Incognito/Private mode</p>`
-					byId('connecting').show(0.5);
-				}
-			});*/
-
 			init();
+
+			byClass('upload-btn-wrapper')[0].remove();
 		}
 	}
 
@@ -2555,23 +2447,14 @@
 		if (settings.showSkins) {
 			let saved_skin = settings.skin;
 
-			if (saved_skin[0] === '$') saved_skin = encode(encode(saved_skin));
-
 			if (saved_skin !== '' && saved_skin !== ' ') {
-				if (saved_skin.startsWith('https://iili.io/')) {
+				if (saved_skin.startsWith('https://iili.io/') && !saved_skin.endsWith('.gif')) {
 					if (!bannedSkins.has(saved_skin)) {
 						byId('previewSkin').src = saved_skin;
 					} else {
 						byId('previewSkin').src = './assets/img/banned.png';
 					}
 				} else {
-					byId('previewSkin').onerror = () => {
-						byId('previewSkin').onerror = () => {
-							byId('previewSkin').onerror = null;
-							byId('previewSkin').src = `${SKIN_URL}custom/${settings.skin}.png`;
-						};
-						byId('previewSkin').src = `${SKIN_URL}custom/${saved_skin}.png`;
-					};
 					byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
 				}
 			} else {
