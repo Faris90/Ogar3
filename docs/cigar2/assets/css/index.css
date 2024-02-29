@@ -291,6 +291,7 @@ input[type=checkbox] {
 	border-radius: 6vw;
 	background: #fff;
 	opacity: 0.3;
+	filter: invert(1);
 }
 
 #splitBtn {
@@ -361,6 +362,10 @@ input[type=checkbox] {
 
 .darkTheme a {
 	color: #fff;
+}
+
+.darkTheme #splitBtn, .darkTheme #ejectBtn {
+	filter: none;
 }
 
 .darkTheme hr {
