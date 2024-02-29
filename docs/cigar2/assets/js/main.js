@@ -1501,8 +1501,16 @@
 			const skin = new Image();
 
 			if (this.skin.startsWith('https://iili.io/') && !this.skin.endsWith('.gif')) {
+				skin.onerror = () => {
+					skin.onerror = null;
+					skin.src = './assets/img/transparent.png';
+				};
 				skin.src = this.skin;
 			} else {
+				skin.onerror = () => {
+					skin.onerror = null;
+					skin.src = './assets/img/transparent.png';
+				};
 				skin.src = `${SKIN_URL}${this.skin}.png`;
 			}
 
@@ -2101,7 +2109,7 @@
 		};
 
 		const changeCellColor = e => {
-			byId('previewSkin').src = './assets/img/transparent.png'
+			byId('previewSkin').src = './assets/img/transparent.png';
 			byId('previewSkin').style.backgroundImage = 'none';
 			byId('previewSkin').style.backgroundColor = settings.showColor ? e.target.value : '#fff';
 			settings.cellColor = e.target.value;
@@ -2115,11 +2123,19 @@
 					if (saved_skin !== '' && saved_skin !== ' ') {
 						if (saved_skin.startsWith('https://iili.io/') && !saved_skin.endsWith('.gif')) {
 							if (!bannedSkins.has(saved_skin)) {
+								byId('previewSkin').onerror = () => {
+									byId('previewSkin').onerror = null;
+									byId('previewSkin').src = './assets/img/transparent.png';
+								};
 								byId('previewSkin').src = saved_skin;
 							} else {
 								byId('previewSkin').src = './assets/img/banned.png';
 							}
 						} else {
+							byId('previewSkin').onerror = () => {
+								byId('previewSkin').onerror = null;
+								byId('previewSkin').src = './assets/img/transparent.png';
+							};
 							byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
 						}
 
@@ -2143,11 +2159,19 @@
 					if (saved_skin !== '' && saved_skin !== ' ') {
 						if (saved_skin.startsWith('https://iili.io/') && !saved_skin.endsWith('.gif')) {
 							if (!bannedSkins.has(saved_skin)) {
+								byId('previewSkin').onerror = () => {
+									byId('previewSkin').onerror = null;
+									byId('previewSkin').src = './assets/img/transparent.png';
+								};
 								byId('previewSkin').src = saved_skin;
 							} else {
 								byId('previewSkin').src = './assets/img/banned.png';
 							}
 						} else {
+							byId('previewSkin').onerror = () => {
+								byId('previewSkin').onerror = null;
+								byId('previewSkin').src = './assets/img/transparent.png';
+							};
 							byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
 						}
 
@@ -2161,7 +2185,7 @@
 						byId('previewSkin').style.backgroundImage = 'none';
 					}
 				} else {
-					byId('previewSkin').src = './assets/img/transparent.png'
+					byId('previewSkin').src = './assets/img/transparent.png';
 					byId('previewSkin').style.backgroundImage = 'none';
 				}
 			}
@@ -2192,11 +2216,19 @@
 				if (saved_skin !== '' && saved_skin !== ' ') {
 					if (saved_skin.startsWith('https://iili.io/') && !saved_skin.endsWith('.gif')) {
 						if (!bannedSkins.has(saved_skin)) {
+							byId('previewSkin').onerror = () => {
+								byId('previewSkin').onerror = null;
+								byId('previewSkin').src = './assets/img/transparent.png';
+							};
 							byId('previewSkin').src = saved_skin;
 						} else {
 							byId('previewSkin').src = './assets/img/banned.png';
 						}
 					} else {
+						byId('previewSkin').onerror = () => {
+							byId('previewSkin').onerror = null;
+							byId('previewSkin').src = './assets/img/transparent.png';
+						};
 						byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
 					}
 				} else {
@@ -2219,7 +2251,7 @@
 					if (settings.skin !== '' && settings.skin !== ' ') {
 						byId('previewSkin').style.backgroundImage = 'url(./assets/img/checkerboard.png)';
 					} else {
-						byId('previewSkin').src = './assets/img/transparent.png'
+						byId('previewSkin').src = './assets/img/transparent.png';
 						byId('previewSkin').style.backgroundImage = 'none';
 						byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
 					}
@@ -2485,15 +2517,23 @@
 			if (saved_skin !== '' && saved_skin !== ' ') {
 				if (saved_skin.startsWith('https://iili.io/') && !saved_skin.endsWith('.gif')) {
 					if (!bannedSkins.has(saved_skin)) {
+						byId('previewSkin').onerror = () => {
+							byId('previewSkin').onerror = null;
+							byId('previewSkin').src = './assets/img/transparent.png';
+						};
 						byId('previewSkin').src = saved_skin;
 					} else {
 						byId('previewSkin').src = './assets/img/banned.png';
 					}
 				} else {
+					byId('previewSkin').onerror = () => {
+						byId('previewSkin').onerror = null;
+						byId('previewSkin').src = './assets/img/transparent.png';
+					};
 					byId('previewSkin').src = `${SKIN_URL}${saved_skin}.png`;
 				}
 			} else {
-				byId('previewSkin').src = './assets/img/transparent.png'
+				byId('previewSkin').src = './assets/img/transparent.png';
 			}
 		}
 
