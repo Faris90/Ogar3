@@ -755,7 +755,8 @@
 		borderColor: '#ffffff',
 		leftClick: true,
 		middleClick: true,
-		rightClick: true
+		rightClick: true,
+		useJoystick: true
 	};
 
 	const pressed = {
@@ -2290,34 +2291,22 @@
 		window.onresize();
 
 		const mobileStuff = byId('mobileStuff');
+		const options = { zone: byId('touch'), mode: 'semi', dynamicPage: true, catchDistance: 80, color: 'white' };
+		const joystick = nipplejs.create(options);
 
+		joystick.on('move', (e, nipple) => {
+			if (settings.useJoystick) {
+				mouseX = innerWidth / 2 + nipple.instance.frontPosition.x;
+				mouseY = innerHeight / 2 + nipple.instance.frontPosition.y;
+			}
+		});
+
+		const touch = byId('touch');
 		const touchpad = byId('touchpad');
 		const touchCircle = byId('touchCircle');
 		const touchSize = .2;
 
 		let touched = false;
-
-		const touchmove = event => {
-			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
-
-			const touch = event.touches[0];
-			const width = innerWidth * touchSize;
-			const height = innerHeight * touchSize;
-
-			if (touch.pageX < width && touch.pageY > innerHeight - height) {
-				mouseX = innerWidth / 2 + (touch.pageX - width / 2) * innerWidth / width;
-				mouseY = innerHeight / 2 + (touch.pageY - (innerHeight - height / 2)) * innerHeight / height;
-			} else {
-				mouseX = touch.pageX;
-				mouseY = touch.pageY;
-			}
-
-			const r = innerWidth * .02;
-			touchCircle.style.left = mouseX - r + 'px';
-			touchCircle.style.top = mouseY - r + 'px';
-		};
-
-		window.addEventListener('touchmove', touchmove);
 
 		window.addEventListener('touchstart', event => {
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
@@ -2326,21 +2315,57 @@
 				touched = true;
 				mobileStuff.show();
 			}
-			if (event.target.id === 'splitBtn') {
-				wsSend(UINT8_CACHE[0x11]);
-			} else if (event.target.id === 'ejectBtn') {
-				wsSend(UINT8_CACHE[0x15]);
+
+			if (!settings.useJoystick) {
+				if (event.target.id === 'splitBtn') {
+					wsSend(UINT8_CACHE[0x11]);
+				} else if (event.target.id === 'ejectBtn') {
+					wsSend(UINT8_CACHE[0x15]);
+				} else {
+					touchmove(event);
+				}
+
+				touch.hide();
+				touchpad.show();
+				touchCircle.show();
 			} else {
-				touchmove(event);
+				touch.show();
+				touchpad.hide();
+				touchCircle.hide();
 			}
-			touchCircle.show();
 		});
+
+		const touchmove = event => {
+			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
+
+			if (!settings.useJoystick) {
+				const touch = event.touches[0];
+				const width = innerWidth * touchSize;
+				const height = innerHeight * touchSize;
+
+				if (touch.pageX < width && touch.pageY > innerHeight - height) {
+					mouseX = innerWidth / 2 + (touch.pageX - width / 2) * innerWidth / width;
+					mouseY = innerHeight / 2 + (touch.pageY - (innerHeight - height / 2)) * innerHeight / height;
+				} else {
+					mouseX = touch.pageX;
+					mouseY = touch.pageY;
+				}
+
+				const r = innerWidth * .02;
+				touchCircle.style.left = mouseX - r + 'px';
+				touchCircle.style.top = mouseY - r + 'px';
+			}
+		};
+
+		window.addEventListener('touchmove', touchmove);
 
 		window.addEventListener('touchend', event => {
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 
-			if (event.touches.length === 0) {
-				touchCircle.hide();
+			if (!settings.useJoystick) {
+				if (event.touches.length === 0) {
+					touchCircle.hide();
+				}
 			}
 		});
 

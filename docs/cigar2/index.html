@@ -10,23 +10,34 @@
 		<meta name="robots" content="index, follow">
 		<meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
-
 		<title>Agar.io v2.0</title>
-
-		<link id="favicon" rel="icon" type="image/png" href="assets/img/favicon.png">
+		<link rel="icon" type="image/png" href="assets/img/favicon.png">
 		<link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet" type="text/css">
 		<link href="assets/css/bootstrap.min.css" rel="stylesheet">
-		<link href="assets/css/index.css?v=7" rel="stylesheet">
+		<link href="assets/css/index.css?v=9" rel="stylesheet">
 		<link href="assets/css/gallery.css" rel="stylesheet">
 	</head>
 
 	<body>
+		<canvas id="canvas" width="800" height="600"></canvas>
+
+		<div id="mobileStuff" style="display: none;">
+			<div id="touch" style="display: none;"></div>
+			<div id="touchpad" style="display: none;"></div>
+			<div id="touchCircle" style="display: none;"></div>
+			<img src="assets/img/split.png" id="splitBtn" alt="" />
+			<img src="assets/img/eject.png" id="ejectBtn" alt="" />
+		</div>
+
+		<input type="text" id="chat_textbox" placeholder="Press enter to chat" maxlength="100" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+
 		<div id="gallery" onclick="if (event.target === this) this.hide()" style="display: none;">
 			<div id="gallery-content">
 				<div id="gallery-header">Skins</div>
 				<div id="gallery-body"></div>
 			</div>
 		</div>
+
 		<div id="overlays" style="display: none;">
 			<div id="helloDialog">
 				<div id="helloDialogContent">
@@ -87,6 +98,7 @@
 							<label><input id="leftClick" type="checkbox" />Left Click</label>
 							<label><input id="middleClick" type="checkbox" />Middle Click</label>
 							<label><input id="rightClick" type="checkbox" />Right Click</label>
+							<label><input id="useJoystick" type="checkbox" />Joystick</label>
 						</div>
 					</div>
 
@@ -143,6 +155,12 @@
 						<hr class="top" />
 						<div class="text">
 							<b>28/02/2024</b>
+							<ul>
+								<li>Improved Touch controls for mobile</li>
+								<li>Implemented <b>Virtual Joystick</b> for mobile</li>
+								<li>Added toggle checkbox in <b>Settings</b> for enabling/disabling <b>Virtual Joystick</b></li>
+							</ul>
+							<hr /><b>28/02/2024</b>
 							<ul>
 								<li>Removed old custom skins that start with <kbd>$</kbd>, just upload your own with the new <b>Upload Skin</b> feature</li>
 								<li>Uploading <kbd>gif</kbd> files is no longer allowed, the animation didn't worked anyway, just first frame was shown</li>
@@ -209,17 +227,9 @@
 			</div>
 		</div>
 
-		<div id="mobileStuff" style="display: none;">
-			<div id="touchpad"></div>
-			<div id="touchCircle" style="display: none;"></div>
-			<img src="assets/img/split.png" id="splitBtn" alt="" />
-			<img src="assets/img/eject.png" id="ejectBtn" alt="" />
-		</div>
-
-		<canvas id="canvas" width="800" height="600"></canvas>
-		<input type="text" id="chat_textbox" placeholder="Press enter to chat" maxlength="100" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
 		<script src="assets/js/jquery-1.11.3.min.js"></script>
 		<script src="assets/js/quadtree.js"></script>
-		<script src="assets/js/main.min.js?v=42"></script>
+		<script src="assets/js/nipplejs.js"></script>
+		<script src="assets/js/main.min.js?v=43"></script>
 	</body>
 </html>
