@@ -195,16 +195,6 @@ input[type=checkbox] {
 	text-shadow: 1px 1px 4px #000;
 }
 
-@media screen and (max-width: 800px) {
-	/*#mobileStuff {
-		display: block;
-	}*/
-
-	#gameplay, #news {
-		display: none;
-	}
-}
-
 #chat_textbox {
 	transition: all .5s ease-in-out;
 	position: absolute;
@@ -377,4 +367,20 @@ input[type=checkbox] {
 	color: #fff;
 	border: 2px solid rgba(36,51,66,0.9);
 	box-shadow: 0 0 9px #243342;
+}
+
+@media screen and (max-width: 899px) {
+	#helloDialog {
+		transform: translate(-50%, -50%) scale(0.5);
+	}
+}
+
+@media screen and (max-width: 480px) {
+	#gameplay, #news {
+		display: none;
+	}
+
+	#helloDialog {
+		transform: translate(-50%, -50%) scale(0.8);
+	}
 }
