@@ -14,7 +14,7 @@
 		<link rel="icon" type="image/png" href="assets/img/favicon.png">
 		<link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet" type="text/css">
 		<link href="assets/css/bootstrap.min.css" rel="stylesheet">
-		<link href="assets/css/index.css?v=11" rel="stylesheet">
+		<link href="assets/css/index.css?v=12" rel="stylesheet">
 		<link href="assets/css/gallery.css" rel="stylesheet">
 	</head>
 
@@ -67,13 +67,10 @@
 					<button class="btn btn-success btn-settings pull-right" onclick="$('#settings').toggle()" ><i class="glyphicon glyphicon-cog"></i></button>
 					<div class="skin-wrapper">
 						<button id="gallery-btn" onclick="openSkinsList()" class="btn btn-play btn-primary btn-needs-server btn-info">Choose Skin</button>
-						<div class="upload-btn-wrapper">
-							<button class="btn btn-play btn-primary btn-needs-server btn-info">Upload Skin</button>
-							<input id="upload-btn" type="file" accept="image/x-png,image/png,image/jpeg,image/webp,image/avif" name="source" />
-						</div>
+						<button id="show-upload-btn" onclick="openUpload()" class="btn btn-play btn-primary btn-needs-server btn-info">Upload Skin</button>
 					</div>
 
-					<div id="settings" class="checkbox" style="display:none;">
+					<div id="settings" class="checkbox" style="display: none;">
 						<div style="margin: 6px;">
 							<label><input id="showSkins" type="checkbox" />Skins</label>
 							<label><input id="fillSkin" type="checkbox" />Fill Skin</label>
@@ -219,6 +216,21 @@
 			</div>
 		</div>
 
+		<div id="upload-skin" style="display: none;" onclick="if (event.target === this) this.hide()">
+			<div id="upload-skin-content">
+				<h3>Upload Skin</h3><hr />
+				<label><input class="c1 upload-checkbox" type="checkbox" /> I agree I will not upload pictures depicting NSFW content</label>
+				<label><input class="c2 upload-checkbox" type="checkbox" /> I agree I will not upload pictures of real people</label>
+				<label><input class="c3 upload-checkbox" type="checkbox" /> I understand that if I do so I might get banned from using the game</label>
+				<hr />
+				<h3 class="countdown" style="display: none;">You must wait <span id="timer"></span></h3>
+				<div class="upload-btn-wrapper" style="display: none;">
+					<button class="btn btn-play btn-primary btn-needs-server btn-info">Upload Skin</button>
+					<input id="upload-btn" type="file" accept="image/x-png,image/png,image/jpeg,image/webp,image/avif" name="source" />
+				</div>
+			</div>
+		</div>
+
 		<div id="connecting">
 			<div id="connecting-content">
 				<h3>Trying to connect...</h3><hr />
@@ -229,6 +241,6 @@
 		<script src="assets/js/jquery-1.11.3.min.js"></script>
 		<script src="assets/js/quadtree.js"></script>
 		<script src="assets/js/nipplejs.js"></script>
-		<script src="assets/js/main.min.js?v=46"></script>
+		<script src="assets/js/main.min.js?v=47"></script>
 	</body>
 </html>

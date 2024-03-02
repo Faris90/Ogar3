@@ -1,19 +1,6 @@
 (function() {
 	'use strict';
 
-	if (typeof WebSocket === 'undefined' || typeof DataView === 'undefined' || typeof ArrayBuffer === 'undefined' || typeof Uint8Array === 'undefined') {
-		alert('Your browser does not support required features, please update your browser.');
-		window.stop();
-	}
-
-	function byId(id) {
-		return document.getElementById(id);
-	}
-
-	function byClass(clss, parent) {
-		return (parent || document).getElementsByClassName(clss);
-	}
-
 	class Sound {
 		constructor(src, volume, maximum) {
 			this.src = src;
@@ -33,25 +20,6 @@
 			this.elms.push(elm);
 			return elm;
 		}
-	}
-
-	const LOAD_START = Date.now();
-
-	Array.prototype.remove = function (a) {
-		const i = this.indexOf(a);
-		return i !== -1 && this.splice(i, 1);
-	}
-
-	Element.prototype.hide = function () {
-		this.style.display = 'none';
-		if (this.style.opacity === 1) this.style.opacity = 0;
-	}
-
-	Element.prototype.show = function (seconds) {
-		this.style.display = '';
-		if (!seconds) return;
-		this.style.transition = `opacity ${seconds}s ease 0s`;
-		this.style.opacity = 1;
 	}
 
 	class Color {
@@ -104,10 +72,6 @@
 			var b = num & 0xFF, g = (num & 0xFF00) >>> 8, r = (num & 0xFF0000) >>> 16, a = ( (num & 0xFF000000) >>> 24 ) / 255;
 			return 'rgba(' + [r, g, b, a].join(',') + ')';
 		}
-	}
-
-	function cleanupObject(object) {
-		for (const i in object) delete object[i];
 	}
 
 	class Writer {
@@ -232,6 +196,412 @@
 		static debug() {
 			if (Logger.verbosity > 3) console.debug.apply(null, arguments);
 		}
+	}
+
+	class Filters {
+		constructor() {
+			this.blacklist_search_regex = {}
+			this.blacklist_search_regex_tr = {}
+			this.blacklist_search_regex_pt = {}
+			this.blacklist_replace_regex = {}
+		}
+
+		run_all_filters(str) {
+			str = str.replaceAll('?', ' ?').replaceAll('!', ' !').replaceAll('-', ' ').replaceAll('.', ' ').replaceAll(',', ' ').trim().split(' ')
+
+			if (Array.isArray(str)) {
+				for (let word1 in str) {
+					for (let r1 in this.autocorrect_slang_regex_list) {
+						if (str[word1].match(this.autocorrect_slang_regex_list[r1])) {
+							str[word1] = str[word1].replace(this.autocorrect_slang_regex_list[r1], r1)
+						}
+					}
+				}
+
+				for (let word2 in str) {
+					for (let r2 in this.autocorrect_abbreviation_regex_list) {
+						if (str[word2].match(this.autocorrect_abbreviation_regex_list[r2])) {
+							str[word2] = str[word2].replace(this.autocorrect_abbreviation_regex_list[r2], r2)
+						}
+					}
+				}
+
+				for (let word3 in str) {
+					for (let r3 in this.autocorrect_misspelling_regex_list) {
+						if (str[word3].match(this.autocorrect_misspelling_regex_list[r3])) {
+							str[word3] = str[word3].replace(this.autocorrect_misspelling_regex_list[r3], r3)
+						}
+					}
+				}
+
+				for (let word4 in str) {
+					for (let r4 in this.autocorrect_contraction_regex_list) {
+						if (str[word4].match(this.autocorrect_contraction_regex_list[r4])) {
+							str[word4] = str[word4].replace(this.autocorrect_contraction_regex_list[r4], r4)
+						}
+					}
+				}
+
+				for (let word5 in str) {
+					for (let r5 in this.autocorrect_replacement_regex_list) {
+						if (str[word5].match(this.autocorrect_replacement_regex_list[r5])) {
+							str[word5] = str[word5].replace(this.autocorrect_replacement_regex_list[r5], r5)
+						}
+					}
+				}
+
+				return str.join(' ')
+			}
+		}
+
+		remove_zalgo(str) {
+			return str.replace(/[\u0300-\u036F\u0483-\u0486\u064E\u064F]/g, '').replace(/[\u1AB0-\u1AFF\u1DC0-\u1DFF\u20D0-\u20FF\uFE20-\uFE2F\u0483-\u0486\u05C7\u0610-\u061A\u0656-\u065F\u0670\u06D6-\u06ED\u0711\u0730-\u073F\u0743-\u074A\u0F18-\u0F19\u0F35\u0F37\u0F72-\u0F73\u0F7A-\u0F81\u0F84\u0e00-\u0eff\uFC5E-\uFC62]{2,}/gi, '')
+		}
+
+		remove_spam(str) {
+			// noinspection JSUnresolvedVariable
+			for (let spam in blacklist) {
+				// noinspection JSUnresolvedVariable,JSUnfilteredForInLoop
+				str = str.replace(new RegExp(blacklist[spam], 'gi'), '')
+			}
+
+			return str.replace(/  +/g, ' ').trim()
+		}
+
+		remove_duplicates(str) {
+			return str.replace(/([^`])\1{4,}/gi, '$1').replace(/(.)\1{5,}/gi, '$1$1$1$1$1$1')
+		}
+
+		str_replace(search, replace, subject, countObj) {
+			let i = 0
+			let j = 0
+			let temp = ''
+			let repl = ''
+			let sl = 0
+			let fl = 0
+			let f = [].concat(search)
+			let r = [].concat(replace)
+			let s = subject
+			let ra = Object.prototype.toString.call(r) === '[object Array]'
+			let sa = Object.prototype.toString.call(s) === '[object Array]'
+			s = [].concat(s)
+
+			if (typeof search === 'object' && typeof replace === 'string') {
+				temp = replace
+				replace = []
+
+				for (i = 0; i < search.length; i += 1) {
+					replace[i] = temp
+				}
+
+				temp = ''
+				r = [].concat(replace)
+				ra = Object.prototype.toString.call(r) === '[object Array]'
+			}
+
+			if (typeof countObj !== 'undefined') {
+				countObj.value = 0
+			}
+
+			for (i = 0, sl = s.length; i < sl; i++) {
+				if (s[i] === '') {
+					continue
+				}
+
+				for (j = 0, fl = f.length; j < fl; j++) {
+					temp = s[i] + ''
+					repl = ra ? (r[j] !== undefined ? r[j] : '') : r[0]
+					s[i] = (temp).split(f[j]).join(repl)
+
+					if (typeof countObj !== 'undefined') {
+						countObj.value += ((temp.split(f[j])).length - 1)
+					}
+				}
+			}
+
+			return sa ? s : s[0]
+		}
+	}
+
+	class Cell {
+		static parseName(name) { // static method
+			if (typeof name !== 'undefined' && name !== null && name !== '') {
+				return name.trim().replace(/[<>|]/g, '').substring(0, 16);
+			}
+
+			return name;
+		}
+		constructor(id, x, y, s, name, nameColor, cellColor, borderColor, skin, flags) {
+			this.destroyed = false;
+			this.diedBy = 0;
+			this.nameSize = 0;
+			this.drawNameSize = 0;
+			this.updated = null;
+			this.dead = null;
+			this.id = id;
+			this.ox = x;
+			this.x = x;
+			this.nx = x;
+			this.oy = y;
+			this.y = y;
+			this.ny = y;
+			this.os = s;
+			this.s = s;
+			this.ns = s;
+			this.name = Cell.parseName(name);
+			this.nameColor = nameColor || Color.fromHex('#ffffff');
+			this.cellColor = cellColor || Color.fromHex('#ffffff');
+			this.borderColor = borderColor || (cellColor ? cellColor.darker() : Color.fromHex('#ffffff'));
+			this.setSkin(skin);
+			this.jagged = flags.jagged;
+			this.ejected = flags.ejected;
+			this.born = syncUpdStamp;
+			this.points = [];
+			this.pointsVel = [];
+		}
+		destroy(killerId) {
+			cells.byId.delete(this.id);
+
+			if (cells.mine.remove(this.id) && cells.mine.length === 0) showESCOverlay();
+
+			this.destroyed = true;
+			this.dead = syncUpdStamp;
+
+			if (killerId && !this.diedBy) {
+				this.diedBy = killerId;
+				this.updated = syncUpdStamp;
+			}
+		}
+		update(relativeTime) {
+			const prevFrameSize = this.s;
+			const dt = Math.max(Math.min((relativeTime - this.updated) / 120, 1), 0);
+			let diedBy;
+
+			if (this.destroyed && Date.now() > this.dead + 200) {
+				cells.list.remove(this);
+			} else if (this.diedBy && (diedBy = cells.byId.get(this.diedBy))) {
+				this.nx = diedBy.x;
+				this.ny = diedBy.y;
+			}
+
+			this.x = this.ox + (this.nx - this.ox) * dt;
+			this.y = this.oy + (this.ny - this.oy) * dt;
+			this.s = this.os + (this.ns - this.os) * dt;
+			this.nameSize = ~~(~~(Math.max(~~(0.3 * this.ns), 24)) / 3) * 3;
+			this.drawNameSize = ~~(~~(Math.max(~~(0.3 * this.s), 24)) / 3) * 3;
+
+			/*TODO: find out why this causes random background color
+			if (settings.jellyPhysics && this.points.length) {
+				const ratio = this.s / prevFrameSize;
+				if (this.ns != this.os && ratio != 1) {
+					for (const point of this.points) point.rl *= ratio;
+				}
+			}*/
+		}
+		updateNumPoints() {
+			let numPoints = Math.min(Math.max(this.s * camera.scale | 0, CELL_POINTS_MIN), CELL_POINTS_MAX);
+
+			if (this.jagged) numPoints = VIRUS_POINTS;
+
+			while (this.points.length > numPoints) {
+				const i = Math.random() * this.points.length | 0;
+				this.points.splice(i, 1);
+				this.pointsVel.splice(i, 1);
+			}
+
+			if (this.points.length === 0 && numPoints !== 0) {
+				this.points.push({ x: this.x, y: this.y, rl: this.s, parent: this });
+				this.pointsVel.push(Math.random() - 0.5);
+			}
+
+			while (this.points.length < numPoints) {
+				const i = Math.random() * this.points.length | 0;
+				const point = this.points[i];
+				const vel = this.pointsVel[i];
+				this.points.splice(i, 0, { x: point.x, y: point.y, rl: point.rl, parent: this });
+				this.pointsVel.splice(i, 0, vel);
+			}
+		}
+		movePoints() {
+			const pointsVel = this.pointsVel.slice();
+
+			for (let i = 0; i < this.points.length; ++i) {
+				const prevVel = pointsVel[(i - 1 + this.points.length) % this.points.length];
+				const nextVel = pointsVel[(i + 1) % this.points.length];
+				const newVel = Math.max(Math.min((this.pointsVel[i] + Math.random() - 0.5) * 0.7, 10), -10);
+				this.pointsVel[i] = (prevVel + nextVel + 8 * newVel) / 10;
+			}
+
+			for (let i = 0; i < this.points.length; ++i) {
+				const curP = this.points[i];
+				const prevRl = this.points[(i - 1 + this.points.length) % this.points.length].rl;
+				const nextRl = this.points[(i + 1) % this.points.length].rl; // here
+				let curRl = curP.rl;
+
+				let affected = quadtree.some({ x: curP.x - 5, y: curP.y - 5, w: 10, h: 10 }, item => item.parent !== this && sqDist(item, curP) <= 25);
+
+				if (!affected && (curP.x < border.left || curP.y < border.top || curP.x > border.right || curP.y > border.bottom)) {
+					affected = true;
+				}
+
+				if (affected) {
+					this.pointsVel[i] = Math.min(this.pointsVel[i], 0) - 1;
+				}
+
+				curRl += this.pointsVel[i];
+				curRl = Math.max(curRl, 0);
+				curRl = (9 * curRl + this.s) / 10;
+				curP.rl = (prevRl + nextRl + 8 * curRl) / 10;
+
+				const angle = 2 * Math.PI * i / this.points.length;
+				let rl = curP.rl;
+
+				if (this.jagged && i % 2 === 0) {
+					rl += 5;
+				}
+
+				curP.x = this.x + Math.cos(angle) * rl;
+				curP.y = this.y + Math.sin(angle) * rl;
+			}
+		}
+		setSkin(value) {
+			if (typeof value !== 'undefined' && value !== null && value !== '') {
+				value = value.trim();
+
+				if (value.indexOf('|') !== -1) {
+					value = value.split('|')[0];
+				}
+			}
+
+			if (typeof value === 'undefined' || value === null || value === '') return;
+
+			this.skin = value[0] === '%' ? value.slice(1) : value;
+
+			if (loadedSkins.has(this.skin) || bannedSkins.has(this.skin)) return;
+
+			const skin = new Image();
+
+			if (this.skin.startsWith('https://iili.io/') && !this.skin.endsWith('.gif')) {
+				skin.onerror = () => {
+					skin.onerror = null;
+					skin.src = './assets/img/transparent.png';
+				};
+				skin.src = this.skin;
+			} else {
+				skin.onerror = () => {
+					skin.onerror = null;
+					skin.src = './assets/img/transparent.png';
+				};
+				skin.src = `${SKIN_URL}${this.skin}.png`;
+			}
+
+			loadedSkins.set(this.skin, skin);
+		}
+		draw(ctx) {
+			ctx.save();
+			this.drawShape(ctx);
+			this.drawText(ctx);
+			ctx.restore();
+		}
+		drawShape(ctx) {
+			ctx.fillStyle = settings.showColor ? this.cellColor.toHex() : '#FFFFFF';
+			ctx.strokeStyle = settings.showColor ? this.borderColor.toHex() : '#E5E5E5';
+			ctx.lineWidth = Math.max(~~(this.s / 50), 10);
+
+			if (this.s > 20) {
+				this.s -= ctx.lineWidth / 2;
+			}
+
+			ctx.beginPath();
+			if (this.jagged) ctx.lineJoin = 'miter';
+			if (settings.jellyPhysics && this.points.length) {
+				const point = this.points[0];
+				ctx.moveTo(point.x, point.y);
+				for (const point of this.points) ctx.lineTo(point.x, point.y);
+			} else if (this.jagged) {
+				const pointCount = 120;
+				const incremental = PI_2 / pointCount;
+				ctx.moveTo(this.x, this.y + this.s + 3);
+				for (let i = 1; i < pointCount; i++) {
+					const angle = i * incremental;
+					const dist = this.s - 3 + (i % 2 === 0) * 6;
+					ctx.lineTo(this.x + dist * Math.sin(angle), this.y + dist * Math.cos(angle))
+				}
+				ctx.lineTo(this.x, this.y + this.s + 3);
+			} else {
+				ctx.arc(this.x, this.y, this.s, 0, PI_2, false);
+			}
+			ctx.closePath();
+
+			if (this.destroyed) {
+				ctx.globalAlpha = Math.max(120 - Date.now() + this.dead, 0) / 120;
+			} else {
+				ctx.globalAlpha = Math.min(Date.now() - this.born, 120) / 120;
+			}
+
+			const skinImage = loadedSkins.get(this.skin);
+			if (settings.showSkins && this.skin && skinImage && skinImage.complete && skinImage.width && skinImage.height) {
+				if (settings.fillSkin) ctx.fill();
+				ctx.save(); // for the clip
+				ctx.clip();
+				ctx.drawImage(skinImage, this.x - this.s, this.y - this.s, this.s * 2, this.s * 2);
+				ctx.restore();
+			} else {
+				ctx.fill();
+			}
+			if (this.s > 20) {
+				ctx.stroke();
+				this.s += ctx.lineWidth / 2;
+			}
+		}
+		drawText(ctx) {
+			if (this.s < 20 || this.jagged) return;
+			if (this.name && settings.showNames) {
+				drawText(ctx, false, this.x, this.y, this.nameSize, this.drawNameSize, this.name, this.nameColor ? this.nameColor.toHex().toUpperCase() : '#FFF');
+			}
+			if (settings.showMass && (cells.mine.indexOf(this.id) !== -1 || cells.mine.length === 0)) {
+				const mass = (~~(this.s * this.s / 100)).toString();
+				let y = this.y;
+				if (this.name && settings.showNames) y += Math.max(this.s / 4.5, this.nameSize / 1.5);
+				drawText(ctx, true, this.x, y, this.nameSize / 2, this.drawNameSize / 2, mass);
+			}
+		}
+	}
+
+	if (typeof WebSocket === 'undefined' || typeof DataView === 'undefined' || typeof ArrayBuffer === 'undefined' || typeof Uint8Array === 'undefined') {
+		alert('Your browser does not support required features, please update your browser.');
+		window.stop();
+	}
+
+	function byId(id) {
+		return document.getElementById(id);
+	}
+
+	function byClass(clss, parent) {
+		return (parent || document).getElementsByClassName(clss);
+	}
+
+	const LOAD_START = Date.now();
+
+	Array.prototype.remove = function (a) {
+		const i = this.indexOf(a);
+		return i !== -1 && this.splice(i, 1);
+	}
+
+	Element.prototype.hide = function () {
+		this.style.display = 'none';
+		if (this.style.opacity === 1) this.style.opacity = 0;
+	}
+
+	Element.prototype.show = function (seconds) {
+		this.style.display = '';
+		if (!seconds) return;
+		this.style.transition = `opacity ${seconds}s ease 0s`;
+		this.style.opacity = 1;
+	}
+
+	function cleanupObject(object) {
+		for (const i in object) delete object[i];
 	}
 
 	const WEBSOCKET_URL = null;
@@ -716,6 +1086,7 @@
 	let feedMacroIntervalID;
 	let splitMacroIntervalID;
 	let quadtree;
+	let interval;
 
 	const settings = {
 		nick: '',
@@ -1342,251 +1713,6 @@
 		}
 	}
 
-	class Cell {
-		static parseName(name) { // static method
-			if (typeof name !== 'undefined' && name !== null && name !== '') {
-				return name.trim().replace(/[<>|]/g, '').substring(0, 16);
-			}
-
-			return name;
-		}
-		constructor(id, x, y, s, name, nameColor, cellColor, borderColor, skin, flags) {
-			this.destroyed = false;
-			this.diedBy = 0;
-			this.nameSize = 0;
-			this.drawNameSize = 0;
-			this.updated = null;
-			this.dead = null;
-			this.id = id;
-			this.ox = x;
-			this.x = x;
-			this.nx = x;
-			this.oy = y;
-			this.y = y;
-			this.ny = y;
-			this.os = s;
-			this.s = s;
-			this.ns = s;
-			this.name = Cell.parseName(name);
-			this.nameColor = nameColor || Color.fromHex('#ffffff');
-			this.cellColor = cellColor || Color.fromHex('#ffffff');
-			this.borderColor = borderColor || (cellColor ? cellColor.darker() : Color.fromHex('#ffffff'));
-			this.setSkin(skin);
-			this.jagged = flags.jagged;
-			this.ejected = flags.ejected;
-			this.born = syncUpdStamp;
-			this.points = [];
-			this.pointsVel = [];
-		}
-		destroy(killerId) {
-			cells.byId.delete(this.id);
-
-			if (cells.mine.remove(this.id) && cells.mine.length === 0) showESCOverlay();
-
-			this.destroyed = true;
-			this.dead = syncUpdStamp;
-
-			if (killerId && !this.diedBy) {
-				this.diedBy = killerId;
-				this.updated = syncUpdStamp;
-			}
-		}
-		update(relativeTime) {
-			const prevFrameSize = this.s;
-			const dt = Math.max(Math.min((relativeTime - this.updated) / 120, 1), 0);
-			let diedBy;
-
-			if (this.destroyed && Date.now() > this.dead + 200) {
-				cells.list.remove(this);
-			} else if (this.diedBy && (diedBy = cells.byId.get(this.diedBy))) {
-				this.nx = diedBy.x;
-				this.ny = diedBy.y;
-			}
-
-			this.x = this.ox + (this.nx - this.ox) * dt;
-			this.y = this.oy + (this.ny - this.oy) * dt;
-			this.s = this.os + (this.ns - this.os) * dt;
-			this.nameSize = ~~(~~(Math.max(~~(0.3 * this.ns), 24)) / 3) * 3;
-			this.drawNameSize = ~~(~~(Math.max(~~(0.3 * this.s), 24)) / 3) * 3;
-
-			/*TODO: find out why this causes random background color
-			if (settings.jellyPhysics && this.points.length) {
-				const ratio = this.s / prevFrameSize;
-				if (this.ns != this.os && ratio != 1) {
-					for (const point of this.points) point.rl *= ratio;
-				}
-			}*/
-		}
-		updateNumPoints() {
-			let numPoints = Math.min(Math.max(this.s * camera.scale | 0, CELL_POINTS_MIN), CELL_POINTS_MAX);
-
-			if (this.jagged) numPoints = VIRUS_POINTS;
-
-			while (this.points.length > numPoints) {
-				const i = Math.random() * this.points.length | 0;
-				this.points.splice(i, 1);
-				this.pointsVel.splice(i, 1);
-			}
-
-			if (this.points.length === 0 && numPoints !== 0) {
-				this.points.push({ x: this.x, y: this.y, rl: this.s, parent: this });
-				this.pointsVel.push(Math.random() - 0.5);
-			}
-
-			while (this.points.length < numPoints) {
-				const i = Math.random() * this.points.length | 0;
-				const point = this.points[i];
-				const vel = this.pointsVel[i];
-				this.points.splice(i, 0, { x: point.x, y: point.y, rl: point.rl, parent: this });
-				this.pointsVel.splice(i, 0, vel);
-			}
-		}
-		movePoints() {
-			const pointsVel = this.pointsVel.slice();
-
-			for (let i = 0; i < this.points.length; ++i) {
-				const prevVel = pointsVel[(i - 1 + this.points.length) % this.points.length];
-				const nextVel = pointsVel[(i + 1) % this.points.length];
-				const newVel = Math.max(Math.min((this.pointsVel[i] + Math.random() - 0.5) * 0.7, 10), -10);
-				this.pointsVel[i] = (prevVel + nextVel + 8 * newVel) / 10;
-			}
-
-			for (let i = 0; i < this.points.length; ++i) {
-				const curP = this.points[i];
-				const prevRl = this.points[(i - 1 + this.points.length) % this.points.length].rl;
-				const nextRl = this.points[(i + 1) % this.points.length].rl; // here
-				let curRl = curP.rl;
-
-				let affected = quadtree.some({ x: curP.x - 5, y: curP.y - 5, w: 10, h: 10 }, item => item.parent !== this && sqDist(item, curP) <= 25);
-
-				if (!affected && (curP.x < border.left || curP.y < border.top || curP.x > border.right || curP.y > border.bottom)) {
-					affected = true;
-				}
-
-				if (affected) {
-					this.pointsVel[i] = Math.min(this.pointsVel[i], 0) - 1;
-				}
-
-				curRl += this.pointsVel[i];
-				curRl = Math.max(curRl, 0);
-				curRl = (9 * curRl + this.s) / 10;
-				curP.rl = (prevRl + nextRl + 8 * curRl) / 10;
-
-				const angle = 2 * Math.PI * i / this.points.length;
-				let rl = curP.rl;
-
-				if (this.jagged && i % 2 === 0) {
-					rl += 5;
-				}
-
-				curP.x = this.x + Math.cos(angle) * rl;
-				curP.y = this.y + Math.sin(angle) * rl;
-			}
-		}
-		setSkin(value) {
-			if (typeof value !== 'undefined' && value !== null && value !== '') {
-				value = value.trim();
-
-				if (value.indexOf('|') !== -1) {
-					value = value.split('|')[0];
-				}
-			}
-
-			if (typeof value === 'undefined' || value === null || value === '') return;
-
-			this.skin = value[0] === '%' ? value.slice(1) : value;
-
-			if (loadedSkins.has(this.skin) || bannedSkins.has(this.skin)) return;
-
-			const skin = new Image();
-
-			if (this.skin.startsWith('https://iili.io/') && !this.skin.endsWith('.gif')) {
-				skin.onerror = () => {
-					skin.onerror = null;
-					skin.src = './assets/img/transparent.png';
-				};
-				skin.src = this.skin;
-			} else {
-				skin.onerror = () => {
-					skin.onerror = null;
-					skin.src = './assets/img/transparent.png';
-				};
-				skin.src = `${SKIN_URL}${this.skin}.png`;
-			}
-
-			loadedSkins.set(this.skin, skin);
-		}
-		draw(ctx) {
-			ctx.save();
-			this.drawShape(ctx);
-			this.drawText(ctx);
-			ctx.restore();
-		}
-		drawShape(ctx) {
-			ctx.fillStyle = settings.showColor ? this.cellColor.toHex() : '#FFFFFF';
-			ctx.strokeStyle = settings.showColor ? this.borderColor.toHex() : '#E5E5E5';
-			ctx.lineWidth = Math.max(~~(this.s / 50), 10);
-
-			if (this.s > 20) {
-				this.s -= ctx.lineWidth / 2;
-			}
-
-			ctx.beginPath();
-			if (this.jagged) ctx.lineJoin = 'miter';
-			if (settings.jellyPhysics && this.points.length) {
-				const point = this.points[0];
-				ctx.moveTo(point.x, point.y);
-				for (const point of this.points) ctx.lineTo(point.x, point.y);
-			} else if (this.jagged) {
-				const pointCount = 120;
-				const incremental = PI_2 / pointCount;
-				ctx.moveTo(this.x, this.y + this.s + 3);
-				for (let i = 1; i < pointCount; i++) {
-					const angle = i * incremental;
-					const dist = this.s - 3 + (i % 2 === 0) * 6;
-					ctx.lineTo(this.x + dist * Math.sin(angle), this.y + dist * Math.cos(angle))
-				}
-				ctx.lineTo(this.x, this.y + this.s + 3);
-			} else {
-				ctx.arc(this.x, this.y, this.s, 0, PI_2, false);
-			}
-			ctx.closePath();
-
-			if (this.destroyed) {
-				ctx.globalAlpha = Math.max(120 - Date.now() + this.dead, 0) / 120;
-			} else {
-				ctx.globalAlpha = Math.min(Date.now() - this.born, 120) / 120;
-			}
-
-			const skinImage = loadedSkins.get(this.skin);
-			if (settings.showSkins && this.skin && skinImage && skinImage.complete && skinImage.width && skinImage.height) {
-				if (settings.fillSkin) ctx.fill();
-				ctx.save(); // for the clip
-				ctx.clip();
-				ctx.drawImage(skinImage, this.x - this.s, this.y - this.s, this.s * 2, this.s * 2);
-				ctx.restore();
-			} else {
-				ctx.fill();
-			}
-			if (this.s > 20) {
-				ctx.stroke();
-				this.s += ctx.lineWidth / 2;
-			}
-		}
-		drawText(ctx) {
-			if (this.s < 20 || this.jagged) return;
-			if (this.name && settings.showNames) {
-				drawText(ctx, false, this.x, this.y, this.nameSize, this.drawNameSize, this.name, this.nameColor ? this.nameColor.toHex().toUpperCase() : '#FFF');
-			}
-			if (settings.showMass && (cells.mine.indexOf(this.id) !== -1 || cells.mine.length === 0)) {
-				const mass = (~~(this.s * this.s / 100)).toString();
-				let y = this.y;
-				if (this.name && settings.showNames) y += Math.max(this.s / 4.5, this.nameSize / 1.5);
-				drawText(ctx, true, this.x, y, this.nameSize / 2, this.drawNameSize / 2, mass);
-			}
-		}
-	}
-
 	function cacheCleanup() {
 		for (const i of cachedNames.keys()) {
 			for (const j of cachedNames.get(i).keys()) {
@@ -1926,9 +2052,11 @@
 					},
 					error: () => {
 						alert('Failed to upload file [1][5]');
-					}
+					},
+					complete: () => byId('upload-skin').hide()
 				});
-			}
+			},
+			complete: () => byId('upload-skin').hide()
 		});
 	}
 
@@ -2200,6 +2328,7 @@
 			if (byId('previewSkin').style.borderColor !== '#ffffff') {
 				settings.borderColor = e.target.value;
 			}
+
 			storeSettings();
 		};
 
@@ -2262,8 +2391,25 @@
 		const changeUploadSkin = e => {
 			if (checkBanCounter() > 2) {
 				byClass('upload-btn-wrapper')[0].remove();
+				byId('show-upload-btn').remove();
 			} else {
 				getBase64(e.target.files[0], b64 => uploadImage(b64));
+			}
+		}
+
+		const changeUploadCheckbox = e => {
+			if (e.target.checked === true) {
+				e.target.disabled = true;
+			}
+
+			if (Array.from(byClass('upload-checkbox')).every(item => item.checked === true)) {
+				byClass('upload-btn-wrapper')[0].hide();
+				byClass('countdown')[0].show();
+
+				startTimer(30, byId('timer'), () => {
+					byClass('upload-btn-wrapper')[0].show();
+					byClass('countdown')[0].hide();
+				});
 			}
 		}
 
@@ -2314,6 +2460,7 @@
 
 		if (checkBanCounter() > 2) {
 			byClass('upload-btn-wrapper')[0].remove();
+			byId('show-upload-btn').remove();
 		}
 
 		window.addEventListener('beforeunload', storeSettings);
@@ -2380,6 +2527,11 @@
 
 			hideESCOverlay();
 			storeSettings();
+		});
+
+		Array.from(byClass('upload-checkbox')).map(item => {
+			item.removeEventListener('change', changeUploadCheckbox);
+			item.addEventListener('change', changeUploadCheckbox);
 		});
 
 		window.onkeydown = keydown;
@@ -2478,6 +2630,36 @@
 		}
 	}
 
+	function startTimer(duration, display, cb) {
+		let timer = duration, minutes, seconds;
+
+		const update = () => {
+			minutes = parseInt(timer / 60, 10);
+			seconds = parseInt(timer % 60, 10);
+
+			minutes = minutes < 10 ? '0' + minutes : minutes;
+			seconds = minutes > 0 ? (seconds < 10 ? '0' + seconds : seconds) : seconds;
+
+			display.innerHTML = minutes > 0 ? minutes + ':' + seconds : seconds;
+		}
+
+		update();
+
+		clearInterval(interval);
+		interval = setInterval(() => {
+			if (--timer < 1) {
+				timer = duration;
+				clearInterval(interval);
+
+				if (typeof cb === 'function') {
+					cb();
+				}
+			}
+
+			update();
+		}, 1000);
+	}
+
 	window.setserver = url => {
 		if (url === wsUrl && ws && ws.readyState <= WebSocket.OPEN) return;
 		wsInit(url);
@@ -2542,6 +2724,7 @@
 		storeSettings();
 
 		if (checkBanCounter() > 2) {
+			byId('show-upload-btn').remove();
 			byClass('upload-btn-wrapper')[0].remove();
 		}
 	};
@@ -2549,6 +2732,18 @@
 	window.openSkinsList = () => {
 		if (byId('gallery-body').innerHTML === '') buildGallery();
 		byId('gallery').show(0.5);
+	};
+
+	window.openUpload = () => {
+		byId('upload-skin').show(0.5);
+		byClass('upload-btn-wrapper')[0].hide();
+		byClass('countdown')[0].hide();
+		byId('timer').innerHTML = '';
+
+		Array.from(byClass('upload-checkbox')).map(item => {
+			item.disabled = false;
+			item.checked = false;
+		});
 	};
 
 	window.addEventListener('DOMContentLoaded', start);
