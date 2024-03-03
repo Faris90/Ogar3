@@ -1127,7 +1127,8 @@
 		leftClick: true,
 		middleClick: true,
 		rightClick: true,
-		useJoystick: true
+		useJoystick: true,
+		useFilters: true
 	};
 
 	const pressed = {
@@ -2406,7 +2407,7 @@
 				byClass('upload-btn-wrapper')[0].hide();
 				byClass('countdown')[0].show();
 
-				startTimer(30, byId('timer'), () => {
+				startTimer(45, byId('timer'), () => {
 					byClass('upload-btn-wrapper')[0].show();
 					byClass('countdown')[0].hide();
 				});
