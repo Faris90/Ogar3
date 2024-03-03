@@ -214,7 +214,7 @@
 
 		for (var i = 0; i < e.changedTouches.length; i++) {
 			var touch = e.changedTouches[i];
-			//console.log(leftTouchID + " "
+
 			if ((leftTouchID < 0) && (touch.clientX < canvasWidth / 2)) {
 				leftTouchID = touch.identifier;
 				leftTouchStartPos.reset(touch.clientX, touch.clientY);
@@ -389,9 +389,9 @@
 	}
 
 	function showConnecting() {
-		if (ma && w) {
+		if (ma) {
 			wjQuery("#connecting").show();
-			attemptConnection()
+			attemptConnection();
 		}
 	}
 
@@ -421,7 +421,7 @@
 		leaderBoard = [];
 		mainCanvas = teamScores = null;
 		userScore = 0;
-		console.log("Connecting to " + wsUrl);
+
 		ws = new WebSocket(wsUrl);
 		ws.binaryType = "arraybuffer";
 		ws.onopen = onWsOpen;
@@ -430,7 +430,6 @@
 		ws.onerror = function () {
 			gameMode = 1;
 			wjQuery("#gamemode").val(1);
-			console.log("socket error");
 			return 54
 		}
 	}
@@ -447,7 +446,6 @@
 		var msg;
 		delay = 500;
 		wjQuery("#connecting").hide();
-		console.log("socket open");
 		msg = prepareData(5);
 		msg.setUint8(0, 254);
 		msg.setUint32(1, 4, true);
@@ -460,7 +458,6 @@
 	}
 
 	function onWsClose() {
-		console.log("socket close");
 		setTimeout(showConnecting, delay);
 		delay *= 1.5
 	}
@@ -624,7 +621,6 @@
 			"message": getString(),
 			"time": Date.now()
 		});
-		//console.log(chatBoard);
 		drawChatBoard();
 		//drawChatBoardLine();
 	}
@@ -639,14 +635,14 @@
 		ctx.scale(scaleFactor, scaleFactor);
 		var nowtime = Date.now();
 		var lasttime = 0;
+
 		if (chatBoard.length >= 1)
 			lasttime = chatBoard[chatBoard.length - 1].time;
 		else return;
+
 		var deltat = nowtime - lasttime;
 
 		ctx.globalAlpha = 0.8 * Math.exp(-deltat / 25000);
-		//console.log(deltat);
-
 
 		var len = chatBoard.length;
 		var from = len - 15;
@@ -917,19 +913,18 @@
 	}
 
 	function sendChat(str) {
-		console.log(str)
 		if (wsIsOpen() && (str.length < 200) && (str.length > 0) && !hideChat) {
 			var msg = prepareData(2 + 2 * str.length);
 			var offset = 0;
 			msg.setUint8(offset++, 99);
 			msg.setUint8(offset++, 0); // flags (0 for now)
+
 			for (var i = 0; i < str.length; ++i) {
 				msg.setUint16(offset, str.charCodeAt(i), true);
 				offset += 2;
 			}
 
 			wsSend(msg);
-			//console.log(msg);
 		}
 	}
 
@@ -1028,7 +1023,7 @@
 		for (d = 0; d < Cells.length; d++) Cells[d].drawOneCell(ctx);
 
 		for (d = 0; d < nodelist.length; d++) nodelist[d].drawOneCell(ctx);
-		//console.log(Cells.length);
+
 		if (drawLine) {
 			drawLineX = (3 * drawLineX + lineX) /
 				4;
