@@ -625,7 +625,7 @@
 		0x19: new Uint8Array([0x19]),
 		0xFE: new Uint8Array([0xFE])
 	};
-
+	const FP = FingerprintJS.load();
 	const NAME_PARSER = /^(?:<([^}]*)>)?([^]*)/;
 	const SEND_254 = new Uint8Array([0xFE, 6, 0, 0, 0]);
 	const SEND_255 = new Uint8Array([0xFF, 1, 0, 0, 0]);
@@ -1094,6 +1094,7 @@
 		skin: '',
 		skinnames: [],
 		gamemode: '',
+		fp: '',
 		showSkins: true,
 		showNames: true,
 		darkTheme: false,
@@ -2523,8 +2524,9 @@
 			const nameColor = settings.nameColor;
 			const cellColor = settings.cellColor;
 			const borderColor = settings.borderColor;
+			const fp = settings.fp;
 
-			sendPlay('<' + (skin ? `${skin}` : '') + '|' + (nameColor ? `${nameColor}` : '') + '|' + (cellColor ? `${cellColor}` : '') + '|' + (borderColor ? `${borderColor}` : '') + '>' + Cell.parseName(settings.nick));
+			sendPlay('<' + (skin ? `${skin}` : '') + '|' + (nameColor ? `${nameColor}` : '') + '|' + (cellColor ? `${cellColor}` : '') + '|' + (borderColor ? `${borderColor}` : '') + '|' + (fp ? `${fp}` : '') + '>' + Cell.parseName(settings.nick));
 
 			hideESCOverlay();
 			storeSettings();
@@ -2548,7 +2550,7 @@
 			drawChat();
 		};
 
-		mainCanvas.onmousemove = (event) => {
+		mainCanvas.onmousemove = event => {
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 			mouseX = event.clientX;
 			mouseY = event.clientY;
@@ -2619,7 +2621,10 @@
 
 					for (const skin of skins) bannedSkins.add(skin);
 
-					init();
+					FP.then(fp => fp.get()).then(result => {
+						settings.fp = result.visitorId;
+						init();
+					})
 				});
 			});
 		} catch (error) {
