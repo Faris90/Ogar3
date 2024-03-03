@@ -2407,7 +2407,7 @@
 				byClass('upload-btn-wrapper')[0].hide();
 				byClass('countdown')[0].show();
 
-				startTimer(45, byId('timer'), () => {
+				startTimer(60, byId('timer'), () => {
 					byClass('upload-btn-wrapper')[0].show();
 					byClass('countdown')[0].hide();
 				});
