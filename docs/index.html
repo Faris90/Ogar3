@@ -193,6 +193,19 @@
 				-o-transform: scale(2.25);
 				transform: scale(2.25)
 			}
+
+			hr {
+				/*border-top: 2px solid #000;*/
+			}
+
+			hr.top {
+				margin-top: 5px;
+			}
+
+			h2 {
+				margin-top: 0;
+				margin-bottom: 0;
+			}
 		</style>
 	</head>
 	<body>
@@ -207,6 +220,8 @@
 				<form id="form" role="form">
 					<div class="form-group">
 						<div><h2 id="title" class="text-center">Agar.io</h2></div>
+						<hr class="top" />
+						<a class="text-center" style="display: block; color: red;" href="https://discord.gg/emupedia-510149138491506688" target="_blank">Join us on Discord if you have suggestions</a>
 					</div>
 					<div class="form-group">
 						<input id="nick" class="form-control" style="display: inline-block;" placeholder="Nick" maxlength="15" pattern="[a-zA-Z0-9_\- ]+" oninvalid="this.setCustomValidity('Only letters, numbers, spaces and \'_\' and \'-\') allowed')" onchange="try{setCustomValidity('')}catch(e){}" />
