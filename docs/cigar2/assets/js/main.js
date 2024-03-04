@@ -1055,6 +1055,7 @@
 	const knownSkins = new Map();
 	const loadedSkins = new Map();
 	const bannedSkins = new Set();
+	const bannedFP = new Set();
 	const camera = {
 		x: 0,
 		y: 0,
@@ -2703,17 +2704,25 @@
 					if (knownSkins.get(i) !== stamp) knownSkins.delete(i);
 				}
 
-				fetch('banList.txt').then(resp => resp.text()).then(data => {
+				fetch('skinBanList.txt').then(resp => resp.text()).then(data => {
 					const skins = data.split(',').filter(name => name.length > 0);
 
 					if (skins.length === 0) return;
 
 					for (const skin of skins) bannedSkins.add(skin);
 
-					FP.then(fp => fp.get()).then(result => {
-						settings.fp = result.visitorId;
-						init();
-					})
+					fetch('fpBanList.txt').then(resp => resp.text()).then(data => {
+						const fp = data.split(',').filter(name => name.length > 0);
+
+						if (fp.length === 0) return;
+
+						for (const p of fp) bannedFP.add(p);
+
+						FP.then(fp => fp.get()).then(result => {
+							settings.fp = result.visitorId;
+							init();
+						});
+					});
 				});
 			});
 		} catch (error) {
