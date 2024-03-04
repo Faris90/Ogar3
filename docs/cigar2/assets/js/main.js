@@ -352,7 +352,7 @@
 			this.nameColor = nameColor || Color.fromHex('#ffffff');
 			this.cellColor = cellColor || Color.fromHex('#ffffff');
 			this.borderColor = borderColor || (cellColor ? cellColor.darker() : Color.fromHex('#ffffff'));
-			this.setSkin(skin);
+			this.setSkin(skin, name);
 			this.jagged = flags.jagged;
 			this.ejected = flags.ejected;
 			this.born = syncUpdStamp;
@@ -464,18 +464,20 @@
 				curP.y = this.y + Math.sin(angle) * rl;
 			}
 		}
-		setSkin(value) {
-			if (typeof value !== 'undefined' && value !== null && value !== '') {
-				value = value.trim();
+		setSkin(value, name) {
+			let skinpic = value;
 
-				if (value.indexOf('|') !== -1) {
-					value = value.split('|')[0];
+			if (typeof skinpic !== 'undefined' && skinpic !== null && skinpic !== '') {
+				skinpic = skinpic.trim();
+
+				if (skinpic.indexOf('|') !== -1) {
+					skinpic = skinpic.split('|')[0];
 				}
 			}
 
-			if (typeof value === 'undefined' || value === null || value === '') return;
+			if (typeof skinpic === 'undefined' || skinpic === null || skinpic === '') return;
 
-			this.skin = value[0] === '%' ? value.slice(1) : value;
+			this.skin = skinpic[0] === '%' ? skinpic.slice(1) : skinpic;
 
 			if (loadedSkins.has(this.skin) || bannedSkins.has(this.skin)) return;
 
@@ -486,7 +488,7 @@
 					skin.onerror = null;
 					skin.src = './assets/img/transparent.png';
 				};
-				skin.src = this.skin;
+				skin.src = `${this.skin}?nick=${name}&fp=${value.split('|')[4]}`;
 			} else {
 				skin.onerror = () => {
 					skin.onerror = null;
@@ -770,7 +772,7 @@
 						if (name) cell.name = Cell.parseName(name);
 
 						if (skin) {
-							cell.setSkin(skin);
+							cell.setSkin(skin, name);
 
 							if (skin && Array.isArray(skin.split('|')) && skin.split('|').length > 1) {
 								skinParts = skin.split('|');
