@@ -626,6 +626,7 @@
 		0xFE: new Uint8Array([0xFE])
 	};
 	const FP = FingerprintJS.load();
+	const S = atob('RVNfN2YzMDM2YTFlZmI5NGYyY2E3OTFjNjEwZDMzYjk3NDA=');
 	const NAME_PARSER = /^(?:<([^}]*)>)?([^]*)/;
 	const SEND_254 = new Uint8Array([0xFE, 6, 0, 0, 0]);
 	const SEND_255 = new Uint8Array([0xFF, 1, 0, 0, 0]);
@@ -2062,6 +2063,69 @@
 		});
 	}
 
+	function checkCaptcha(data) {
+		$.ajax({
+			url: 'https://corsproxy.io/?' + encodeURIComponent('https://api.hcaptcha.com/siteverify'),
+			type: 'POST',
+			headers: {
+				Accept: 'application/json'
+			},
+			data: {
+				response: data,
+				secret: S
+			},
+			error: () => {
+				$.ajax({
+					url: 'https://agar.emupedia.net/captcha/',
+					type: 'POST',
+					headers: {
+						Accept: 'application/json'
+					},
+					data: {
+						response: data,
+						secret: S
+					},
+					error: () => {
+						byId('captcha').hide();
+						byClass('upload-btn-wrapper')[0].show();
+					},
+					success: result => {
+						if (typeof result !== 'undefined') {
+							if (typeof result['success'] !== 'undefined') {
+								if (result['success'] === true) {
+									byId('captcha').hide();
+									byClass('upload-btn-wrapper')[0].show();
+								} else {
+									byId('upload-skin').hide();
+								}
+							} else {
+								byId('upload-skin').hide();
+							}
+						} else {
+							byId('upload-skin').hide();
+						}
+					}
+				});
+			},
+			success: result => {
+				if (typeof result !== 'undefined') {
+					if (typeof result['success'] !== 'undefined') {
+						if (result['success'] === true) {
+							byId('captcha').hide();
+							byClass('upload-btn-wrapper')[0].show();
+						} else {
+							byId('upload-skin').hide();
+						}
+					} else {
+						byId('upload-skin').hide();
+					}
+				} else {
+					byId('upload-skin').hide();
+				}
+			}
+		});
+	}
+
 	function getBase64(file, cb) {
 		var reader = new FileReader();
 
@@ -2188,18 +2252,21 @@
 			if (settings.darkTheme) {
 				document.documentElement.classList.add('darkTheme');
 				joystick.options.color = 'white';
-
-				if (typeof joystick[0] !== 'undefined') {
-					joystick[0].destroy();
-				}
 			} else {
 				document.documentElement.classList.remove('darkTheme');
 				joystick.options.color = 'black';
-
-				if (typeof joystick[0] !== 'undefined') {
-					joystick[0].destroy();
-				}
 			}
+
+			if (typeof joystick[0] !== 'undefined') {
+				joystick[0].destroy();
+			}
+
+			byId('captcha').innerHTML = '';
+
+			hcaptcha.render('captcha' , {
+				theme: settings.darkTheme ? 'dark' : '',
+				sitekey: '6bd25504-b5be-483b-9baa-0b53e51edf67'
+			});
 		}
 
 		changeDarkTheme();
@@ -2399,6 +2466,20 @@
 			}
 		}
 
+		const observer = new MutationObserver((mutations, observer) => {
+			mutations.forEach(mutation => {
+				if (mutation.target.firstChild && mutation.target.firstChild.tagName.toLowerCase() === 'iframe') {
+					observer.observe(mutation.target.firstChild, { attributes: true });
+				}
+
+				if (mutation.target.tagName.toLowerCase() === 'iframe' && mutation.target.getAttribute('data-hcaptcha-response') !== '') {
+					checkCaptcha(mutation.target.getAttribute('data-hcaptcha-response'))
+				}
+			});
+		});
+
+		observer.observe(byId('captcha'), { attributes: true });
+
 		const changeUploadCheckbox = e => {
 			if (e.target.checked === true) {
 				e.target.disabled = true;
@@ -2406,11 +2487,17 @@
 
 			if (Array.from(byClass('upload-checkbox')).every(item => item.checked === true)) {
 				byClass('upload-btn-wrapper')[0].hide();
+				byId('captcha').hide();
 				byClass('countdown')[0].show();
 
-				startTimer(60, byId('timer'), () => {
-					byClass('upload-btn-wrapper')[0].show();
+				startTimer(59, byId('timer'), () => {
 					byClass('countdown')[0].hide();
+					byId('captcha').innerHTML = '';
+					hcaptcha.render('captcha' , {
+						theme: settings.darkTheme ? 'dark' : '',
+						sitekey: '6bd25504-b5be-483b-9baa-0b53e51edf67'
+					});
+					byId('captcha').show();
 				});
 			}
 		}
@@ -2743,6 +2830,9 @@
 	window.openUpload = () => {
 		byId('upload-skin').show(0.5);
 		byClass('upload-btn-wrapper')[0].hide();
+		hcaptcha.reset();
+		byId('captcha').innerHTML = '';
+		byId('captcha').hide();
 		byClass('countdown')[0].hide();
 		byId('timer').innerHTML = '';
 

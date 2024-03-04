@@ -14,7 +14,7 @@
 		<link rel="icon" type="image/png" href="assets/img/favicon.png">
 		<link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet" type="text/css">
 		<link href="assets/css/bootstrap.min.css" rel="stylesheet">
-		<link href="assets/css/index.css?v=12" rel="stylesheet">
+		<link href="assets/css/index.css?v=13" rel="stylesheet">
 		<link href="assets/css/gallery.css" rel="stylesheet">
 	</head>
 
@@ -219,12 +219,13 @@
 
 		<div id="upload-skin" style="display: none;" onclick="if (event.target === this) this.hide()">
 			<div id="upload-skin-content">
-				<h3>Upload Skin</h3><hr />
+				<h3>Upload Skin</h3><hr class="top" />
 				<label><input class="c1 upload-checkbox" type="checkbox" /> I agree I will not upload pictures depicting NSFW content</label>
 				<label><input class="c2 upload-checkbox" type="checkbox" /> I agree I will not upload pictures of real people</label>
 				<label><input class="c3 upload-checkbox" type="checkbox" /> I understand that if I do so I might get banned from using the game</label>
 				<hr />
-				<h3 class="countdown" style="display: none;">You must wait <span id="timer"></span></h3>
+				<h4 class="countdown" style="display: none;">To prove you understood the rules,<br />you must wait <span id="timer"></span> seconds</h4>
+				<div id="captcha" style="display: none;"></div>
 				<div class="upload-btn-wrapper" style="display: none;">
 					<button class="btn btn-play btn-primary btn-needs-server btn-info">Upload Skin</button>
 					<input id="upload-btn" type="file" accept="image/x-png,image/png,image/jpeg,image/webp,image/avif" name="source" />
@@ -234,15 +235,16 @@
 
 		<div id="connecting">
 			<div id="connecting-content">
-				<h3>Trying to connect...</h3><hr />
+				<h3>Trying to connect...</h3><hr class="top" />
 				<p>If you cannot connect to the servers, check if you have some anti virus or firewall blocking the connection.</p>
 			</div>
 		</div>
 
+		<script src="https://js.hcaptcha.com/1/api.js?render=explicit" async defer></script>
 		<script src="assets/js/jquery-1.11.3.min.js"></script>
 		<script src="assets/js/fp.umd.min.js"></script>
 		<script src="assets/js/nipplejs.js"></script>
 		<script src="assets/js/quadtree.js"></script>
-		<script src="assets/js/main.min.js?v=49"></script>
+		<script src="assets/js/main.min.js?v=50"></script>
 	</body>
 </html>
