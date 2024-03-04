@@ -1,8 +1,7 @@
 (function() {
     'use strict';
 
-    if (typeof WebSocket === 'undefined' || typeof DataView === 'undefined' ||
-        typeof ArrayBuffer === 'undefined' || typeof Uint8Array === 'undefined') {
+    if (typeof WebSocket === 'undefined' || typeof DataView === 'undefined' || typeof ArrayBuffer === 'undefined' || typeof Uint8Array === 'undefined') {
         alert('Your browser does not support required features, please update your browser or get a new one.');
         window.stop();
     }
@@ -60,26 +59,11 @@
         }
     }
 
-
-
     function convertColCode(colCode) {
         if (colCode == undefined) return ''
         var splitted = colCode.split('-')
         return hideBorder(splitted[0]) + '-' + splitted[1]
     }
-
-    const knownColorFills = new Map();
-    fetch('colorFills.txt').then(resp => resp.text()).then(data => {
-        const skins = data.split(',').filter(name => name.length > 0);
-        if (skins.length === 0) return;
-        byId('gallery-btn').style.display = 'inline-block';
-        const stamp = Date.now();
-        for (const skin of skins) knownColorFills.set(skin, stamp);
-        for (const i of knownColorFills.keys()) {
-            if (knownColorFills.get(i) !== stamp) knownColorFills.delete(i);
-        }
-    });
-
 
     function checkColCode(colCode) {
         const colCodes = Array.from(knownColorFills.keys()).sort();
@@ -324,6 +308,7 @@
         25: new Uint8Array([25]),
         254: new Uint8Array([254])
     };
+    const FP = FingerprintJS.load();
     const KEY_TO_OPCODE = {
         e: UINT8_CACHE[22],
         r: UINT8_CACHE[23],
@@ -678,7 +663,9 @@
 
     const knownSkinsLocal = new Map();
     const knownSkins = new Map();
+    const knownColorFills = new Map();
     const loadedSkins = new Map();
+    const bannedFP = new Set();
     const macroCooldown = 0;
     const camera = {
         x: 0,
@@ -777,31 +764,8 @@ exampleNick2
 
     userId = localStorage.getItem("id");
 
-
     const eatSound = new Sound('./assets/sound/eat.mp3', 0.5, 10);
     const pelletSound = new Sound('./assets/sound/pellet.mp3', 0.5, 10);
-
-    fetch('skinListLocal.txt').then(resp => resp.text()).then(data => {
-        const skins = data.split(',').filter(name => name.length > 0);
-        if (skins.length === 0) return;
-        byId('gallery-btn').style.display = 'inline-block';
-        const stamp = Date.now();
-        for (const skin of skins) knownSkinsLocal.set(skin, stamp);
-        for (const i of knownSkinsLocal.keys()) {
-            if (knownSkinsLocal.get(i) !== stamp) knownSkinsLocal.delete(i);
-        }
-    });
-
-    fetch('skinList.txt').then(resp => resp.text()).then(data => {
-        const skins = data.split(',').filter(name => name.length > 0);
-        if (skins.length === 0) return;
-        byId('gallery-btn').style.display = 'inline-block';
-        const stamp = Date.now();
-        for (const skin of skins) knownSkins.set(skin, stamp);
-        for (const i of knownSkins.keys()) {
-            if (knownSkins.get(i) !== stamp) knownSkins.delete(i);
-        }
-    });
 
     function hideESCOverlay() {
         escOverlayShown = false;
@@ -1994,6 +1958,76 @@ exampleNick2
         drawGame();
         Logger.info(`Init done in ${Date.now() - LOAD_START}ms`);
     }
+
+    function start() {
+        try {
+            fetch('skinList.txt').then(resp => resp.text()).then(data => {
+                const skins = data.split(',').filter(name => name.length > 0);
+                if (skins.length === 0) return;
+                byId('gallery-btn').style.display = 'inline-block';
+                const stamp = Date.now();
+                for (const skin of skins) knownSkins.set(skin, stamp);
+                for (const i of knownSkins.keys()) {
+                    if (knownSkins.get(i) !== stamp) knownSkins.delete(i);
+                }
+
+                fetch('skinListLocal.txt').then(resp => resp.text()).then(data => {
+                    const skins = data.split(',').filter(name => name.length > 0);
+                    if (skins.length === 0) return;
+                    byId('gallery-btn').style.display = 'inline-block';
+                    const stamp = Date.now();
+                    for (const skin of skins) knownSkinsLocal.set(skin, stamp);
+                    for (const i of knownSkinsLocal.keys()) {
+                        if (knownSkinsLocal.get(i) !== stamp) knownSkinsLocal.delete(i);
+                    }
+
+                    fetch('colorFills.txt').then(resp => resp.text()).then(data => {
+                        const skins = data.split(',').filter(name => name.length > 0);
+                        if (skins.length === 0) return;
+                        byId('gallery-btn').style.display = 'inline-block';
+                        const stamp = Date.now();
+                        for (const skin of skins) knownColorFills.set(skin, stamp);
+                        for (const i of knownColorFills.keys()) {
+                            if (knownColorFills.get(i) !== stamp) knownColorFills.delete(i);
+                        }
+
+                        fetch('../cigar2/fpBanList.txt').then(resp => resp.text()).then(data => {
+                            const fp = data.split(',').filter(name => name.length > 0);
+
+                            if (fp.length === 0) return;
+
+                            for (const p of fp) bannedFP.add(p);
+
+                            FP.then(fp => fp.get()).then(result => {
+                                settings.fp = result.visitorId;
+
+                                let ban = false;
+
+                                bannedFP.forEach((value1, value2, set) => {
+                                    if (settings.fp === value2) {
+                                        ban = true;
+                                    }
+                                });
+
+                                if (ban) {
+                                    wsCleanup();
+                                    byId('chat_textbox').hide();
+                                    byId('connecting-content').innerHTML = '<h3>Your are banned 😭</h3><hr class="top" /><p>You are banned from the game because you broke the rules while uploading custom skins.</p>';
+                                    byId('connecting').show(0.5);
+                                } else {
+                                    init();
+                                }
+                            });
+                        });
+                    });
+                });
+            });
+        } catch (error) {
+            console.error(error);
+            init();
+        }
+    }
+
     window.setserver = (url) => {
         if (url === wsUrl && ws && ws.readyState <= WebSocket.OPEN) return;
         wsInit(url);
@@ -2012,7 +2046,7 @@ exampleNick2
         if (byId('gallery-body').innerHTML === '') buildGallery();
         byId('gallery').show(0.5);
     };
-    window.addEventListener('DOMContentLoaded', init);
+    window.addEventListener('DOMContentLoaded', start);
 
     function doubleSplit() {
         if (!settings.doubleSplit || isTyping) {
