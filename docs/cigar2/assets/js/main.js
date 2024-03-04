@@ -2490,7 +2490,7 @@
 				byId('captcha').hide();
 				byClass('countdown')[0].show();
 
-				startTimer(59, byId('timer'), () => {
+				startTimer(120, byId('timer'), () => {
 					byClass('countdown')[0].hide();
 					byId('captcha').innerHTML = '';
 					hcaptcha.render('captcha' , {
