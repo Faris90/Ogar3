@@ -1,6 +1,11 @@
 (function() {
 	'use strict';
 
+	if (typeof WebSocket === 'undefined' || typeof DataView === 'undefined' || typeof ArrayBuffer === 'undefined' || typeof Uint8Array === 'undefined') {
+		alert('Your browser does not support required features, please update your browser.');
+		window.stop();
+	}
+
 	class Sound {
 		constructor(src, volume, maximum) {
 			this.src = src;
@@ -568,11 +573,6 @@
 				drawText(ctx, true, this.x, y, this.nameSize / 2, this.drawNameSize / 2, mass);
 			}
 		}
-	}
-
-	if (typeof WebSocket === 'undefined' || typeof DataView === 'undefined' || typeof ArrayBuffer === 'undefined' || typeof Uint8Array === 'undefined') {
-		alert('Your browser does not support required features, please update your browser.');
-		window.stop();
 	}
 
 	function byId(id) {
@@ -2720,7 +2720,23 @@
 
 						FP.then(fp => fp.get()).then(result => {
 							settings.fp = result.visitorId;
-							init();
+
+							let ban = false;
+
+							bannedFP.forEach((value1, value2, set) => {
+								if (settings.fp === value2) {
+									ban = true;
+								}
+							});
+
+							if (ban) {
+								wsCleanup();
+								byId('chat_textbox').hide();
+								byId('connecting-content').innerHTML = '<h3>Your are banned 😭</h3><hr class="top" /><p>You are banned from the game because you broke the rules while uploading custom skins.</p>';
+								byId('connecting').show(0.5);
+							} else {
+								init();
+							}
 						});
 					});
 				});
