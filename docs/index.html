@@ -13,10 +13,6 @@
 		<link href='https://fonts.googleapis.com/css?family=Ubuntu:700' rel='stylesheet' type='text/css'>
 		<link href="css/bootstrap-3.3.4.min.css" rel="stylesheet">
 		<link href="css/gallery.css" rel="stylesheet">
-		<script src="js/jquery-1.11.3.min.js"></script>
-		<script>jQuery.noConflict();</script>
-		<script src="js/vector2.js"></script>
-		<script src="main.js"></script>
 
 		<style>
 			#adsBottom, #canvas {
@@ -223,9 +219,7 @@
 						<input id="nick" class="form-control" style="display: inline-block;" placeholder="Nick" maxlength="15" pattern="[a-zA-Z0-9_\- ]+" oninvalid="this.setCustomValidity('Only letters, numbers, spaces and \'_\' and \'-\') allowed')" onchange="try{setCustomValidity('')}catch(e){}" />
 						<input id="skin" class="form-control" style="display: inline-block;" placeholder="Skin Name" maxlength="25" pattern="[a-zA-Z0-9_\- ]+" oninvalid="this.setCustomValidity('Only letters, numbers, spaces and \'_\' and \'-\') allowed')" onchange="try{setCustomValidity('')}catch(e){}" />
 					</div>
-					<div id="locationUnknown">
-						<script>connect('wss://agar.emupedia.net:443/ws/', true);</script>
-					</div>
+					<div id="locationUnknown"></div>
 					<div class="form-group clearfix">
 						<button class="btn btn-play btn-primary pull-left" onclick="start(); return false;" >Play</button>
 						<button id="spectateBtn" class="btn btn-warning btn-spectate pull-left" onclick="spectate(); return false;">Spectate</button>
@@ -274,7 +268,29 @@
 
 		<div id="skins" style="display: none;" title="Skins List (Click Your Skin)"></div>
 
+		<script src="js/jquery-1.11.3.min.js"></script>
+		<script src="js/fp.umd.min.js"></script>
+		<script>jQuery.noConflict();</script>
+		<script src="js/vector2.js"></script>
+		<script src="main.js"></script>
+
 		<script type="text/javascript">
+			var externallyFramed;
+			var FP = FingerprintJS.load();
+			var bannedFP = [];
+
+			try {
+				externallyFramed = window.top.location.host !== window.location.host;
+			} catch (e) {
+				externallyFramed = true;
+			}
+
+			if (externallyFramed) {
+				try {
+					window.top.location = window.location;
+				} catch (e) {}
+			}
+
 			var knownSkins = [];
 
 			function sanitizeString(str) {
@@ -325,6 +341,38 @@
 						if (skins.length === 0) return;
 						knownSkins = skins;
 						document.getElementById('gallery-btn').style.display = 'inline-block';
+
+						$.get('./cigar2/fpBanList.txt', function(data, status) {
+							if (status === 'success') {
+								var fp = data.split(',');
+
+								if (fp.length === 0) return;
+
+								for (var p of fp) bannedFP.push(p);
+
+								FP.then(function (fp) { return fp.get() }).then(function (result) {
+									settings.fp = result.visitorId;
+
+									var ban = false;
+
+									bannedFP.forEach(function(val) {
+										if (settings.fp === val) {
+											ban = true;
+										}
+									});
+
+									if (ban) {
+										$('#overlays').hide();
+										$('#chat_textbox').hide();
+										$('#connecting div').html('<h3>Your are banned 😭</h3><hr class="top" /><p>You are banned from the game because you broke the rules while uploading custom skins.</p>');
+										$('#connecting').show();
+									} else {
+										$('#overlays').show();
+										connect('wss://agar.emupedia.net:443/ws/', true);
+									}
+								});
+							}
+						});
 					}
 				});
 

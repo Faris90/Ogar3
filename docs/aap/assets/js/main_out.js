@@ -286,7 +286,7 @@
 
     const WEBSOCKET_URL = null;
     const LOCAL_SKIN_URL = './skins/';
-    const SKIN_URL = 'https://emupedia.net/emupedia-game-agar.io/cigar2/skins/';
+    const SKIN_URL = '../cigar2/skins/';
     const USE_HTTPS = 'https:' === window.location.protocol || window.location.hostname === 'localhost';
     const EMPTY_NAME = 'An unnamed cell';
     const QUADTREE_MAX_POINTS = 32;
@@ -1819,12 +1819,10 @@ exampleNick2
         document.body.addEventListener('mouseup', (e)=>{if(e.button===_button){clearInterval(_ID);_ID=0}});
         mainCanvas.addEventListener('click', doubleSplit);
 
-
         bgColorInput.value = settings.bgColor;
         cellMinInput.value = "3";
         virusNumInput.value = settings.virNumPoints;
         cellMaxInput.value = settings.cellMaxPoints;
-
 
         byId('nickList').addEventListener('keyup', () => {
             const nickList = document.getElementById('nickList').value;

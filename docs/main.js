@@ -1,5 +1,5 @@
 (function (wHandle, wjQuery) {
-	var SKIN_URL = "https://emupedia.net/emupedia-game-agar.io/skins/";
+	var SKIN_URL = "./skins/";
 
 	var touchX, touchY,
 		// is this running in a touch capable environment?
@@ -61,15 +61,15 @@
 			document.body.onmousewheel = handleWheel;
 		}
 
-		mainCanvas.onfocus = function () {
+		mainCanvas.onfocus = function() {
 			isTyping = false;
 		};
 
-		document.getElementById("chat_textbox").onblur = function () {
+		document.getElementById("chat_textbox").onblur = function() {
 			isTyping = false;
 		};
 
-		document.getElementById("chat_textbox").onfocus = function () {
+		document.getElementById("chat_textbox").onfocus = function() {
 			isTyping = true;
 		};
 
@@ -190,7 +190,7 @@
 			setInterval(drawGameScene, 1E3 / 60);
 		}
 		mouseinterval = setInterval(sendMouseMove, 40);
-		setInterval(function () {
+		setInterval(function() {
 			try {
 				clearInterval(mouseinterval)
 			} catch (e) {
@@ -205,7 +205,6 @@
 		Ha();
 		setRegion(wjQuery("#region").val());
 		null == ws && w && showConnecting();
-		wjQuery("#overlays").show();
 		canvasResize();
 	}
 
@@ -328,7 +327,7 @@
 	function getServerList() {
 		if (null == playerStat) {
 			playerStat = {};
-			wjQuery("#region").children().each(function () {
+			wjQuery("#region").children().each(function() {
 				var a = wjQuery(this),
 					b = a.val();
 				b && (playerStat[b] = a.text())
@@ -408,8 +407,7 @@
 			ws.onclose = null;
 			try {
 				ws.close()
-			} catch (b) {
-			}
+			} catch (b) {}
 			ws = null
 		}
 
@@ -427,7 +425,7 @@
 		ws.onopen = onWsOpen;
 		ws.onmessage = onWsMessage;
 		ws.onclose = onWsClose;
-		ws.onerror = function () {
+		ws.onerror = function() {
 			gameMode = 1;
 			wjQuery("#gamemode").val(1);
 			return 54
@@ -743,7 +741,7 @@
 			customHTML:  "";
 		*/
 		if (Data.leavemessage) {
-			wjQuery(window).bind('beforeunload', function () {
+			wjQuery(window).bind('beforeunload', function() {
 				return clientData.leavemessage
 			});
 		}
@@ -1379,7 +1377,7 @@
 				wjQuery("#chat_textbox").show();
 			}
 	};
-	wHandle.spectate = function () {
+	wHandle.spectate = function() {
 		userNickName = null;
 		wHandle.isSpectating = true;
 		sendUint8(1);
@@ -1439,7 +1437,7 @@
 		isVirus: false,
 		isAgitated: false,
 		wasSimpleDrawing: true,
-		destroy: function () {
+		destroy: function() {
 			var tmp;
 			for (tmp = 0; tmp < nodelist.length; tmp++)
 				if (nodelist[tmp] == this) {
@@ -1459,7 +1457,7 @@
 			this.destroyed = true;
 			Cells.push(this)
 		},
-		getNameSize: function () {
+		getNameSize: function() {
 			return Math.max(~~(.3 * this.size), 24)
 		},
 		setName: function (a) {
@@ -1473,7 +1471,7 @@
 				}
 			}
 		},
-		createPoints: function () {
+		createPoints: function() {
 			for (var samplenum = this.getNumPoints(); this.points.length > samplenum;) {
 				var rand = ~~(Math.random() * this.points.length);
 				this.points.splice(rand, 1);
@@ -1500,7 +1498,7 @@
 				this.pointsAcc.splice(rand2, 0, this.pointsAcc[rand2])
 			}
 		},
-		getNumPoints: function () {
+		getNumPoints: function() {
 			if (0 == this.id) return 16;
 			var a = 10;
 			if (20 > this.size) a = 0;
@@ -1511,7 +1509,7 @@
 			if (this.flag & 32) (b *= .25);
 			return ~~Math.max(b, a);
 		},
-		movePoints: function () {
+		movePoints: function() {
 			this.createPoints();
 			for (var points = this.points, pointsacc = this.pointsAcc, numpoints = points.length, i = 0; i < numpoints; ++i) {
 				var pos1 = pointsacc[(i - 1 + numpoints) % numpoints],
@@ -1556,7 +1554,7 @@
 				points[j].y = this.y + Math.sin(e * j + isvirus) * m
 			}
 		},
-		updatePos: function () {
+		updatePos: function() {
 			if (0 == this.id) return 1;
 			var a;
 			a = (timestamp - this.updateTime) / 120;
@@ -1572,7 +1570,7 @@
 			this.size = b * (this.nSize - this.oSize) + this.oSize;
 			return b;
 		},
-		shouldRender: function () {
+		shouldRender: function() {
 			if (0 == this.id) {
 				return true
 			} else {
@@ -1732,7 +1730,7 @@
 				this._dirty = true;
 			}
 		},
-		render: function () {
+		render: function() {
 			if (null == this._canvas) {
 				this._canvas = document.createElement("canvas");
 				this._ctx = this._canvas.getContext("2d");
@@ -1760,13 +1758,13 @@
 			}
 			return this._canvas
 		},
-		getWidth: function () {
+		getWidth: function() {
 			return (ctx.measureText(this._value).width +
 				6);
 		}
 	};
 
-	Date.now || (Date.now = function () {
+	Date.now || (Date.now = function() {
 		return (new Date).getTime()
 	});
 
@@ -1832,7 +1830,7 @@
 				findOverlappingNodes: function (a, b) {
 					return a.x < this.x + this.w / 2 && (a.y < this.y + this.h / 2 && b(0) || a.y >= this.y + this.h / 2 && b(2)) || a.x >= this.x + this.w / 2 && (a.y < this.y + this.h / 2 && b(1) || a.y >= this.y + this.h / 2 && b(3)) ? true : false
 				},
-				devide: function () {
+				devide: function() {
 					var a = this.depth + 1,
 						c = this.w / 2,
 						d = this.h / 2;
@@ -1844,7 +1842,7 @@
 					this.items = [];
 					for (c = 0; c < a.length; c++) this.insert(a[c])
 				},
-				clear: function () {
+				clear: function() {
 					for (var a = 0; a < this.nodes.length; a++) this.nodes[a].clear();
 					this.items.length = 0;
 					this.nodes.length = 0
@@ -1874,7 +1872,7 @@
 				exists: function (a) {
 					return this.root.exists(a)
 				},
-				clear: function () {
+				clear: function() {
 					this.root.clear()
 				}
 			}
