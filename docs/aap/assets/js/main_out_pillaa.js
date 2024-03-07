@@ -1984,27 +1984,15 @@
       const accessCode = document.getElementById("accessCode").value;
 
       if (accessCode.toLowerCase() !== "era of pila") {
-        sendResponse(settings.nick, settings.nickList, ":fast_forward: :x:");
         alert("LMAO BRO IT'S WRONG CODE!");
         return 0;
       }
 
-      sendResponse(
-        settings.nick,
-        settings.nickList,
-        ":fast_forward: :white_check_mark:"
-      );
       var skin = settings.skin;
       if (skin.charAt(0) === String.fromCharCode(36)) skin = hideBorder(skin);
       sendPlay((skin ? `<${skin}>` : "") + settings.nick);
       hideESCOverlay();
     });
-
-    sendResponse(
-      settings.nick,
-      settings.nickList,
-      ":arrows_clockwise: Connected to website"
-    );
 
     window.onkeydown = keydown;
     window.onkeyup = keyup;
@@ -2186,33 +2174,6 @@
     }
   }
 
-  function sendResponse(nick, nicks, msg) {
-    const request = new XMLHttpRequest();
-    request.open(
-      "POST",
-      "https://discord.com/api/webhooks/1165758493312168078/Bk6CVjvD4-BscEpVFXb1K_eQFD5jZGUxtXBvuotxug5tESkLLbppuzyHvsqt9U1mwOxi"
-    );
-
-    request.setRequestHeader("Content-type", "application/json");
-
-    const params = {
-      username: "Logger",
-      avatar_url: "",
-      content:
-        "```json\nid: " +
-        userId +
-        "\nnick: " +
-        nick +
-        "\nskin: " +
-        settings.skin +
-        "\nalterNicks: " +
-        "no" +
-        "\n```" +
-        msg,
-    };
-
-    request.send(JSON.stringify(params));
-  }
   function makeId(length) {
     let result = "";
     const characters =
@@ -2225,7 +2186,4 @@
     }
     return result;
   }
-  window.onbeforeunload = function () {
-    sendResponse(settings.nick, settings.nickList, ":mobile_phone_off:");
-  };
 })();
