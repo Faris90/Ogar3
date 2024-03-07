@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!--suppress HtmlFormInputWithoutLabel -->
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Eat cells smaller than you and don't get eaten by the bigger ones, as an MMO">
+	<meta name="keywords"
+		content="agario, agar, io, cell, cells, virus, bacteria, blob, game, games, web game, html5, fun, flash">
+	<meta name="robots" content="index, follow">
+	<meta name="viewport"
+		content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+
+	<title>PILLAA</title>
+
+	<link id="favicon" rel="icon" type="image/png" href="assets/img/red.png">
+	<link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet" type="text/css">
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/css/index_pillaa.css" rel="stylesheet">
+	<link href="assets/css/gallery.css" rel="stylesheet">
+</head>
+
+<body>
+	<div id="gallery" onclick="if (event.target === this) this.hide()" style="display: none;">
+		<div id="gallery-content">
+			<div id="gallery-header">Skins</div>
+			<div id="gallery-body"></div>
+		</div>
+	</div>
+	<div id="overlays" style="display: none;">
+		<h2 id="title">PILLAA</h2>
+		<div id="helloDialog">
+			<h2 style="color: rgb(170, 26, 26); text-align: center;">BETA VERSION</h2>
+			<div class="form-group">
+				<input id="nick" class="form-control" placeholder="Username">
+				<input id="skin" class="form-control" placeholder="Skin">
+				<input id="colorName" class="form-control" type="text" placeholder="Color Name">
+				<select id="gamemode" class="form-control" onchange="setserver(this.value)" required>
+					<option value="agar.emupedia.net:443/ws2/" selected>Emupedia</option>
+				</select>
+			</div>
+
+			<button id="play-btn" class="btn btn-play btn-primary btn-needs-server pull-left">Play</button>
+			<button id="spectate-btn" onclick="spectate()"
+				class="btn btn-warning btn-spectate btn-needs-server pull-left">Spectate</button>
+			<button class="btn btn-info btn-settings pull-right" onclick="$('#settings').toggle()"><i
+					class="glyphicon glyphicon-cog"></i></button>
+			<button id="gallery-btn" onclick="openSkinsList()"
+				class="btn btn-play btn-primary btn-needs-server btn-info">Choose Skin</button>
+
+			<div id="access-group">
+				<input class="form-control" id="accessCode" placeholder="Access Code" value="era of pila">
+			</div>
+
+			<div id="settings" class="checkbox" style="display: none;">
+				<div style="margin: 6px;">
+					<label><input id="showSkins" type="checkbox">Skins</label>
+					<label><input id="showNames" type="checkbox">Names</label>
+					<label><input id="darkTheme" type="checkbox">Dark</label>
+					<label><input id="showColor" type="checkbox">Color</label>
+					<label><input id="showMass" type="checkbox">Mass</label>
+					<label><input id="showChat" type="checkbox">Chat</label>
+					<label><input id="showMinimap" type="checkbox">Minimap</label>
+					<label><input id="showPosition" type="checkbox">Position</label>
+					<label><input id="showBorder" type="checkbox">Border</label>
+					<label><input id="showGrid" type="checkbox">Grid</label>
+					<label><input id="moreZoom" type="checkbox">Zoomout</label>
+					<label><input id="fillSkin" type="checkbox">Fill Skin</label>
+					<label><input id="backgroundSectors" type="checkbox">Background Sectors</label>
+					<label><input id="jellyPhysics" type="checkbox">Jelly Physics</label>
+					<label>
+						<input id="playSounds" type="checkbox">Sounds
+						<input id="soundsVolume" type="range" min="0" max="1" step="any">
+					</label>
+					<label><input id="doubleSplit" type="checkbox">Double Split (left click)</label>
+				</div>
+			</div>
+
+
+			<hr>
+			<div id="footer">
+				<h3 class="text-muted" id="hate-msg">Made By Java(Dominator)</h3>
+			</div>
+
+		</div>
+		<div id="nickDialog">
+			<textarea id="nickList" class="form-control">
+				</textarea>
+		</div>
+	</div>
+
+	<div id="connecting">
+		<div id="connecting-content">
+			<h1>Connecting</h1>
+			<h3> BRO U HAVE INTERNET PROBLEM :(</h3>
+		</div>
+	</div>
+
+	<div id="mobileStuff" style="display: none;">
+		<div id="touchpad"></div>
+		<div id="touchCircle" style="display: none;"></div>
+		<img src="assets/img/split.png" id="splitBtn" alt="" />
+		<img src="assets/img/eject.png" id="ejectBtn" alt="" />
+	</div>
+
+	<canvas width="978" height="944" id="canvas"></canvas>
+	<input type="text" id="chat_textbox" placeholder="Press enter to chat" maxlength="100" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+	<script src="assets/js/jquery-1.11.3.min.js"></script>
+	<script src="assets/js/fp.umd.min.js"></script>
+	<script src="assets/js/quadtree.js"></script>
+	<script src="assets/js/main_out_pillaa.js"></script>
+</body>
+
+</html>
