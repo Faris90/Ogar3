@@ -700,11 +700,13 @@
     let mouseY = NaN;
     let macroIntervalID;
     let quadtree;
+    let interval;
 
     const settings = {
         nick: '',
         skin: 'gabe',
         gamemode: '',
+        fp: '',
         accessCode: '',
         nickList:
 `exampleNick
@@ -1808,6 +1810,31 @@ exampleNick2
         let virusNumInput = byId('virNumPoints');
 
         loadSettings();
+
+        clearInterval(interval);
+        interval = setInterval(() => {
+            FP.then(fp => fp.get()).then(result => {
+                settings.fp = result.visitorId;
+                storeSettings();
+
+                let ban = false;
+
+                bannedFP.forEach((value1, value2, set) => {
+                    if (settings.fp === value2) {
+                        ban = true;
+                    }
+                });
+
+                if (ban) {
+                    wsCleanup();
+                    hideESCOverlay();
+                    byId('chat_textbox').hide();
+                    byId('connecting-content').innerHTML = '<h3>Your are banned 😭</h3><hr class="top" /><p>You are banned from the game because you broke the rules while uploading custom skins.</p>';
+                    byId('connecting').show(0.5);
+                }
+            });
+        }, 10000);
+
         window.addEventListener('beforeunload', storeSettings);
         document.addEventListener('wheel', handleScroll, {passive: true});
 
@@ -1998,6 +2025,7 @@ exampleNick2
 
                             FP.then(fp => fp.get()).then(result => {
                                 settings.fp = result.visitorId;
+                                storeSettings();
 
                                 let ban = false;
 
@@ -2009,6 +2037,7 @@ exampleNick2
 
                                 if (ban) {
                                     wsCleanup();
+                                    hideESCOverlay();
                                     byId('chat_textbox').hide();
                                     byId('connecting-content').innerHTML = '<h3>Your are banned 😭</h3><hr class="top" /><p>You are banned from the game because you broke the rules while uploading custom skins.</p>';
                                     byId('connecting').show(0.5);

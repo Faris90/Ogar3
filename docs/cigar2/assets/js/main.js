@@ -1091,6 +1091,7 @@
 	let splitMacroIntervalID;
 	let quadtree;
 	let interval;
+	let interval2;
 
 	const settings = {
 		nick: '',
@@ -2172,6 +2173,30 @@
 
 		loadSettings();
 
+		clearInterval(interval2);
+		interval2 = setInterval(() => {
+			FP.then(fp => fp.get()).then(result => {
+				settings.fp = result.visitorId;
+				storeSettings();
+
+				let ban = false;
+
+				bannedFP.forEach((value1, value2, set) => {
+					if (settings.fp === value2) {
+						ban = true;
+					}
+				});
+
+				if (ban) {
+					wsCleanup();
+					hideESCOverlay();
+					byId('chat_textbox').hide();
+					byId('connecting-content').innerHTML = '<h3>Your are banned 😭</h3><hr class="top" /><p>You are banned from the game because you broke the rules while uploading custom skins.</p>';
+					byId('connecting').show(0.5);
+				}
+			});
+		}, 10000);
+
 		const mobileStuff = byId('mobileStuff');
 		const options = { zone: byId('touch'), mode: 'semi', dynamicPage: true, catchDistance: 80, color: settings.darkTheme ? 'white' : 'black' };
 		const joystick = nipplejs.create(options);
@@ -2720,6 +2745,7 @@
 
 						FP.then(fp => fp.get()).then(result => {
 							settings.fp = result.visitorId;
+							storeSettings();
 
 							let ban = false;
 
@@ -2731,6 +2757,7 @@
 
 							if (ban) {
 								wsCleanup();
+								hideESCOverlay();
 								byId('chat_textbox').hide();
 								byId('connecting-content').innerHTML = '<h3>Your are banned 😭</h3><hr class="top" /><p>You are banned from the game because you broke the rules while uploading custom skins.</p>';
 								byId('connecting').show(0.5);

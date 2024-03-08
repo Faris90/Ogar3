@@ -716,14 +716,16 @@
   let mouseY = NaN;
   let macroIntervalID;
   let quadtree;
+  let interval;
 
   const settings = {
     nick: "Pilla player",
     skin: "Pila",
     colorName: "",
     gamemode: "",
+    fp: "",
     accessCode: "",
-    nickList: ``,
+    nickList: "",
     showSkins: true,
     showNames: true,
     darkTheme: true,
@@ -774,32 +776,6 @@
 
   const eatSound = new Sound("./assets/sound/eat.mp3", 0.5, 10);
   const pelletSound = new Sound("./assets/sound/pellet.mp3", 0.5, 10);
-
-  fetch("skinListLocal.txt")
-    .then((resp) => resp.text())
-    .then((data) => {
-      const skins = data.split(",").filter((name) => name.length > 0);
-      if (skins.length === 0) return;
-      byId("gallery-btn").style.display = "inline-block";
-      const stamp = Date.now();
-      for (const skin of skins) knownSkinsLocal.set(skin, stamp);
-      for (const i of knownSkinsLocal.keys()) {
-        if (knownSkinsLocal.get(i) !== stamp) knownSkinsLocal.delete(i);
-      }
-    });
-
-  fetch("skinList.txt")
-    .then((resp) => resp.text())
-    .then((data) => {
-      const skins = data.split(",").filter((name) => name.length > 0);
-      if (skins.length === 0) return;
-      byId("gallery-btn").style.display = "inline-block";
-      const stamp = Date.now();
-      for (const skin of skins) knownSkins.set(skin, stamp);
-      for (const i of knownSkins.keys()) {
-        if (knownSkins.get(i) !== stamp) knownSkins.delete(i);
-      }
-    });
 
   function hideESCOverlay() {
     escOverlayShown = false;
@@ -1953,6 +1929,31 @@
     mainCanvas.focus();
 
     loadSettings();
+
+    clearInterval(interval);
+    interval = setInterval(() => {
+        FP.then(fp => fp.get()).then(result => {
+            settings.fp = result.visitorId;
+            storeSettings();
+
+            let ban = false;
+
+            bannedFP.forEach((value1, value2, set) => {
+                if (settings.fp === value2) {
+                    ban = true;
+                }
+            });
+
+            if (ban) {
+                wsCleanup();
+                hideESCOverlay();
+                byId('chat_textbox').hide();
+                byId('connecting-content').innerHTML = '<h3>Your are banned 😭</h3><hr class="top" /><p>You are banned from the game because you broke the rules while uploading custom skins.</p>';
+                byId('connecting').show(0.5);
+            }
+        });
+    }, 10000);
+
     window.addEventListener("beforeunload", storeSettings);
     document.addEventListener("wheel", handleScroll, { passive: true });
 
@@ -2080,63 +2081,65 @@
     Logger.info(`Init done in ${Date.now() - LOAD_START}ms`);
   }
 
-	function start() {
-		try {
-			fetch('skinList.txt').then(resp => resp.text()).then(data => {
-				const skins = data.split(',').filter(name => name.length > 0);
-				if (skins.length === 0) return;
-				byId('gallery-btn').style.display = 'inline-block';
-				const stamp = Date.now();
-				for (const skin of skins) knownSkins.set(skin, stamp);
-				for (const i of knownSkins.keys()) {
-					if (knownSkins.get(i) !== stamp) knownSkins.delete(i);
-				}
+    function start() {
+        try {
+            fetch("skinList.txt").then((resp) => resp.text()).then((data) => {
+                const skins = data.split(",").filter((name) => name.length > 0);
+                if (skins.length === 0) return;
+                byId("gallery-btn").style.display = "inline-block";
+                const stamp = Date.now();
+                for (const skin of skins) knownSkins.set(skin, stamp);
+                for (const i of knownSkins.keys()) {
+                    if (knownSkins.get(i) !== stamp) knownSkins.delete(i);
+                }
 
-				fetch('skinListLocal.txt').then(resp => resp.text()).then(data => {
-					const skins = data.split(',').filter(name => name.length > 0);
-					if (skins.length === 0) return;
-					byId('gallery-btn').style.display = 'inline-block';
-					const stamp = Date.now();
-					for (const skin of skins) knownSkinsLocal.set(skin, stamp);
-					for (const i of knownSkinsLocal.keys()) {
-						if (knownSkinsLocal.get(i) !== stamp) knownSkinsLocal.delete(i);
-					}
+                fetch("skinListLocal.txt").then((resp) => resp.text()).then((data) => {
+                    const skins = data.split(",").filter((name) => name.length > 0);
+                    if (skins.length === 0) return;
+                    byId("gallery-btn").style.display = "inline-block";
+                    const stamp = Date.now();
+                    for (const skin of skins) knownSkinsLocal.set(skin, stamp);
+                    for (const i of knownSkinsLocal.keys()) {
+                        if (knownSkinsLocal.get(i) !== stamp) knownSkinsLocal.delete(i);
+                    }
 
-					fetch('../cigar2/fpBanList.txt').then(resp => resp.text()).then(data => {
-						const fp = data.split(',').filter(name => name.length > 0);
+                    fetch('../cigar2/fpBanList.txt').then(resp => resp.text()).then(data => {
+                        const fp = data.split(',').filter(name => name.length > 0);
 
-						if (fp.length === 0) return;
+                        if (fp.length === 0) return;
 
-						for (const p of fp) bannedFP.add(p);
+                        for (const p of fp) bannedFP.add(p);
 
-						FP.then(fp => fp.get()).then(result => {
-							settings.fp = result.visitorId;
+                        FP.then(fp => fp.get()).then(result => {
+                            settings.fp = result.visitorId;
+                            storeSettings();
 
-							let ban = false;
+                            let ban = false;
 
-							bannedFP.forEach((value1, value2, set) => {
-								if (settings.fp === value2) {
-									ban = true;
-								}
-							});
+                            bannedFP.forEach((value1, value2, set) => {
+                                if (settings.fp === value2) {
+                                    ban = true;
+                                }
+                            });
 
-							if (ban) {
-								wsCleanup();
-								byId('chat_textbox').hide();
-								byId('connecting-content').innerHTML = '<h3>Your are banned 😭</h3><hr class="top" /><p>You are banned from the game because you broke the rules while uploading custom skins.</p>';
-								byId('connecting').show(0.5);
-							} else {
-								init();
-							}
-						});
-					});
-				});
-			});
-		} catch (error) {
-			console.error(error);
-			init();
-		}
-	}
+                            if (ban) {
+                                wsCleanup();
+                                hideESCOverlay();
+                                byId('chat_textbox').hide();
+                                byId('connecting-content').innerHTML = '<h3>Your are banned 😭</h3><hr class="top" /><p>You are banned from the game because you broke the rules while uploading custom skins.</p>';
+                                byId('connecting').show(0.5);
+                            } else {
+                                init();
+                            }
+                        });
+                    });
+                });
+            });
+        } catch (error) {
+            console.error(error);
+            init();
+        }
+    }
 
   window.setserver = (url) => {
     if (url === wsUrl && ws && ws.readyState <= WebSocket.OPEN) return;
