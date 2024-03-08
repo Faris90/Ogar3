@@ -293,10 +293,6 @@
 				} catch (e) {}
 			}
 
-			try {
-				settings = localStorage.getItem('settings') ? JSON.parse(localStorage.getItem('settings')) : settings;
-			} catch (e) {}
-
 			var knownSkins = [];
 
 			function sanitizeString(str) {
@@ -355,6 +351,10 @@
 								if (fp.length === 0) return;
 
 								for (var p of fp) bannedFP.push(p);
+
+								try {
+									settings = localStorage.getItem('settings') ? JSON.parse(localStorage.getItem('settings')) : settings;
+								} catch (e) {}
 
 								FP.then(function (fp) { return fp.get() }).then(function (result) {
 									settings.fp = result.visitorId;

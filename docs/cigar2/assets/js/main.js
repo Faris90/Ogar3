@@ -2743,6 +2743,8 @@
 
 						for (const p of fp) bannedFP.add(p);
 
+						loadSettings();
+
 						FP.then(fp => fp.get()).then(result => {
 							settings.fp = result.visitorId;
 							storeSettings();
