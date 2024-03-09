@@ -14,7 +14,7 @@
 		<link rel="icon" type="image/png" href="assets/img/favicon.png">
 		<link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet" type="text/css">
 		<link href="assets/css/bootstrap.min.css" rel="stylesheet">
-		<link href="assets/css/index.css?v=13" rel="stylesheet">
+		<link href="assets/css/index.css?v=14" rel="stylesheet">
 		<link href="assets/css/gallery.css" rel="stylesheet">
 	</head>
 
@@ -47,25 +47,35 @@
 						<a class="text-center" style="display: block; color: red;" href="https://discord.gg/emupedia-510149138491506688" target="_blank">Join us on Discord if you have suggestions</a>
 					</div>
 
-					<div class="form-group">
-						<input id="nick" list="nicknames" class="form-control" onfocus="this.oldvalue=this.value;this.value=''" onblur="if(this.value==='')this.value=this.oldvalue || ''" placeholder="Nickname" maxlength="16" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-						<datalist id="nicknames">
-							<option value=""> </option>
-						</datalist>
-						<input id="skin" list="skinnames" class="form-control" onfocus="this.oldvalue=this.value;this.value=''" onblur="if(this.value==='')this.value=this.oldvalue || ''" placeholder="Skin Name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-						<datalist id="skinnames">
-							<option value=""> </option>
-						</datalist>
+					<div class="form-wrapper">
+						<div class="form-label-wrapper">
+							<label><span>Nickname</span><input id="nick" list="nicknames" class="form-control" onfocus="this.oldvalue=this.value;this.value=''" onblur="if(this.value==='')this.value=this.oldvalue || ''" placeholder="Nickname" maxlength="16" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></label>
+							<datalist id="nicknames">
+								<option value=""> </option>
+							</datalist>
+						</div>
+						<div class="form-label-wrapper">
+							<label><span>Skin</span><input id="skin" list="skinnames" class="form-control pull-right" onfocus="this.oldvalue=this.value;this.value=''" onblur="if(this.value==='')this.value=this.oldvalue || ''" placeholder="Skin Name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></label>
+							<datalist id="skinnames">
+								<option value=""> </option>
+							</datalist>
+						</div>
+						<div class="form-label-wrapper">
+							<label><span>Copy</span><button id="copy-btn" class="btn btn-success pull-right" onclick="copyToClipboard(document.getElementById('skin').value, this)"><i class="glyphicon glyphicon-copy"></i></button></label>
+						</div>
 						<select id="gamemode" class="form-control" onchange="setserver(this.value)" required>
 							<option value="agar.emupedia.net:443/ws2/" selected>Emupedia</option>
 							<option value="127.0.0.1:5000">Local</option>
 						</select>
 					</div>
 
-					<button id="play-btn" class="btn btn-play btn-primary btn-needs-server pull-left">Play</button>
-					<button id="spectate-btn" onclick="spectate()" class="btn btn-warning btn-spectate btn-needs-server pull-left">Spectate</button>
-					<button class="btn btn-success btn-settings pull-right" onclick="$('#settings').toggle()" ><i class="glyphicon glyphicon-cog"></i></button>
-					<div class="skin-wrapper">
+					<div class="form-wrapper">
+						<button id="play-btn" class="btn btn-play btn-primary btn-needs-server pull-left">Play</button>
+						<button id="spectate-btn" onclick="spectate()" class="btn btn-warning btn-spectate btn-needs-server pull-left">Spectate</button>
+						<button class="btn btn-success btn-settings pull-right" onclick="$('#settings').toggle()" ><i class="glyphicon glyphicon-cog"></i></button>
+					</div>
+
+					<div class="form-wrapper">
 						<button id="gallery-btn" onclick="openSkinsList()" class="btn btn-play btn-primary btn-needs-server btn-info">Choose Skin</button>
 						<button id="show-upload-btn" onclick="openUpload()" class="btn btn-play btn-primary btn-needs-server btn-info">Upload Skin</button>
 					</div>
@@ -106,10 +116,10 @@
 					</div>
 
 					<div id="colors">
-						<label><input id="bgColor" type="color" value="#ffffff" /><span>Background</span></label>
-						<label><input id="nameColor" type="color" value="#ffffff" /><span>Name</span></label>
-						<label><input id="cellColor" type="color" value="#ffffff" /><span>Color</span></label>
-						<label><input id="borderColor" type="color" value="#ffffff" /><span>Border</span></label>
+						<label class="form-label-wrapper"><input id="bgColor" type="color" value="#ffffff" /><span>Background</span></label>
+						<label class="form-label-wrapper"><input id="nameColor" type="color" value="#ffffff" /><span>Name</span></label>
+						<label class="form-label-wrapper"><input id="cellColor" type="color" value="#ffffff" /><span>Color</span></label>
+						<label class="form-label-wrapper"><input id="borderColor" type="color" value="#ffffff" /><span>Border</span></label>
 					</div>
 				</div>
 
@@ -152,7 +162,12 @@
 						<h2 id="title">News</h2>
 						<hr class="top" />
 						<div class="text">
-							<b>28/02/2024</b>
+							<b>09/03/2024</b>
+							<ul>
+								<li>Added <b>Copy To Clipboard</b> button for Skins</li>
+								<li>Increased Chat Area Size to fit more messages</li>
+							</ul>
+							<hr /><b>28/02/2024</b>
 							<ul>
 								<li>Improved Touch controls for mobile</li>
 								<li>Implemented <b>Virtual Joystick</b> for mobile</li>
@@ -252,6 +267,6 @@
 		<script src="assets/js/fp.umd.min.js"></script>
 		<script src="assets/js/nipplejs.js"></script>
 		<script src="assets/js/quadtree.js"></script>
-		<script src="assets/js/main.min.js?v=56"></script>
+		<script src="assets/js/main.min.js?v=57"></script>
 	</body>
 </html>

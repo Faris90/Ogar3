@@ -42,8 +42,21 @@ ul {
 	padding-left: 20px;
 }
 
+label {
+	margin-bottom: auto;
+}
+
+label span {
+	font-size: 14px;
+	font-weight: normal;
+}
+
 label, input[type=checkbox] {
 	cursor: pointer;
+}
+
+input::-webkit-calendar-picker-indicator {
+	opacity: 100;
 }
 
 #overlays, #connecting, #upload-skin {
@@ -82,19 +95,6 @@ label, input[type=checkbox] {
 	text-align: center;
 }
 
-#nick {
-	width: 65%;
-}
-
-#skin {
-	width: 33%;
-	float: right;
-}
-
-#nick, #skin {
-	display: inline;
-}
-
 #colors {
 	display: flex;
 	flex-direction: row;
@@ -102,13 +102,6 @@ label, input[type=checkbox] {
 	align-items: center;
 	text-align: center;
 	margin-top: 5px;
-}
-
-#colors label {
-	display: flex;
-	flex-direction: column;
-	font-size: 16px;
-	font-weight: normal;
 }
 
 #colors label input {
@@ -237,19 +230,7 @@ label, input[type=checkbox] {
 }
 
 #play-btn {
-	width: 55%;
-	margin-bottom: 10px;
-	margin-right: 10px;
-}
-
-#spectate-btn {
-	/*width: 13%;*/
-	float: right;
-	top: 0;
-}
-
-#play-btn, #spectate-button {
-	display: inline;
+	width: 100%;
 }
 
 #gallery-btn {
@@ -326,12 +307,20 @@ label, input[type=checkbox] {
 	user-select: none;
 }
 
-.skin-wrapper {
+.form-wrapper {
+	width: 100%;
 	display: flex;
 	gap: 10px;
-	width: 100%;
+	align-items: flex-end;
+	margin-bottom: 10px;
 	clear: both;
-	margin-bottom: 5px;
+}
+
+.form-label-wrapper {
+	display: flex;
+	flex-direction: column;
+	font-size: 14px;
+	font-weight: normal;
 }
 
 .upload-btn-wrapper {
@@ -352,6 +341,11 @@ label, input[type=checkbox] {
 	top: 0;
 	opacity: 0;
 	font-size: 26px;
+}
+
+#copy-msg {
+	min-width: 110px;
+	text-align: center;
 }
 
 #captcha {

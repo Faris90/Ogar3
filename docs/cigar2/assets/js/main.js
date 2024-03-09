@@ -1262,7 +1262,7 @@
 
 		const canvas = chat.canvas;
 		const ctx = canvas.getContext('2d');
-		const latestMessages = chat.messages.slice(-15);
+		const latestMessages = chat.messages.slice(-30);
 		const lines = [];
 
 		for (let i = 0; i < latestMessages.length; i++) {
@@ -2897,6 +2897,42 @@
 			item.checked = false;
 		});
 	};
+
+	window.copyToClipboard = (text, el) => {
+		if ('clipboard' in navigator) {
+			navigator.clipboard.writeText(text);
+		} else {
+			var element = document.createElement('input');
+
+			element.type = 'text';
+			element.disabled = true;
+
+			element.style.setProperty('position', 'fixed');
+			element.style.setProperty('z-index', '-100');
+			element.style.setProperty('pointer-events', 'none');
+			element.style.setProperty('opacity', '0');
+
+			element.value = text;
+
+			document.body.appendChild(element);
+
+			element.click();
+			element.select();
+			document.execCommand('copy');
+
+			document.body.removeChild(element);
+		}
+
+		if (el) {
+			var message = $('<div id="copy-msg">Skin URL Copied to Clipboard!</div>')
+
+			$(el).parent().parent().after(message)
+
+			message.fadeOut(2000, function() {
+				$(this).remove();
+			});
+		}
+	}
 
 	window.addEventListener('DOMContentLoaded', start);
 })();
