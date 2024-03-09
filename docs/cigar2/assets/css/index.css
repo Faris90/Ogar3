@@ -44,6 +44,7 @@ ul {
 
 label {
 	margin-bottom: auto;
+	user-select: none;
 }
 
 label span {

@@ -2518,7 +2518,7 @@
 				byId('captcha').hide();
 				byClass('countdown')[0].show();
 
-				startTimer(120, byId('timer'), () => {
+				startTimer(30, byId('timer'), () => {
 					byClass('countdown')[0].hide();
 					byId('captcha').innerHTML = '';
 					hcaptcha.render('captcha' , {
