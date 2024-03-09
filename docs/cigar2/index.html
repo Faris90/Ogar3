@@ -14,7 +14,7 @@
 		<link rel="icon" type="image/png" href="assets/img/favicon.png">
 		<link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet" type="text/css">
 		<link href="assets/css/bootstrap.min.css" rel="stylesheet">
-		<link href="assets/css/index.css?v=15" rel="stylesheet">
+		<link href="assets/css/index.css?v=16" rel="stylesheet">
 		<link href="assets/css/gallery.css" rel="stylesheet">
 	</head>
 
@@ -49,13 +49,13 @@
 
 					<div class="form-wrapper">
 						<div class="form-label-wrapper">
-							<label><span>Nickname</span><input id="nick" list="nicknames" class="form-control" onfocus="this.oldvalue=this.value;this.value=''" onblur="if(this.value==='')this.value=this.oldvalue || ''" placeholder="Nickname" maxlength="16" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></label>
+							<label id="nick-list"><span>Nickname</span><input id="nick" list="nicknames" class="form-control" onfocus="this.oldvalue=this.value;this.value=''" onblur="if(this.value==='')this.value=this.oldvalue || ''" placeholder="Nickname" maxlength="16" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></label>
 							<datalist id="nicknames">
 								<option value=""> </option>
 							</datalist>
 						</div>
 						<div class="form-label-wrapper">
-							<label><span>Skin</span><input id="skin" list="skinnames" class="form-control pull-right" onfocus="this.oldvalue=this.value;this.value=''" onblur="if(this.value==='')this.value=this.oldvalue || ''" placeholder="Skin Name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></label>
+							<label id="skin-list"><span>Skin</span><input id="skin" list="skinnames" class="form-control pull-right" onfocus="this.oldvalue=this.value;this.value=''" onblur="if(this.value==='')this.value=this.oldvalue || ''" placeholder="Skin Name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></label>
 							<datalist id="skinnames">
 								<option value=""> </option>
 							</datalist>

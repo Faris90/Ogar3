@@ -57,7 +57,21 @@ label, input[type=checkbox] {
 }
 
 input::-webkit-calendar-picker-indicator {
-	opacity: 100;
+	display: none !important;
+	opacity: 0 !important;
+}
+
+label#nick-list, label#skin-list {
+	position: relative;
+}
+
+label#nick-list:after, label#skin-list:after {
+	position: absolute;
+	top: 27px;
+	right: 3px;
+	content: url(../img/arrow.png);
+	padding: .1em;
+	pointer-events: none;
 }
 
 #overlays, #connecting, #upload-skin {
