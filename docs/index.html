@@ -277,8 +277,8 @@
 		<script type="text/javascript">
 			var externallyFramed;
 			var FP = FingerprintJS.load();
-			var settings = {};
-			var bannedFP = [];
+			var agarv1ident;
+			var bannedIdent = [];
 			var interval;
 
 			try {
@@ -344,66 +344,66 @@
 						knownSkins = skins;
 						document.getElementById('gallery-btn').style.display = 'inline-block';
 
-						$.get('./cigar2/fpBanList.txt', function(data, status) {
-							if (status === 'success') {
-								var fp = data.split(',');
+						$.get('banList.txt').success(function(data) {
+							var fp = data.split(',');
 
-								if (fp.length === 0) return;
+							for (var p of fp) bannedIdent.push(p);
 
-								for (var p of fp) bannedFP.push(p);
+							try {
+								agarv1ident = localStorage.getItem('agarv1ident');
+							} catch (e) {}
 
-								try {
-									settings = localStorage.getItem('settings') ? JSON.parse(localStorage.getItem('settings')) : settings;
-								} catch (e) {}
+							FP.then(function (fp) { return fp.get() }).then(function(result) {
+								localStorage.setItem('agarv1ident', result.visitorId);
 
-								FP.then(function (fp) { return fp.get() }).then(function (result) {
-									settings.fp = result.visitorId;
-									localStorage.setItem('settings', JSON.stringify(settings));
+								var ban = false;
 
-									var ban = false;
-
-									bannedFP.forEach(function(val) {
-										if (settings.fp === val) {
-											ban = true;
-										}
-									});
-
-									if (ban) {
-										$('#chat_textbox').hide();
-										$('#overlays').hide();
-										$('#connecting div').html('<h3>Your are banned 😭</h3><hr class="top" /><p>You are banned from the game because you broke the rules while uploading custom skins.</p>');
-										$('#connecting').show();
-									} else {
-										$('#overlays').show();
-										connect('wss://agar.emupedia.net:443/ws/', true);
-
-										clearInterval(interval);
-										interval = setInterval(() => {
-											FP.then(fp => fp.get()).then(result => {
-												settings.fp = result.visitorId;
-												localStorage.setItem('settings', JSON.stringify(settings));
-
-												let ban = false;
-
-												bannedFP.forEach((value1, value2, set) => {
-													if (settings.fp === value2) {
-														ban = true;
-													}
-												});
-
-												if (ban) {
-													$('#chat_textbox').hide();
-													$('#overlays').hide();
-													$('#connecting div').html('<h3>Your are banned 😭</h3><hr class="top" /><p>You are banned from the game because you broke the rules while uploading custom skins.</p>');
-													$('#connecting').show();
-												}
-											});
-										}, 10000);
+								bannedIdent.forEach(function(val) {
+									if (agarv1ident === val) {
+										ban = true;
 									}
 								});
-							}
+
+								if (ban) {
+									$('#chat_textbox').hide();
+									$('#overlays').hide();
+									$('#connecting div').html('<h3>Your are banned 😭</h3><hr class="top" /><p>You are banned from the game because you broke the rules while uploading custom skins.</p>');
+									$('#connecting').show();
+								} else {
+									$('#overlays').show();
+									connect('wss://agar.emupedia.net:443/ws/', true);
+
+									clearInterval(interval);
+									interval = setInterval(() => {
+										FP.then(fp => fp.get()).then(result => {
+											localStorage.setItem('agarv1ident', result.visitorId);
+
+											let ban = false;
+
+											bannedIdent.forEach(function(val) {
+												if (agarv1ident === val) {
+													ban = true;
+												}
+											});
+
+											if (ban) {
+												$('#chat_textbox').hide();
+												$('#overlays').hide();
+												$('#connecting div').html('<h3>Your are banned 😭</h3><hr class="top" /><p>You are banned from the game because you broke the rules while uploading custom skins.</p>');
+												$('#connecting').show();
+											}
+										});
+									}, 10000);
+								}
+							});
+						}).error(function() {
+							$('#overlays').show();
+							connect('wss://agar.emupedia.net:443/ws/', true);
 						});
 					}
+				}).error(function() {
+					$('#overlays').show();
+					connect('wss://agar.emupedia.net:443/ws/', true);
 				});
 
 				$('input').keypress(function(e) {
