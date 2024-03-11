@@ -963,7 +963,7 @@ GameServer.prototype.updateCells = function() {
 GameServer.prototype.loadConfig = function() {
     try {
         // Load the contents of the config file
-        var load = ini.parse(fs.readFileSync('/gameserver.ini', 'utf-8'));
+        var load = ini.parse(fs.readFileSync('./gameserver.ini', 'utf-8'));
 
         for (var obj in load) {
             if ( obj.substr(0,2) != "//" ) this.config[obj] = load[obj];
@@ -971,7 +971,7 @@ GameServer.prototype.loadConfig = function() {
     } catch (err) {
         console.log("\u001B[33mConfig not found... Generating new config\u001B[0m");
         // Create a new config
-        fs.writeFileSync('/gameserver.ini', ini.stringify(this.config));
+        fs.writeFileSync('./gameserver.ini', ini.stringify(this.config));
     }
 
     try {
