@@ -2754,13 +2754,17 @@
 							crypto.subtle.digest('SHA-1', new TextEncoder().encode(trace)).then(res => {
 								ident = ''; //Array.from(new Uint8Array(res)).map((i) => i.toString(16).padStart(2, '0')).join('');
 
+								loadSettings();
+
 								FP.then(fp => fp.get()).then(result => {
-									settings.fp = ident !== '' ? ident + '|' + result.visitorId : result.visitorId;
+									settings.fp = ident !== '' ? (ident + '|' + result.visitorId) : result.visitorId;
 									storeSettings();
 								});
 							});
 						} catch (e) {
 							console.error(e);
+
+							loadSettings();
 
 							FP.then(fp => fp.get()).then(result => {
 								settings.fp = result.visitorId;
@@ -2773,9 +2777,9 @@
 
 							for (const p of fp) bannedFP.add(p);
 
-							loadSettings();
-
 							let ban = false;
+
+							loadSettings();
 
 							bannedFP.forEach(val => {
 								if (settings.fp === val) {
