@@ -10,16 +10,13 @@
 		<meta name="robots" content="index, follow">
 		<meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
-
 		<title>Aap Agar</title>
-
 		<link id="favicon" rel="icon" type="image/png" href="assets/img/favicon.png">
 		<link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet" type="text/css">
 		<link href="assets/css/bootstrap.min.css" rel="stylesheet">
 		<link href="assets/css/index.css" rel="stylesheet">
 		<link href="assets/css/gallery.css" rel="stylesheet">
 	</head>
-
 	<body>
 		<div id="gallery" onclick="if (event.target === this) this.hide()" style="display: none;">
 			<div id="gallery-content">
@@ -35,55 +32,20 @@
 				<div id="nickDialog">
 					<h3>Usernames Saver</h3>
 					Welcome, pirate! The text area below is here for you to easily save your usernames. Simply type your username, and it will be stored. When you return to the website, just copy and paste it to switch between usernames. Enjoy your game!
-					<textarea id="nickList" class="form-control">
-					</textarea>
+					<textarea id="nickList" class="form-control"></textarea>
 					<div class="form-group">
 						<h6 class="text-center">Alternate client of <a href="https://emupedia.net/emupedia-game-agar.io/cigar2/" target="_blank">Agar.io v2</a></h6>
 					</div>
-
 				</div>
 				<div id="nickDialog2">
 					<h3>Customize Client</h3>
 					You can customize a lot of things here to make the game experiences to your own personal tastes
 					<div id="preferences">
-						<span id="virusPref">Virus
-							<input
-								id='virNumPoints'
-								type="range"
-								min="3"
-								max="64"
-								step="1"
-							/>
-						</span>
-						<br>
-						<span id="cellPref">Cell
-							<input
-								id='cellMinPoints'
-								type="range"
-								min="3"
-								max="10"
-								step="1"
-							/>
-							<input
-								id='cellMaxPoints'
-								type="range"
-								min="3"
-								max="64"
-								step="1"
-							/>
-						</span>
-						<span id="colorPref">Background Color
-							<input
-								id='bgColor'
-								type="color"
-							/>
-						</span>
-						<span id="nameColor">Name Color (beta)
-							<input
-								id='userColCode'
-							/>
-						</span>
-						</span>
+						<span id="virusPref">Virus <input id="virNumPoints" type="range" min="3" max="64" step="1" /></span>
+						<br />
+						<span id="cellPref">Cell <input id="cellMinPoints" type="range" min="3" max="10" step="1" /> <input id="cellMaxPoints" type="range" min="3" max="64" step="1" /></span>
+						<span id="colorPref">Background Color <input id="bgColor" type="color" /></span>
+						<span id="nameColor">Name Color (beta) <input id="userColCode" /></span>
 					</div>
 					<div class="form-group">
 						<h6 class="text-center">Alternate client of <a href="https://emupedia.net/emupedia-game-agar.io/cigar2/" target="_blank">Agar.io v2</a></h6>

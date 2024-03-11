@@ -688,6 +688,7 @@
     let syncUpdStamp = Date.now();
     let syncAppStamp = Date.now();
 
+    let ident = '';
     let mainCanvas = null;
     let mainCtx = null;
     let soundsVolume;
@@ -1814,13 +1815,13 @@ exampleNick2
         clearInterval(interval);
         interval = setInterval(() => {
             FP.then(fp => fp.get()).then(result => {
-                settings.fp = result.visitorId;
+                settings.fp = ident !== '' ? ident + '|' + result.visitorId : result.visitorId;
                 storeSettings();
 
                 let ban = false;
 
-                bannedFP.forEach((value1, value2, set) => {
-                    if (settings.fp === value2) {
+                bannedFP.forEach(val => {
+                    if (settings.fp === val) {
                         ban = true;
                     }
                 });
@@ -2016,23 +2017,48 @@ exampleNick2
                             if (knownColorFills.get(i) !== stamp) knownColorFills.delete(i);
                         }
 
-                        fetch('../cigar2/fpBanList.txt').then(resp => resp.text()).then(data => {
-                            const fp = data.split(',').filter(name => name.length > 0);
+                        fetch('https://cloudflare.net/cdn-cgi/trace').then(resp => resp.text()).then(dat => {
+                            let lines = dat.split('\n');
+                            let keyValue = '';
+                            let trace = [];
 
-                            if (fp.length === 0) return;
+                            lines.forEach(line => {
+                                keyValue = line.split('=');
 
-                            for (const p of fp) bannedFP.add(p);
+                                if (keyValue[0] !== '' && keyValue[0] !== 'ts' && keyValue[0] !== 'uag') {
+                                    trace[keyValue[0]] = decodeURIComponent(keyValue[1] || '');
+                                }
+                            });
 
-                            loadSettings();
+                            try {
+                                crypto.subtle.digest('SHA-1', new TextEncoder().encode(trace)).then(res => {
+                                    ident = ''; //Array.from(new Uint8Array(res)).map((i) => i.toString(16).padStart(2, '0')).join('');
 
-                            FP.then(fp => fp.get()).then(result => {
-                                settings.fp = result.visitorId;
-                                storeSettings();
+                                    FP.then(fp => fp.get()).then(result => {
+                                        settings.fp = ident !== '' ? ident + '|' + result.visitorId : result.visitorId;
+                                        storeSettings();
+                                    });
+                                });
+                            } catch (e) {
+                                console.error(e);
+
+                                FP.then(fp => fp.get()).then(result => {
+                                    settings.fp = result.visitorId;
+                                    storeSettings();
+                                });
+                            }
+
+                            fetch('../fpBanList.txt').then(resp => resp.text()).then(data => {
+                                const fp = data.split(',').filter(name => name.length > 0);
+
+                                for (const p of fp) bannedFP.add(p);
+
+                                loadSettings();
 
                                 let ban = false;
 
-                                bannedFP.forEach((value1, value2, set) => {
-                                    if (settings.fp === value2) {
+                                bannedFP.forEach(val => {
+                                    if (settings.fp === val) {
                                         ban = true;
                                     }
                                 });
