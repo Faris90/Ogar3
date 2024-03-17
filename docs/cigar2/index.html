@@ -55,7 +55,7 @@
 							</datalist>
 						</div>
 						<div class="form-label-wrapper">
-							<label id="skin-list"><span>Skin</span><input id="skin" list="skinnames" class="form-control pull-right" onfocus="this.oldvalue=this.value;this.value=''" onblur="if(this.value==='')this.value=this.oldvalue || ''" placeholder="Skin Name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></label>
+							<label id="skin-list"><span>Skin</span><input id="skin" list="skinnames" class="form-control pull-right" onfocus="this.oldvalue=this.value;this.value=''" onblur="if(this.value==='')this.value=this.oldvalue || ''" placeholder="Skin Name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" readonly="readonly"></label>
 							<datalist id="skinnames">
 								<option value=""> </option>
 							</datalist>
@@ -77,7 +77,7 @@
 
 					<div class="form-wrapper">
 						<button id="gallery-btn" onclick="openSkinsList()" class="btn btn-play btn-primary btn-needs-server btn-info">Choose Skin</button>
-						<button id="show-upload-btn" onclick="openUpload()" class="btn btn-play btn-primary btn-needs-server btn-info">Upload Skin</button>
+						<!--<button id="show-upload-btn" onclick="openUpload()" class="btn btn-play btn-primary btn-needs-server btn-info">Upload Skin</button>-->
 					</div>
 
 					<div id="settings" class="checkbox" style="display: none;">
@@ -233,7 +233,7 @@
 			</div>
 		</div>
 
-		<div id="upload-skin" style="display: none;" onclick="if (event.target === this) this.hide()">
+		<!--<div id="upload-skin" style="display: none;" onclick="if (event.target === this) this.hide()">
 			<div id="upload-skin-content">
 				<h3>Upload Skin</h3><hr class="top" />
 				<label><input id="c1" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures depicting NSFW content</label>
@@ -254,7 +254,7 @@
 					<input id="upload-btn" type="file" accept="image/x-png,image/png,image/jpeg,image/webp,image/avif" name="source" />
 				</div>
 			</div>
-		</div>
+		</div>-->
 
 		<div id="connecting">
 			<div id="connecting-content">
@@ -263,11 +263,11 @@
 			</div>
 		</div>
 
-		<script src="https://js.hcaptcha.com/1/api.js?render=explicit" async defer></script>
+		<!--<script src="https://js.hcaptcha.com/1/api.js?render=explicit" async defer></script>-->
 		<script src="assets/js/jquery-1.11.3.min.js"></script>
 		<script src="assets/js/fp.umd.min.js"></script>
 		<script src="assets/js/nipplejs.js"></script>
 		<script src="assets/js/quadtree.js"></script>
-		<script src="assets/js/main.min.js?v=63"></script>
+		<script src="assets/js/main.min.js?v=64"></script>
 	</body>
 </html>

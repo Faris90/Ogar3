@@ -1993,7 +1993,8 @@
 	}
 
 	function uploadImage(image) {
-		$.ajax({
+		byId('upload-skin').hide();
+		/*$.ajax({
 			url: 'https://corsproxy.io/?' + encodeURIComponent('https://freeimage.host/api/1/upload?key=6d207e02198a847aa98d0a2a901485a5'),
 			type: 'POST',
 			headers: {
@@ -2065,7 +2066,7 @@
 				});
 			},
 			complete: () => byId('upload-skin').hide()
-		});
+		});*/
 	}
 
 	function checkCaptcha(data) {
@@ -2290,12 +2291,12 @@
 				joystick[0].destroy();
 			}
 
-			byId('captcha').innerHTML = '';
+			/*byId('captcha').innerHTML = '';
 
 			hcaptcha.render('captcha' , {
 				theme: settings.darkTheme ? 'dark' : '',
 				sitekey: '6bd25504-b5be-483b-9baa-0b53e51edf67'
-			});
+			});*/
 		}
 
 		changeDarkTheme();
@@ -2495,7 +2496,7 @@
 			}
 		}
 
-		const observer = new MutationObserver((mutations, observer) => {
+		/*const observer = new MutationObserver((mutations, observer) => {
 			mutations.forEach(mutation => {
 				if (mutation.target.firstChild && mutation.target.firstChild.tagName.toLowerCase() === 'iframe') {
 					observer.observe(mutation.target.firstChild, { attributes: true });
@@ -2505,9 +2506,9 @@
 					checkCaptcha(mutation.target.getAttribute('data-hcaptcha-response'))
 				}
 			});
-		});
+		});*/
 
-		observer.observe(byId('captcha'), { attributes: true });
+		// observer.observe(byId('captcha'), { attributes: true });
 
 		const changeUploadCheckbox = e => {
 			if (e.target.checked === true) {
@@ -2574,12 +2575,12 @@
 		byId('showColor').addEventListener('change', changeShowColor);
 		byId('showSkins').addEventListener('change', changeShowSkins);
 		byId('darkTheme').addEventListener('change', changeDarkTheme);
-		byId('upload-btn').addEventListener('change', changeUploadSkin);
+		// byId('upload-btn').addEventListener('change', changeUploadSkin);
 
-		if (checkBanCounter() > 2) {
+		/*if (checkBanCounter() > 2) {
 			byClass('upload-btn-wrapper')[0].remove();
 			byId('show-upload-btn').remove();
-		}
+		}*/
 
 		window.addEventListener('beforeunload', storeSettings);
 
@@ -2902,10 +2903,10 @@
 
 		storeSettings();
 
-		if (checkBanCounter() > 2) {
+		/*if (checkBanCounter() > 2) {
 			byId('show-upload-btn').remove();
 			byClass('upload-btn-wrapper')[0].remove();
-		}
+		}*/
 	};
 
 	window.openSkinsList = () => {
