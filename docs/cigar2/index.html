@@ -55,14 +55,14 @@
 							</datalist>
 						</div>
 						<div class="form-label-wrapper">
-							<label id="skin-list"><span>Skin</span><input id="skin" list="skinnames" class="form-control pull-right" onfocus="this.oldvalue=this.value;this.value=''" onblur="if(this.value==='')this.value=this.oldvalue || ''" placeholder="Skin Name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" readonly="readonly"></label>
+							<label id="skin-list"><span>Skin</span><input id="skin" list="skinnames" class="form-control pull-right" onfocus="return;this.oldvalue=this.value;this.value=''" onblur="return;if(this.value==='')this.value=this.oldvalue || ''" placeholder="Skin Name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" readonly="readonly"></label>
 							<datalist id="skinnames">
 								<option value=""> </option>
 							</datalist>
 						</div>
-						<div class="form-label-wrapper">
+						<!--<div class="form-label-wrapper">
 							<label><span>Copy</span><button id="copy-btn" class="btn btn-success pull-right" onclick="copyToClipboard(document.getElementById('skin').value, this)"><i class="glyphicon glyphicon-copy"></i></button></label>
-						</div>
+						</div>-->
 						<select id="gamemode" class="form-control" onchange="setserver(this.value)" required>
 							<option value="agar.emupedia.net:443/ws2/" selected>Emupedia</option>
 							<option value="127.0.0.1:5000">Local</option>
