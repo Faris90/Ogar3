@@ -1,0 +1,452 @@
+<html lang="en">
+	<head>
+		<title>Agar.io v2.0 - Upload Custom Skin</title>
+		<link href="cigar2/assets/css/bootstrap.min.css" rel="stylesheet">
+		<style>
+			body {
+				margin: 0;
+				padding: 0 20px;
+				background: none transparent;
+				border-radius: 15px;
+			}
+
+			body.loading::after {
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				content: 'Loading \A Please wait...';
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.9);
+				background-image: url(cigar2/assets/img/loading.gif);
+				background-repeat: no-repeat;
+				background-position: center 100px;
+				padding-top: 100px;
+				font-size: 42px;
+				text-align: center;
+				white-space: pre-wrap;
+				color: #fff;
+			}
+
+			*::-webkit-scrollbar {
+				width: 5px;
+				height: 5px;
+			}
+
+			*::-webkit-scrollbar-thumb, *::-webkit-scrollbar-thumb:horizontal {
+				background: #888;
+				border-radius: 3px;
+			}
+
+			*::-webkit-scrollbar-thumb:hover, *::-webkit-scrollbar-thumb:horizontal:hover {
+				background: #555;
+			}
+
+			hr {
+				border-top: 2px solid #000;
+				margin-top: 15px;
+				margin-bottom: 15px;
+			}
+
+			hr.top {
+				margin-top: 5px;
+			}
+
+			h3 {
+				margin-top: 10px;
+				margin-bottom: 10px;
+				text-align: center;
+			}
+
+			label {
+				display: block;
+				margin-bottom: auto;
+				user-select: none;
+				font-size: 2.7vw;
+			}
+
+			label, input[type=checkbox] {
+				cursor: pointer;
+			}
+
+			.button-wrapper {
+				display: flex;
+				width: 100%;
+				height: 22%;
+				justify-content: center;
+				align-items: center;
+			}
+
+			.upload-btn-wrapper {
+				width: 100%;
+				position: relative;
+				overflow: hidden;
+				display: inline-block;
+				cursor: pointer;
+			}
+
+			.upload-btn-wrapper button {
+				width: 100%;
+				cursor: pointer;
+			}
+
+			.upload-btn-wrapper input[type=file] {
+				position: absolute;
+				left: 0;
+				top: 0;
+				opacity: 0;
+				font-size: 25px;
+				cursor: pointer;
+			}
+
+			.upload-btn-wrapper input[type=file]::file-selector-button {
+				cursor: pointer;
+			}
+
+			#captcha {
+				text-align: center;
+			}
+
+			#captcha iframe {
+				margin: auto;
+			}
+
+			.darkTheme a {
+				color: #fff;
+			}
+
+			.darkTheme hr {
+				border-top: 2px solid #fff;
+			}
+
+			.darkTheme body {
+				color: #fff;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="upload-skin-content">
+			<div class="header-wrapper">
+				<h3>Upload Skin</h3><hr class="top" />
+				<label><input id="c1" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures depicting NSFW or pornographic content</label>
+				<label><input id="c2" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures disgusting for shock value or gore content</label>
+				<label><input id="c3" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures of real people, myself, my friends</label>
+				<label><input id="c4" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures of famous people (actors, musicians, football players, etc.)</label>
+				<label><input id="c5" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures that shows the face of any person</label>
+				<label><input id="c6" class="upload-checkbox" type="checkbox" /> I understand that I need to have an IQ level of at least 50 IQ points and can solve a Captcha</label>
+				<label><input id="c7" class="upload-checkbox" type="checkbox" /> I understand that if I break any of these rules I will be banned from using the game</label>
+				<label><input id="c8" class="upload-checkbox" type="checkbox" /> I understand that I will not cry in Discord after I have been banned from the game</label>
+				<hr />
+			</div>
+			<div class="button-wrapper">
+				<div id="captcha" style="display: none;"></div>
+				<div class="upload-btn-wrapper" style="display: none;">
+					<button class="btn btn-play btn-primary btn-needs-server btn-info">Upload Skin</button>
+					<input id="upload-btn" type="file" accept="image/x-png,image/png,image/jpeg,image/webp,image/avif" name="source" />
+				</div>
+			</div>
+		</div>
+
+		<script>
+			document.body.classList.add('loading');
+
+			const settings = {
+				darkTheme: false
+			}
+
+			function loadSettings() {
+				const text = localStorage.getItem('settings');
+				const obj = text ? JSON.parse(text) : settings;
+
+				settings.darkTheme = obj['darkTheme'];
+
+				if (settings.darkTheme === true) {
+					document.documentElement.classList.add('darkTheme');
+				}
+			}
+
+			loadSettings();
+		</script>
+
+		<script src="cigar2/assets/js/jquery-1.11.3.min.js"></script>
+		<script src="https://js.hcaptcha.com/1/api.js?render=explicit" async defer></script>
+		<script src="nsfwjs/models/inception_v3/model.min.js" type="text/javascript"></script>
+		<script src="nsfwjs/models/inception_v3/group1-shard1of6.min.js" type="text/javascript"></script>
+		<script src="nsfwjs/models/inception_v3/group1-shard2of6.min.js" type="text/javascript"></script>
+		<script src="nsfwjs/models/inception_v3/group1-shard3of6.min.js" type="text/javascript"></script>
+		<script src="nsfwjs/models/inception_v3/group1-shard4of6.min.js" type="text/javascript"></script>
+		<script src="nsfwjs/models/inception_v3/group1-shard5of6.min.js" type="text/javascript"></script>
+		<script src="nsfwjs/models/inception_v3/group1-shard6of6.min.js" type="text/javascript"></script>
+		<script src="nsfwjs/browser/tf.min.js" type="text/javascript"></script>
+		<script src="nsfwjs/browser/nsfwjs.min.js" type="text/javascript"></script>
+		<script>
+			Element.prototype.hide = function () {
+				// noinspection JSUnresolvedReference
+				this.style.display = 'none';
+				// noinspection JSUnresolvedReference
+				if (this.style.opacity === 1) {
+					// noinspection JSUnresolvedReference
+					this.style.opacity = 0;
+				}
+			}
+
+			Element.prototype.show = function (seconds) {
+				// noinspection JSUnresolvedReference
+				this.style.display = '';
+				if (!seconds) return;
+				// noinspection JSUnresolvedReference
+				this.style.transition = `opacity ${seconds}s ease 0s`;
+				// noinspection JSUnresolvedReference
+				this.style.opacity = 1;
+			}
+
+			const S = atob('RVNfN2YzMDM2YTFlZmI5NGYyY2E3OTFjNjEwZDMzYjk3NDA=');
+
+			let interval;
+
+			function byId(id) {
+				return document.getElementById(id);
+			}
+
+			function byClass(clss, parent) {
+				return (parent || document).getElementsByClassName(clss);
+			}
+
+			function checkNSFW(image, cb) {
+				// noinspection JSUnresolvedReference
+				if (typeof tf !== 'undefined' && typeof nsfwjs !== 'undefined') {
+					const img = new Image();
+					img.crossOrigin = 'anonymous';
+					img.src = image;
+					img.onload = () => {
+						// noinspection JSUnresolvedReference
+						tf.enableProdMode();
+						// noinspection JSUnresolvedReference
+						tf.setBackend('cpu');
+						// nsfwjs.load('nsfwjs/models/inception_v3/model.json', { type: 'graph' }).then(model => {
+						// noinspection JSUnresolvedReference
+						nsfwjs.load('InceptionV3').then(model => {
+							// noinspection JSUnresolvedReference
+							model.classify(img, 1).then(predictions => {
+								if (predictions[0] && predictions[0].className) {
+									if (predictions[0].className === 'Neutral' || predictions[0].className === 'Drawing') {
+										if (typeof cb === 'function') {
+											cb(image.split(',')[1]);
+										}
+									} else {
+										alert('Image probably contains NSFW content and was not uploaded');
+										window.top.closeUpload();
+									}
+								}
+							});
+						});
+					};
+				}
+			}
+
+			function checkCaptcha(data) {
+				$.ajax({
+					url: 'https://corsproxy.io/?' + encodeURIComponent('https://api.hcaptcha.com/siteverify'),
+					type: 'POST',
+					headers: {
+						Accept: 'application/json'
+					},
+					data: {
+						response: data,
+						secret: S
+					},
+					error: () => {
+						$.ajax({
+							url: 'https://agar.emupedia.net/captcha/',
+							type: 'POST',
+							headers: {
+								Accept: 'application/json'
+							},
+							data: {
+								response: data,
+								secret: S
+							},
+							error: () => {
+								window.top.closeUpload()
+							},
+							success: result => {
+								if (typeof result !== 'undefined') {
+									if (typeof result['success'] !== 'undefined') {
+										if (result['success'] === true) {
+											byId('captcha').hide();
+											byClass('upload-btn-wrapper')[0].show();
+										} else {
+											window.top.closeUpload()
+										}
+									} else {
+										window.top.closeUpload()
+									}
+								} else {
+									window.top.closeUpload()
+								}
+							}
+						});
+					},
+					success: result => {
+						if (typeof result !== 'undefined') {
+							if (typeof result['success'] !== 'undefined') {
+								if (result['success'] === true) {
+									byId('captcha').hide();
+									byClass('upload-btn-wrapper')[0].show();
+								} else {
+									window.top.closeUpload()
+								}
+							} else {
+								window.top.closeUpload()
+							}
+						} else {
+							window.top.closeUpload()
+						}
+					}
+				});
+			}
+
+			function getBase64(file, cb) {
+				document.body.classList.add('loading');
+
+				const reader = new FileReader();
+
+				reader.readAsDataURL(file);
+
+				reader.onload = () => {
+					if (typeof cb === 'function') {
+						cb(reader.result);
+					} else {
+						alert('Failed to upload file [6]');
+					}
+				};
+
+				reader.onerror = error => {
+					console.error(error);
+					alert('Failed to upload file [7]');
+				};
+			}
+
+			function uploadImage(image) {
+				$.ajax({
+					url: 'https://corsproxy.io/?' + encodeURIComponent('https://freeimage.host/api/1/upload?key=6d207e02198a847aa98d0a2a901485a5'),
+					type: 'POST',
+					headers: {
+						Accept: 'application/json'
+					},
+					data: {
+						source: image
+					},
+					success: result => {
+						if (typeof result !== 'undefined') {
+							if (typeof result['image'] !== 'undefined') {
+								if (typeof result['image']['url'] !== 'undefined') {
+									if (result.image.url !== null && result.image.url !== '') {
+										window.top.changeSkin(null, result.image.url);
+									} else {
+										alert('Failed to upload file [0][1]');
+									}
+								} else {
+									alert('Failed to upload file [0][2]');
+								}
+							} else {
+								alert('Failed to upload file [0][3]');
+							}
+						} else {
+							alert('Failed to upload file [0][4]');
+						}
+					},
+					error: () => {
+						$.ajax({
+							url: 'https://agar.emupedia.net/skin/?key=6d207e02198a847aa98d0a2a901485a5',
+							type: 'POST',
+							headers: {
+								Accept: 'application/json'
+							},
+							data: {
+								source: image
+							},
+							success: result => {
+								if (typeof result !== 'undefined') {
+									if (typeof result['image'] !== 'undefined') {
+										if (typeof result['image']['url'] !== 'undefined') {
+											if (result.image.url !== null && result.image.url !== '') {
+												window.top.changeSkin(null, result.image.url);
+											} else {
+												alert('Failed to upload file [1][1]');
+											}
+										} else {
+											alert('Failed to upload file [1][2]');
+										}
+									} else {
+										alert('Failed to upload file [1][3]');
+									}
+								} else {
+									alert('Failed to upload file [1][4]');
+								}
+							},
+							error: () => {
+								alert('Failed to upload file [1][5]');
+							},
+							complete: () => window.top.closeUpload()
+						});
+					},
+					complete: () => window.top.closeUpload()
+				});
+			}
+
+			const changeUploadSkin = e => getBase64(e.target.files[0], b64 => checkNSFW(b64, image => uploadImage(image)));
+
+			const changeUploadCheckbox = e => {
+				if (e.target.checked === true) {
+					e.target.disabled = true;
+				}
+
+				if (Array.from(byClass('upload-checkbox')).every(item => item.checked === true)) {
+					byId('captcha').innerHTML = '';
+					// noinspection JSUnresolvedReference
+					hcaptcha.render('captcha' , {
+						theme: settings.darkTheme ? 'dark' : '',
+						sitekey: '6bd25504-b5be-483b-9baa-0b53e51edf67'
+					});
+
+					byId('captcha').show();
+				}
+			}
+
+			byId('captcha').innerHTML = '';
+			byId('captcha').hide();
+
+			Array.from(byClass('upload-checkbox')).map(item => {
+				item.disabled = false;
+				item.checked = false;
+
+				item.removeEventListener('change', changeUploadCheckbox);
+				item.addEventListener('change', changeUploadCheckbox);
+			});
+
+			const observer = new MutationObserver((mutations, observer) => {
+				mutations.forEach(mutation => {
+					if (mutation.target.firstChild && mutation.target.firstChild.tagName.toLowerCase() === 'iframe') {
+						observer.observe(mutation.target.firstChild, { attributes: true });
+					}
+
+					if (mutation.target.tagName.toLowerCase() === 'iframe' && mutation.target.getAttribute('data-hcaptcha-response') !== '') {
+						checkCaptcha(mutation.target.getAttribute('data-hcaptcha-response'))
+					}
+				});
+			});
+
+			observer.observe(byId('captcha'), { attributes: true });
+
+			byId('upload-btn').addEventListener('change', changeUploadSkin);
+
+			document.body.classList.remove('loading');
+		</script>
+	</body>
+</html>

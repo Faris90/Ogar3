@@ -1,3 +1,5 @@
+// noinspection DuplicatedCode
+
 (function() {
 	'use strict';
 
@@ -17,6 +19,7 @@
 			if (typeof vol === 'number') this.volume = vol;
 			const toPlay = this.elms.find((elm) => elm.paused) ?? this.add();
 			toPlay.volume = this.volume;
+			// noinspection JSIgnoredPromiseFromCall
 			toPlay.play();
 		}
 		add() {
@@ -72,19 +75,20 @@
 		static toColor(num) {
 			return '#' + (num & 0x00FFFFFF).toString(16).padStart(6, '0');
 		}
+		// noinspection JSUnusedGlobalSymbols
 		static toRGBA(num) {
 			num >>>= 0;
-			var b = num & 0xFF, g = (num & 0xFF00) >>> 8, r = (num & 0xFF0000) >>> 16, a = ( (num & 0xFF000000) >>> 24 ) / 255;
+			let b = num & 0xFF, g = (num & 0xFF00) >>> 8, r = (num & 0xFF0000) >>> 16, a = ( (num & 0xFF000000) >>> 24 ) / 255;
 			return 'rgba(' + [r, g, b, a].join(',') + ')';
 		}
 	}
 
 	class Writer {
 		constructor(littleEndian) {
-			this.writer = true;
 			this.tmpBuf = new DataView(new ArrayBuffer(8));
 			this._e = littleEndian;
 			this.reset();
+
 			return this;
 		}
 		reset(littleEndian = this._e) {
@@ -134,6 +138,7 @@
 			for (let i = 0; i < b; i++) this._b.push(this.tmpBuf.getUint8(i));
 		}
 		setStringUTF8(s) {
+			// noinspection JSDeprecatedSymbols
 			const bytesStr = unescape(encodeURIComponent(s));
 			for (let i = 0, l = bytesStr.length; i < l; i++) this._b.push(bytesStr.charCodeAt(i));
 			this._b.push(0);
@@ -181,6 +186,7 @@
 		getStringUTF8() {
 			let s = '', b;
 			while ((b = this.view.getUint8(this._o++)) !== 0) s += String.fromCharCode(b);
+			// noinspection JSDeprecatedSymbols
 			return decodeURIComponent(escape(s));
 		}
 	}
@@ -203,7 +209,7 @@
 		}
 	}
 
-	class Filters {
+	/*class Filters {
 		constructor() {
 			this.blacklist_search_regex = {}
 			this.blacklist_search_regex_tr = {}
@@ -326,7 +332,7 @@
 
 			return sa ? s : s[0]
 		}
-	}
+	}*/
 
 	class Cell {
 		static parseName(name) { // static method
@@ -378,7 +384,7 @@
 			}
 		}
 		update(relativeTime) {
-			const prevFrameSize = this.s;
+			// const prevFrameSize = this.s;
 			const dt = Math.max(Math.min((relativeTime - this.updated) / 120, 1), 0);
 			let diedBy;
 
@@ -511,8 +517,8 @@
 			ctx.restore();
 		}
 		drawShape(ctx) {
-			ctx.fillStyle = settings.showColor ? this.cellColor.toHex() : '#FFFFFF';
-			ctx.strokeStyle = settings.showColor ? this.borderColor.toHex() : '#E5E5E5';
+			ctx.fillStyle = settings.showColor ? this.cellColor.toHex() : '#ffffff';
+			ctx.strokeStyle = settings.showColor ? this.borderColor.toHex() : '#e5e5e5';
 			ctx.lineWidth = Math.max(~~(this.s / 50), 10);
 
 			if (this.s > 20) {
@@ -564,7 +570,7 @@
 		drawText(ctx) {
 			if (this.s < 20 || this.jagged) return;
 			if (this.name && settings.showNames) {
-				drawText(ctx, false, this.x, this.y, this.nameSize, this.drawNameSize, this.name, this.nameColor ? this.nameColor.toHex().toUpperCase() : '#FFF');
+				drawText(ctx, false, this.x, this.y, this.nameSize, this.drawNameSize, this.name, this.nameColor ? this.nameColor.toHex().toUpperCase() : '#ffffff');
 			}
 			if (settings.showMass && (cells.mine.indexOf(this.id) !== -1 || cells.mine.length === 0)) {
 				const mass = (~~(this.s * this.s / 100)).toString();
@@ -591,14 +597,22 @@
 	}
 
 	Element.prototype.hide = function () {
+		// noinspection JSUnresolvedReference
 		this.style.display = 'none';
-		if (this.style.opacity === 1) this.style.opacity = 0;
+		// noinspection JSUnresolvedReference
+		if (this.style.opacity === 1) {
+			// noinspection JSUnresolvedReference
+			this.style.opacity = 0;
+		}
 	}
 
 	Element.prototype.show = function (seconds) {
+		// noinspection JSUnresolvedReference
 		this.style.display = '';
 		if (!seconds) return;
+		// noinspection JSUnresolvedReference
 		this.style.transition = `opacity ${seconds}s ease 0s`;
+		// noinspection JSUnresolvedReference
 		this.style.opacity = 1;
 	}
 
@@ -628,8 +642,6 @@
 		0xFE: new Uint8Array([0xFE])
 	};
 	const FP = FingerprintJS.load();
-	const S = atob('RVNfN2YzMDM2YTFlZmI5NGYyY2E3OTFjNjEwZDMzYjk3NDA=');
-	const NAME_PARSER = /^(?:<([^}]*)>)?([^]*)/;
 	const SEND_254 = new Uint8Array([0xFE, 6, 0, 0, 0]);
 	const SEND_255 = new Uint8Array([0xFF, 1, 0, 0, 0]);
 
@@ -1029,7 +1041,7 @@
 		type: null,
 		items: null,
 		canvas: document.createElement('canvas'),
-		teams: ['#F33', '#3F3', '#33F']
+		teams: ['#ff3333', '#33ff33', '#3333ff']
 	});
 
 	const chat = Object.create({
@@ -1092,7 +1104,6 @@
 	let splitMacroIntervalID;
 	let quadtree;
 	let interval;
-	let interval2;
 
 	const settings = {
 		nick: '',
@@ -1118,7 +1129,7 @@
 		showMinimap: true,
 		showPosition: false,
 		showBorder: false,
-		showGrid: false,
+		showGrid: true,
 		playSounds: true,
 		soundsVolume: 0.5,
 		moreZoom: false,
@@ -1186,12 +1197,16 @@
 
 	function initSetting(id, elm) {
 		function simpleAssignListen(id, elm, prop) {
-			if (settings[id] !== '') elm[prop] = settings[id];
+			if (settings[id] !== '') {
+				elm[prop] = settings[id];
+			}
 
 			elm.addEventListener('change', () => {
 				settings[id] = elm[prop];
+				storeSettings();
 			});
 		}
+
 		switch (elm.tagName.toLowerCase()) {
 			case 'input':
 				switch (elm.type.toLowerCase()) {
@@ -1235,7 +1250,7 @@
 
 		for (const skin of sortedSkins) {
 			html += `<li class="skin" onclick="changeSkin(null, '${skin}')">`;
-			html += `<img class="circular" loading="lazy" src="./skins/${skin}.png">`;
+			html += `<img class="circular" alt="" loading="lazy" src="./skins/${skin}.png">`;
 			html += `<h4 class="skinName">${skin}</h4>`;
 			html += '</li>';
 		}
@@ -1272,7 +1287,7 @@
 				color: latestMessages[i].color
 			} , {
 				text: ` ${latestMessages[i].message}`,
-				color: Color.fromHex(settings.darkTheme ? '#FFF' : '#000')
+				color: Color.fromHex(settings.darkTheme ? '#ffffff' : '#000000')
 			}]);
 		}
 
@@ -1302,7 +1317,7 @@
 
 			for (let j = 0; j < complexes.length; j++) {
 				ctx.font = '18px Ubuntu';
-				ctx.fillStyle = settings.showColor ? complexes[j].color.toHex() : '#FFF';
+				ctx.fillStyle = settings.showColor ? complexes[j].color.toHex() : '#ffffff';
 				ctx.fillText(complexes[j].text, width, 20 * (1 + i));
 				width += complexes[j].width;
 			}
@@ -1331,7 +1346,7 @@
 		canvas.width = width;
 		canvas.height = rows.length * (14 + 2);
 		ctx.font = '14px Ubuntu';
-		ctx.fillStyle = settings.darkTheme ? '#AAA' : '#555';
+		ctx.fillStyle = settings.darkTheme ? '#aaaaaa' : '#555555';
 		ctx.textBaseline = 'top';
 		for (let i = 0; i < rows.length; i++) {
 			ctx.fillText(rows[i], 2, -1 + i * (14 + 2));
@@ -1351,14 +1366,14 @@
 			beginX += width / 2 - 1;
 			beginY = beginY - 194 * border.height / border.width;
 			mainCtx.textAlign = 'right';
-			mainCtx.fillStyle = settings.darkTheme ? '#AAA' : '#555';
+			mainCtx.fillStyle = settings.darkTheme ? '#aaaaaa' : '#555555';
 			mainCtx.fillText(`X: ${~~camera.x}, Y: ${~~camera.y}`, beginX + width / 2, beginY + height / 2);
 		} else {
-			mainCtx.fillStyle = '#000';
+			mainCtx.fillStyle = '#000000';
 			mainCtx.globalAlpha = 0.4;
 			mainCtx.fillRect(beginX, beginY, width, height);
 			mainCtx.globalAlpha = 1;
-			drawRaw(mainCtx, beginX + width / 2, beginY + height / 2, `X: ${~~camera.x}, Y: ${~~camera.y}`);
+			drawRaw(mainCtx, beginX + width / 2, beginY + height / 2, `X: ${~~camera.x}, Y: ${~~camera.y}`, 15);
 		}
 	}
 
@@ -1387,11 +1402,11 @@
 		canvas.height = leaderboard.type !== 'pie' ? 60 + 24 * leaderboard.items.length : 240;
 
 		ctx.globalAlpha = .4;
-		ctx.fillStyle = '#000';
+		ctx.fillStyle = '#000000';
 		ctx.fillRect(0, 0, 200, canvas.height);
 
 		ctx.globalAlpha = 1;
-		ctx.fillStyle = '#FFF';
+		ctx.fillStyle = '#ffffff';
 		ctx.font = '30px Ubuntu';
 		ctx.fillText('Leaderboard', 100 - ctx.measureText('Leaderboard').width / 2, 40);
 
@@ -1422,7 +1437,7 @@
 
 				if (leaderboard.type === 'ffa') text = `${i + 1}. ${text}`;
 
-				ctx.fillStyle = isMe ? '#FAA' : '#FFF';
+				ctx.fillStyle = isMe ? '#ffaaaa' : '#ffffff';
 				const width = ctx.measureText(text).width;
 				const start = width > 200 ? 2 : 100 - width * 0.5;
 				ctx.fillText(text, start, 70 + 24 * i);
@@ -1433,7 +1448,7 @@
 	function drawGrid() {
 		mainCtx.save();
 		mainCtx.lineWidth = 1;
-		mainCtx.strokeStyle = settings.darkTheme ? '#AAA' : '#000';
+		mainCtx.strokeStyle = settings.darkTheme ? '#aaaaaa' : '#000000';
 		mainCtx.globalAlpha = 0.2;
 		const step = 50;
 		const cW = mainCanvas.width / camera.scale;
@@ -1465,7 +1480,7 @@
 		const h = border.height / sectorCount;
 
 		toCamera(mainCtx);
-		mainCtx.fillStyle = settings.darkTheme ? '#666' : '#DDD';
+		mainCtx.fillStyle = settings.darkTheme ? '#666666' : '#dddddd';
 		mainCtx.textBaseline = 'middle';
 		mainCtx.textAlign = 'center';
 		mainCtx.font = `${w / 3 | 0}px Ubuntu`;
@@ -1492,7 +1507,7 @@
 		const beginX = mainCanvas.width - width;
 		const beginY = mainCanvas.height - height;
 
-		mainCtx.fillStyle = '#000';
+		mainCtx.fillStyle = '#000000';
 		mainCtx.globalAlpha = 0.4;
 		mainCtx.fillRect(beginX, beginY, width, height);
 		mainCtx.globalAlpha = 1;
@@ -1503,7 +1518,7 @@
 		const sectorHeight = height / sectorCount;
 		const sectorNameSize = Math.min(sectorWidth, sectorHeight) / 3;
 
-		mainCtx.fillStyle = settings.darkTheme ? '#666' : '#DDD';
+		mainCtx.fillStyle = settings.darkTheme ? '#666666' : '#dddddd';
 		mainCtx.textBaseline = 'middle';
 		mainCtx.textAlign = 'center';
 		mainCtx.font = `${sectorNameSize}px Ubuntu`;
@@ -1545,7 +1560,7 @@
 				mainCtx.arc(x, y, r, 0, PI_2);
 			}
 		} else {
-			mainCtx.fillStyle = '#FAA';
+			mainCtx.fillStyle = '#ffaaaa';
 			mainCtx.arc(myPosX, myPosY, 5, 0, PI_2);
 		}
 		mainCtx.fill();
@@ -1554,7 +1569,7 @@
 		const cell = cells.byId.get(cells.mine.find(id => cells.byId.has(id)));
 
 		if (cell) {
-			mainCtx.fillStyle = settings.showColor && typeof cell['nameColor'] !== 'undefined' && cell.nameColor !== '' && cell.nameColor !== null ? cell.nameColor.toHex() : (settings.darkTheme ? '#DDD' : '#222');
+			mainCtx.fillStyle = settings.showColor && typeof cell['nameColor'] !== 'undefined' && cell.nameColor !== '' && cell.nameColor !== null ? cell.nameColor.toHex() : (settings.darkTheme ? '#dddddd' : '#222222');
 			mainCtx.font = `${sectorNameSize}px Ubuntu`;
 			mainCtx.fillText(cell.name || EMPTY_NAME, myPosX, myPosY - 7 - sectorNameSize / 2);
 		}
@@ -1599,7 +1614,7 @@
 		mainCtx.save();
 		mainCtx.resetTransform();
 
-		mainCtx.fillStyle = settings.bgColor !== '#ffffff' ? settings.bgColor : (settings.darkTheme ? '#111' : '#F2FBFF');
+		mainCtx.fillStyle = settings.bgColor !== '#ffffff' ? settings.bgColor : (settings.darkTheme ? '#111111' : '#f2fbff');
 		mainCtx.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
 
 		if (settings.showGrid) drawGrid();
@@ -1617,7 +1632,7 @@
 		mainCtx.scale(camera.viewportScale, camera.viewportScale);
 
 		let height = 2;
-		mainCtx.fillStyle = settings.darkTheme ? '#FFF' : '#000';
+		mainCtx.fillStyle = settings.darkTheme ? '#ffffff' : '#000000';
 		mainCtx.textBaseline = 'top';
 
 		if (!isNaN(stats.score)) {
@@ -1748,7 +1763,7 @@
 	window.cachedNames = cachedNames;
 	window.cachedMass = cachedMass;
 
-	function drawTextOnto(canvas, ctx, text, size, color = '#FFF') {
+	function drawTextOnto(canvas, ctx, text, size, color = '#ffffff') {
 		ctx.font = size + 'px Ubuntu';
 		ctx.lineWidth = Math.max(~~(size / 10), 2);
 		canvas.width = ctx.measureText(text).width + 2 * ctx.lineWidth;
@@ -1758,25 +1773,25 @@
 		ctx.textBaseline = 'middle';
 		ctx.textAlign = 'center';
 		ctx.fillStyle = color;
-		ctx.strokeStyle = '#000';
+		ctx.strokeStyle = '#000000';
 		ctx.translate(canvas.width / 2, 2 * size);
 		(ctx.lineWidth !== 1) && ctx.strokeText(text, 0, 0);
 		ctx.fillText(text, 0, 0);
 	}
 
-	function drawRaw(ctx, x, y, text, size, color = '#FFF') {
+	function drawRaw(ctx, x, y, text, size, color = '#ffffff') {
 		ctx.font = size + 'px Ubuntu';
 		ctx.textBaseline = 'middle';
 		ctx.textAlign = 'center';
 		ctx.lineWidth = Math.max(~~(size / 10), 2);
 		ctx.fillStyle = color;
-		ctx.strokeStyle = '#000';
+		ctx.strokeStyle = '#000000';
 		(ctx.lineWidth !== 1) && ctx.strokeText(text, x, y);
 		ctx.fillText(text, x, y);
 		ctx.restore();
 	}
 
-	function newNameCache(value, size, color = '#FFF') {
+	function newNameCache(value, size, color = '#ffffff') {
 		const canvas = document.createElement('canvas');
 		const ctx = canvas.getContext('2d');
 
@@ -1833,7 +1848,7 @@
 		return (a - tolerance) <= b && b <= (a + tolerance);
 	}
 
-	function getNameCache(value, size, color = '#FFF') {
+	function getNameCache(value, size, color = '#ffffff') {
 		if (!cachedNames.has(value)) {
 			return newNameCache(value, size, color);
 		}
@@ -1859,7 +1874,7 @@
 		return newMassCache(size);
 	}
 
-	function drawText(ctx, isMass, x, y, size, drawSize, value, color = '#FFF') {
+	function drawText(ctx, isMass, x, y, size, drawSize, value, color = '#ffffff') {
 		ctx.save();
 
 		if (size > 500) {
@@ -1992,169 +2007,12 @@
 		camera.userZoom = Math.min(camera.userZoom, 4);
 	}
 
-	function uploadImage(image) {
-		byId('upload-skin').hide();
-		/*$.ajax({
-			url: 'https://corsproxy.io/?' + encodeURIComponent('https://freeimage.host/api/1/upload?key=6d207e02198a847aa98d0a2a901485a5'),
-			type: 'POST',
-			headers: {
-				Accept: 'application/json'
-			},
-			data: {
-				source: image
-			},
-			success: result => {
-				if (typeof result !== 'undefined') {
-					if (typeof result['image'] !== 'undefined') {
-						if (typeof result['image']['url'] !== 'undefined') {
-							if (result.image.url !== null && result.image.url !== '') {
-								if (result.image.nsfw === 0) {
-									changeSkin(null, result.image.url);
-								} else {
-									alert('Failed to upload file [0][0]');
-								}
-							} else {
-								alert('Failed to upload file [0][1]');
-							}
-						} else {
-							alert('Failed to upload file [0][2]');
-						}
-					} else {
-						alert('Failed to upload file [0][3]');
-					}
-				} else {
-					alert('Failed to upload file [0][4]');
-				}
-			},
-			error: () => {
-				$.ajax({
-					url: 'https://agar.emupedia.net/skin/?key=6d207e02198a847aa98d0a2a901485a5',
-					type: 'POST',
-					headers: {
-						Accept: 'application/json'
-					},
-					data: {
-						source: image
-					},
-					success: result => {
-						if (typeof result !== 'undefined') {
-							if (typeof result['image'] !== 'undefined') {
-								if (typeof result['image']['url'] !== 'undefined') {
-									if (result.image.url !== null && result.image.url !== '') {
-										if (result.image.nsfw === 0) {
-											changeSkin(null, result.image.url);
-										} else {
-											alert('Failed to upload file [1][0]');
-										}
-									} else {
-										alert('Failed to upload file [1][1]');
-									}
-								} else {
-									alert('Failed to upload file [1][2]');
-								}
-							} else {
-								alert('Failed to upload file [1][3]');
-							}
-						} else {
-							alert('Failed to upload file [1][4]');
-						}
-					},
-					error: () => {
-						alert('Failed to upload file [1][5]');
-					},
-					complete: () => byId('upload-skin').hide()
-				});
-			},
-			complete: () => byId('upload-skin').hide()
-		});*/
-	}
-
-	function checkCaptcha(data) {
-		$.ajax({
-			url: 'https://corsproxy.io/?' + encodeURIComponent('https://api.hcaptcha.com/siteverify'),
-			type: 'POST',
-			headers: {
-				Accept: 'application/json'
-			},
-			data: {
-				response: data,
-				secret: S
-			},
-			error: () => {
-				$.ajax({
-					url: 'https://agar.emupedia.net/captcha/',
-					type: 'POST',
-					headers: {
-						Accept: 'application/json'
-					},
-					data: {
-						response: data,
-						secret: S
-					},
-					error: () => {
-						byId('captcha').hide();
-						byClass('upload-btn-wrapper')[0].show();
-					},
-					success: result => {
-						if (typeof result !== 'undefined') {
-							if (typeof result['success'] !== 'undefined') {
-								if (result['success'] === true) {
-									byId('captcha').hide();
-									byClass('upload-btn-wrapper')[0].show();
-								} else {
-									byId('upload-skin').hide();
-								}
-							} else {
-								byId('upload-skin').hide();
-							}
-						} else {
-							byId('upload-skin').hide();
-						}
-					}
-				});
-			},
-			success: result => {
-				if (typeof result !== 'undefined') {
-					if (typeof result['success'] !== 'undefined') {
-						if (result['success'] === true) {
-							byId('captcha').hide();
-							byClass('upload-btn-wrapper')[0].show();
-						} else {
-							byId('upload-skin').hide();
-						}
-					} else {
-						byId('upload-skin').hide();
-					}
-				} else {
-					byId('upload-skin').hide();
-				}
-			}
-		});
-	}
-
-	function getBase64(file, cb) {
-		var reader = new FileReader();
-
-		reader.readAsDataURL(file);
-
-		reader.onload = () => {
-			if (typeof cb === 'function') {
-				cb(reader.result.split(',')[1]);
-			} else {
-				alert('Failed to upload file [6]');
-			}
-		};
-
-		reader.onerror = error => {
-			alert('Failed to upload file [7]');
-		};
-	}
-
 	function checkBanCounter() {
 		let banCounter = 0;
 
 		for (let skin in settings.skinnames) {
 			if (typeof settings.skinnames[skin] === 'string' && settings.skinnames[skin] !== '') {
+				// noinspection JSUnusedLocalSymbols
 				bannedSkins.forEach((value1, value2, set) => {
 					if (settings.skinnames[skin] === value2) {
 						banCounter++;
@@ -2175,8 +2033,8 @@
 
 		loadSettings();
 
-		clearInterval(interval2);
-		interval2 = setInterval(() => {
+		clearInterval(interval);
+		interval = setInterval(() => {
 			FP.then(fp => fp.get()).then(result => {
 				settings.fp = ident !== '' ? ident + '|' + result.visitorId : result.visitorId;
 				storeSettings();
@@ -2278,7 +2136,7 @@
 			}
 		});
 
-		const changeDarkTheme = e => {
+		const changeDarkTheme = () => {
 			if (settings.darkTheme) {
 				document.documentElement.classList.add('darkTheme');
 				joystick.options.color = 'white';
@@ -2290,13 +2148,6 @@
 			if (typeof joystick[0] !== 'undefined') {
 				joystick[0].destroy();
 			}
-
-			/*byId('captcha').innerHTML = '';
-
-			hcaptcha.render('captcha' , {
-				theme: settings.darkTheme ? 'dark' : '',
-				sitekey: '6bd25504-b5be-483b-9baa-0b53e51edf67'
-			});*/
 		}
 
 		changeDarkTheme();
@@ -2338,11 +2189,11 @@
 		const changeCellColor = e => {
 			byId('previewSkin').src = './assets/img/transparent.png';
 			byId('previewSkin').style.backgroundImage = 'none';
-			byId('previewSkin').style.backgroundColor = settings.showColor ? e.target.value : '#fff';
+			byId('previewSkin').style.backgroundColor = settings.showColor ? e.target.value : '#ffffff';
 			settings.cellColor = e.target.value;
 
 			if (settings.cellColor !== '#ffffff') {
-				byId('previewSkin').style.backgroundColor = settings.showColor ? e.target.value : '#fff';
+				byId('previewSkin').style.backgroundColor = settings.showColor ? e.target.value : '#ffffff';
 
 				if (settings.showSkins) {
 					let saved_skin = settings.skin;
@@ -2431,13 +2282,13 @@
 			storeSettings();
 		};
 
-		const changeShowColor = e => {
-			byId('previewName').style.color = settings.showColor ? settings.nameColor : '#fff';
-			byId('previewSkin').style.backgroundColor = settings.showColor ? settings.cellColor : '#fff';
+		const changeShowColor = () => {
+			byId('previewName').style.color = settings.showColor ? settings.nameColor : '#ffffff';
+			byId('previewSkin').style.backgroundColor = settings.showColor ? settings.cellColor : '#ffffff';
 			byId('previewSkin').style.borderColor = settings.showColor ? (settings.borderColor !== '#ffffff' ? settings.borderColor : Color.fromHex(randomColor).darker().toHex()) : Color.fromHex('#ffffff').darker().toHex();
 		}
 
-		const changeShowSkins = e => {
+		const changeShowSkins = () => {
 			if (settings.showSkins) {
 				let saved_skin = settings.skin;
 
@@ -2462,16 +2313,16 @@
 				} else {
 					byId('previewSkin').src = './assets/img/transparent.png';
 					byId('previewSkin').style.backgroundImage = 'none';
-					byId('previewSkin').style.backgroundColor = settings.showColor ? settings.cellColor : '#fff';
+					byId('previewSkin').style.backgroundColor = settings.showColor ? (settings.cellColor !== '#ffffff' ? settings.cellColor : randomColor) : '#ffffff';
 				}
 			} else {
 				byId('previewSkin').src = './assets/img/transparent.png';
 				byId('previewSkin').style.backgroundImage = 'none';
-				byId('previewSkin').style.backgroundColor = settings.showColor ? settings.cellColor : '#fff';
+				byId('previewSkin').style.backgroundColor = settings.showColor ? (settings.cellColor !== '#ffffff' ? settings.cellColor : randomColor) : '#ffffff';
 			}
 		}
 
-		const changeFillSkin = e => {
+		const changeFillSkin = () => {
 			if (settings.showSkins) {
 				if (settings.fillSkin) {
 					byId('previewSkin').style.backgroundImage = 'none';
@@ -2481,54 +2332,9 @@
 					} else {
 						byId('previewSkin').src = './assets/img/transparent.png';
 						byId('previewSkin').style.backgroundImage = 'none';
-						byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#fff';
+						byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#ffffff';
 					}
 				}
-			}
-		}
-
-		const changeUploadSkin = e => {
-			if (checkBanCounter() > 2) {
-				byClass('upload-btn-wrapper')[0].remove();
-				byId('show-upload-btn').remove();
-			} else {
-				getBase64(e.target.files[0], b64 => uploadImage(b64));
-			}
-		}
-
-		/*const observer = new MutationObserver((mutations, observer) => {
-			mutations.forEach(mutation => {
-				if (mutation.target.firstChild && mutation.target.firstChild.tagName.toLowerCase() === 'iframe') {
-					observer.observe(mutation.target.firstChild, { attributes: true });
-				}
-
-				if (mutation.target.tagName.toLowerCase() === 'iframe' && mutation.target.getAttribute('data-hcaptcha-response') !== '') {
-					checkCaptcha(mutation.target.getAttribute('data-hcaptcha-response'))
-				}
-			});
-		});*/
-
-		// observer.observe(byId('captcha'), { attributes: true });
-
-		const changeUploadCheckbox = e => {
-			if (e.target.checked === true) {
-				e.target.disabled = true;
-			}
-
-			if (Array.from(byClass('upload-checkbox')).every(item => item.checked === true)) {
-				byClass('upload-btn-wrapper')[0].hide();
-				byId('captcha').hide();
-				byClass('countdown')[0].show();
-
-				startTimer(30, byId('timer'), () => {
-					byClass('countdown')[0].hide();
-					byId('captcha').innerHTML = '';
-					hcaptcha.render('captcha' , {
-						theme: settings.darkTheme ? 'dark' : '',
-						sitekey: '6bd25504-b5be-483b-9baa-0b53e51edf67'
-					});
-					byId('captcha').show();
-				});
 			}
 		}
 
@@ -2540,12 +2346,16 @@
 
 		if (settings.nameColor !== '#ffffff') {
 			byId('nameColor').value = settings.nameColor;
-			byId('previewName').style.color = settings.showColor ? settings.nameColor : '#fff';
+			byId('previewName').style.color = settings.showColor ? settings.nameColor : '#ffffff';
+		} else {
+			byId('previewName').style.color = settings.showColor ? randomColor : '#ffffff';
 		}
 
 		if (settings.cellColor !== '#ffffff') {
 			byId('cellColor').value = settings.cellColor;
-			byId('previewSkin').style.backgroundColor = settings.showColor ? settings.cellColor : '#fff';
+			byId('previewSkin').style.backgroundColor = settings.showColor ? settings.cellColor : '#ffffff';
+		} else {
+			byId('previewSkin').style.backgroundColor = settings.showColor ? randomColor : '#ffffff';
 		}
 
 		if (settings.borderColor !== '#ffffff') {
@@ -2575,12 +2385,11 @@
 		byId('showColor').addEventListener('change', changeShowColor);
 		byId('showSkins').addEventListener('change', changeShowSkins);
 		byId('darkTheme').addEventListener('change', changeDarkTheme);
-		// byId('upload-btn').addEventListener('change', changeUploadSkin);
 
-		/*if (checkBanCounter() > 2) {
+		if (checkBanCounter() > 2) {
 			byClass('upload-btn-wrapper')[0].remove();
 			byId('show-upload-btn').remove();
-		}*/
+		}
 
 		window.addEventListener('beforeunload', storeSettings);
 
@@ -2649,11 +2458,6 @@
 			storeSettings();
 		});
 
-		Array.from(byClass('upload-checkbox')).map(item => {
-			item.removeEventListener('change', changeUploadCheckbox);
-			item.addEventListener('change', changeUploadCheckbox);
-		});
-
 		window.onkeydown = keydown;
 		window.onkeyup = keyup;
 
@@ -2681,7 +2485,7 @@
 			camera.viewportScale = Math.max(width / 1920, height / 1080);
 		};
 
-		window.onresize();
+		window.onresize(null);
 
 		gameReset();
 		showESCOverlay();
@@ -2693,6 +2497,7 @@
 		if (div) {
 			window.setserver(div[1]);
 		} else {
+			// noinspection JSUnresolvedReference
 			window.setserver(byId('gamemode').value);
 		}
 
@@ -2752,6 +2557,7 @@
 						});
 
 						try {
+							// noinspection JSCheckFunctionSignatures,JSUnusedLocalSymbols
 							crypto.subtle.digest('SHA-1', new TextEncoder().encode(trace)).then(res => {
 								ident = ''; //Array.from(new Uint8Array(res)).map((i) => i.toString(16).padStart(2, '0')).join('');
 
@@ -2810,36 +2616,6 @@
 		}
 	}
 
-	function startTimer(duration, display, cb) {
-		let timer = duration, minutes, seconds;
-
-		const update = () => {
-			minutes = parseInt(timer / 60, 10);
-			seconds = parseInt(timer % 60, 10);
-
-			minutes = minutes < 10 ? '0' + minutes : minutes;
-			seconds = minutes > 0 ? (seconds < 10 ? '0' + seconds : seconds) : seconds;
-
-			display.innerHTML = minutes > 0 ? minutes + ':' + seconds : seconds;
-		}
-
-		update();
-
-		clearInterval(interval);
-		interval = setInterval(() => {
-			if (--timer < 1) {
-				timer = duration;
-				clearInterval(interval);
-
-				if (typeof cb === 'function') {
-					cb();
-				}
-			}
-
-			update();
-		}, 1000);
-	}
-
 	window.setserver = url => {
 		if (url === wsUrl && ws && ws.readyState <= WebSocket.OPEN) return;
 		wsInit(url);
@@ -2852,7 +2628,7 @@
 	};
 
 	window.changeSkin = (e, s) => {
-		let sk = '';
+		let sk;
 
 		if (e === null) {
 			sk = s;
@@ -2860,6 +2636,7 @@
 			sk = e.target.value;
 		}
 
+		// noinspection JSUnresolvedReference
 		if (sk !== byId('skin').value) {
 			byId('skin').value = sk;
 		}
@@ -2903,10 +2680,10 @@
 
 		storeSettings();
 
-		/*if (checkBanCounter() > 2) {
+		if (checkBanCounter() > 2) {
 			byId('show-upload-btn').remove();
 			byClass('upload-btn-wrapper')[0].remove();
-		}*/
+		}
 	};
 
 	window.openSkinsList = () => {
@@ -2915,25 +2692,21 @@
 	};
 
 	window.openUpload = () => {
+		// noinspection HtmlUnknownTarget
+		byId('upload-skin-content').innerHTML = '<iframe src="../upload.html" allowtransparency="true"></iframe>';
 		byId('upload-skin').show(0.5);
-		byClass('upload-btn-wrapper')[0].hide();
-		hcaptcha.reset();
-		byId('captcha').innerHTML = '';
-		byId('captcha').hide();
-		byClass('countdown')[0].hide();
-		byId('timer').innerHTML = '';
+	}
 
-		Array.from(byClass('upload-checkbox')).map(item => {
-			item.disabled = false;
-			item.checked = false;
-		});
-	};
+	window.closeUpload = () => {
+		byId('upload-skin').hide();
+	}
 
 	window.copyToClipboard = (text, el) => {
 		if ('clipboard' in navigator) {
+			// noinspection JSIgnoredPromiseFromCall
 			navigator.clipboard.writeText(text);
 		} else {
-			var element = document.createElement('input');
+			let element = document.createElement('input');
 
 			element.type = 'text';
 			element.disabled = true;
@@ -2949,19 +2722,18 @@
 
 			element.click();
 			element.select();
+			// noinspection JSDeprecatedSymbols
 			document.execCommand('copy');
 
 			document.body.removeChild(element);
 		}
 
 		if (el) {
-			var message = $('<div id="copy-msg">Skin URL Copied to Clipboard!</div>')
+			let message = $('<div id="copy-msg">Skin URL Copied to Clipboard!</div>')
 
 			$(el).parent().parent().after(message)
 
-			message.fadeOut(2000, function() {
-				$(this).remove();
-			});
+			message.fadeOut(2000, () => $(this).remove());
 		}
 	}
 

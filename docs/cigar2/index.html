@@ -14,7 +14,7 @@
 		<link rel="icon" type="image/png" href="assets/img/favicon.png">
 		<link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet" type="text/css">
 		<link href="assets/css/bootstrap.min.css" rel="stylesheet">
-		<link href="assets/css/index.css?v=16" rel="stylesheet">
+		<link href="assets/css/index.css?v=17" rel="stylesheet">
 		<link href="assets/css/gallery.css" rel="stylesheet">
 	</head>
 
@@ -42,7 +42,7 @@
 			<div id="helloDialog">
 				<div id="helloDialogContent">
 					<div class="form-group">
-						<h2 id="title">Agar.io v2.0</h2>
+						<h2 class="title">Agar.io v2.0</h2>
 						<hr class="top" />
 						<a class="text-center" style="display: block; color: red;" href="https://discord.gg/emupedia-510149138491506688" target="_blank">Join us on Discord if you have suggestions</a>
 					</div>
@@ -55,14 +55,14 @@
 							</datalist>
 						</div>
 						<div class="form-label-wrapper">
-							<label id="skin-list"><span>Skin</span><input id="skin" list="skinnames" class="form-control pull-right" onfocus="return;this.oldvalue=this.value;this.value=''" onblur="return;if(this.value==='')this.value=this.oldvalue || ''" placeholder="Skin Name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" readonly="readonly"></label>
+							<label id="skin-list"><span>Skin</span><input id="skin" list="skinnames" class="form-control pull-right" onfocus="this.oldvalue=this.value;this.value=''" onblur="if(this.value==='')this.value=this.oldvalue || ''" placeholder="Skin Name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></label>
 							<datalist id="skinnames">
 								<option value=""> </option>
 							</datalist>
 						</div>
-						<!--<div class="form-label-wrapper">
+						<div class="form-label-wrapper">
 							<label><span>Copy</span><button id="copy-btn" class="btn btn-success pull-right" onclick="copyToClipboard(document.getElementById('skin').value, this)"><i class="glyphicon glyphicon-copy"></i></button></label>
-						</div>-->
+						</div>
 						<select id="gamemode" class="form-control" onchange="setserver(this.value)" required>
 							<option value="agar.emupedia.net:443/ws2/" selected>Emupedia</option>
 							<option value="127.0.0.1:5000">Local</option>
@@ -77,7 +77,7 @@
 
 					<div class="form-wrapper">
 						<button id="gallery-btn" onclick="openSkinsList()" class="btn btn-play btn-primary btn-needs-server btn-info">Choose Skin</button>
-						<!--<button id="show-upload-btn" onclick="openUpload()" class="btn btn-play btn-primary btn-needs-server btn-info">Upload Skin</button>-->
+						<button id="show-upload-btn" onclick="openUpload()" class="btn btn-play btn-primary btn-needs-server btn-info">Upload Skin</button>
 					</div>
 
 					<div id="settings" class="checkbox" style="display: none;">
@@ -111,7 +111,7 @@
 					</div>
 
 					<div id="preview">
-						<img id="previewSkin" src="assets/img/transparent.png">
+						<img id="previewSkin" alt="" src="assets/img/transparent.png">
 						<div id="previewName"></div>
 					</div>
 
@@ -125,7 +125,7 @@
 
 				<div id="gameplay">
 					<div>
-						<h2 id="title">Gameplay</h2>
+						<h2 class="title">Gameplay</h2>
 						<hr class="top" />
 						<div class="text">
 							<p class="text-center">
@@ -141,30 +141,32 @@
 							<b>Starting Out:</b> When you first join the game, you'll start as a small cell. Move around using your mouse to collect the colorful pellets scattered across the map. Eating pellets increases your size and mass.<br /><br />
 							<b>Movement:</b> To move your cell, you simply move your mouse cursor in the direction you want your cell to go. Your cell will follow the movement of your mouse cursor on the screen.<br /><br />
 							<b>Consume Smaller Cells:</b> Keep an eye out for smaller cells roaming nearby. As you grow larger, you'll be able to engulf these smaller cells to increase your mass. Approach them strategically to avoid being eaten by larger cells.<br /><br />
-							<b>Avoid Larger Cells:</b> Be cautious of larger cells, as they can consume you if you're smaller than them. Watch out for players who split to capture smaller cells, and try to anticipate their movements to stay safe.<br /><br />
+							<b>Avoid Larger Cells:</b> Be cautious of larger cells, as they can consume you if you're smaller than they. Watch out for players who split to capture smaller cells, and try to anticipate their movements to stay safe.<br /><br />
 							<b>Splitting:</b> You can split your cell into multiple smaller pieces by pressing the <kbd>SPACE</kbd>. Use this tactic to capture smaller cells or to escape from larger ones. You can also do a multiple splits by pressing <kbd>X</kbd> or <kbd>Z</kbd>. Remember, splitting also makes you more vulnerable, so use it wisely.<br /><br />
 							<b>Ejecting Mass:</b> While ejecting mass by pressing the <kbd>W</kbd> or <kbd>Left Click</kbd> can be beneficial, it also comes with risks. Ejected mass can be consumed by other players, including potential rivals. Additionally, ejecting mass reduces your cell's overall size, which may make you more vulnerable to being consumed by larger cells.<br /><br />
 							<b>Team Play (Optional):</b> In team mode, you can collaborate with other players to dominate the leaderboard. Team up with friends or other players to outmaneuver your opponents and conquer the game together.<br /><br />
 							<b>Grow and Dominate:</b> As you consume smaller cells and avoid being eaten, your cell will continue to grow in size. Aim to become the largest cell on the server and dominate the leaderboard.<br /><br />
-							<b>Watch Out for Viruses:</b> Throughout the map, you'll encounter green spiky circles known as viruses. Avoid colliding with these, as they can split your cell into smaller pieces if you're larger than them. Feeding viruses your mass from a direction will cause them to multiply in the opposite direction.<br /><br />
+							<b>Watch Out for Viruses:</b> Throughout the map, you'll encounter green spiky circles known as viruses. Avoid colliding with these, as they can split your cell into smaller pieces if you're larger than they. Feeding viruses your mass from a direction will cause them to multiply in the opposite direction.<br /><br />
 							<b>Be Strategic:</b> Agar.io is as much about strategy as it is about skill. Pay attention to your surroundings, anticipate your opponents' moves, and use tactics like splitting and merging wisely to outsmart your rivals.<hr />
-							<p class="text-center">
-								That's it for the basics of Agar.io! Now it's time to jump into the game and start growing your cell to become the biggest and most dominant player on the server.
-							</p>
+							<p class="text-center">That's it for the basics of Agar.io! Now it's time to jump into the game and start growing your cell to become the biggest and most dominant player on the server.</p>
 							<hr />
-							<h5 class="text-center">Good luck, and have fun!<h5></p>
+							<h5 class="text-center">Good luck, and have fun!</h5>
 						</div>
 					</div>
 				</div>
 
 				<div id="news">
 					<div>
-						<h2 id="title">News</h2>
+						<h2 class="title">News</h2>
 						<hr class="top" />
 						<div class="text">
+							<b>31/03/2024</b>
+							<ul>
+								<li>Re-added <b>Upload Custom Skin</b> feature with extra NSFW checks to prevent abuse</li>
+							</ul>
 							<b>17/03/2024</b>
 							<ul>
-								<li>Removed <b>Upload Skin</b> feature</li>
+								<li>Removed <b>Upload Custom Skin</b> feature because abuse</li>
 							</ul>
 							<hr /><b>09/03/2024</b>
 							<ul>
@@ -181,7 +183,7 @@
 							<hr /><b>28/02/2024</b>
 							<ul>
 								<li>Removed old custom skins that start with <kbd>$</kbd>, just upload your own with the new <b>Upload Skin</b> feature</li>
-								<li>Uploading <kbd>gif</kbd> files is no longer allowed, the animation didn't worked anyway, just first frame was shown</li>
+								<li>Uploading <kbd>gif</kbd> files is no longer allowed, the animation didn't work anyway, just first frame was shown</li>
 							</ul>
 							<hr /><b>27/02/2024</b>
 							<ul>
@@ -237,41 +239,21 @@
 			</div>
 		</div>
 
-		<!--<div id="upload-skin" style="display: none;" onclick="if (event.target === this) this.hide()">
-			<div id="upload-skin-content">
-				<h3>Upload Skin</h3><hr class="top" />
-				<label><input id="c1" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures depicting NSFW content</label>
-				<label><input id="c2" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures with pornographic content</label>
-				<label><input id="c3" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures of real people</label>
-				<label><input id="c4" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures of myself</label>
-				<label><input id="c5" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures of my friends</label>
-				<label><input id="c6" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures of famous people (actors, musicians, football players, etc.)</label>
-				<label><input id="c7" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures that shows the face of any person</label>
-				<label><input id="c8" class="upload-checkbox" type="checkbox" /> I understand that I need to have an IQ level of at least 50 IQ points and can solve a Captcha</label>
-				<label><input id="c9" class="upload-checkbox" type="checkbox" /> I understand that if I break any of these rules I will be banned from using the game</label>
-				<label><input id="c10" class="upload-checkbox" type="checkbox" /> I understand that I will not cry in Discord after I have been banned from the game</label>
-				<hr />
-				<h4 class="countdown" style="display: none;">To prove you understood the rules,<br />you must wait <span id="timer"></span> seconds</h4>
-				<div id="captcha" style="display: none;"></div>
-				<div class="upload-btn-wrapper" style="display: none;">
-					<button class="btn btn-play btn-primary btn-needs-server btn-info">Upload Skin</button>
-					<input id="upload-btn" type="file" accept="image/x-png,image/png,image/jpeg,image/webp,image/avif" name="source" />
-				</div>
-			</div>
-		</div>-->
+		<div id="upload-skin" style="display: none;" onclick="if (event.target === this) this.hide()">
+			<div id="upload-skin-content"></div>
+		</div>
 
 		<div id="connecting">
 			<div id="connecting-content">
 				<h3>Trying to connect...</h3><hr class="top" />
-				<p>If you cannot connect to the servers, check if you have some anti virus or firewall blocking the connection.</p>
+				<p>If you cannot connect to the servers, check if you have some antivirus or firewall blocking the connection.</p>
 			</div>
 		</div>
 
-		<!--<script src="https://js.hcaptcha.com/1/api.js?render=explicit" async defer></script>-->
 		<script src="assets/js/jquery-1.11.3.min.js"></script>
 		<script src="assets/js/fp.umd.min.js"></script>
 		<script src="assets/js/nipplejs.js"></script>
 		<script src="assets/js/quadtree.js"></script>
-		<script src="assets/js/main.min.js?v=64"></script>
+		<script src="assets/js/main.min.js?v=66"></script>
 	</body>
 </html>
