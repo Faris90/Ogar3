@@ -10,6 +10,7 @@
 				border-radius: 15px;
 			}
 
+			/*noinspection CssUnusedSymbol*/
 			body.loading::after {
 				position: absolute;
 				left: 0;
@@ -167,6 +168,10 @@
 
 				if (settings.darkTheme === true) {
 					document.documentElement.classList.add('darkTheme');
+
+					if (window.top.location === window.location) {
+						document.documentElement.style.backgroundColor = 'rgba(9,13,23,0.6)';
+					}
 				}
 			}
 
@@ -175,16 +180,15 @@
 
 		<script src="cigar2/assets/js/jquery-1.11.3.min.js"></script>
 		<script src="https://js.hcaptcha.com/1/api.js?render=explicit" async defer></script>
-		<script src="nsfwjs/models/inception_v3/model.min.js" type="text/javascript"></script>
-		<script src="nsfwjs/models/inception_v3/group1-shard1of6.min.js" type="text/javascript"></script>
-		<script src="nsfwjs/models/inception_v3/group1-shard2of6.min.js" type="text/javascript"></script>
-		<script src="nsfwjs/models/inception_v3/group1-shard3of6.min.js" type="text/javascript"></script>
-		<script src="nsfwjs/models/inception_v3/group1-shard4of6.min.js" type="text/javascript"></script>
-		<script src="nsfwjs/models/inception_v3/group1-shard5of6.min.js" type="text/javascript"></script>
-		<script src="nsfwjs/models/inception_v3/group1-shard6of6.min.js" type="text/javascript"></script>
 		<script src="nsfwjs/browser/tf.min.js" type="text/javascript"></script>
 		<script src="nsfwjs/browser/nsfwjs.min.js" type="text/javascript"></script>
+
 		<script>
+			// noinspection JSUnresolvedReference
+			tf.setBackend('cpu');
+			// noinspection JSUnresolvedReference
+			tf.enableProdMode();
+
 			Element.prototype.hide = function () {
 				// noinspection JSUnresolvedReference
 				this.style.display = 'none';
@@ -218,34 +222,44 @@
 			}
 
 			function checkNSFW(image, cb) {
-				// noinspection JSUnresolvedReference
-				if (typeof tf !== 'undefined' && typeof nsfwjs !== 'undefined') {
-					const img = new Image();
-					img.crossOrigin = 'anonymous';
-					img.src = image;
-					img.onload = () => {
-						// noinspection JSUnresolvedReference
-						tf.enableProdMode();
-						// noinspection JSUnresolvedReference
-						tf.setBackend('cpu');
-						// nsfwjs.load('nsfwjs/models/inception_v3/model.json', { type: 'graph' }).then(model => {
-						// noinspection JSUnresolvedReference
-						nsfwjs.load('InceptionV3').then(model => {
+				if (window.Worker && typeof OffscreenCanvas !== 'undefined') {
+					const worker = new Worker('nsfw-worker.js');
+					worker.postMessage(image);
+					worker.onmessage = e => {
+						if (e.data === true) {
+							if (typeof cb === 'function') {
+								cb(image.split(',')[1]);
+							}
+						} else {
+							alert('Image probably contains NSFW content and was not uploaded');
+							window.top.closeUpload();
+						}
+					}
+				} else {
+					// noinspection JSUnresolvedReference
+					if (typeof tf !== 'undefined' && typeof nsfwjs !== 'undefined') {
+						const img = new Image();
+						img.crossOrigin = 'anonymous';
+						img.src = image;
+						img.onload = () => {
 							// noinspection JSUnresolvedReference
-							model.classify(img, 1).then(predictions => {
-								if (predictions[0] && predictions[0].className) {
-									if (predictions[0].className === 'Neutral' || predictions[0].className === 'Drawing') {
-										if (typeof cb === 'function') {
-											cb(image.split(',')[1]);
+							nsfwjs.load('nsfwjs/models/inception_v3/model.json', { size: 299 }).then(model => {
+								// noinspection JSUnresolvedReference
+								model.classify(img, 1).then(predictions => {
+									if (predictions[0] && predictions[0].className) {
+										if (predictions[0].className === 'Neutral' || predictions[0].className === 'Drawing') {
+											if (typeof cb === 'function') {
+												cb(image.split(',')[1]);
+											}
+										} else {
+											alert('Image probably contains NSFW content and was not uploaded');
+											window.top.closeUpload();
 										}
-									} else {
-										alert('Image probably contains NSFW content and was not uploaded');
-										window.top.closeUpload();
 									}
-								}
+								});
 							});
-						});
-					};
+						};
+					}
 				}
 			}
 
