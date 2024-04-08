@@ -68,7 +68,7 @@
 				display: block;
 				margin-bottom: auto;
 				user-select: none;
-				font-size: 2.7vw;
+				font-size: 14px;
 			}
 
 			label, input[type=checkbox] {
@@ -107,6 +107,11 @@
 
 			.upload-btn-wrapper input[type=file]::file-selector-button {
 				cursor: pointer;
+			}
+
+			.upload-skin-content {
+				max-width: 510px;
+				margin: auto;
 			}
 
 			#captcha {
@@ -346,6 +351,14 @@
 				};
 			}
 
+			function loadSettings() {
+				return JSON.parse(localStorage.getItem('settings'))
+			}
+
+			function storeSettings(settings) {
+				localStorage.setItem('settings', JSON.stringify(settings));
+			}
+
 			function uploadImage(image) {
 				$.ajax({
 					url: 'https://corsproxy.io/?' + encodeURIComponent('https://freeimage.host/api/1/upload?key=6d207e02198a847aa98d0a2a901485a5'),
@@ -361,7 +374,16 @@
 							if (typeof result['image'] !== 'undefined') {
 								if (typeof result['image']['url'] !== 'undefined') {
 									if (result.image.url !== null && result.image.url !== '') {
-										window.top.changeSkin(null, result.image.url);
+										try {
+											window.top.changeSkin(null, result.image.url);
+										} catch(e) {
+											console.error(e);
+											const settings = loadSettings();
+											settings.skin = result.image.url;
+											settings.skinnames.push(result.image.url);
+											storeSettings(settings);
+											window.location = '/emupedia-game-agar.io/cigar2/';
+										}
 									} else {
 										alert('Failed to upload file [0][1]');
 									}
@@ -390,7 +412,16 @@
 									if (typeof result['image'] !== 'undefined') {
 										if (typeof result['image']['url'] !== 'undefined') {
 											if (result.image.url !== null && result.image.url !== '') {
-												window.top.changeSkin(null, result.image.url);
+												try {
+													window.top.changeSkin(null, result.image.url);
+												} catch(e) {
+													console.error(e);
+													const settings = loadSettings();
+													settings.skin = result.image.url;
+													settings.skinnames.push(result.image.url);
+													storeSettings(settings);
+													window.location = '/emupedia-game-agar.io/cigar2/';
+												}
 											} else {
 												alert('Failed to upload file [1][1]');
 											}
@@ -407,10 +438,22 @@
 							error: () => {
 								alert('Failed to upload file [1][5]');
 							},
-							complete: () => window.top.closeUpload()
+							complete: () => {
+								try {
+									window.top.closeUpload()
+								} catch(e) {
+									console.error(e);
+								}
+							}
 						});
 					},
-					complete: () => window.top.closeUpload()
+					complete: () => {
+						try {
+							window.top.closeUpload()
+						} catch(e) {
+							console.error(e);
+						}
+					}
 				});
 			}
 
