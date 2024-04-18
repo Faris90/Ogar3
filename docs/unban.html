@@ -1,1 +1,1 @@
-<script>document.write('<pre><xmp>' + JSON.stringify(JSON.parse(localStorage.settings), null, 4) + '</xmp></pre>');</script>
+<script>document.write('<center><h1 style="margin: 0;">Your unban code is<br /><br />' + btoa(JSON.parse(localStorage.settings).fp).replace(/(.{10})/g, "$1<br />") + '</h1></center>');</script>

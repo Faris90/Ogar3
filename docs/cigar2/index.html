@@ -14,7 +14,7 @@
 		<link rel="icon" type="image/png" href="assets/img/favicon.png">
 		<link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet" type="text/css">
 		<link href="assets/css/bootstrap.min.css" rel="stylesheet">
-		<link href="assets/css/index.css?v=17" rel="stylesheet">
+		<link href="assets/css/index.css?v=18" rel="stylesheet">
 		<link href="assets/css/gallery.css" rel="stylesheet">
 	</head>
 
@@ -78,6 +78,7 @@
 					<div class="form-wrapper">
 						<button id="gallery-btn" onclick="openSkinsList()" class="btn btn-play btn-primary btn-needs-server btn-info">Choose Skin</button>
 						<button id="show-upload-btn" onclick="openUpload()" class="btn btn-play btn-primary btn-needs-server btn-info">Upload Skin</button>
+						<button id="unban-btn" onclick="openUnban()" class="btn btn-play btn-primary btn-needs-server btn-info" style="display: none;">Unban</button>
 					</div>
 
 					<div id="settings" class="checkbox" style="display: none;">
@@ -243,6 +244,10 @@
 			<div id="upload-skin-content"></div>
 		</div>
 
+		<div id="unban" style="display: none;" onclick="if (event.target === this) this.hide()">
+			<div id="unban-content"></div>
+		</div>
+
 		<div id="connecting">
 			<div id="connecting-content">
 				<h3>Trying to connect...</h3><hr class="top" />
@@ -254,6 +259,6 @@
 		<script src="assets/js/fp.umd.min.js"></script>
 		<script src="assets/js/nipplejs.js"></script>
 		<script src="assets/js/quadtree.js"></script>
-		<script src="assets/js/main.min.js?v=66"></script>
+		<script src="assets/js/main.min.js?v=67"></script>
 	</body>
 </html>

@@ -88,7 +88,7 @@ label#nick-list:after, label#skin-list:after {
 	pointer-events: none;
 }
 
-#overlays, #connecting, #upload-skin {
+#overlays, #connecting, #upload-skin, #unban {
 	opacity: 0;
 	position: absolute;
 	left: 0;
@@ -99,7 +99,7 @@ label#nick-list:after, label#skin-list:after {
 	z-index: 200;
 }
 
-#connecting, #upload-skin {
+#connecting, #upload-skin, #unban {
 	z-index: 201;
 }
 
@@ -111,7 +111,7 @@ label#nick-list:after, label#skin-list:after {
 	padding: 5px 15px;
 }
 
-#upload-skin-content {
+#upload-skin-content, #unban-content {
 	position: relative;
 	max-width: 510px;
 	overflow: hidden;
@@ -120,7 +120,7 @@ label#nick-list:after, label#skin-list:after {
 	border-radius: 15px;
 }
 
-#upload-skin-content iframe {
+#upload-skin-content iframe, #unban-content iframe {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -413,6 +413,10 @@ label#nick-list:after, label#skin-list:after {
 
 #upload-skin-content {
 	background-color: rgba(255,255,255,0.91);
+}
+
+#unban-content {
+	background-color: #fff;
 }
 
 .darkTheme #connecting-content, .darkTheme #upload-skin-content {
