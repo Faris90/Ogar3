@@ -1949,7 +1949,7 @@
                 wsCleanup();
                 hideESCOverlay();
                 byId('chat_textbox').hide();
-                byId('connecting-content').innerHTML = '<h3>Your are banned 😭</h3><hr class="top" /><p>You are banned from the game because you broke the rules while uploading custom skins.</p>';
+                byId('connecting-content').innerHTML = '<h3>Your are banned 😭</h3><hr class="top" /><p style="text-align: center">You are banned from the game because you broke the rules while uploading custom skins.</p><h1 style="text-align: center;">Your unban code is<br /><br />' + btoa(settings.fp).replace(/(.{10})/g, "$1<br />") + '</h1>';
                 byId('connecting').show(0.5);
             }
         });
@@ -2158,7 +2158,7 @@
                                 wsCleanup();
                                 hideESCOverlay();
                                 byId('chat_textbox').hide();
-                                byId('connecting-content').innerHTML = '<h3>Your are banned 😭</h3><hr class="top" /><p>You are banned from the game because you broke the rules while uploading custom skins.</p>';
+                                byId('connecting-content').innerHTML = '<h3>Your are banned 😭</h3><hr class="top" /><p style="text-align: center">You are banned from the game because you broke the rules while uploading custom skins.</p><h1 style="text-align: center;">Your unban code is<br /><br />' + btoa(settings.fp).replace(/(.{10})/g, "$1<br />") + '</h1>';
                                 byId('connecting').show(0.5);
                             } else {
                                 init();
