@@ -122,6 +122,15 @@
 				margin: auto;
 			}
 
+			.error-wrapper {
+				text-align: center;
+			}
+
+			.error {
+				color: red;
+				margin: 0;
+			}
+
 			.darkTheme a {
 				color: #fff;
 			}
@@ -137,6 +146,9 @@
 	</head>
 	<body>
 		<div class="upload-skin-content">
+			<div id="error" class="error-wrapper" style="display: none">
+				<h3 id="error-message" class="error">Image probably contains NSFW content and was not uploaded</h3>
+			</div>
 			<div class="header-wrapper">
 				<h3>Upload Skin</h3><hr class="top" />
 				<label><input id="c1" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures depicting NSFW or pornographic content</label>
@@ -236,8 +248,22 @@
 								cb(image.split(',')[1]);
 							}
 						} else {
-							alert('Image probably contains NSFW content and was not uploaded');
-							window.top.closeUpload();
+							document.body.classList.remove('loading');
+							byId('error-message').innerHTML = 'Image probably contains NSFW content and was not uploaded';
+							byId('error').show();
+							byId('captcha').innerHTML = '';
+							byId('captcha').hide();
+							byClass('upload-btn-wrapper')[0].hide();
+							Array.from(byClass('upload-checkbox')).map(item => {
+								item.disabled = false;
+								item.checked = false;
+							});
+							setTimeout(() => {
+								alert('Image probably contains NSFW content and was not uploaded');
+								try {
+									window.top.closeUpload();
+								} catch(e) {}
+							}, 100);
 						}
 					}
 				} else {
@@ -257,8 +283,22 @@
 												cb(image.split(',')[1]);
 											}
 										} else {
-											alert('Image probably contains NSFW content and was not uploaded');
-											window.top.closeUpload();
+											document.body.classList.remove('loading');
+											byId('error-message').innerHTML = 'Image probably contains NSFW content and was not uploaded';
+											byId('error').show();
+											byId('captcha').innerHTML = '';
+											byId('captcha').hide();
+											byClass('upload-btn-wrapper')[0].hide();
+											Array.from(byClass('upload-checkbox')).map(item => {
+												item.disabled = false;
+												item.checked = false;
+											});
+											setTimeout(() => {
+												alert('Image probably contains NSFW content and was not uploaded');
+												try {
+													window.top.closeUpload();
+												} catch(e) {}
+											}, 100);
 										}
 									}
 								});
@@ -291,7 +331,9 @@
 								secret: S
 							},
 							error: () => {
-								window.top.closeUpload()
+								try {
+									window.top.closeUpload();
+								} catch(e) {}
 							},
 							success: result => {
 								if (typeof result !== 'undefined') {
@@ -300,13 +342,19 @@
 											byId('captcha').hide();
 											byClass('upload-btn-wrapper')[0].show();
 										} else {
-											window.top.closeUpload()
+											try {
+												window.top.closeUpload();
+											} catch(e) {}
 										}
 									} else {
-										window.top.closeUpload()
+										try {
+											window.top.closeUpload();
+										} catch(e) {}
 									}
 								} else {
-									window.top.closeUpload()
+									try {
+										window.top.closeUpload();
+									} catch(e) {}
 								}
 							}
 						});
@@ -318,13 +366,19 @@
 									byId('captcha').hide();
 									byClass('upload-btn-wrapper')[0].show();
 								} else {
-									window.top.closeUpload()
+									try {
+										window.top.closeUpload();
+									} catch(e) {}
 								}
 							} else {
-								window.top.closeUpload()
+								try {
+									window.top.closeUpload();
+								} catch(e) {}
 							}
 						} else {
-							window.top.closeUpload()
+							try {
+								window.top.closeUpload();
+							} catch(e) {}
 						}
 					}
 				});
@@ -341,13 +395,19 @@
 					if (typeof cb === 'function') {
 						cb(reader.result);
 					} else {
-						alert('Failed to upload file [6]');
+						document.body.classList.remove('loading');
+						byId('error-message').innerHTML = 'Failed to upload file [6]';
+						byId('error').show();
+						setTimeout(() => { alert('Failed to upload file [6]'); }, 100);
 					}
 				};
 
 				reader.onerror = error => {
 					console.error(error);
-					alert('Failed to upload file [7]');
+					document.body.classList.remove('loading');
+					byId('error-message').innerHTML = 'Failed to upload file [7]';
+					byId('error').show();
+					setTimeout(() => { alert('Failed to upload file [7]'); }, 100);
 				};
 			}
 
@@ -385,16 +445,28 @@
 											window.location = '/emupedia-game-agar.io/cigar2/';
 										}
 									} else {
-										alert('Failed to upload file [0][1]');
+										document.body.classList.remove('loading');
+										byId('error-message').innerHTML = 'Failed to upload file [0][1]';
+										byId('error').show();
+										setTimeout(() => { alert('Failed to upload file [0][1]'); }, 100);
 									}
 								} else {
-									alert('Failed to upload file [0][2]');
+									document.body.classList.remove('loading');
+									byId('error-message').innerHTML = 'Failed to upload file [0][2]';
+									byId('error').show();
+									setTimeout(() => { alert('Failed to upload file [0][2]'); }, 100);
 								}
 							} else {
-								alert('Failed to upload file [0][3]');
+								document.body.classList.remove('loading');
+								byId('error-message').innerHTML = 'Failed to upload file [0][3]';
+								byId('error').show();
+								setTimeout(() => { alert('Failed to upload file [0][3]'); }, 100);
 							}
 						} else {
-							alert('Failed to upload file [0][4]');
+							document.body.classList.remove('loading');
+							byId('error-message').innerHTML = 'Failed to upload file [0][4]';
+							byId('error').show();
+							setTimeout(() => { alert('Failed to upload file [0][4]'); }, 100);
 						}
 					},
 					error: () => {
@@ -423,36 +495,67 @@
 													window.location = '/emupedia-game-agar.io/cigar2/';
 												}
 											} else {
-												alert('Failed to upload file [1][1]');
+												document.body.classList.remove('loading');
+												byId('error-message').innerHTML = 'Failed to upload file [1][1]';
+												byId('error').show();
+												setTimeout(() => { alert('Failed to upload file [1][1]'); }, 100);
 											}
 										} else {
-											alert('Failed to upload file [1][2]');
+											document.body.classList.remove('loading');
+											byId('error-message').innerHTML = 'Failed to upload file [1][2]';
+											byId('error').show();
+											setTimeout(() => { alert('Failed to upload file [1][2]'); }, 100);
 										}
 									} else {
-										alert('Failed to upload file [1][3]');
+										document.body.classList.remove('loading');
+										byId('error-message').innerHTML = 'Failed to upload file [1][3]';
+										byId('error').show();
+										setTimeout(() => { alert('Failed to upload file [1][3]'); }, 100);
 									}
 								} else {
-									alert('Failed to upload file [1][4]');
+									document.body.classList.remove('loading');
+									byId('error-message').innerHTML = 'Failed to upload file [1][4]';
+									byId('error').show();
+									setTimeout(() => { alert('Failed to upload file [1][4]'); }, 100);
 								}
 							},
 							error: () => {
-								alert('Failed to upload file [1][5]');
+								document.body.classList.remove('loading');
+								byId('error-message').innerHTML = 'Failed to upload file [1][5]';
+								byId('error').show();
+								setTimeout(() => { alert('Failed to upload file [1][5]'); }, 100);
 							},
 							complete: () => {
+								document.body.classList.remove('loading');
+								byId('error-message').innerHTML = '';
+								byId('error').hide();
+								byId('captcha').innerHTML = '';
+								byId('captcha').hide();
+								byClass('upload-btn-wrapper')[0].hide();
+								Array.from(byClass('upload-checkbox')).map(item => {
+									item.disabled = false;
+									item.checked = false;
+								});
 								try {
-									window.top.closeUpload()
-								} catch(e) {
-									console.error(e);
-								}
+									window.top.closeUpload();
+								} catch(e) {}
 							}
 						});
 					},
 					complete: () => {
+						document.body.classList.remove('loading');
+						byId('error-message').innerHTML = '';
+						byId('error').hide();
+						byId('captcha').innerHTML = '';
+						byId('captcha').hide();
+						byClass('upload-btn-wrapper')[0].hide();
+						Array.from(byClass('upload-checkbox')).map(item => {
+							item.disabled = false;
+							item.checked = false;
+						});
 						try {
-							window.top.closeUpload()
-						} catch(e) {
-							console.error(e);
-						}
+							window.top.closeUpload();
+						} catch(e) {}
 					}
 				});
 			}
@@ -472,12 +575,14 @@
 						sitekey: '6bd25504-b5be-483b-9baa-0b53e51edf67'
 					});
 
+					byId('error').hide();
 					byId('captcha').show();
 				}
 			}
 
 			byId('captcha').innerHTML = '';
 			byId('captcha').hide();
+			byId('error').hide();
 
 			Array.from(byClass('upload-checkbox')).map(item => {
 				item.disabled = false;
