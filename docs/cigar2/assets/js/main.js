@@ -2063,8 +2063,8 @@
 
 		joystick.on('move', (e, nipple) => {
 			if (settings.useJoystick) {
-				mouseX = innerWidth / 2 + nipple.instance.frontPosition.x;
-				mouseY = innerHeight / 2 + nipple.instance.frontPosition.y;
+				mouseX = innerWidth / 2 + nipple.instance.frontPosition.x * 2;
+				mouseY = innerHeight / 2 + nipple.instance.frontPosition.y * 2;
 			}
 		});
 
