@@ -904,7 +904,7 @@
 	function sendNickName() {
 		if (wsIsOpen() && null != userNickName) {
 			var msg = prepareData(1 + 2 * userNickName.length);
-			msg.setUint8(0, 0);
+			msg.setUint8(0, 1);
 			for (var i = 0; i < userNickName.length; ++i) msg.setUint16(1 + 2 * i, userNickName.charCodeAt(i), true);
 			wsSend(msg)
 		}
@@ -1380,7 +1380,7 @@
 	wHandle.spectate = function() {
 		userNickName = null;
 		wHandle.isSpectating = true;
-		sendUint8(1);
+		sendUint8(0);
 		hideOverlays()
 	};
 	wHandle.setGameMode = function (arg) {

@@ -371,7 +371,7 @@
 									$('#connecting').show();
 								} else {
 									$('#overlays').show();
-									connect('wss://agar.emupedia.net:443/ws/', true);
+									connect('wss://agar.emupedia.net:443/ws1/', true);
 
 									clearInterval(interval);
 									interval = setInterval(() => {
@@ -398,12 +398,12 @@
 							});
 						}).error(function() {
 							$('#overlays').show();
-							connect('wss://agar.emupedia.net:443/ws/', true);
+							connect('wss://agar.emupedia.net:443/ws1/', true);
 						});
 					}
 				}).error(function() {
 					$('#overlays').show();
-					connect('wss://agar.emupedia.net:443/ws/', true);
+					connect('wss://agar.emupedia.net:443/ws1/', true);
 				});
 
 				$('input').keypress(function(e) {
