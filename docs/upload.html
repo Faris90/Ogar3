@@ -78,7 +78,7 @@
 			.button-wrapper {
 				display: flex;
 				width: 100%;
-				height: 22%;
+				height: 17%;
 				justify-content: center;
 				align-items: center;
 			}
@@ -122,6 +122,12 @@
 				margin: auto;
 			}
 
+			#phrase {
+				width: 100%;
+				background: #000;
+				color: #fff;
+			}
+
 			.error-wrapper {
 				text-align: center;
 			}
@@ -155,10 +161,12 @@
 				<label><input id="c2" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures disgusting for shock value or gore content</label>
 				<label><input id="c3" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures of real people, myself, my friends</label>
 				<label><input id="c4" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures of famous people (actors, musicians, football players, etc.)</label>
-				<label><input id="c5" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures that shows the face of any person</label>
-				<label><input id="c6" class="upload-checkbox" type="checkbox" /> I understand that I need to have an IQ level of at least 50 IQ points and can solve a Captcha</label>
+<!--				<label><input id="c5" class="upload-checkbox" type="checkbox" /> I agree I will not upload pictures that shows the face of any real person</label>-->
+<!--				<label><input id="c6" class="upload-checkbox" type="checkbox" /> I understand that I need to have an IQ level of at least 50 IQ points and can solve a Captcha</label>-->
 				<label><input id="c7" class="upload-checkbox" type="checkbox" /> I understand that if I break any of these rules I will be banned from using the game</label>
 				<label><input id="c8" class="upload-checkbox" type="checkbox" /> I understand that I will not cry in Discord after I have been banned from the game</label>
+				<h6>After you've read all the rules and checked all the checkboxes, then type the following phrase exactly as seen: <b>I will not upload pictures that shows the face of any real person</b></h6>
+				<input id="phrase" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onpaste="return false;" ondrop="return false;" value="" />
 				<hr />
 			</div>
 			<div class="button-wrapper">
@@ -253,6 +261,7 @@
 							byId('error').show();
 							byId('captcha').innerHTML = '';
 							byId('captcha').hide();
+							byId('phrase').value = '';
 							byClass('upload-btn-wrapper')[0].hide();
 							Array.from(byClass('upload-checkbox')).map(item => {
 								item.disabled = false;
@@ -288,6 +297,7 @@
 											byId('error').show();
 											byId('captcha').innerHTML = '';
 											byId('captcha').hide();
+											byId('phrase').value = '';
 											byClass('upload-btn-wrapper')[0].hide();
 											Array.from(byClass('upload-checkbox')).map(item => {
 												item.disabled = false;
@@ -340,6 +350,7 @@
 									if (typeof result['success'] !== 'undefined') {
 										if (result['success'] === true) {
 											byId('captcha').hide();
+											byId('phrase').value = '';
 											byClass('upload-btn-wrapper')[0].show();
 										} else {
 											try {
@@ -364,6 +375,7 @@
 							if (typeof result['success'] !== 'undefined') {
 								if (result['success'] === true) {
 									byId('captcha').hide();
+									byId('phrase').value = '';
 									byClass('upload-btn-wrapper')[0].show();
 								} else {
 									try {
@@ -531,6 +543,7 @@
 								byId('error').hide();
 								byId('captcha').innerHTML = '';
 								byId('captcha').hide();
+								byId('phrase').value = '';
 								byClass('upload-btn-wrapper')[0].hide();
 								Array.from(byClass('upload-checkbox')).map(item => {
 									item.disabled = false;
@@ -548,6 +561,7 @@
 						byId('error').hide();
 						byId('captcha').innerHTML = '';
 						byId('captcha').hide();
+						byId('phrase').value = '';
 						byClass('upload-btn-wrapper')[0].hide();
 						Array.from(byClass('upload-checkbox')).map(item => {
 							item.disabled = false;
@@ -566,8 +580,10 @@
 				if (e.target.checked === true) {
 					e.target.disabled = true;
 				}
+			}
 
-				if (Array.from(byClass('upload-checkbox')).every(item => item.checked === true)) {
+			const changeInputPhrase = e => {
+				if (Array.from(byClass('upload-checkbox')).every(item => item.checked === true) && e.target.value === 'I will not upload pictures that shows the face of any real person') {
 					byId('captcha').innerHTML = '';
 					// noinspection JSUnresolvedReference
 					hcaptcha.render('captcha' , {
@@ -577,11 +593,14 @@
 
 					byId('error').hide();
 					byId('captcha').show();
+				} else {
+					byId('captcha').hide();
 				}
 			}
 
 			byId('captcha').innerHTML = '';
 			byId('captcha').hide();
+			byId('phrase').value = '';
 			byId('error').hide();
 
 			Array.from(byClass('upload-checkbox')).map(item => {
@@ -607,6 +626,7 @@
 			observer.observe(byId('captcha'), { attributes: true });
 
 			byId('upload-btn').addEventListener('change', changeUploadSkin);
+			byId('phrase').addEventListener('input', changeInputPhrase);
 
 			document.body.classList.remove('loading');
 		</script>
