@@ -583,7 +583,7 @@
 			}
 
 			const changeInputPhrase = e => {
-				if (Array.from(byClass('upload-checkbox')).every(item => item.checked === true) && e.target.value === 'I will not upload pictures that shows the face of any real person') {
+				if (Array.from(byClass('upload-checkbox')).every(item => item.checked === true) && e.target.value.toLowerCase() === 'i will not upload pictures that shows the face of any real person') {
 					byId('captcha').innerHTML = '';
 					// noinspection JSUnresolvedReference
 					hcaptcha.render('captcha' , {
