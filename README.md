@@ -10,7 +10,7 @@ The [Server Tracker](https://ogar3tracker.faris90.repl.co/) is up and running
 ## How to access server
 Go to localhost if you set the port to 80 go to localhost:80
 ## Demos
-[Replit](https://ogar3.faris90.repl.co)
+[Render](https://ogar3-demo.onrender.com/)
 ## Obtaining and Using
 ## Server tracker
  [Server Tracker](http://ogar3tracker.wdr.icu/)
