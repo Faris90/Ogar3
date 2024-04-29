@@ -8,7 +8,7 @@ We worked really hard for this project. Although we dont care if you enhance it 
 if you copy it and claim our work as your own. Although it might feel good, to take the credit, you would ultimatly
 regret it. But please feel free to change the files and publish putting your name up as well as ours.
 We will also not get into legalities. but please dont take advantage that we dont use
-legalities. Instead, treat us with respect like we treat you. 
+legalities. Instead, treat us with respect like we treat you.
 
 Sincerely
 The AJS Dev Team.
@@ -71,6 +71,12 @@ PacketHandler.prototype.handleMessage = function(message) {
 
           nick += String.fromCharCode(charCode);
         }
+
+        if (nick === '<(_ _)>') {
+          nick = 'player';
+          console.log('nick <(_ _)> found! renamed to player !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        }
+
         this.setNickname(nick);
         break;
       case 1:
@@ -146,7 +152,6 @@ PacketHandler.prototype.handleMessage = function(message) {
         }
         break;
       case 90: // from cigar
-
         var message = "";
         var maxLen = this.gameServer.config.chatMaxMessageLength * 2; // 2 bytes per char
         var offset = 2;
@@ -167,6 +172,9 @@ PacketHandler.prototype.handleMessage = function(message) {
           }
           message += String.fromCharCode(charCode);
         }
+
+        console.log('[' + (new Date().toISOString().replace('T', ' ')) + '][90][' + (typeof this.socket.verifyScore !== 'undefined' ? this.socket.verifyScore : '??') +'][' + this.socket.remoteAddress + ']' + this.socket.playerTracker.name + ': ' + message)
+
         var packet = new Packet.Chat(this.socket.playerTracker, message);
         // Send to all clients (broadcast)
         for (var i = 0; i < this.gameServer.clients.length; i++) {
@@ -216,6 +224,9 @@ PacketHandler.prototype.handleMessage = function(message) {
 
           var zname = wname = this.socket.playerTracker.name;
           if (wname == "") wname = "Spectator";
+
+          console.log('[' + (new Date().toISOString().replace('T', ' ')) + '][99][' + (typeof this.socket.verifyScore !== 'undefined' ? this.socket.verifyScore : '??') +'][' + this.socket.remoteAddress + ']' + this.socket.playerTracker.name + ': ' + message)
+
           for (var i in this.gameServer.plugins) {
             if (this.gameServer.plugins[i].beforecmsg) {
               if (!this.gameServer.plugins[i].beforecmsg(this.socket.playerTracker, message)) break;
