@@ -357,7 +357,13 @@
 	}
 
 	function attemptConnection() {
-		wsConnect(connectUrl);
+		if (typeof grecaptcha !== 'undefined') {
+			grecaptcha.ready(() => {
+				grecaptcha.execute('6LdxZMspAAAAAOVZOMGJQ_yJo2hBI9QAbShSr_F3', { action: 'connect' }).then(token => {
+					wsConnect('wss://agar.emupedia.net/ws1/?token=' + token);
+				});
+			});
+		}
 	}
 
 	function showConnecting() {
@@ -367,13 +373,7 @@
 		}
 	}
 
-	function wsConnect(wsUrl, seturl) {
-		if (seturl) {
-			var con = wsUrl.split(":");
-			connectUrl = con[0] + ":" + con[1];
-			defaultPort = con[2];
-		}
-
+	function wsConnect(wsUrl) {
 		if (ws) {
 			ws.onopen = null;
 			ws.onmessage = null;
@@ -532,8 +532,6 @@
 				drawLeaderBoard();
 				break;
 			case 60: // List servers
-
-
 				break;
 			case 64: // set border
 				leftPos = msg.getFloat64(offset, true);
