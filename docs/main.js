@@ -632,7 +632,7 @@
 			var chatText = new UText(18, '#666666');
 			chatText.setValue(': ' + chatBoard[i + from].message);
 			a = chatText.render();
-			ctx.drawImage(a, 3 + width, chatCanvas.height / scaleFactor - 24 * (len - from - i));
+			ctx.drawImage(a, 15 + width * 1.5, chatCanvas.height / scaleFactor - 24 * (len - from - i));
 		}
 		//ctx.restore();
 	}
