@@ -2085,8 +2085,12 @@
 
 			if (event.target.id === 'splitBtn') {
 				wsSend(UINT8_CACHE[minionControlled ? 0x16 : 0x11]);
-			} else if (event.target.id === 'ejectBtn') {
+				return;
+			}
+
+			if (event.target.id === 'ejectBtn') {
 				wsSend(UINT8_CACHE[minionControlled ? 0x17 : 0x15]);
+				return;
 			}
 
 			if (!settings.useJoystick) {
