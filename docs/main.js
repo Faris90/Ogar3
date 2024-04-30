@@ -1,3 +1,5 @@
+// noinspection DuplicatedCode
+
 (function (wHandle, wjQuery) {
 	var SKIN_URL = "./skins/";
 
@@ -16,8 +18,6 @@
 		document.getElementById("canvas").focus();
 		var isTyping = false;
 		var chattxt;
-		//getServerList();
-		//setInterval(getServerList, 18E4);
 		mainCanvas = nCanvas = document.getElementById("canvas");
 		ctx = mainCanvas.getContext("2d");
 		/*mainCanvas.onmousedown = function (event) {
@@ -324,26 +324,6 @@
 		Y = (rawMouseY - canvasHeight / 2) / viewZoom + nodeY
 	}
 
-	function getServerList() {
-		if (null == playerStat) {
-			playerStat = {};
-			wjQuery("#region").children().each(function() {
-				var a = wjQuery(this),
-					b = a.val();
-				b && (playerStat[b] = a.text())
-			});
-		}
-		wjQuery.get("info.php", function (a) {
-			var numPlayers = {};
-			for (var region in a.regions) {
-				var d = region.split(":")[0];
-				numPlayers[d] = numPlayers[d] || 0;
-				numPlayers[d] += a.regions[region].numPlayers
-			}
-			for (var numplayer in numPlayers) wjQuery('#region option[value="' + numplayer + '"]').text(playerStat[numplayer] + " (" + numPlayers[numplayer] + " players)")
-		}, "json")
-	}
-
 	function hideOverlays() {
 		hasOverlay = false;
 		wjQuery("#adsBottom").hide();
@@ -377,14 +357,7 @@
 	}
 
 	function attemptConnection() {
-		for (var i in knownServers) {
-			var ser = knownServers[i];
-			if (ser && ser.id == gameMode) {
-				wsConnect(connectUrl + ":" + ser.port);
-
-				break;
-			}
-		}
+		wsConnect(connectUrl);
 	}
 
 	function showConnecting() {
@@ -419,16 +392,17 @@
 		leaderBoard = [];
 		mainCanvas = teamScores = null;
 		userScore = 0;
-
+		//console.log('Connecting to ' + wsUrl + '...');
 		ws = new WebSocket(wsUrl);
-		ws.binaryType = "arraybuffer";
+		ws.binaryType = 'arraybuffer';
 		ws.onopen = onWsOpen;
 		ws.onmessage = onWsMessage;
 		ws.onclose = onWsClose;
-		ws.onerror = function() {
+		ws.onerror = function(e) {
+			//console.log('Error ' + e);
 			gameMode = 1;
 			wjQuery("#gamemode").val(1);
-			return 54
+			return 54;
 		}
 	}
 
@@ -442,8 +416,7 @@
 
 	function onWsOpen() {
 		var msg;
-		delay = 500;
-		wjQuery("#connecting").hide();
+		wjQuery('#connecting').hide();
 		msg = prepareData(5);
 		msg.setUint8(0, 254);
 		msg.setUint32(1, 4, true);
@@ -453,9 +426,19 @@
 		msg.setUint32(1, 1332175218, true);
 		wsSend(msg);
 		sendNickName();
+		// console.log('Connection successful!');
+		if (reconnectTimeout === null) {
+			reconnectTimeout = setTimeout(function() {
+				delay = 500;
+			}, 5000);
+		} else {
+			clearTimeout(reconnectTimeout);
+			reconnectTimeout = null;
+		}
 	}
 
 	function onWsClose() {
+		// console.log('Connection closed!');
 		setTimeout(showConnecting, delay);
 		delay *= 1.5
 	}
@@ -500,7 +483,6 @@
 				break;
 			case 45: // info
 				infoPacket(msg, offset)
-
 				break;
 			case 21: // draw line
 				lineX = msg.getInt16(offset, true);
@@ -681,17 +663,12 @@
 			if (!regi[i]) continue;
 			var det = regi[i].split(":");
 			if (!det[2] || det[2] == "undefined") det[2] = defaultPort;
-
-			wjQuery('#gamemode')
-				.append(wjQuery("<option></option>")
-					.attr("value", det[0])
-					.text(det[1]));
+			wjQuery('#gamemode').append(wjQuery("<option></option>").attr("value", det[0]).text(det[1]));
 			var pu = {
 				id: det[0],
 				name: det[1],
 				port: det[2]
 			}
-			knownServers.push(pu);
 		}
 	}
 
@@ -1240,6 +1217,12 @@
 
 	var nCanvas, ctx, mainCanvas, lbCanvas, chatCanvas, canvasWidth, canvasHeight, qTree = null,
 	ws = null,
+	delay = 500,
+	oldX = -1,
+	oldY = -1,
+	z = 1,
+	scoreText = null,
+	skins = {},
 	nodeX = 0,
 	nodeY = 0,
 	nodesOnScreen = [],
@@ -1272,6 +1255,7 @@
 	qMacro = false,
 	eMacro = false,
 	rMacro = false,
+	reconnectTimeout = null,
 	mouseinterval = false,
 	clientData = { // Levels of "permission": 0 = not allowed, 1 = checked off but changeable, 2 = checked on but changeable, 3 = always on
 
@@ -1311,8 +1295,6 @@
 	connectUrl = "",
 	isNewProto = false,
 	defaultPort = 0,
-	knownServers = [],
-	idList = [],
 	smoothRender = .4,
 	hideChat = false,
 	posX = nodeX = ~~((leftPos + rightPos) / 2),
@@ -1327,7 +1309,6 @@
 	lineY = 0,
 	drawLineX = 0,
 	drawLineY = 0,
-	Ra = 0,
 	teamColor = ["#333333", "#FF3333", "#33FF33", "#3333FF"],
 	xa = false,
 	zoom = 1,
@@ -1393,25 +1374,6 @@
 		if (clientData.acid != 0 && clientData.acid != 3) xa = arg
 	};
 	wHandle.connect = wsConnect;
-
-	if (null != wHandle.localStorage) {
-		if (null == wHandle.localStorage.AB8) {
-			wHandle.localStorage.AB8 = ~~(100 * Math.random());
-		}
-		Ra = +wHandle.localStorage.AB8;
-		wHandle.ABGroup = Ra;
-	}
-
-	var delay = 500,
-	oldX = -1,
-	oldY = -1,
-	Canvas = null,
-	z = 1,
-	scoreText = null,
-	skins = {},
-	knownNameDict = "2ch;3lkoos;4chan;52k;8;8ch;9gag;argentina;ashwin;austria;ayy-lmao;babadook;bait;bangladesh;belgium;berlusconi;blatter;boris;bosnia;botswana;brax;brazil;bulba;bulgaria;bush;byzantium;cambodia;cameron;canada;char;chavez;chile;china;cia;clinton;confederate;croatia;cuba;denmark;dilma;doge;ea;earth;estonia;european-union;f4;facebook;facepunch;fidel;gdk-xmas;german-empire;germany;getdeadkid;greece;guri;hillary;hitler;hollande;hong-kong;hungary;imperial-japan;india;indiana;indonesia;iran;iraq;ireland;italy;jamaica;japan;kbkb;kc;kim-jong-un;latvia;lithuania;luxembourg;m4j;majnoon;maldivas;mars;matriarchy;merkel;mexico;mistik;moon;nasa;nazi;netherlands;nigeria;north-korea;norway;obama;origin;pakistan;palin;patriarchy;peru;pewdiepie;piccolo;pika;pokerface;poland;portugal;prodota;prussia;putin;qing-dynasty;quebec;queen;receita-federal;reddit;romania;russia;sanik;scotland;sealand;sir;skills;snay-chocolate;snay-gang;snay;sneddy-gaming;somalia;sonic;south-korea;spain;squi;stalin;statik;steam;strike;stussy;sweden;switzerland;taiwan;texas;thailand;timid;togomanyt;trump;tsarist-russia;tsipras;tumblr;turkey;ukraine;united-kingdom;usa;ussr;venezuela;vinesauce;wojak;woobs;xxnetro;xxnetro2;yaranaika;yemeni;zone".split(";"),
-	knownNameDict_noDisp = ["8", "nasa"],
-	ib = ["_canvas'blob"];
 
 	Cell.prototype = {
 		id: 0,
