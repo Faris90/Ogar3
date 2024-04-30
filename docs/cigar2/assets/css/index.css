@@ -419,6 +419,10 @@ label#nick-list:after, label#skin-list:after {
 	background-color: #fff;
 }
 
+.grecaptcha-badge {
+	display: none;
+}
+
 .darkTheme #connecting-content, .darkTheme #upload-skin-content {
 	background-color: rgba(9,13,23,0.6);
 	color: #fff;
