@@ -2494,14 +2494,16 @@
 		gameReset();
 		showESCOverlay();
 
-		const regex = /ip=([\w\W]+:[0-9]+)/;
-		const args = window.location.search;
-		const div = args ? regex.exec(args.slice(1)) : null;
-
-		if (div) {
-			window.setserver(div[1]);
-		} else {
+		// noinspection JSUnresolvedReference
+		if (typeof grecaptcha !== 'undefined') {
 			// noinspection JSUnresolvedReference
+			grecaptcha.ready(() => {
+				// noinspection JSUnresolvedReference
+				grecaptcha.execute('6LdxZMspAAAAAOVZOMGJQ_yJo2hBI9QAbShSr_F3', { action: 'connectV2' }).then(token => {
+					window.setserver(byId('gamemode').value + '?token=' + token);
+				});
+			});
+		} else {
 			window.setserver(byId('gamemode').value);
 		}
 
