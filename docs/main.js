@@ -591,9 +591,9 @@
 		}
 		color = '#' + color;
 		chatBoard.push({
-			"name": atob(getString()),
+			"name": getString(),
 			"color": color,
-			"message": atob(getString()),
+			"message": getString(),
 			"time": Date.now()
 		});
 		drawChatBoard();
