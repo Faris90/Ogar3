@@ -682,13 +682,31 @@
 			wsCleanup();
 		}
 		byId('connecting').show(0.5);
-		wsUrl = url;
-		ws = new WebSocket(`ws${USE_HTTPS ? 's' : ''}://${url}`);
-		ws.binaryType = 'arraybuffer';
-		ws.onopen = wsOpen;
-		ws.onmessage = wsMessage;
-		ws.onerror = wsError;
-		ws.onclose = wsClose;
+
+		// noinspection JSUnresolvedReference
+		if (typeof grecaptcha !== 'undefined') {
+			// noinspection JSUnresolvedReference
+			grecaptcha.ready(() => {
+				// noinspection JSUnresolvedReference
+				grecaptcha.execute('6LdxZMspAAAAAOVZOMGJQ_yJo2hBI9QAbShSr_F3', { action: 'connectV2' }).then(token => {
+					wsUrl = url;
+					ws = new WebSocket(`ws${USE_HTTPS ? 's' : ''}://${url + '?token=' + token}`);
+					ws.binaryType = 'arraybuffer';
+					ws.onopen = wsOpen;
+					ws.onmessage = wsMessage;
+					ws.onerror = wsError;
+					ws.onclose = wsClose;
+				});
+			});
+		} else {
+			wsUrl = url;
+			ws = new WebSocket(`ws${USE_HTTPS ? 's' : ''}://${url}`);
+			ws.binaryType = 'arraybuffer';
+			ws.onopen = wsOpen;
+			ws.onmessage = wsMessage;
+			ws.onerror = wsError;
+			ws.onclose = wsClose;
+		}
 	}
 
 	function wsOpen() {
@@ -2494,18 +2512,7 @@
 		gameReset();
 		showESCOverlay();
 
-		// noinspection JSUnresolvedReference
-		if (typeof grecaptcha !== 'undefined') {
-			// noinspection JSUnresolvedReference
-			grecaptcha.ready(() => {
-				// noinspection JSUnresolvedReference
-				grecaptcha.execute('6LdxZMspAAAAAOVZOMGJQ_yJo2hBI9QAbShSr_F3', { action: 'connectV2' }).then(token => {
-					window.setserver(byId('gamemode').value + '?token=' + token);
-				});
-			});
-		} else {
-			window.setserver(byId('gamemode').value);
-		}
+		window.setserver(byId('gamemode').value);
 
 		drawGame();
 		Logger.info(`Init done in ${Date.now() - LOAD_START}ms`);
