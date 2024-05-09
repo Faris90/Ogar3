@@ -4,7 +4,7 @@ An open source Agar.io server implementation, based on Jaralowell's [Ogarserv](h
 ## Want old version?
 [Here you go!](https://github.com/Faris90/Ogar3/tree/old-ogar3)
 ## Project Status
-The [Server Tracker](https://ogar3tracker.faris90.repl.co/) down
+The [Server Tracker](https://ogar3tracker.faris90.repl.co/) is down
 
 
 ## How to access server
