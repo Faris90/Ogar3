@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/> <!-- Mobile Fix -->
+		<meta property="og:image" content="img/1200x630.png"/>
+		<meta property="og:image:width" content="1200"/>
+		<meta property="og:image:height" content="630"/>
+		<meta property="og:type" content="website"/>
+		<title>Agar.io</title>
+		<link id="fav" rel="icon" type="image/png" href="favicon-32x32.png"/>
+		<link href='https://fonts.googleapis.com/css?family=Ubuntu:700' rel='stylesheet' type='text/css'>
+		<link href="css/bootstrap-3.3.4.min.css" rel="stylesheet">
+		<link href="css/gallery.css" rel="stylesheet">
+
+		<style>
+			#adsBottom, #canvas {
+				left: 0;
+				right: 0;
+				bottom: 0;
+				position: absolute
+			}
+
+			#adsBottom, #canvas, #chat_textbox, #helloDialog {
+				position: absolute;
+			}
+
+			.ui-dialog, body {
+				overflow: hidden
+			}
+
+			body {
+				padding: 0;
+				margin: 0
+			}
+
+			#canvas {
+				top: 0;
+				width: 100%;
+				height: 100%
+			}
+
+			.checkbox label {
+				margin-right: 10px
+			}
+
+			form {
+				margin-bottom: 0
+			}
+
+			.btn-play, .btn-settings, .btn-spectate {
+				display: block;
+				height: 35px
+			}
+
+			.btn-play {
+				width: 85%;
+				float: left
+			}
+
+			.btn-settings {
+				width: 13%;
+				float: right
+			}
+
+			.btn-spectate {
+				display: block;
+				float: right
+			}
+
+			.btn-play, .btn-settings, .btn-spectate {
+				display: block;
+				height: 35px;
+			}
+
+			.btn-play {
+				width: 55%;
+				margin-right: 10px;
+				margin-bottom: 10px;
+			}
+
+			.btn-settings {
+				width: 13%;
+			}
+
+			#helloDialog {
+				width: 350px;
+				background-color: #FFFFFF;
+				border-radius: 15px;
+				padding: 5px 15px 5px 15px;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				-webkit-transform: translate(-50%, -50%);
+				-ms-transform: translate(-50%, -50%);
+				transform: translate(-50%, -50%);
+			}
+
+			#chat_textbox {
+				-webkit-transition: all .5s ease-in-out;
+				-moz-transition: all .5s ease-in-out;
+				-o-transition: all .5s ease-in-out;
+				transition: all .5s ease-in-out;
+				z-index: 1;
+				bottom: 10px;
+				background: rgba(0, 0, 0, .2);
+				border: 0;
+				outline: 0;
+				color: #FFF;
+				height: 30px;
+				text-indent: 12px;
+				left: 10px;
+				width: 300px
+			}
+
+			#chat_textbox:focus {
+				background: rgba(0, 0, 0, .5)
+			}
+
+			#title {
+				padding: 10px;
+			}
+
+			#nick {
+				width: 65%;
+			}
+
+			#skin {
+				width: 33%;
+				float: right;
+			}
+
+			#gallery-btn {
+				width: 100%;
+				margin-bottom: 5px;
+				display: none; /* Visible when skins are loaded */
+			}
+
+			#footer {
+				text-align: center;
+				margin-bottom: 10px;
+				margin-top: -10px;
+			}
+
+			#a300x250 {
+				width: 300px;
+				height: 250px;
+				background-repeat: no-repeat;
+				background-size: contain;
+				background-position: center center
+			}
+
+			.ui-dialog {
+				background-color: #141414;
+				/*background-image: url(http://agariohub.tk/assets/img/texture.png);*/
+				z-index: 100000
+			}
+
+			.ui-widget-overlay {
+				overflow: hidden;
+				z-index: 1000000
+			}
+
+			.skinclick {
+				cursor: pointer;
+				padding: 2px;
+				position: relative;
+				right: -12px;
+				border-radius: 50%;
+				-webkit-transition: all .5s ease;
+				-moz-transition: all .5s ease;
+				-ms-transition: all .5s ease;
+				-o-transition: all .5s ease;
+				transition: all .5s ease;
+				border: 1px solid orange
+			}
+
+			.skinlist:hover {
+				cursor: pointer;
+			}
+
+			.skinclick:hover {
+				border: 1px solid #fff;
+				z-index: 99999999999999;
+				-webkit-transform: scale(2.25);
+				-moz-transform: scale(2.25);
+				-ms-transform: scale(2.25);
+				-o-transform: scale(2.25);
+				transform: scale(2.25)
+			}
+
+			hr.top {
+				margin-top: 5px;
+			}
+
+			h2 {
+				margin-top: 0;
+				margin-bottom: 0;
+			}
+
+			.grecaptcha-badge {
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="gallery" onclick="if (event.target === this) this.style.display = 'none';" style="display: none;">
+			<div id="gallery-content">
+				<div id="gallery-header">Skins</div>
+				<div id="gallery-body"></div>
+			</div>
+		</div>
+		<div id="overlays" style="display:none; position: absolute; left: 0; right: 0; top: 0; bottom: 0; background-color: rgba(0,0,0,0.5); z-index: 200;">
+			<div id="helloDialog">
+				<form id="form" role="form">
+					<div class="form-group">
+						<div><h2 id="title" class="text-center">Agar.io</h2></div>
+						<hr class="top" />
+						<a class="text-center" style="display: block; color: red;" href="https://discord.gg/emupedia-510149138491506688" target="_blank">Join us on Discord if you have suggestions</a>
+					</div>
+					<div class="form-group">
+						<input id="nick" class="form-control" style="display: inline-block;" placeholder="Nick" maxlength="15" pattern="[a-zA-Z0-9_\- ]+" oninvalid="this.setCustomValidity('Only letters, numbers, spaces and \'_\' and \'-\') allowed')" onchange="try{setCustomValidity('')}catch(e){}" />
+						<input id="skin" class="form-control" style="display: inline-block;" placeholder="Skin Name" maxlength="25" pattern="[a-zA-Z0-9_\- ]+" oninvalid="this.setCustomValidity('Only letters, numbers, spaces and \'_\' and \'-\') allowed')" onchange="try{setCustomValidity('')}catch(e){}" />
+					</div>
+					<div id="locationUnknown"></div>
+					<div class="form-group clearfix">
+						<button class="btn btn-play btn-primary pull-left" onclick="start(); return false;" >Play</button>
+						<button id="spectateBtn" class="btn btn-warning btn-spectate pull-left" onclick="spectate(); return false;">Spectate</button>
+						<button class="btn btn-info btn-settings pull-right" onclick="jQuery('#settings').toggle(); return false;" ><i class="glyphicon glyphicon-cog"></i></button>
+						<button id="gallery-btn" onclick="openSkinsList(); return false;" class="btn btn-play btn-primary btn-needs-server btn-info">Choose Skin</button>
+					</div>
+					<div id="cantc" style="display:none;">
+						<h4>Cannot connect to server, click the reconnect button below to try again</h4><br>
+					</div>
+					<div class="checkbox" id="settings" style="display:none;">
+						<div style="margin: 6px;">
+							<label><input id="cskin" onchange="setSkins(!jQuery(this).is(':checked'));" type="checkbox"> No skins</label> <label><input id="cname" onchange="setNames(!jQuery(this).is(':checked'));"
+							type="checkbox"> No names</label> <label><input id="cdark" onchange="setDarkTheme(jQuery(this).is(':checked'));" type="checkbox"> Dark Theme</label> <label><input id="ccolor"
+							onchange="setColors(jQuery(this).is(':checked'));" type="checkbox"> No colors</label> <label><input id="cmass" onchange="setShowMass(jQuery(this).is(':checked'));" type="checkbox"> Show
+							mass</label> <label><input id="cchat" onchange="setHideChat(jQuery(this).is(':checked'));" type="checkbox"> Hide chat</label> <label><input id="csmooth" onchange=
+							"setSmooth(jQuery(this).is(':checked'));" type="checkbox"> Smooth Render</label> <label><input id="cacid" onchange="setAcid(jQuery(this).is(':checked'));" type="checkbox"> Acid
+							mode</label> <label><input id="cgrid" onchange="setHideGrid(jQuery(this).is(':checked'));" type="checkbox">Hide Grid</label>
+						</div>
+					</div>
+				</form>
+				<hr />
+				<div id="instructions" class="text-center text-muted">
+					<div>Move your mouse to control your cell</div>
+					<div>Press <b>Space</b> to split</div>
+					<div>Press <b>W</b> to eject some mass</div>
+				</div>
+				<hr />
+				<div id="footer">
+					<span class="text-muted">Have fun!</span>
+				</div>
+			</div>
+		</div>
+
+		<div id="connecting" style="display:none; position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 201; background-color: rgba(0,0,0,0.5);">
+			<div style="width: 350px; background-color: #fff; margin: 100px auto; border-radius: 15px; padding: 5px 15px 5px 15px;">
+				<h3>Trying to connect...</h3><hr />
+				<a class="text-center" style="display: block; color: red;" href="https://discord.gg/emupedia-510149138491506688" target="_blank">Join us on Discord!</a>
+				<p>If you cannot connect to the servers, check if you have some antivirus or firewall blocking the connection.</p>
+			</div>
+		</div>
+
+		<canvas height="600" id="canvas" width="800"></canvas>
+
+		<form>
+			<input id="chat_textbox" maxlength="70" autocomplete="off" placeholder="Press Enter to chat!" type="text">
+		</form>
+
+		<div id="skins" style="display: none;" title="Skins List (Click Your Skin)"></div>
+
+		<script src="https://www.google.com/recaptcha/api.js?render=6LdxZMspAAAAAOVZOMGJQ_yJo2hBI9QAbShSr_F3"></script>
+		<script src="js/jquery-1.11.3.min.js"></script>
+		<script src="js/fp.umd.min.js"></script>
+		<script>jQuery.noConflict();</script>
+		<script src="js/vector2.js"></script>
+		<script src="main.js?v=15"></script>
+
+		<script type="text/javascript">
+			var externallyFramed;
+			var FP = FingerprintJS.load();
+			var agarv1ident;
+			var bannedIdent = [];
+			var interval;
+
+			try {
+				externallyFramed = window.top.location.host !== window.location.host;
+			} catch (e) {
+				externallyFramed = true;
+			}
+
+			if (externallyFramed) {
+				try {
+					window.top.location = window.location;
+				} catch (e) {}
+			}
+
+			var knownSkins = [];
+
+			function sanitizeString(str) {
+				return str.replace(/[^a-zA-Z0-9_\- ]/gim, '').trim();
+			}
+
+			function openSkinsList() {
+				if (document.getElementById('gallery-body').innerHTML === '') {
+					buildGallery();
+				}
+
+				document.getElementById('gallery').style.display = 'flex';
+			}
+
+			function start() {
+				var form = document.getElementById('form');
+
+				if (form && typeof form['reportValidity'] === 'function' && form.reportValidity()) {
+					setNick((document.getElementById('skin').value !== '' ?  '<' : '') + sanitizeString(document.getElementById('skin').value) + (document.getElementById('skin').value !== '' ?  '>' : '') + sanitizeString(document.getElementById('nick').value));
+				}
+			}
+
+			function changeSkin(skin) {
+				document.getElementById('skin').value = sanitizeString(skin);
+				document.getElementById('gallery').style.display = 'none';
+			}
+
+			function buildGallery() {
+				var sortedSkins = knownSkins.sort();
+				var c = '';
+
+				for (var skin in sortedSkins) {
+					if (sortedSkins[skin] !== '') {
+						c += '<li class="skin" onclick="changeSkin(\'' + sortedSkins[skin] + '\')">';
+							c += '<img class="circular" loading="lazy" src="./skins/' + sortedSkins[skin] + '.png">';
+							c += '<h4 class="skinName">' + sortedSkins[skin] + '</h4>';
+						c += '</li>';
+					}
+				}
+
+				document.getElementById('gallery-body').innerHTML = '<ul id="skinsUL">' + c + '</ul>';
+			}
+
+			jQuery(document).ready(function($) {
+				$.get('skinList.txt', function(data, status) {
+					if (status === 'success') {
+						var skins = data.split(',');
+						if (skins.length === 0) return;
+						knownSkins = skins;
+						document.getElementById('gallery-btn').style.display = 'inline-block';
+
+						$.get('banList.txt').success(function(data) {
+							var fp = data.split(',');
+
+							for (var p of fp) bannedIdent.push(p);
+
+							try {
+								agarv1ident = localStorage.getItem('agarv1ident');
+							} catch (e) {}
+
+							FP.then(function (fp) { return fp.get() }).then(function(result) {
+								localStorage.setItem('agarv1ident', result.visitorId);
+
+								var ban = false;
+
+								bannedIdent.forEach(function(val) {
+									if (agarv1ident === val) {
+										ban = true;
+									}
+								});
+
+								if (ban) {
+									$('#chat_textbox').hide();
+									$('#overlays').hide();
+									$('#connecting div').html('<h3 style="text-align: center">Your are banned 😭</h3><hr class="top" /><p style="text-align: center">You are banned from the game because you broke the rules while uploading custom skins.</p><h1 style="text-align: center;">Your unban code is<br /><br />' + btoa(agarv1ident).replace(/(.{10})/g, "$1<br />") + '</h1>');
+									$('#connecting').show();
+								} else {
+									$('#overlays').show();
+
+									grecaptcha.ready(() => {
+										grecaptcha.execute('6LdxZMspAAAAAOVZOMGJQ_yJo2hBI9QAbShSr_F3', { action: 'connect' }).then(token => {
+											connect('wss://agar.emupedia.net/ws1/?token=' + token);
+										});
+									});
+
+									clearInterval(interval);
+									interval = setInterval(() => {
+										FP.then(fp => fp.get()).then(result => {
+											localStorage.setItem('agarv1ident', result.visitorId);
+
+											let ban = false;
+
+											bannedIdent.forEach(function(val) {
+												if (agarv1ident === val) {
+													ban = true;
+												}
+											});
+
+											if (ban) {
+												$('#chat_textbox').hide();
+												$('#overlays').hide();
+												$('#connecting div').html('<h3>Your are banned 😭</h3><hr class="top" /><p style="text-align: center">You are banned from the game because you broke the rules while uploading custom skins.</p><h1 style="text-align: center;">Your unban code is<br /><br />' + btoa(agarv1ident).replace(/(.{10})/g, "$1<br />") + '</h1>');
+												$('#connecting').show();
+											}
+										});
+									}, 10000);
+								}
+							});
+						}).error(function() {
+							$('#overlays').show();
+
+							grecaptcha.ready(() => {
+								grecaptcha.execute('6LdxZMspAAAAAOVZOMGJQ_yJo2hBI9QAbShSr_F3', { action: 'connect' }).then(token => {
+									connect('wss://agar.emupedia.net/ws1/?token=' + token);
+								});
+							});
+						});
+					}
+				}).error(function() {
+					$('#overlays').show();
+
+					grecaptcha.ready(() => {
+						grecaptcha.execute('6LdxZMspAAAAAOVZOMGJQ_yJo2hBI9QAbShSr_F3', { action: 'connect' }).then(token => {
+							connect('wss://agar.emupedia.net/ws1/?token=' + token);
+						});
+					});
+				});
+
+				$('input').keypress(function(e) {
+					if (e.which === '13') {
+						e.preventDefault();
+
+						if (!isSpectating) {
+							setNick((document.getElementById('skin').value !== '' ? '<' : '') + sanitizeString(document.getElementById('skin').value) + (document.getElementById('skin').value !== '' ?  '>' : '') + sanitizeString(document.getElementById('nick').value));
+						}
+					}
+				});
+
+				$('#chat_textbox').off('paste').on('paste', function(e) {
+					e.preventDefault();
+					return false;
+				});
+			});
+		</script>
+	</body>
+</html>
