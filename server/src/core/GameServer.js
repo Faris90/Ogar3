@@ -397,7 +397,7 @@ module.exports = class GameServer {
 			let clients = this.getClients();
 
 			if (clients.length >= this.config.serverMaxConnections) { // Server full
-				console.log('SERVER FULL!!!');
+				console.log('[' + (new Date().toISOString().replace('T', ' ')) + '] SERVER FULL!!!');
 				ws.close();
 				return;
 			}
@@ -405,7 +405,7 @@ module.exports = class GameServer {
 			let origin = ws.upgradeReq.rawHeaders[ws.upgradeReq.rawHeaders.indexOf('Origin') + 1];
 
 			if (origin !== 'https://emupedia.net' && origin !== 'https://emupedia.org' && origin !== 'https://emuos.org' && origin !== 'https://emuos.net' && origin !== 'http://localhost:8000') {
-				console.log('Origin: ' + origin + ' REFUSED');
+				console.log('[' + (new Date().toISOString().replace('T', ' ')) + '] Origin: ' + origin + ' REFUSED');
 				ws.close();
 				return;
 			}
@@ -415,7 +415,7 @@ module.exports = class GameServer {
 			const ip = ws.upgradeReq.headers['x-real-ip'] !== 'undefined' ? ws.upgradeReq.headers['x-real-ip'] : ws._socket.remoteAddress;
 
 			if (this.configService.getUniBan().indexOf(ip) !== -1) {
-				console.log('IP: ' + ip + ' BANNED');
+				console.log('[' + (new Date().toISOString().replace('T', ' ')) + '] IP ' + ip + ' BANNED');
 				ws.close();
 				return;
 			}
@@ -426,12 +426,16 @@ module.exports = class GameServer {
 			const verify_url = 'https://www.google.com/recaptcha/api/siteverify?secret=' + secret_key + '&response=' + query.token;
 
 			request(verify_url, { json: true }, function(error, response, body) {
-				ws.verifyScore = body.score;
-
-				if (body.success === false || body.score <= 0.7) {
-					console.log('IP: ' + ip + ' Token ' + query.token + ' Success ' + body.success + ' Score ' + body.score + ' failed recaptcha');
+				if (!error && response.statusCode === 200) {
+					if (body.success === false) {
+						console.log('[' + (new Date().toISOString().replace('T', ' ')) + '] IP ' + ip + ' Token ' + query.token + ' Error ' + body['error-codes'].join(',') + ' failed recaptcha');
+						ws.close();
+					} else {
+						ws.verifyScore = body.score;
+					}
+				} else {
+					console.log('[' + (new Date().toISOString().replace('T', ' ')) + '] IP ' + ip + ' Token ' + query.token + ' Error ' + error + ' failed recaptcha');
 					ws.close();
-					return;
 				}
 			});
 

@@ -1,21 +1,9 @@
 [
   {
-    "hash": "509ce7e92a5d245ad809438057591793",
-    "src": "src/Install%20Dependencies%20(Windows).bat",
-    "dst": "./Install Dependencies (Windows).bat",
-    "name": "Install Dependencies (Windows).bat"
-  },
-  {
     "hash": "baced4ca7e15847ae82678a068ffdcf6",
     "src": "src/README.md",
     "dst": "./README.md",
     "name": "README.md"
-  },
-  {
-    "hash": "9e0db4f4f62303ac627e379323a71fc6",
-    "src": "src/Start.bat",
-    "dst": "./Start.bat",
-    "name": "Start.bat"
   },
   {
     "hash": "117cd80d443ff5d26980004d99ff974f",
@@ -78,7 +66,7 @@
     "name": "Multiverse.js"
   },
   {
-    "hash": "9ad03d1c240374a7e4346a4e28383463",
+    "hash": "72234f01a29e600982f73f9c2a06451e",
     "src": "src/core/ConfigService.js",
     "dst": "./core/ConfigService.js",
     "name": "ConfigService.js"
@@ -96,7 +84,7 @@
     "name": "ControlServer.js"
   },
   {
-    "hash": "4e242784b54d8bb48463289e0d1abb75",
+    "hash": "a38c60d41b48e5ea858a8ef7fed713f5",
     "src": "src/core/GameServer.js",
     "dst": "./core/GameServer.js",
     "name": "GameServer.js"
@@ -114,7 +102,7 @@
     "name": "LeaderBoardService.js"
   },
   {
-    "hash": "6f49e52b08e7d1a568eb256af750badb",
+    "hash": "4dde124083489bf74dd74a074fc5fba5",
     "src": "src/core/PacketHandler.js",
     "dst": "./core/PacketHandler.js",
     "name": "PacketHandler.js"
@@ -246,7 +234,7 @@
     "name": "index.js"
   },
   {
-    "hash": "e76898882437d19e43f00b05bdb6f3c7",
+    "hash": "25076ccfb21bd6209e3c273d7558b5e3",
     "src": "src/files.json",
     "dst": "./files.json",
     "name": "files.json"
@@ -990,19 +978,19 @@
     "name": "README.md"
   },
   {
-    "hash": "e461e8bc172f3b6df5b852fa86aa902e",
+    "hash": "d6ac690f166e80cdaca39e35a3e76de2",
     "src": "src/settings/advConfig.ini",
     "dst": "./settings/advConfig.ini",
     "name": "advConfig.ini"
   },
   {
-    "hash": "7dcc6a58cd1f07a15379c834403cdfca",
+    "hash": "f88f018b5851f5567042e8c368c358f8",
     "src": "src/settings/clientConfig.ini",
     "dst": "./settings/clientConfig.ini",
     "name": "clientConfig.ini"
   },
   {
-    "hash": "e93d9e0ef185a5c0402706349fec5b03",
+    "hash": "96afeff392f1da34821eee6149525e95",
     "src": "src/settings/config.ini",
     "dst": "./settings/config.ini",
     "name": "config.ini"
