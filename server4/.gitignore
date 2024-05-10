@@ -1,7 +1,5 @@
 # CLI
 cli/logs
-cli/settings.json
-cli/log-settings.json
 
 # npm
 node_modules
