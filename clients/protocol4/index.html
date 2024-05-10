@@ -1,0 +1,175 @@
+<html>
+
+<head>
+    <title>Client</title>
+    <canvas height="600" id="canvas" width="800"></canvas>
+    <link id="fav" rel="icon" type="image/png" href="./icon.png" />
+
+    <!--Required files-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Russo+One" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.slim.js"></script>
+
+    <link rel="stylesheet" href="./assets/css/Bootstrap.css"></link>
+    <link rel="stylesheet" href="./assets/css/csshake.min.css">
+    <link rel="stylesheet" href="./assets/css/main.css">
+
+    <script src="./assets/js/jscolor.js"></script>
+    <script src="./assets/js/main.js"></script>
+
+</head>
+
+<body>
+    <div id="overlays" style="background-color: rgba(0, 0, 0, 0.4); position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 200;font-family: Orbitron;">
+
+
+        <!--Main-->
+
+        <div id="main">
+            <div id="serverPanel">
+                <div>
+                    <h2 style="font-family: 'Orbitron', sans-serif;font-size: 45px;color: orange;" id="titleh">Servers</h2>
+                </div>
+                <hr>
+                <center>
+                    <select size=8 class="form-control" style="overflow:hidden">
+                            <br clear="both"/>
+                            <option value="0" onclick='recaptcha("wss://agar.emupedia.net/ws2/");'>Server 1</option>
+                        </select>
+                </center>
+            </div>
+
+            <div class="form-group">
+
+                <div style="float: left; margin-left: 20px;">
+                    <h2 style="font-family: 'Orbitron', sans-serif;font-size: 45px;color: orange;" class="shake-slow shake-constant" id="titleh">Client</h2>
+                </div>
+
+                <br clear="both">
+
+                <form role="form">
+                    <ul class="nav nav-tabs nav-justified" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a>
+                        </li>
+
+                        <li role="presentation">
+                            <a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a>
+                        </li>
+
+                        <li role="presentation">
+                            <a href="#theming" aria-controls="theming" role="tab" data-toggle="tab">Themes</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane" id="home"></div>
+
+                        <div role="tabpanel" class="tab-pane fade settings" id="settings">
+                            <hr>
+                            <div class="container">
+
+                                <div class="settingsRow">
+                                    <span id="animationTxt">Animation Delay 120</span>
+                                    <br>
+                                    <br>
+                                    <label></label>
+                                    <input type="range" id="delay" min="10" max="300">
+                                    </label>
+                                    <br>
+                                    <br>
+                                    <div style="position: relative;">
+                                        <label>
+                                            <input type="checkbox" name="sqMode" id="sqMode"> Square Mode &nbsp</label>
+                                        <br>
+                                        <label>
+                                            <input type="checkbox" name="sectors" id="sectors"> Sectors &nbsp</label>
+                                        <br>
+                                        <label>
+                                            <input type="checkbox" name="borders" id="borders"> Borders &nbsp</label>
+                                        <br>
+                                        <label>
+                                            <input type="checkbox" name="food" id="food"> Hide Food &nbsp</label>
+                                        <br>
+                                        <label>
+                                            <input type="checkbox" name="ERTP" id="ERTP"> ERTP Control &nbsp</label>
+                                        <br>
+                                        <label>
+                                            <input type="checkbox" name="name" id="name"> No Name &nbsp</label>
+                                        <br>
+                                        <label>
+                                            <input type="checkbox" name="mass" id="mass"> No Mass &nbsp</label>
+                                        <br>
+                                        <label>
+                                            <input type="checkbox" name="ShortMass" id="ShortMass"> Short Mass &nbsp</label>
+                                        <br>
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane fade" id="theming">
+                            <label>Background Colour &nbsp</label>
+                            <br>
+                            <input class="jscolor" id="bgColour" value="222222">
+                            <br>
+                            <label>Border Colour &nbsp</label>
+                            <br>
+                            <input class="jscolor" id="borderColour" value="FFA500">
+                            <br>
+                            <label>Sector Colour &nbsp</label>
+                            <br>
+                            <input class="jscolor" id="sectorColour" value="1A1A1A">
+                            <br>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-group">
+                <input class="form-control" id="nick" maxlength="15" placeholder="Nick">
+                <input class="form-control" id="skinUrl" placeholder="SkinUrl (https://i.imgur.com/........)">
+            </div>
+            <br>
+
+            <div class="form-group">
+                <button class="shake-constant btn playButton btn-primary btn-needs-server" style="background-color: orange;" id="playBtn" onclick="setNick(document.getElementById('nick').value); return false;" type="submit">Join</button>
+                <button class="btn btn-warning watchButton btn-needs-server" style="background-color: orange;" id="watchBtn" onclick="watch(); return false;">Watch</button>
+                <br clear="both">
+                <br>
+            </div>
+
+            </form>
+
+            <p>
+                An open-source client made by
+                <a href="https://github.com/Fan7asy" target="_blank">Fan7asy</a>
+            </p>
+
+        </div>
+
+    </div>
+	<input id="chat" maxlength="200" placeholder="Enter to chat" type="text">
+	<script src="https://www.google.com/recaptcha/api.js?render=6LdxZMspAAAAAOVZOMGJQ_yJo2hBI9QAbShSr_F3"></script>
+	<script>
+		function recaptcha(server) {
+			if (typeof grecaptcha !== 'undefined') {
+				grecaptcha.ready(() => {
+					grecaptcha.execute('6LdxZMspAAAAAOVZOMGJQ_yJo2hBI9QAbShSr_F3', { action: 'connect' }).then(token => {
+						connect(server + '?token=' + token);
+					});
+				});
+			} else {
+				connect(server);
+			}
+		}
+	</script>
+</body>
+
+
+</html>
