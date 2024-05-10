@@ -10,7 +10,7 @@ function getLeaderboardData(player, requesting, index) {
     return {
         name: player.leaderboardName,
         highlighted: requesting.id === player.id,
-        cellId: player.ownedCells[0].id,
+        cellId: typeof player.ownedCells !== 'undefined' && typeof player.ownedCells[0] !== 'undefined' && typeof player.ownedCells[0]['id'] !== 'undefined' ? player.ownedCells[0]['id'] : undefined,
         position: 1 + index
     };
 }

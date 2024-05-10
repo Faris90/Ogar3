@@ -7,10 +7,13 @@ class Connection extends Router {
      * @param {Listener} listener
      * @param {WebSocket} webSocket
      */
-    constructor(listener, webSocket) {
+    constructor(listener, webSocket, req) {
         super(listener);
-        this.remoteAddress = filterIPAddress(webSocket._socket.remoteAddress);
+        const ip = typeof req.headers['x-real-ip'] !== 'undefined' ? req.headers['x-real-ip'] : req.socket.remoteAddress;
+        this.remoteAddress = filterIPAddress(ip);
+        this.verifyScore = -1;
         this.webSocket = webSocket;
+        this.req = req;
         this.connectTime = Date.now();
         this.lastActivityTime = Date.now();
         this.lastChatTime = Date.now();
@@ -92,16 +95,15 @@ class Connection extends Router {
     onChatMessage(message) {
         message = message.trim();
         if (!message) return;
-        const globalChat = this.listener.globalChat;
         const lastChatTime = this.lastChatTime;
         this.lastChatTime = Date.now();
         if (message.length >= 2 && message[0] === "/") {
-            if (!this.handle.chatCommands.execute(this, message.slice(1))) globalChat.directMessage(null, this, "unknown command, execute /help for the list of commands");
+            if (!this.handle.chatCommands.execute(this, message.slice(1))) this.listener.globalChat.directMessage(null, this, "unknown command, execute /help for the list of commands");
         } else {
             if (Date.now() - lastChatTime >= this.settings.chatCooldown) {
-                 globalChat.broadcast(this, message);
+                 this.listener.globalChat.broadcast(this, message);
             } else {
-                 globalChat.directMessage(null, this, "Please don't spam.");
+                 this.listener.globalChat.directMessage(null, this, "Please don't spam.");
             }
         }
     }

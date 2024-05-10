@@ -1,6 +1,7 @@
 const WebSocket = require("uws");
 const WebSocketServer = WebSocket.Server;
-
+const url = require('url');
+const request = require('request');
 const Connection = require("./Connection");
 const ChatChannel = require("./ChatChannel");
 const { filterIPAddress } = require("../primitives/Misc");
@@ -49,29 +50,31 @@ class Listener {
      * @param {*} response
      */
     verifyClient(info, response) {
-        const address = filterIPAddress(info.req.socket.remoteAddress);
+        const ip = typeof info.req.headers['x-real-ip'] !== 'undefined' ? info.req.headers['x-real-ip'] : info.req.socket.remoteAddress;
+        const address = filterIPAddress(ip);
         this.logger.onAccess(`REQUEST FROM ${address}, ${info.secure ? "" : "not "}secure, Origin: ${info.origin}`);
         if (this.connections.length > this.settings.listenerMaxConnections) {
-            this.logger.debug("listenerMaxConnections reached, dropping new connections");
+            this.logger.inform("listenerMaxConnections reached, dropping new connections");
             return void response(false, 503, "Service Unavailable");
         }
         const acceptedOrigins = this.settings.listenerAcceptedOrigins;
         if (acceptedOrigins.length > 0 && acceptedOrigins.indexOf(info.origin) === -1) {
-            this.logger.debug(`listenerAcceptedOrigins doesn't contain ${info.origin}`);
+            this.logger.inform(`listenerAcceptedOrigins doesn't contain ${info.origin}`);
             return void response(false, 403, "Forbidden");
         }
         if (this.settings.listenerForbiddenIPs.indexOf(address) !== -1) {
-            this.logger.debug(`listenerForbiddenIPs contains ${address}, dropping connection`);
+            this.logger.inform(`listenerForbiddenIPs contains ${address}, dropping connection`);
             return void response(false, 403, "Forbidden");
         }
         if (this.settings.listenerMaxConnectionsPerIP > 0) {
             const count = this.connectionsByIP[address];
             if (count && count >= this.settings.listenerMaxConnectionsPerIP) {
-                this.logger.debug(`listenerMaxConnectionsPerIP reached for '${address}', dropping its new connections`);
+                this.logger.inform(`listenerMaxConnectionsPerIP reached for '${address}', dropping its new connections`);
                 return void response(false, 403, "Forbidden");
             }
         }
-        this.logger.debug("client verification passed");
+
+        this.logger.debug(`IP '${address}' Client Verification Passed`);
         response(true);
     }
     onOpen() {
@@ -94,12 +97,32 @@ class Listener {
     /**
      * @param {WebSocket} webSocket
      */
-    onConnection(webSocket) {
-        const newConnection = new Connection(this, webSocket);
+    onConnection(webSocket, req) {
+        const newConnection = new Connection(this, webSocket, req);
         this.logger.onAccess(`CONNECTION FROM ${newConnection.remoteAddress}`);
-        this.connectionsByIP[newConnection.remoteAddress] =
-            this.connectionsByIP[newConnection.remoteAddress] + 1 || 1;
+        this.connectionsByIP[newConnection.remoteAddress] = this.connectionsByIP[newConnection.remoteAddress] + 1 || 1;
         this.connections.push(newConnection);
+
+        if (this.settings.listenerUseReCaptcha) {
+            const url_parts = url.parse(req.url, true);
+            const query = url_parts.query;
+            const secret_key = 'INSERT RECAPTCHA SECRET KEY HERE';
+            const verify_url = 'https://www.google.com/recaptcha/api/siteverify?secret=' + secret_key + '&response=' + query.token;
+
+            request(verify_url, { json: true }, (error, response, body) => {
+                if (!error && response.statusCode === 200) {
+                    if (body.success === false) {
+                        this.logger.inform(`IP '${newConnection.remoteAddress}' Token '${query.token}' Error '${body['error-codes'].join(',')}' failed recaptcha`);
+                        newConnection.closeSocket(1003, "Remote address is forbidden");
+                    } else {
+                        newConnection.verifyScore = body.score
+                    }
+                } else {
+                    this.logger.inform(`IP '${newConnection.remoteAddress}' Token '${query.token}' Error '${error}' failed recaptcha`);
+                    newConnection.closeSocket(1003, "Remote address is forbidden");
+                }
+            });
+        }
     }
 
     /**

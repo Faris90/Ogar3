@@ -35,7 +35,7 @@ class QuadTree {
         for (let i = 0, l = this.items.length; i < l; i++)
             delete this.items[i].__root;
         if (!this.hasSplit) return;
-        for (i = 0; i < 4; i++) this.branches[i].destroy();
+        for (let i = 0; i < 4; i++) this.branches[i].destroy();
     }
     /**
      * @param {QuadItem<T>} item

@@ -736,6 +736,7 @@ module.exports = (commands, chatCommands) => {
              */
             exec: (handle, context, args) => {
                 const chat = handle.listener.globalChat;
+                return void chat.directMessage(null, context, "disabled for now");
                 if (!context.hasPlayer)
                     return void chat.directMessage(null, context, "you don't have a player associated with yourself");
                 if (!context.player.hasWorld)
@@ -752,6 +753,7 @@ module.exports = (commands, chatCommands) => {
              */
             exec: (handle, context, args) => {
                 const chat = handle.listener.globalChat;
+                return void chat.directMessage(null, context, "disabled for now");
                 if (args.length === 0)
                     return void chat.directMessage(null, context, "missing world id argument");
                 const id = parseInt(args[0]);

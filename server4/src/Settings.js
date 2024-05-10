@@ -6,6 +6,7 @@ const value = Object.seal({
     listenerMaxConnections: 100,
     listenerMaxClientDormancy: 1000 * 60,
     listenerMaxConnectionsPerIP: -1,
+    listenerUseReCaptcha: false,
     listeningPort: 443,
 
     serverFrequency: 25,
