@@ -149,3 +149,7 @@ input[type=checkbox] {
     margin-right: 10px;
     user-select: none;
 }
+
+.grecaptcha-badge {
+	display: none;
+}

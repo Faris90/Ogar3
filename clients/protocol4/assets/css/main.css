@@ -10,7 +10,7 @@
 
 
 #main {
-    position: absolute;    
+    position: absolute;
     width: 350px;
     background-size: 350px;
     background-color: rgb(51, 51, 51);
@@ -96,4 +96,8 @@ input[type=range]::-webkit-slider-thumb {
     cursor: pointer;
     margin-top: -14px;
     box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+
+.grecaptcha-badge {
+	display: none;
 }
