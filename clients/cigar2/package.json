@@ -1,0 +1,22 @@
+{
+  "name": "cigar2",
+  "version": "1.2.3",
+  "description": "Protocol 6 Agar.io client for private servers",
+  "main": "webserver.js",
+  "scripts": {
+    "start": "node webserver.js"
+  },
+  "dependencies": {
+    "express": "^4.16.4"
+  },
+  "engines": {
+    "node": "8.x"
+  },
+  "repository": {
+    "url": "https://github.com/Cigar2/Cigar2"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.12.1"
+  }
+}

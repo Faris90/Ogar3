@@ -1,0 +1,87 @@
+#gallery {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 201;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#gallery-content {
+    background: #fff;
+    max-height: 80%;
+    max-width: 60%;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+#gallery-header {
+    font-size: 26px;
+    background: #555;
+    color: #fff;
+    text-align: center;
+}
+#gallery-body {
+    display: flex;
+    min-height: 0;
+}
+#skinsUL {
+    padding: 0;
+    margin: 0;
+    padding-left: 10px;
+    padding-top: 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    scrollbar-color: #9090a0 #fff;
+    scrollbar-width: thin;
+}
+#skinsUL::-webkit-scrollbar {
+    width: 12px;
+}
+#skinsUL::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 6px;
+}
+#skinsUL::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    background: #9090a0;
+}
+#skinsUL::-webkit-scrollbar-thumb:hover {
+    background: slategrey;
+}
+.skin {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    list-style-type: none; /* removes bullet point */
+}
+.circular {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: url("../img/checkerboard.png");
+    background-repeat: no-repeat;
+    background-size: 150px 150px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.skinName {
+    text-align: center;
+    margin-bottom: 0;
+    transition: all 0.2s;
+}
+.circular:hover {
+    box-shadow: 0 0 12px rgba(0, 0, 0, .8);
+
+}
+.circular:hover + .skinName {
+    text-shadow: 0 0 1px rgba(0, 0, 0, .8);
+}
