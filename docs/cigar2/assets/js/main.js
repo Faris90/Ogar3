@@ -2360,6 +2360,14 @@
 			}
 		}
 
+		const overlayClick = event => {
+			if (event.target === byId('overlays')) {
+				event.preventDefault();
+				hideESCOverlay();
+				chatBox.focus();
+			}
+		}
+
 		byId('previewName').innerHTML = Cell.parseName(settings.nick);
 
 		if (settings.bgColor !== '#ffffff') {
@@ -2407,6 +2415,7 @@
 		byId('showColor').addEventListener('change', changeShowColor);
 		byId('showSkins').addEventListener('change', changeShowSkins);
 		byId('darkTheme').addEventListener('change', changeDarkTheme);
+		byId('overlays').addEventListener('click', overlayClick)
 
 		if (checkBanCounter() > 2) {
 			byClass('upload-btn-wrapper')[0].remove();
