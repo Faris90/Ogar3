@@ -289,21 +289,12 @@ label#nick-list:after, label#skin-list:after {
 	left: 0;
 }
 
-#touchpad, #touchCircle, #splitBtn, #ejectBtn {
+#touchCircle, #splitBtn, #ejectBtn {
 	position: fixed;
 }
 
-#touchpad, #splitBtn, #ejectBtn {
+#splitBtn, #ejectBtn {
 	z-index: 2;
-}
-
-#touchpad {
-	background: #000;
-	opacity: 0.3;
-	width: 40vw;
-	height: 80vh;
-	left: 0;
-	bottom: 0;
 }
 
 #touchCircle {
@@ -329,9 +320,19 @@ label#nick-list:after, label#skin-list:after {
 	bottom: 11vh;
 }
 
+.flipped-controls #splitBtn {
+	left: 18vw;
+	bottom: 11vh;
+}
+
 #ejectBtn {
-	bottom: 18vw;
 	right: 0;
+	bottom: 18vw;
+}
+
+.flipped-controls #ejectBtn {
+	left: 0;
+	bottom: 18vw;
 }
 
 #playSounds:checked + #soundsVolume {

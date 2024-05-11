@@ -1163,6 +1163,7 @@
 		leftClick: true,
 		middleClick: true,
 		rightClick: true,
+		flipTouchControls: false,
 		useJoystick: true,
 		useFilters: true
 	};
@@ -2087,9 +2088,7 @@
 		});
 
 		const touch = byId('touch');
-		const touchpad = byId('touchpad');
 		const touchCircle = byId('touchCircle');
-		const touchSize = .2;
 
 		let touched = false;
 
@@ -2115,11 +2114,9 @@
 				touchmove(event);
 
 				touch.hide();
-				touchpad.show();
 				touchCircle.show();
 			} else {
 				touch.show();
-				touchpad.hide();
 				touchCircle.hide();
 			}
 		});
@@ -2129,20 +2126,12 @@
 
 			if (!settings.useJoystick) {
 				const touch = event.touches[0];
-				const width = innerWidth * touchSize;
-				const height = innerHeight * touchSize;
 
-				if (touch.pageX < width && touch.pageY > innerHeight - height) {
-					mouseX = innerWidth / 2 + (touch.pageX - width / 2) * innerWidth / width;
-					mouseY = innerHeight / 2 + (touch.pageY - (innerHeight - height / 2)) * innerHeight / height;
-				} else {
-					mouseX = touch.pageX;
-					mouseY = touch.pageY;
-				}
+				mouseX = touch.pageX;
+				mouseY = touch.pageY;
 
-				const r = innerWidth * .02;
-				touchCircle.style.left = mouseX - r + 'px';
-				touchCircle.style.top = mouseY - r + 'px';
+				touchCircle.style.left = touch.pageX + 'px';
+				touchCircle.style.top = touch.pageY + 'px';
 			}
 		};
 
@@ -2360,6 +2349,11 @@
 			}
 		}
 
+		const changeFlipTouchControls = () => {
+			const html = document.getElementsByTagName('html')[0];
+			html.classList.toggle('flipped-controls');
+		}
+
 		const overlayClick = event => {
 			if (event.target === byId('overlays')) {
 				event.preventDefault();
@@ -2404,6 +2398,7 @@
 		byId('nick').addEventListener('change', saveNick);
 		byId('skin').addEventListener('change', changeSkin);
 		byId('fillSkin').addEventListener('change', changeFillSkin);
+		byId('flipTouchControls').addEventListener('change', changeFlipTouchControls);
 		byId('bgColor').addEventListener('input', changeBackgroundColor);
 		byId('bgColor').addEventListener('change', changeBackgroundColor);
 		byId('nameColor').addEventListener('input', changeNameColor);
