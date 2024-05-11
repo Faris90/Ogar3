@@ -2456,14 +2456,17 @@
 		});
 
 		document.addEventListener('contextmenu', event => {
-			event.preventDefault();
-
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 
 			if (settings.rightClick && event.button === 2) {
 				let code = UINT8_CACHE[minionControlled ? 0x16 : 0x11];
 				wsSend(code);
 				wsSend(code);
+			}
+
+			if (!byId('overlays').contains(event.target)) {
+				event.preventDefault();
+				return false;
 			}
 		});
 
@@ -2492,6 +2495,21 @@
 			isTyping = true;
 			drawChat();
 		};
+
+		chatBox.onpaste = () => {
+			chat.messages.push({
+				color: Color.fromHex('#3f3fc0'),
+				name: "[SERVER] Server",
+				message: "[AntiSpam] Your cannot paste messages, write them yourself.",
+				time: Date.now(),
+				server: true,
+				admin: false,
+				mod: false
+			});
+			drawChat();
+
+			return false;
+		}
 
 		mainCanvas.onmousemove = event => {
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
