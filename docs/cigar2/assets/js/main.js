@@ -2102,12 +2102,14 @@
 
 			if (event.target.id === 'splitBtn') {
 				wsSend(UINT8_CACHE[minionControlled ? 0x16 : 0x11]);
-				return;
 			}
 
 			if (event.target.id === 'ejectBtn') {
-				wsSend(UINT8_CACHE[minionControlled ? 0x17 : 0x15]);
-				return;
+				clearInterval(feedMacroIntervalID);
+				let code = UINT8_CACHE[minionControlled ? 0x17 : 0x15];
+				let macroCooldown = settings.feedMacro ? 0 : 1000 / 7;
+				feedMacroIntervalID = setInterval(() => wsSend(code), macroCooldown);
+				wsSend(code);
 			}
 
 			if (!settings.useJoystick) {
@@ -2139,6 +2141,10 @@
 
 		window.addEventListener('touchend', event => {
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
+
+			if (touched) {
+				clearInterval(feedMacroIntervalID)
+			}
 
 			if (!settings.useJoystick) {
 				if (event.touches.length === 0) {
@@ -2427,6 +2433,8 @@
 			switch (event.button) {
 				case 0:
 					if (settings.leftClick) {
+						if (touched) return;
+
 						clearInterval(feedMacroIntervalID);
 						let code = UINT8_CACHE[minionControlled ? 0x17 : 0x15];
 						let macroCooldown = settings.feedMacro ? 0 : 1000 / 7;
