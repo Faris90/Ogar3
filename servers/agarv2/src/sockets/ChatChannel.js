@@ -36,6 +36,12 @@ class ChatChannel {
 				remoteAddress: connection.remoteAddress,
 				socket: connection
 			});
+		} else {
+			this.remove(connection);
+			this.connections.push({
+				remoteAddress: connection.remoteAddress,
+				socket: connection
+			});
 		}
 	}
 	/**
