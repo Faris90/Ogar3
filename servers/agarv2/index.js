@@ -22,7 +22,6 @@ const DefaultGamemodes = [
 /** @returns {DefaultSettings} */
 function readSettings() {
 	try {
-		console.log(process.env)
 		if (process.env.DEV === 'true') {
 			return JSON.parse(fs.readFileSync("./settings.dev.json", "utf-8"));
 		}
@@ -44,8 +43,6 @@ if (!fs.existsSync("./settings.json")) {
 }
 
 let settings = readSettings();
-
-console.log(settings)
 
 const currentHandle = new ServerHandle(settings);
 // overwriteSettings(currentHandle.settings);
