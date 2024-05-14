@@ -531,8 +531,6 @@
 				}
 				drawLeaderBoard();
 				break;
-			case 60: // List servers
-				break;
 			case 64: // set border
 				leftPos = msg.getFloat64(offset, true);
 				offset += 8;
@@ -984,7 +982,7 @@
 			drawGrid();
 		}
 		nodelist.sort(function (a, b) {
-			return a.size == b.size ? a.id - b.id : a.size - b.size
+			return a.size === b.size ? a.id - b.id : a.size - b.size
 		});
 		ctx.save();
 		ctx.translate(canvasWidth / 2, canvasHeight / 2);
@@ -1066,7 +1064,7 @@
 
 				} else {
 
-					ctx.beginPath();
+					//ctx.beginPath();
 					//ctx.fillStyle = "#0096ff";
 					//ctx.fillText("touch id : "+touch.identifier+" x:"+touch.clientX+" y:"+touch.clientY, touch.clientX+30, touch.clientY-30);
 
@@ -1396,8 +1394,8 @@
 		wasSimpleDrawing: true,
 		destroy: function() {
 			var tmp;
-			for (tmp = 0; tmp < nodelist.length; tmp++)
-				if (nodelist[tmp] == this) {
+			for (tmp = 0, len = nodelist.length; tmp < len; tmp++)
+				if (nodelist[tmp] === this) {
 					nodelist.splice(tmp, 1);
 					break
 				}
@@ -1408,9 +1406,7 @@
 				playerCells.splice(tmp, 1);
 			}
 			tmp = nodesOnScreen.indexOf(this.id);
-			if (-1 != tmp) {
-				nodesOnScreen.splice(tmp, 1);
-			}
+			if (-1 != tmp) nodesOnScreen.splice(tmp, 1);
 			this.destroyed = true;
 			Cells.push(this)
 		},
@@ -1701,23 +1697,23 @@
 					fontsize = this._size,
 					font = fontsize + 'px Ubuntu';
 				ctx.font = font;
-				var h = ~~(.2 * fontsize);
-				canvas.width = (ctx.measureText(value).width + 6) * scale;
+				var h = ~~(.2 * fontsize), wd = fontsize * 0.1;
+				var h2 = h * 0.5;
+				canvas.width = ctx.measureText(value).width * scale + 3;
 				canvas.height = (fontsize + h) * scale;
 				ctx.font = font;
-				ctx.scale(scale, scale);
 				ctx.globalAlpha = 1;
-				ctx.lineWidth = 3;
+				ctx.lineWidth = wd;
 				ctx.strokeStyle = this._strokeColor;
 				ctx.fillStyle = this._color;
-				this._stroke && ctx.strokeText(value, 3, fontsize - h / 2);
-				ctx.fillText(value, 3, fontsize - h / 2)
+				ctx.scale(scale, scale);
+				this._stroke && ctx.strokeText(value, 0, fontsize - h2);
+				ctx.fillText(value, 0, fontsize - h2)
 			}
 			return this._canvas
 		},
 		getWidth: function() {
-			return (ctx.measureText(this._value).width +
-				6);
+			return (ctx.measureText(this._value).width + 6);
 		}
 	};
 
