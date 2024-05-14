@@ -189,6 +189,6 @@ class PlayerBot extends Bot {
 
 module.exports = PlayerBot;
 
-const World = require("../worlds/World");
-const Cell = require("../cells/Cell");
-const PlayerCell = require("../cells/PlayerCell");
+// const World = require("../worlds/World");
+// const Cell = require("../cells/Cell");
+// const PlayerCell = require("../cells/PlayerCell");

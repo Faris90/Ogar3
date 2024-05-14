@@ -105,5 +105,5 @@ class ChatChannel {
 
 module.exports = ChatChannel;
 
-const Listener = require("./Listener");
-const Connection = require("./Connection");
+// const Listener = require("./Listener");
+// const Connection = require("./Connection");

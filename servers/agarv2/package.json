@@ -16,8 +16,13 @@
         "email": "anusualmail123@gmail.com",
         "url": "https://github.com/Luka967/OgarII/issues"
     },
+    "engines": {
+        "node": "^10.24.1",
+        "npm": "^6.14.12"
+    },
     "dependencies": {
         "request": "^2.88.2",
+        "uWebSockets.js": "github:uNetworking/uWebSockets.js#v18.14.0",
         "uws": "10.148.1"
     }
 }

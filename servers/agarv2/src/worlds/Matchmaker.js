@@ -7,14 +7,12 @@ class Matchmaker {
 		/** @type {Connection[]} */
 		this.queued = [];
 	}
-
 	/**
 	 * @param {Connection} connection
 	 */
 	isInQueue(connection) {
 		return this.queued.indexOf(connection) !== -1;
 	}
-
 	broadcastQueueLength() {
 		if (!this.handle.settings.matchmakerNeedsQueuing) {
 			return;
@@ -26,14 +24,12 @@ class Matchmaker {
 			this.handle.listener.globalChat.directMessage(null, this.queued[i], message);
 		}
 	}
-
 	/**
 	 * @param {Connection} connection
 	 */
 	toggleQueued(connection) {
 		this.isInQueue(connection) ? this.dequeue(connection) : this.enqueue(connection);
 	}
-
 	/**
 	 * @param {Connection} connection
 	 */
@@ -45,7 +41,6 @@ class Matchmaker {
 		this.queued.push(connection);
 		this.broadcastQueueLength();
 	}
-
 	/**
 	 * @param {Connection} connection
 	 */
@@ -57,7 +52,6 @@ class Matchmaker {
 		this.queued.splice(this.queued.indexOf(connection), 1);
 		this.broadcastQueueLength();
 	}
-
 	update() {
 		const bulkSize = this.handle.settings.matchmakerBulkSize;
 
@@ -83,7 +77,6 @@ class Matchmaker {
 			}
 		}
 	}
-
 	getSuitableWorld() {
 		/** @type {World} */
 		let bestWorld = null;
@@ -116,6 +109,6 @@ class Matchmaker {
 
 module.exports = Matchmaker;
 
-const ServerHandle = require("../ServerHandle");
-const Connection = require("../sockets/Connection");
-const World = require("../worlds/World");
+// const ServerHandle = require("../ServerHandle");
+// const Connection = require("../sockets/Connection");
+// const World = require("../worlds/World");

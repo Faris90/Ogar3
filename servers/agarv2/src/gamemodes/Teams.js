@@ -148,7 +148,7 @@ class Teams extends Gamemode {
 
 module.exports = Teams;
 
-const ServerHandle = require("../ServerHandle");
-const World = require("../worlds/World");
-const Connection = require("../sockets/Connection");
-const Player = require("../worlds/Player");
+// const ServerHandle = require("../ServerHandle");
+// const World = require("../worlds/World");
+// const Connection = require("../sockets/Connection");
+// const Player = require("../worlds/Player");

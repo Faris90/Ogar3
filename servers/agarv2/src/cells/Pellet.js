@@ -64,4 +64,4 @@ class Pellet extends Cell {
 
 module.exports = Pellet;
 
-const World = require("../worlds/World");
+// const World = require("../worlds/World");
