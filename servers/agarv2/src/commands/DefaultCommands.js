@@ -40,18 +40,18 @@ function table(contents, eol) {
     }
     for (i = 0, rowText = ""; i < contents.columns.length; i++) {
         col = contents.columns[i];
-        rowText += (i == 0 ? "" : col.separated ? " | " : " ") + padRight(col.text, col.headPad, columnSizes[i]);
+        rowText += (i === 0 ? "" : col.separated ? " | " : " ") + padRight(col.text, col.headPad, columnSizes[i]);
     }
     all += rowText + eol;
     for (i = 0, rowText = ""; i < contents.rows.length; i++, rowText = "") {
         for (j = 0; j < contents.rows[i].length; j++) {
             row = contents.rows[i][j] || "";
             col = contents.columns[j];
-            rowText += (j == 0 ? "" : col.separated ? " | " : " ") + padRight(row, row ? col.rowPad : col.emptyPad, columnSizes[j]);
+            rowText += (j === 0 ? "" : col.separated ? " | " : " ") + padRight(row, row ? col.rowPad : col.emptyPad, columnSizes[j]);
         }
         for (; j < contents.columns.length; j++) {
             col = contents.columns[j];
-            rowText += (j == 0 ? "" : col.separated ? " | " : " ") + padRight("", col.emptyPad, columnSizes[j]);
+            rowText += (j === 0 ? "" : col.separated ? " | " : " ") + padRight("", col.emptyPad, columnSizes[j]);
         }
         all += rowText + eol;
     }
@@ -685,11 +685,7 @@ module.exports = (commands, chatCommands) => {
                 const list = handle.chatCommands.list;
                 handle.listener.globalChat.directMessage(null, context, "available commands:");
                 for (let name in list)
-                    handle.listener.globalChat.directMessage(
-                        null,
-                        context,
-                        `${name}${list[name].args.length > 0 ? " " : ""}${list[name].args} - ${list[name].description}`
-                    );
+                    handle.listener.globalChat.directMessage(null, context, `${name}${list[name].args.length > 0 ? " " : ""}${list[name].args} - ${list[name].description}`);
             }
         }),
         genCommand({
@@ -700,11 +696,7 @@ module.exports = (commands, chatCommands) => {
              * @param {Connection} context
              */
             exec: (handle, context, args) => {
-                handle.listener.globalChat.directMessage(
-                    null,
-                    context,
-                    context.hasPlayer ? `your ID is ${context.player.id}` : "you don't have a player associated with yourself"
-                );
+                handle.listener.globalChat.directMessage(null, context, context.hasPlayer ? `your ID is ${context.player.id}` : "you don't have a player associated with yourself");
             }
         }),
         genCommand({
@@ -720,11 +712,7 @@ module.exports = (commands, chatCommands) => {
                     return void chat.directMessage(null, context, "you don't have a player associated with yourself");
                 if (!context.player.hasWorld)
                     return void chat.directMessage(null, context, "you're not in a world");
-                chat.directMessage(
-                    null,
-                    context,
-                    `your world ID is ${context.player.world.id}`
-                );
+                chat.directMessage(null, context, `your world ID is ${context.player.world.id}`);
             }
         }),
         genCommand({

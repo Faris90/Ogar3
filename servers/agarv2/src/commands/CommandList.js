@@ -27,7 +27,7 @@ class CommandList {
     constructor(handle) {
         this.handle = handle;
         /** @type {{[commandName: string]: Command}} */
-        this.list = { };
+        this.list = {};
     }
 
     /**
