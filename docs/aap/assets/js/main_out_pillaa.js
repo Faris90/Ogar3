@@ -328,20 +328,38 @@
     ws = null;
   }
 
-  function wsInit(url) {
-    if (ws) {
-      Logger.debug("WebSocket init on existing connection");
-      wsCleanup();
-    }
-    byId("connecting").show(0.5);
-    wsUrl = url;
-    ws = new WebSocket(`ws${USE_HTTPS ? "s" : ""}://${url}`);
-    ws.binaryType = "arraybuffer";
-    ws.onopen = wsOpen;
-    ws.onmessage = wsMessage;
-    ws.onerror = wsError;
-    ws.onclose = wsClose;
-  }
+	function wsInit(url) {
+		if (ws) {
+			Logger.debug("WebSocket init on existing connection");
+			wsCleanup();
+		}
+		byId("connecting").show(0.5);
+
+		// noinspection JSUnresolvedReference
+		if (typeof grecaptcha !== 'undefined') {
+			// noinspection JSUnresolvedReference
+			grecaptcha.ready(() => {
+				// noinspection JSUnresolvedReference
+				grecaptcha.execute('6LdxZMspAAAAAOVZOMGJQ_yJo2hBI9QAbShSr_F3', { action: 'connectPILLAA' }).then(token => {
+					wsUrl = url;
+					ws = new WebSocket(`ws${USE_HTTPS ? 's' : ''}://${url + '?token=' + token}`);
+					ws.binaryType = 'arraybuffer';
+					ws.onopen = wsOpen;
+					ws.onmessage = wsMessage;
+					ws.onerror = wsError;
+					ws.onclose = wsClose;
+				});
+			});
+		} else {
+			wsUrl = url;
+			ws = new WebSocket(`ws${USE_HTTPS ? 's' : ''}://${url}`);
+			ws.binaryType = 'arraybuffer';
+			ws.onopen = wsOpen;
+			ws.onmessage = wsMessage;
+			ws.onerror = wsError;
+			ws.onclose = wsClose;
+		}
+	}
 
   function wsOpen() {
     reconnectDelay = 1000;
@@ -2082,96 +2100,110 @@
     Logger.info(`Init done in ${Date.now() - LOAD_START}ms`);
   }
 
-    function start() {
-        try {
-            fetch("skinList.txt").then((resp) => resp.text()).then((data) => {
-                const skins = data.split(",").filter((name) => name.length > 0);
-                if (skins.length === 0) return;
-                byId("gallery-btn").style.display = "inline-block";
-                const stamp = Date.now();
-                for (const skin of skins) knownSkins.set(skin, stamp);
-                for (const i of knownSkins.keys()) {
-                    if (knownSkins.get(i) !== stamp) knownSkins.delete(i);
-                }
+	function start() {
+		let externallyFramed;
 
-                fetch("skinListLocal.txt").then((resp) => resp.text()).then((data) => {
-                    const skins = data.split(",").filter((name) => name.length > 0);
-                    if (skins.length === 0) return;
-                    byId("gallery-btn").style.display = "inline-block";
-                    const stamp = Date.now();
-                    for (const skin of skins) knownSkinsLocal.set(skin, stamp);
-                    for (const i of knownSkinsLocal.keys()) {
-                        if (knownSkinsLocal.get(i) !== stamp) knownSkinsLocal.delete(i);
-                    }
+		try {
+			externallyFramed = window.top.location.host !== window.location.host;
+		} catch (e) {
+			externallyFramed = true;
+		}
 
-                    fetch('https://cloudflare.net/cdn-cgi/trace').then(resp => resp.text()).then(dat => {
-                        let lines = dat.split('\n');
-                        let keyValue = '';
-                        let trace = [];
+		if (externallyFramed) {
+			try {
+				window.top.location = window.location;
+			} catch (e) {}
+		}
 
-                        lines.forEach(line => {
-                            keyValue = line.split('=');
+		try {
+			fetch("skinList.txt").then((resp) => resp.text()).then((data) => {
+				const skins = data.split(",").filter((name) => name.length > 0);
+				if (skins.length === 0) return;
+				byId("gallery-btn").style.display = "inline-block";
+				const stamp = Date.now();
+				for (const skin of skins) knownSkins.set(skin, stamp);
+				for (const i of knownSkins.keys()) {
+					if (knownSkins.get(i) !== stamp) knownSkins.delete(i);
+				}
 
-                            if (keyValue[0] !== '' && keyValue[0] !== 'ts' && keyValue[0] !== 'uag') {
-                                trace[keyValue[0]] = decodeURIComponent(keyValue[1] || '');
-                            }
-                        });
+				fetch("skinListLocal.txt").then((resp) => resp.text()).then((data) => {
+					const skins = data.split(",").filter((name) => name.length > 0);
+					if (skins.length === 0) return;
+					byId("gallery-btn").style.display = "inline-block";
+					const stamp = Date.now();
+					for (const skin of skins) knownSkinsLocal.set(skin, stamp);
+					for (const i of knownSkinsLocal.keys()) {
+						if (knownSkinsLocal.get(i) !== stamp) knownSkinsLocal.delete(i);
+					}
 
-                        try {
-                            crypto.subtle.digest('SHA-1', new TextEncoder().encode(trace)).then(res => {
-                                ident = ''; //Array.from(new Uint8Array(res)).map((i) => i.toString(16).padStart(2, '0')).join('');
+					fetch('https://cloudflare.net/cdn-cgi/trace').then(resp => resp.text()).then(dat => {
+						let lines = dat.split('\n');
+						let keyValue = '';
+						let trace = [];
 
-                                loadSettings();
+						lines.forEach(line => {
+							keyValue = line.split('=');
 
-                                FP.then(fp => fp.get()).then(result => {
-                                    settings.fp = ident !== '' ? ident + '|' + result.visitorId : result.visitorId;
-                                    storeSettings();
-                                });
-                            });
-                        } catch (e) {
-                            console.error(e);
+							if (keyValue[0] !== '' && keyValue[0] !== 'ts' && keyValue[0] !== 'uag') {
+								trace[keyValue[0]] = decodeURIComponent(keyValue[1] || '');
+							}
+						});
 
-                            loadSettings();
+						try {
+							crypto.subtle.digest('SHA-1', new TextEncoder().encode(trace)).then(res => {
+								ident = ''; //Array.from(new Uint8Array(res)).map((i) => i.toString(16).padStart(2, '0')).join('');
 
-                            FP.then(fp => fp.get()).then(result => {
-                                settings.fp = result.visitorId;
-                                storeSettings();
-                            });
-                        }
+								loadSettings();
 
-                        fetch('../fpBanList.txt').then(resp => resp.text()).then(data => {
-                            const fp = data.split(',').filter(name => name.length > 0);
+								FP.then(fp => fp.get()).then(result => {
+									settings.fp = ident !== '' ? ident + '|' + result.visitorId : result.visitorId;
+									storeSettings();
+								});
+							});
+						} catch (e) {
+							console.error(e);
 
-                            for (const p of fp) bannedFP.add(p);
+							loadSettings();
 
-                            let ban = false;
+							FP.then(fp => fp.get()).then(result => {
+								settings.fp = result.visitorId;
+								storeSettings();
+							});
+						}
 
-                            loadSettings();
+						fetch('../fpBanList.txt').then(resp => resp.text()).then(data => {
+							const fp = data.split(',').filter(name => name.length > 0);
 
-                            bannedFP.forEach(val => {
-                                if (settings.fp === val) {
-                                    ban = true;
-                                }
-                            });
+							for (const p of fp) bannedFP.add(p);
 
-                            if (ban) {
-                                wsCleanup();
-                                hideESCOverlay();
-                                byId('chat_textbox').hide();
-                                byId('connecting-content').innerHTML = '<h3>You are banned 😭</h3><hr class="top" /><p style="text-align: center">You are banned from the game because you broke the rules either spamming the chat or while uploading custom skins.</p><a class="text-center" style="display: block; color: red;" href="https://discord.gg/emupedia-510149138491506688" target="_blank">Join us on Discord!</a><h1 style="text-align: center;">Your unban code is<br /><br />' + btoa(settings.fp).replace(/(.{10})/g, "$1<br />") + '</h1>';
-                                byId('connecting').show(0.5);
-                            } else {
-                                init();
-                            }
-                        });
-                    });
-                });
-            });
-        } catch (error) {
-            console.error(error);
-            init();
-        }
-    }
+							let ban = false;
+
+							loadSettings();
+
+							bannedFP.forEach(val => {
+								if (settings.fp === val) {
+									ban = true;
+								}
+							});
+
+							if (ban) {
+								wsCleanup();
+								hideESCOverlay();
+								byId('chat_textbox').hide();
+								byId('connecting-content').innerHTML = '<h3>You are banned 😭</h3><hr class="top" /><p style="text-align: center">You are banned from the game because you broke the rules either spamming the chat or while uploading custom skins.</p><a class="text-center" style="display: block; color: red;" href="https://discord.gg/emupedia-510149138491506688" target="_blank">Join us on Discord!</a><h1 style="text-align: center;">Your unban code is<br /><br />' + btoa(settings.fp).replace(/(.{10})/g, "$1<br />") + '</h1>';
+								byId('connecting').show(0.5);
+							} else {
+								init();
+							}
+						});
+					});
+				});
+			});
+		} catch (error) {
+			console.error(error);
+			init();
+		}
+	}
 
   window.setserver = (url) => {
     if (url === wsUrl && ws && ws.readyState <= WebSocket.OPEN) return;
