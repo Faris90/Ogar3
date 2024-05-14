@@ -11,7 +11,7 @@ class Router {
 		this.mouseX = 0;
 		this.mouseY = 0;
 
-		/** @type {string=} */
+		/** @type {string} */
 		this.spawningName = null;
 		this.requestingSpectate = false;
 		this.isPressingQ = false;
@@ -172,7 +172,3 @@ class Router {
 }
 
 module.exports = Router;
-
-// const Listener = require("./Listener");
-// const Player = require("../worlds/Player");
-// const PlayerCell = require("../cells/PlayerCell");

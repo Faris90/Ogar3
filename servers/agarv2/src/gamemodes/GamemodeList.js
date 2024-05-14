@@ -36,6 +36,3 @@ class GamemodeList {
 }
 
 module.exports = GamemodeList;
-
-// const Gamemode = require("./Gamemode");
-// const ServerHandle = require("../ServerHandle");

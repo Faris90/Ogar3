@@ -4,7 +4,6 @@ module.exports = {
 	Protocol: require("./src/protocols/Protocol"),
 	Command: require("./src/commands/CommandList").Command,
 	Gamemode: require("./src/gamemodes/Gamemode"),
-
 	base: {
 		commands: require("./src/commands/DefaultCommands"),
 		protocols: [
@@ -17,4 +16,4 @@ module.exports = {
 			require("./src/gamemodes/LastManStanding")
 		]
 	}
-};
+}

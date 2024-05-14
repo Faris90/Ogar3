@@ -1,4 +1,4 @@
-const { Command, genCommand } = require("./CommandList");
+const { genCommand } = require("./CommandList");
 const { EOL } = require("os");
 const { inspect } = require("util");
 
@@ -1032,7 +1032,3 @@ module.exports = (commands, chatCommands) => {
 		})
 	);
 };
-
-const { CommandList } = require("./CommandList");
-// const ServerHandle = require("../ServerHandle");
-// const Connection = require("../sockets/Connection");

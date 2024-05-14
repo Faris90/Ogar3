@@ -116,10 +116,3 @@ class Gamemode {
 }
 
 module.exports = Gamemode;
-
-// const ServerHandle = require("../ServerHandle");
-// const World = require("../worlds/World");
-// const Connection = require("../sockets/Connection");
-// const Player = require("../worlds/Player");
-// const Cell = require("../cells/Cell");
-// const PlayerCell = require("../cells/PlayerCell");

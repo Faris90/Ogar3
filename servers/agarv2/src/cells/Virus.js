@@ -100,5 +100,3 @@ class Virus extends Cell {
 }
 
 module.exports = Virus;
-
-// const World = require("../worlds/World");

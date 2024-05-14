@@ -202,6 +202,3 @@ class ServerHandle {
 }
 
 module.exports = ServerHandle;
-
-// const Router = require("./sockets/Router");
-// const Gamemode = require("./gamemodes/Gamemode");

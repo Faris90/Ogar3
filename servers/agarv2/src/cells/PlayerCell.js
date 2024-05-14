@@ -126,5 +126,3 @@ class PlayerCell extends Cell {
 }
 
 module.exports = PlayerCell;
-
-// const Player = require("../worlds/Player");

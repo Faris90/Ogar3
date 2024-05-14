@@ -108,5 +108,3 @@ class Mothercell extends Cell {
 }
 
 module.exports = Mothercell;
-
-// const World = require("../worlds/World");

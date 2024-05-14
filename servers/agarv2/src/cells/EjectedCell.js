@@ -64,6 +64,3 @@ class EjectedCell extends Cell {
 }
 
 module.exports = EjectedCell;
-
-// const World = require("../worlds/World");
-// const Player = require("../worlds/Player");

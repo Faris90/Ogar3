@@ -23,7 +23,7 @@ let settings = {
 	fileLogSaveOld: true
 };
 
-const {EOL} = require("os");
+const { EOL } = require("os");
 const fs = require("fs");
 
 if (fs.existsSync("./log-settings.json")) {
@@ -175,5 +175,3 @@ process.once("exit", function (code) {
  * @param {ServerHandle} handle
  */
 module.exports = (handle) => handle.logger.onlog = write;
-
-const ServerHandle = require("../src/ServerHandle");

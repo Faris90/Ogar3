@@ -108,7 +108,3 @@ class Matchmaker {
 }
 
 module.exports = Matchmaker;
-
-// const ServerHandle = require("../ServerHandle");
-// const Connection = require("../sockets/Connection");
-// const World = require("../worlds/World");

@@ -84,8 +84,3 @@ class FFA extends Gamemode {
 }
 
 module.exports = FFA;
-
-// const ServerHandle = require("../ServerHandle");
-// const World = require("../worlds/World");
-// const Connection = require("../sockets/Connection");
-// const Player = require("../worlds/Player");

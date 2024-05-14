@@ -77,5 +77,3 @@ module.exports = {
 		return new Command(info.name, info.desc, info.args, info.exec);
 	}
 };
-
-// const ServerHandle = require("../ServerHandle");

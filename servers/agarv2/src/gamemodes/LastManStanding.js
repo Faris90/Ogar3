@@ -49,6 +49,3 @@ class LastManStanding extends FFA {
 }
 
 module.exports = LastManStanding;
-
-// const World = require("../worlds/World");
-// const Player = require("../worlds/Player");

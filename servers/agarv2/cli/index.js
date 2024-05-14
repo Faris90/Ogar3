@@ -44,6 +44,7 @@ require("./log-handler")(currentHandle);
 const logger = currentHandle.logger;
 
 let commandStreamClosing = false;
+
 const commandStream = readline.createInterface({
 	input: process.stdin,
 	output: process.stdout,

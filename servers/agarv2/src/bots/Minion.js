@@ -47,5 +47,3 @@ class Minion extends Bot {
 }
 
 module.exports = Minion;
-
-// const Connection = require("../sockets/Connection");

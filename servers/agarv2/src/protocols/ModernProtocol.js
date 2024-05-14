@@ -1,5 +1,4 @@
 const Protocol = require("./Protocol");
-// const Reader = require("../primitives/Reader");
 const Writer = require("../primitives/Writer");
 
 const PingReturn = Buffer.from(new Uint8Array([2]));
@@ -480,7 +479,3 @@ class ModernProtocol extends Protocol {
 }
 
 module.exports = ModernProtocol;
-
-// const Cell = require("../cells/Cell");
-// const PlayerCell = require("../cells/PlayerCell");
-// const Connection = require("../sockets/Connection");

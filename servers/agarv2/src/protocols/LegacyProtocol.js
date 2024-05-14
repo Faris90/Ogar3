@@ -1,5 +1,4 @@
 const Protocol = require("./Protocol");
-// const Reader = require("../primitives/Reader");
 const Writer = require("../primitives/Writer");
 
 class LegacyProtocol extends Protocol {
@@ -726,8 +725,3 @@ function readZTString(reader, protocol) {
 function writeZTString(writer, value, protocol) {
 	writer[protocol < 6 ? "writeZTStringUCS2" : "writeZTStringUTF8"](value);
 }
-
-// const Cell = require("../cells/Cell");
-// const Player = require("../worlds/Player");
-// const PlayerCell = require("../cells/PlayerCell");
-// const Connection = require("../sockets/Connection");

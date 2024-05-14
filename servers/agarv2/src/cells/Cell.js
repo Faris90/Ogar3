@@ -203,6 +203,3 @@ class Cell {
 }
 
 module.exports = Cell;
-
-// const World = require("../worlds/World");
-// const Player = require("../worlds/Player");
