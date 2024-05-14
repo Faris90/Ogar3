@@ -1,24 +1,24 @@
 {
-    "showingConsole": {
-        "PRINT": true,
-        "FILE": true,
-        "DEBUG": true,
-        "ACCESS": true,
-        "INFO": true,
-        "WARN": true,
-        "ERROR": true,
-        "FATAL": true
-    },
-    "showingFile": {
-        "PRINT": false,
-        "FILE": false,
-        "DEBUG": false,
-        "ACCESS": false,
-        "INFO": true,
-        "WARN": true,
-        "ERROR": true,
-        "FATAL": true
-    },
-    "fileLogDirectory": "./logs/",
-    "fileLogSaveOld": true
+	"showingConsole": {
+		"PRINT": true,
+		"FILE": true,
+		"DEBUG": true,
+		"ACCESS": true,
+		"INFO": true,
+		"WARN": true,
+		"ERROR": true,
+		"FATAL": true
+	},
+	"showingFile": {
+		"PRINT": false,
+		"FILE": false,
+		"DEBUG": false,
+		"ACCESS": false,
+		"INFO": true,
+		"WARN": true,
+		"ERROR": true,
+		"FATAL": true
+	},
+	"fileLogDirectory": "./logs/",
+	"fileLogSaveOld": true
 }

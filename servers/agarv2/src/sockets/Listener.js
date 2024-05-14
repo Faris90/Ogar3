@@ -15,7 +15,6 @@ class Listener {
 		this.listenerSocket = null;
 		this.handle = handle;
 		this.globalChat = new ChatChannel(this);
-
 		/** @type {Router[]} */
 		this.routers = [];
 		/** @type {Connection[]} */
@@ -23,28 +22,31 @@ class Listener {
 		/** @type {Counter<IPAddress>} */
 		this.connectionsByIP = { };
 	}
-
 	get settings() { return this.handle.settings; }
 	get logger() { return this.handle.logger; }
-
 	open() {
 		if (this.listenerSocket !== null) return false;
+
 		this.logger.debug(`listener opening at ${this.settings.listeningPort}`);
+
 		this.listenerSocket = new WebSocketServer({
 			port: this.settings.listeningPort,
 			verifyClient: this.verifyClient.bind(this)
 		}, this.onOpen.bind(this));
+
 		this.listenerSocket.on("connection", this.onConnection.bind(this));
+
 		return true;
 	}
 	close() {
 		if (this.listenerSocket === null) return false;
+
 		this.logger.debug("listener closing");
 		this.listenerSocket.close();
 		this.listenerSocket = null;
+
 		return true;
 	}
-
 	/**
 	 * @param {{req: any, origin: string}} info
 	 * @param {*} response
@@ -53,23 +55,33 @@ class Listener {
 		const ip = typeof info.req.headers['x-real-ip'] !== 'undefined' ? info.req.headers['x-real-ip'] : info.req.socket.remoteAddress;
 		const address = filterIPAddress(ip);
 		this.logger.onAccess(`REQUEST FROM ${address}, ${info.secure ? "" : "not "}secure, Origin: ${info.origin}`);
+
 		if (this.connections.length > this.settings.listenerMaxConnections) {
 			this.logger.inform("listenerMaxConnections reached, dropping new connections");
+
 			return void response(false, 503, "Service Unavailable");
 		}
+
 		const acceptedOrigins = this.settings.listenerAcceptedOrigins;
+
 		if (acceptedOrigins.length > 0 && acceptedOrigins.indexOf(info.origin) === -1) {
 			this.logger.inform(`listenerAcceptedOrigins doesn't contain ${info.origin}`);
+
 			return void response(false, 403, "Forbidden");
 		}
+
 		if (this.settings.listenerForbiddenIPs.indexOf(address) !== -1) {
 			this.logger.inform(`listenerForbiddenIPs contains ${address}, dropping connection`);
+
 			return void response(false, 403, "Forbidden");
 		}
+
 		if (this.settings.listenerMaxConnectionsPerIP > 0) {
 			const count = this.connectionsByIP[address];
+
 			if (count && count >= this.settings.listenerMaxConnectionsPerIP) {
 				this.logger.inform(`listenerMaxConnectionsPerIP reached for '${address}', dropping its new connections`);
+
 				return void response(false, 403, "Forbidden");
 			}
 		}
@@ -80,7 +92,6 @@ class Listener {
 	onOpen() {
 		this.logger.inform(`listener open at ${this.settings.listeningPort}`);
 	}
-
 	/**
 	 * @param {Router} router
 	 */
@@ -93,7 +104,6 @@ class Listener {
 	removeRouter(router) {
 		this.routers.splice(this.routers.indexOf(router), 1);
 	}
-
 	/**
 	 * @param {WebSocket} webSocket
 	 */
@@ -132,22 +142,29 @@ class Listener {
 	 */
 	onDisconnection(connection, code, reason) {
 		this.logger.onAccess(`DISCONNECTION FROM ${connection.remoteAddress} (${code} '${reason}')`);
+
 		if (--this.connectionsByIP[connection.remoteAddress] <= 0)
 			delete this.connectionsByIP[connection.remoteAddress];
+
 		this.globalChat.remove(connection);
 		this.connections.splice(this.connections.indexOf(connection), 1);
 	}
-
 	update() {
 		let i, l;
+
 		for (i = 0, l = this.routers.length; i < l; i++) {
 			const router = this.routers[i];
+
 			if (!router.shouldClose) continue;
+
 			router.close(); i--; l--;
 		}
+
 		for (i = 0; i < l; i++) this.routers[i].update();
+
 		for (i = 0, l = this.connections.length; i < l; i++) {
 			const connection = this.connections[i];
+
 			if (this.settings.listenerForbiddenIPs.indexOf(connection.remoteAddress) !== -1)
 				connection.closeSocket(1003, "Remote address is forbidden");
 			else if (Date.now() - connection.lastActivityTime >= this.settings.listenerMaxClientDormancy)

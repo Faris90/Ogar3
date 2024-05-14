@@ -38,6 +38,7 @@ class ChatChannel {
 			});
 		} else {
 			this.remove(connection);
+
 			this.connections.push({
 				remoteAddress: connection.remoteAddress,
 				socket: connection
@@ -65,6 +66,7 @@ class ChatChannel {
 		for (let i = 0, l = this.settings.chatFilteredPhrases.length; i < l; i++)
 			if (message.indexOf(this.settings.chatFilteredPhrases[i]) !== -1)
 				return true;
+
 		return false;
 	}
 	/**
@@ -95,6 +97,7 @@ class ChatChannel {
 		if (this.shouldFilter(message)) {
 			return this.directMessage(null, source, "Your message contains banned words.");
 		}
+
 		const sourceInfo = source == null ? serverSource : getSourceFromConnection(source);
 		recipient.protocol.onChatMessage(sourceInfo, message);
 	}
