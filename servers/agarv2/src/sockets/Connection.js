@@ -100,8 +100,8 @@ class Connection extends Router {
 
 		const lastChatTime = this.lastChatTime;
 		const lastMessage = this.lastMessage;
-		const lastlastMessage = this.lastlastMessage;
-		const lastlastlastMessage = this.lastlastlastMessage;
+		//const lastlastMessage = this.lastlastMessage;
+		//const lastlastlastMessage = this.lastlastlastMessage;
 
 		if (message[0] === "/" && message.length >= 2) {
 			if (!this.handle.chatCommands.execute(this, message.slice(1))) {
@@ -128,7 +128,7 @@ class Connection extends Router {
 				}
 			}
 
-			if (lastlastMessage) {
+			/*if (lastlastMessage) {
 				if (lastlastMessage === message || (~lastlastMessage.indexOf(message) || ~message.indexOf(lastlastMessage)) && message.length >= 10) {
 					this.listener.globalChat.directMessage(null, this, "[AntiSpam] Please don't repeat yourself, write something different.");
 					return;
@@ -140,13 +140,13 @@ class Connection extends Router {
 					this.listener.globalChat.directMessage(null, this, "[AntiSpam] Please don't repeat yourself, write something different.");
 					return;
 				}
-			}
+			}*/
 
 			this.listener.globalChat.broadcast(this, message);
 
 			this.lastChatTime = Date.now();
-			this.lastlastlastMessage = lastlastMessage;
-			this.lastlastMessage = lastMessage;
+			//this.lastlastlastMessage = lastlastMessage;
+			//this.lastlastMessage = lastMessage;
 			this.lastMessage = message;
 		} else {
 			this.listener.globalChat.directMessage(null, this, "[AntiSpam] Please don't write too fast, wait at least " + (this.settings.chatCooldown / 1000)  + " seconds.");
