@@ -70,7 +70,9 @@ class Virus extends Cell {
 			this.boost.dy = (this.boost.dy * this.boost.d + cell.boost.dy * settings.virusPushBoost) / newD;
 			this.boost.d = newD;
 			this.world.setCellAsBoosting(this);
-		} else {
+		}
+
+		if (settings.virusGrowSplitting) {
 			this.splitAngle = Math.atan2(cell.boost.dx, cell.boost.dy);
 
 			if (++this.fedTimes >= settings.virusFeedTimes) {

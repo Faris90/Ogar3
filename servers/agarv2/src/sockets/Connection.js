@@ -110,8 +110,6 @@ class Connection extends Router {
 
 		const lastChatTime = this.lastChatTime;
 		const lastMessage = this.lastMessage;
-		//const lastlastMessage = this.lastlastMessage;
-		//const lastlastlastMessage = this.lastlastlastMessage;
 
 		if (message[0] === "/" && message.length >= 2) {
 			if (!this.handle.chatCommands.execute(this, message.slice(1))) {
@@ -121,48 +119,18 @@ class Connection extends Router {
 			return;
 		}
 
-		if (message.length <= 1) {
-			this.listener.globalChat.directMessage(null, this, "[AntiSpam] Your message is too short, write longer messages.");
-
-			return;
-		}
-
-		if (message.length >= 10 && !~message.indexOf(' ')) {
-			this.listener.globalChat.directMessage(null, this, "[AntiSpam] Your message doesn't has any spaces, add some spaces.");
-
-			return;
-		}
-
 		if (!lastChatTime || (Date.now() - lastChatTime >= this.settings.chatCooldown)) {
 			if (lastMessage) {
-				if (lastMessage === message || (~lastMessage.indexOf(message) || ~message.indexOf(lastMessage)) && message.length >= 10) {
+				if ((lastMessage === message || ~lastMessage.indexOf(message) || ~message.indexOf(lastMessage)) && message.length >= 10) {
 					this.listener.globalChat.directMessage(null, this, "[AntiSpam] Please don't repeat yourself, write something different.");
 
 					return;
 				}
 			}
-
-			/*if (lastlastMessage) {
-				if (lastlastMessage === message || (~lastlastMessage.indexOf(message) || ~message.indexOf(lastlastMessage)) && message.length >= 10) {
-					this.listener.globalChat.directMessage(null, this, "[AntiSpam] Please don't repeat yourself, write something different.");
-
-					return;
-				}
-			}
-
-			if (lastlastlastMessage) {
-				if (lastlastlastMessage === message || (~lastlastlastMessage.indexOf(message) || ~message.indexOf(lastlastlastMessage)) && message.length >= 10) {
-					this.listener.globalChat.directMessage(null, this, "[AntiSpam] Please don't repeat yourself, write something different.");
-
-					return;
-				}
-			}*/
 
 			this.listener.globalChat.broadcast(this, message);
 
 			this.lastChatTime = Date.now();
-			//this.lastlastlastMessage = lastlastMessage;
-			//this.lastlastMessage = lastMessage;
 			this.lastMessage = message;
 		} else {
 			this.listener.globalChat.directMessage(null, this, "[AntiSpam] Please don't write too fast, wait at least " + (this.settings.chatCooldown / 1000)  + " seconds.");

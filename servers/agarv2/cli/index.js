@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const fs = require("fs");
 const DefaultSettings = require("../src/Settings");
 const ServerHandle = require("../src/ServerHandle");
@@ -20,6 +22,10 @@ const DefaultGamemodes = [
 /** @returns {DefaultSettings} */
 function readSettings() {
 	try {
+		if (process.env.DEV === 'true') {
+			return JSON.parse(fs.readFileSync("./settings.dev.json", "utf-8"));
+		}
+
 		return JSON.parse(fs.readFileSync("./settings.json", "utf-8"));
 	} catch (e) {
 		console.log("caught error while parsing/reading settings.json:", e.stack);

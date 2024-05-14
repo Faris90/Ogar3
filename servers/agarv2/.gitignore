@@ -1,10 +1,10 @@
 # CLI
 cli/logs
-
+cli/settings.dev.json
 # npm
 node_modules
 package-lock.json
-
+.env
 # IDE settings
 .vscode
 .vs

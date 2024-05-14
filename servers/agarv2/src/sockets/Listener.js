@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const WebSocket = require("uws");
 const WebSocketServer = WebSocket.Server;
 // const uws = require('uWebSockets.js');
@@ -118,7 +120,7 @@ class Listener {
 		if (this.settings.listenerUseReCaptcha) {
 			const url_parts = url.parse(req.url, true);
 			const query = url_parts.query;
-			const secret_key = 'INSERT RECAPTCHA SECRET KEY HERE';
+			const secret_key = process.env.RECAPTCHA_SECRET_KEY || '';
 			const verify_url = 'https://www.google.com/recaptcha/api/siteverify?secret=' + secret_key + '&response=' + query.token;
 
 			request(verify_url, { json: true }, (error, response, body) => {

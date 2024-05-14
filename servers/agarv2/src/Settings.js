@@ -57,6 +57,7 @@ const value = Object.seal({
 	virusMaxCount: 90,
 	virusSize: 100,
 	virusFeedTimes: 7,
+	virusGrowSplitting: true,
 	virusPushing: false,
 	virusSplitBoost: 780,
 	virusPushBoost: 120,
