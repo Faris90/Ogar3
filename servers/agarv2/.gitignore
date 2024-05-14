@@ -1,6 +1,6 @@
 # CLI
-cli/logs
-cli/settings.dev.json
+logs
+settings.dev.json
 # npm
 node_modules
 package-lock.json
