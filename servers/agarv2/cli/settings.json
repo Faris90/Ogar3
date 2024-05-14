@@ -4,7 +4,7 @@
     "listenerMaxConnections": 200,
     "listenerMaxClientDormancy": 60000,
     "listenerMaxConnectionsPerIP": -1,
-    "listenerUseReCaptcha": true,
+    "listenerUseReCaptcha": false,
     "listeningPort": 5000,
     "serverFrequency": 25,
     "serverName": "Emupedia",

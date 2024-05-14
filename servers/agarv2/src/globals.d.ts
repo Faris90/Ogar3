@@ -72,7 +72,7 @@ interface GenCommandTable {
 
 declare type LogEventLevel = 'DEBUG' | 'ACCESS' | 'INFO' | 'WARN' | 'ERROR' | 'FATAL';
 declare type LogEvent = (date: Date, level: LogEventLevel, message: string) => void;
-declare type LogMessageData = any[];
+declare type LogMessageData = any;
 
 /**
  * 0 None, 1 Rigid, 2 Eat, 3 EatInvd

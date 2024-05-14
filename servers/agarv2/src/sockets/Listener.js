@@ -1,5 +1,7 @@
 const WebSocket = require("uws");
 const WebSocketServer = WebSocket.Server;
+// const uws = require('uWebSockets.js');
+// const app = uws.App();
 const url = require('url');
 const request = require('request');
 const Connection = require("./Connection");
@@ -123,13 +125,13 @@ class Listener {
 				if (!error && response.statusCode === 200) {
 					if (body.success === false) {
 						this.logger.inform(`IP '${newConnection.remoteAddress}' Token '${query.token}' Error '${body['error-codes'].join(',')}' failed recaptcha`);
-						newConnection.closeSocket(1003, "Remote address is forbidden");
+						newConnection.closeSocket(1003, "Failed recaptcha verification clientside");
 					} else {
 						newConnection.verifyScore = body.score
 					}
 				} else {
 					this.logger.inform(`IP '${newConnection.remoteAddress}' Token '${query.token}' Error '${error}' failed recaptcha`);
-					newConnection.closeSocket(1003, "Remote address is forbidden");
+					newConnection.closeSocket(1003, "Failed reacaptha verification serverside");
 				}
 			});
 		}
