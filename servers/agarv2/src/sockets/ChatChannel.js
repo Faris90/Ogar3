@@ -1,8 +1,8 @@
 const serverSource = {
-	name: "Server",
+	name: 'Server',
 	isServer: true,
 	color: 0x3F3FC0
-};
+}
 
 /** @param {Connection} connection */
 function getSourceFromConnection(connection) {
@@ -10,7 +10,7 @@ function getSourceFromConnection(connection) {
 		isServer: false,
 		name: connection.player.chatName,
 		color: connection.player.chatColor
-	};
+	}
 }
 
 class ChatChannel {
@@ -18,31 +18,31 @@ class ChatChannel {
 	 * @param {Listener} listener
 	 */
 	constructor(listener) {
-		this.listener = listener;
+		this.listener = listener
 		/** @type {Connection[]} */
-		this.connections = [];
+		this.connections = []
 	}
 
-	get settings() { return this.listener.handle.settings; }
+	get settings() { return this.listener.handle.settings }
 
 	/**
 	 * @param {Connection} connection
 	 */
 	add(connection) {
-		const isPresent = this.connections.some(item => item.remoteAddress === connection.remoteAddress);
+		const isPresent = this.connections.some(item => item.remoteAddress === connection.remoteAddress)
 
 		if (!isPresent) {
 			this.connections.push({
 				remoteAddress: connection.remoteAddress,
 				socket: connection
-			});
+			})
 		} else {
-			this.remove(connection);
+			this.remove(connection)
 
 			this.connections.push({
 				remoteAddress: connection.remoteAddress,
 				socket: connection
-			});
+			})
 		}
 	}
 	/**
@@ -51,8 +51,8 @@ class ChatChannel {
 	remove(connection) {
 		for (let i = 0; i < this.connections.length; i++) {
 			if (this.connections[i].remoteAddress === connection.remoteAddress) {
-				this.connections.splice(i, 1);
-				break;
+				this.connections.splice(i, 1)
+				break
 			}
 		}
 	}
@@ -61,46 +61,50 @@ class ChatChannel {
 	 * @param {string} message
 	 */
 	shouldFilter(message) {
-		message = message.toLowerCase();
+		message = message.toLowerCase()
 
 		for (let i = 0, l = this.settings.chatFilteredPhrases.length; i < l; i++)
 			if (message.indexOf(this.settings.chatFilteredPhrases[i]) !== -1)
-				return true;
+				return true
 
-		return false;
+		return false
 	}
 	/**
-	 * @param {Connection=} source
+	 * @param {Connection} source
 	 * @param {string} message
 	 */
 	broadcast(source, message) {
 		if (this.shouldFilter(message)) {
-			return this.directMessage(null, source, "Your message contains banned words.");
+			return this.directMessage(null, source, 'Your message contains banned words.')
 		}
 
-		const sourceInfo = source == null ? serverSource : getSourceFromConnection(source);
+		const sourceInfo = source == null ? serverSource : getSourceFromConnection(source)
+
+		if (source) {
+			source.protocol.onChatMessage(sourceInfo, message)
+		}
 
 		for (let i = 0, l = this.connections.length; i < l; i++) {
-			const conn = this.connections[i];
+			const conn = this.connections[i]
 
-			if (conn && conn.socket) {
-				conn.socket.protocol.onChatMessage(sourceInfo, message);
+			if (conn && conn.socket && conn.socket !== source) {
+				conn.socket.protocol.onChatMessage(sourceInfo, message)
 			}
 		}
 	}
 	/**
-	 * @param {Connection=} source
+	 * @param {Connection} source
 	 * @param {Connection} recipient
 	 * @param {string} message
 	 */
 	directMessage(source, recipient, message) {
 		if (this.shouldFilter(message)) {
-			return this.directMessage(null, source, "Your message contains banned words.");
+			return this.directMessage(null, source, 'Your message contains banned words.')
 		}
 
-		const sourceInfo = source == null ? serverSource : getSourceFromConnection(source);
-		recipient.protocol.onChatMessage(sourceInfo, message);
+		const sourceInfo = source == null ? serverSource : getSourceFromConnection(source)
+		recipient.protocol.onChatMessage(sourceInfo, message)
 	}
 }
 
-module.exports = ChatChannel;
+module.exports = ChatChannel
