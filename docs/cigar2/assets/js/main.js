@@ -2150,16 +2150,6 @@
 				mobileStuff.show();
 			}
 
-			if (event.target.id === 'menuBtn') {
-				if (!escOverlayShown) {
-					showESCOverlay();
-				}
-			}
-
-			if (event.target.id === 'fullscreenBtn') {
-				byId('toggleFullscreen').click();
-			}
-
 			if (event.target.id === 'splitBtn') {
 				wsSend(UINT8_CACHE[minionControlled ? 0x16 : 0x11]);
 			}
@@ -2451,6 +2441,16 @@
 			}
 		}
 
+		const menuClick = () => {
+			if (!escOverlayShown) {
+				showESCOverlay();
+			}
+		}
+
+		const fullscreenClick = () => {
+			byId('toggleFullscreen').click();
+		}
+
 		byId('previewName').innerHTML = Cell.parseName(settings.nick);
 
 		if (settings.bgColor !== '#ffffff') {
@@ -2501,6 +2501,8 @@
 		byId('showSkins').addEventListener('change', changeShowSkins);
 		byId('darkTheme').addEventListener('change', changeDarkTheme);
 		byId('overlays').addEventListener('click', overlayClick)
+		byId('menuBtn').addEventListener('click', menuClick);
+		byId('fullscreenBtn').addEventListener('click', fullscreenClick);
 
 		if (checkBanCounter() > 2) {
 			byClass('upload-btn-wrapper')[0].remove();
