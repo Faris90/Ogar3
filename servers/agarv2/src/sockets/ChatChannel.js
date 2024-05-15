@@ -29,18 +29,18 @@ class ChatChannel {
 	 * @param {Connection} connection
 	 */
 	add(connection) {
-		const isPresent = this.connections.some(item => item.remoteAddress === connection.remoteAddress)
+		const isPresent = this.connections.some(item => item.id === connection.remoteAddress + '-' + connection.player.id)
 
 		if (!isPresent) {
 			this.connections.push({
-				remoteAddress: connection.remoteAddress,
+				id: connection.remoteAddress + '-' + connection.player.id,
 				socket: connection
 			})
 		} else {
 			this.remove(connection)
 
 			this.connections.push({
-				remoteAddress: connection.remoteAddress,
+				id: connection.remoteAddress + '-' + connection.player.id,
 				socket: connection
 			})
 		}
@@ -50,7 +50,7 @@ class ChatChannel {
 	 */
 	remove(connection) {
 		for (let i = 0; i < this.connections.length; i++) {
-			if (this.connections[i].remoteAddress === connection.remoteAddress) {
+			if (this.connections[i].id === connection.remoteAddress + '-' + connection.player.id) {
 				this.connections.splice(i, 1)
 				break
 			}
@@ -79,10 +79,6 @@ class ChatChannel {
 		}
 
 		const sourceInfo = source == null ? serverSource : getSourceFromConnection(source)
-
-		if (source) {
-			source.protocol.onChatMessage(sourceInfo, message)
-		}
 
 		for (let i = 0, l = this.connections.length; i < l; i++) {
 			const conn = this.connections[i]
