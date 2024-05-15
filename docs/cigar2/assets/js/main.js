@@ -2437,7 +2437,10 @@
 			if (event.target === byId('overlays')) {
 				event.preventDefault();
 				hideESCOverlay();
-				chatBox.focus();
+
+				if (!touched) {
+					chatBox.focus();
+				}
 			}
 		}
 
@@ -2445,10 +2448,6 @@
 			if (!escOverlayShown) {
 				showESCOverlay();
 			}
-		}
-
-		const fullscreenClick = () => {
-			byId('toggleFullscreen').click();
 		}
 
 		byId('previewName').innerHTML = Cell.parseName(settings.nick);
@@ -2502,7 +2501,7 @@
 		byId('darkTheme').addEventListener('change', changeDarkTheme);
 		byId('overlays').addEventListener('click', overlayClick)
 		byId('menuBtn').addEventListener('click', menuClick);
-		byId('fullscreenBtn').addEventListener('click', fullscreenClick);
+		byId('fullscreenBtn').addEventListener('click', openFullscreen);
 
 		if (checkBanCounter() > 2) {
 			byClass('upload-btn-wrapper')[0].remove();
