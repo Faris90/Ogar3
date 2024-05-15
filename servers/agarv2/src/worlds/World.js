@@ -35,7 +35,7 @@ class World {
 		this.playerCells = [];
 		/** @type {Player[]} */
 		this.players = [];
-		/** @type {Player=} */
+		/** @type {Player} */
 		this.largestPlayer = null;
 		this.worldChat = new ChatChannel(this.handle);
 		/** @type {Rect} */

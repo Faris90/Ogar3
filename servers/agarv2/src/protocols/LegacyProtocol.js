@@ -156,7 +156,7 @@ class LegacyProtocol extends Protocol {
 
 				reader.skip(skipLen);
 				const message = readZTString(reader, this.protocol);
-				this.logger.inform(`[${this.connection.remoteAddress}][${this.connection.verifyScore}][${this.connection.player.cellSkin ? this.connection.player.cellSkin.split('|').slice(-1) : ''}] ${this.connection.player.chatName}: ${message} [${this.connection.player.cellSkin ? this.connection.player.cellSkin.split('|')[0] : ''}]`);
+				this.logger.inform(`[IP${this.connection.remoteAddress}][SCORE${this.connection.verifyScore}][ID${this.connection.player.id ? this.connection.player.id : 0}][FP${this.connection.player.cellSkin ? this.connection.player.cellSkin.split('|').slice(-1) : ''}] <${this.connection.player.chatName}>: ${message} [SKIN${this.connection.player.cellSkin ? this.connection.player.cellSkin.split('|')[0] : ''}]`);
 				this.connection.onChatMessage(message);
 				break;
 			case 254:
@@ -165,7 +165,9 @@ class LegacyProtocol extends Protocol {
 				}
 				break;
 			case 255:
-				return void this.fail(1003, "Unexpected message");
+				const chatName = readZTString(reader, this.protocol)
+				this.connection.player.chatName = !this.connection.player.hasWorld ? chatName + '(Spectator)' : chatName;
+				break;
 			default:
 				return void this.fail(1003, "Unknown message type");
 		}
