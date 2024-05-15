@@ -1015,6 +1015,18 @@
 	}
 
 	function sendChat(text) {
+		chat.messages.push({
+			color: settings.nameColor !== '#ffffff' ? Color.fromHex(settings.nameColor) : Color.fromHex('#33ff33'),
+			name: Cell.parseName(settings.nick),
+			message: text,
+			time: Date.now(),
+			server: false,
+			admin: false,
+			mod: false
+		});
+
+		drawChat();
+
 		const writer = new Writer();
 		writer.setUint8(0x63);
 		writer.setUint8(0);
