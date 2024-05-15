@@ -29,18 +29,18 @@ class ChatChannel {
 	 * @param {Connection} connection
 	 */
 	add(connection) {
-		const isPresent = this.connections.some(item => item.hash === connection.remoteAddress + '-' + (typeof connection.player.id !== 'undefined' ? connection.player.id : 0))
+		const isPresent = this.connections.some(item => item.hash === connection.remoteAddress + '-' + (connection.player && typeof connection.player.id !== 'undefined' ? connection.player.id : 0))
 
 		if (!isPresent) {
 			this.connections.push({
-				hash: connection.remoteAddress + '-' + (typeof connection.player.id !== 'undefined' ? connection.player.id : 0),
+				hash: connection.remoteAddress + '-' + (connection.player && typeof connection.player.id !== 'undefined' ? connection.player.id : 0),
 				socket: connection
 			})
 		} else {
 			this.remove(connection)
 
 			this.connections.push({
-				hash: connection.remoteAddress + '-' + (typeof connection.player.id !== 'undefined' ? connection.player.id : 0),
+				hash: connection.remoteAddress + '-' + (connection.player && typeof connection.player.id !== 'undefined' ? connection.player.id : 0),
 				socket: connection
 			})
 		}
@@ -50,7 +50,7 @@ class ChatChannel {
 	 */
 	remove(connection) {
 		for (let i = 0; i < this.connections.length; i++) {
-			if (this.connections[i].hash === connection.remoteAddress + '-' + (typeof connection.player.id !== 'undefined' ? connection.player.id : 0)) {
+			if (this.connections[i].hash === (connection.remoteAddress + '-' + (connection.player && typeof connection.player.id !== 'undefined' ? connection.player.id : 0))) {
 				this.connections.splice(i, 1)
 				break
 			}
