@@ -76,7 +76,7 @@ module.exports = class GameServer {
 		this.highscores = this.configService.getHighScores();
 		this.rSkins = this.configService.getRSkins();
 		this.uid = this.configService.getUnique();
-     
+
 		this.randomNames = this.configService.getBotNames();
 		this.skinshortcut = this.configService.getSkinShortCuts();
 		this.skin = this.configService.getSkins();
@@ -404,7 +404,7 @@ module.exports = class GameServer {
 
 			let origin = ws.upgradeReq.rawHeaders[ws.upgradeReq.rawHeaders.indexOf('Origin') + 1];
 
-			if (origin !== 'https://emupedia.net' && origin !== 'https://emupedia.org' && origin !== 'https://emuos.org' && origin !== 'https://emuos.net' && origin !== 'http://localhost:8000') {
+			if (origin !== 'https://emupedia.net' && origin !== 'https://emupedia.org' && origin !== 'https://emuos.org' && origin !== 'https://emuos.net' && origin !== 'http://localhost:58585') {
 				console.log('[' + (new Date().toISOString().replace('T', ' ')) + '] Origin: ' + origin + ' REFUSED');
 				ws.close();
 				return;
