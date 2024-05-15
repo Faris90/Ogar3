@@ -374,7 +374,7 @@
 			cells.byId.delete(this.id);
 
 			if (cells.mine.remove(this.id) && cells.mine.length === 0) {
-				if (settings.autoRespawn) {
+				if (settings.autoRespawn && !escOverlayShown) {
 					byId('play-btn').click();
 				} else {
 					showESCOverlay();
