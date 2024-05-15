@@ -2508,7 +2508,7 @@
 			drawChat();
 		};
 
-		chatBox.onpaste = () => {
+		/*chatBox.onpaste = () => {
 			chat.messages.push({
 				color: Color.fromHex('#3f3fc0'),
 				name: "[SERVER] Server",
@@ -2521,7 +2521,7 @@
 			drawChat();
 
 			return false;
-		}
+		}*/
 
 		mainCanvas.onmousemove = event => {
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
