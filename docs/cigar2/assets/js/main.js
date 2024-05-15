@@ -642,8 +642,6 @@
 		0xFE: new Uint8Array([0xFE])
 	};
 	const FP = FingerprintJS.load();
-	const SEND_254 = new Uint8Array([0xFE, 6, 0, 0, 0]);
-	const SEND_255 = new Uint8Array([0xFF, 1, 0, 0, 0]);
 
 	const KEY_TO_OPCODE = {
 		e: UINT8_CACHE[0x16],
@@ -711,9 +709,23 @@
 
 	function wsOpen() {
 		reconnectDelay = 1000;
+
 		byId('connecting').hide();
-		wsSend(SEND_254);
-		wsSend(SEND_255);
+
+		wsSend(new Uint8Array([0xFE, 6, 0, 0, 0]));
+
+		if (settings.nick !== '') {
+			const writer = new Writer(true);
+			writer.setUint8(0xFF);
+			writer.setUint8(1);
+			writer.setUint8(0);
+			writer.setUint8(0);
+			writer.setUint8(0);
+			writer.setStringUTF8(Cell.parseName(settings.nick));
+			wsSend(writer);
+		} else {
+			wsSend(new Uint8Array([0xFF, 1, 0, 0, 0]));
+		}
 	}
 
 	function wsError(error) {
