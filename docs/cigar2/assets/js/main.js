@@ -2486,6 +2486,7 @@
 		byId('nick').addEventListener('change', saveNick);
 		byId('skin').addEventListener('change', changeSkin);
 		byId('toggleFullscreen').addEventListener('change', changeFullscreen);
+		byId('fullscreenBtn').addEventListener('click', changeFullscreen);
 		byId('fillSkin').addEventListener('change', changeFillSkin);
 		byId('flipTouchControls').addEventListener('change', changeFlipTouchControls);
 		byId('bgColor').addEventListener('input', changeBackgroundColor);
@@ -2501,7 +2502,6 @@
 		byId('darkTheme').addEventListener('change', changeDarkTheme);
 		byId('overlays').addEventListener('click', overlayClick)
 		byId('menuBtn').addEventListener('click', menuClick);
-		byId('fullscreenBtn').addEventListener('click', openFullscreen);
 
 		if (checkBanCounter() > 2) {
 			byClass('upload-btn-wrapper')[0].remove();
