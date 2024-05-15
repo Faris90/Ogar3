@@ -2161,6 +2161,10 @@
 				byId('fullscreenBtn').show();
 				byId('splitBtn').show();
 				byId('ejectBtn').show();
+			} else {
+				if (document.activeElement === chatBox) {
+					chatBox.blur();
+				}
 			}
 
 			if (event.target.id === 'splitBtn') {
@@ -2452,6 +2456,10 @@
 				if (!touched) {
 					chatBox.focus();
 					byId('menuBtn').show();
+				} else {
+					if (document.activeElement === chatBox) {
+						chatBox.blur();
+					}
 				}
 			}
 		}
