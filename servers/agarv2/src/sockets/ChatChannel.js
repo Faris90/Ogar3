@@ -75,7 +75,7 @@ class ChatChannel {
 	 */
 	broadcast(source, message) {
 		if (this.shouldFilter(message)) {
-			return this.directMessage(null, source, 'Your message contains banned words.')
+			return this.directMessage(null, source, 'Last message was not sent, because it contains banned words.')
 		}
 
 		const sourceInfo = source == null ? serverSource : getSourceFromConnection(source)
@@ -95,7 +95,7 @@ class ChatChannel {
 	 */
 	directMessage(source, recipient, message) {
 		if (this.shouldFilter(message)) {
-			return this.directMessage(null, source, 'Your message contains banned words.')
+			return this.directMessage(null, source, 'Last message was not sent, because it contains banned words.')
 		}
 
 		const sourceInfo = source == null ? serverSource : getSourceFromConnection(source)

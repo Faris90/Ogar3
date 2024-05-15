@@ -122,7 +122,7 @@ class Connection extends Router {
 		if (!lastChatTime || (Date.now() - lastChatTime >= this.settings.chatCooldown)) {
 			if (lastMessage) {
 				if ((lastMessage === message || ~lastMessage.indexOf(message) || ~message.indexOf(lastMessage)) && message.length >= 10) {
-					this.listener.globalChat.directMessage(null, this, '[AntiSpam] Please don\'t repeat yourself, write something different.')
+					this.listener.globalChat.directMessage(null, this, '[AntiSpam] Last message was not sent, please don\'t repeat yourself, write something different.')
 
 					return
 				}
@@ -133,7 +133,7 @@ class Connection extends Router {
 			this.lastChatTime = Date.now()
 			this.lastMessage = message
 		} else {
-			this.listener.globalChat.directMessage(null, this, '[AntiSpam] Please don\'t write too fast, wait at least ' + (this.settings.chatCooldown / 1000)  + ' seconds.')
+			this.listener.globalChat.directMessage(null, this, '[AntiSpam] Last message was not sent, please don\'t write too fast, wait at least ' + (this.settings.chatCooldown / 1000)  + ' seconds.')
 		}
 	}
 	onQPress() {
