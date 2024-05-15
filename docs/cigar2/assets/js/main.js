@@ -373,7 +373,13 @@
 		destroy(killerId) {
 			cells.byId.delete(this.id);
 
-			if (cells.mine.remove(this.id) && cells.mine.length === 0) showESCOverlay();
+			if (cells.mine.remove(this.id) && cells.mine.length === 0) {
+				if (settings.autoRespawn) {
+					byId('play-btn').click();
+				} else {
+					showESCOverlay();
+				}
+			}
 
 			this.destroyed = true;
 			this.dead = syncUpdStamp;
@@ -1194,7 +1200,8 @@
 		rightClick: true,
 		flipTouchControls: false,
 		useJoystick: true,
-		useFilters: true
+		useFilters: true,
+		autoRespawn: true
 	};
 
 	const pressed = {
