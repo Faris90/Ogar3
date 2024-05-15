@@ -312,9 +312,9 @@ label#nick-list:after, label#skin-list:after {
 }
 
 #touchCircle {
-	width: 4vw;
-	height: 4vw;
-	border-radius: 2vw;
+	width: 6vw;
+	height: 6vw;
+	border-radius: 6vw;
 	background: #f00;
 	opacity: 0.3;
 	z-index: 3;

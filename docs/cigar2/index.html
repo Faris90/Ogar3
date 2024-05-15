@@ -12,20 +12,20 @@
 		<link rel="icon" type="image/png" href="assets/img/favicon.png">
 		<link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet" type="text/css">
 		<link href="assets/css/bootstrap.min.css" rel="stylesheet">
-		<link href="assets/css/index.css?v=23" rel="stylesheet">
+		<link href="assets/css/index.css?v=24" rel="stylesheet">
 		<link href="assets/css/gallery.css" rel="stylesheet">
 	</head>
 
 	<body>
 		<canvas id="canvas" width="800" height="600"></canvas>
 
-		<div id="mobileStuff" style="display: none;">
+		<div id="mobileStuff">
 			<div id="touch" style="display: none;"></div>
 			<div id="touchCircle" style="display: none;"></div>
-			<img id="menuBtn" src="assets/img/menu.png" alt="" draggable="false" ondragstart="return false;"/>
-			<img id="fullscreenBtn" src="assets/img/fullscreen.png" alt="" draggable="false" ondragstart="return false;" />
-			<img id="splitBtn" src="assets/img/split.png" alt="" draggable="false" ondragstart="return false;" />
-			<img id="ejectBtn" src="assets/img/eject.png" alt="" draggable="false" ondragstart="return false;" />
+			<img id="menuBtn" style="display: none;" src="assets/img/menu.png" alt="" draggable="false" ondragstart="return false;"/>
+			<img id="fullscreenBtn" style="display: none;" src="assets/img/fullscreen.png" alt="" draggable="false" ondragstart="return false;" />
+			<img id="splitBtn" style="display: none;" src="assets/img/split.png" alt="" draggable="false" ondragstart="return false;" />
+			<img id="ejectBtn" style="display: none;" src="assets/img/eject.png" alt="" draggable="false" ondragstart="return false;" />
 		</div>
 
 		<input type="text" id="chat_textbox" placeholder="Press enter to chat" maxlength="100" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
@@ -166,8 +166,8 @@
 							<ul>
 								<li>Fixed a long-standing bug in Chat that prevented showing some messages sometimes</li>
 								<li>You can now see Spectator's nicknames if they have one set</li>
-								<li>Starting mass was increased, so you can feed from ejected mass faster</li>
-								<li>Now you can push Viruses by ejecting your mass towards them</li>
+								<li>Cell starting mass was increased, so your Cell can feed with ejected mass immediately after respawn</li>
+								<li>Now you can push Viruses by ejecting your Cell's mass towards the Viruses</li>
 								<li>Adjusted AntiSpam measures to be more forgiving in Chat, also re-enabled Pasting messages</li>
 								<li>Added <b>Toggle Fullscreen</b> checkbox in <b>Settings</b></li>
 								<li>Implemented <b>AutoRespawn</b>, now you will automatically respawn without needing to press <b>Play</b> again</li>
@@ -268,6 +268,6 @@
 		<script src="assets/js/fp.umd.min.js"></script>
 		<script src="assets/js/nipplejs.js"></script>
 		<script src="assets/js/quadtree.js"></script>
-		<script src="assets/js/main.js?v=95"></script>
+		<script src="assets/js/main.js?v=96"></script>
 	</body>
 </html>

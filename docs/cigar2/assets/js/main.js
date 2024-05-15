@@ -1151,6 +1151,7 @@
 	let chatBox = null;
 	let mapCenterSet = false;
 	let minionControlled = false;
+	let touched = false;
 	let mouseX = NaN;
 	let mouseY = NaN;
 	let feedMacroIntervalID;
@@ -1228,6 +1229,10 @@
 	function showESCOverlay() {
 		escOverlayShown = true;
 		byId('overlays').show(0.5);
+
+		if (!touched) {
+			byId('menuBtn').hide();
+		}
 	}
 
 	function toCamera(ctx) {
@@ -2147,14 +2152,15 @@
 		const touch = byId('touch');
 		const touchCircle = byId('touchCircle');
 
-		let touched = false;
-
 		window.addEventListener('touchstart', event => {
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 
 			if (!touched) {
 				touched = true;
-				mobileStuff.show();
+				byId('menuBtn').show();
+				byId('fullscreenBtn').show();
+				byId('splitBtn').show();
+				byId('ejectBtn').show();
 			}
 
 			if (event.target.id === 'splitBtn') {
@@ -2189,8 +2195,8 @@
 				mouseX = touch.pageX;
 				mouseY = touch.pageY;
 
-				touchCircle.style.left = touch.pageX + 'px';
-				touchCircle.style.top = touch.pageY + 'px';
+				touchCircle.style.left = 'calc(' + touch.pageX + 'px - 3vw)';
+				touchCircle.style.top = 'calc(' + touch.pageY + 'px - 3vw)';
 			}
 		};
 
@@ -2198,8 +2204,6 @@
 
 		window.addEventListener('touchend', event => {
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
-
-			if (escOverlayShown) return;
 
 			if (touched) {
 				clearInterval(feedMacroIntervalID)
@@ -2447,6 +2451,7 @@
 
 				if (!touched) {
 					chatBox.focus();
+					byId('menuBtn').show();
 				}
 			}
 		}
