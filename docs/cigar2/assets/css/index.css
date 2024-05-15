@@ -1,11 +1,15 @@
 html, body {
-	padding: 0;
-	margin: 0;
-	overflow: hidden;
-	-webkit-text-size-adjust: none;
+	position: fixed;
 	width: 100%;
 	height: 100%;
-	position: fixed;
+	padding: 0;
+	margin: 0;
+	-webkit-text-size-adjust: none;
+	overflow: hidden;
+}
+
+html, body, * {
+	touch-action: manipulation;
 }
 
 *::-webkit-scrollbar {
@@ -289,11 +293,11 @@ label#nick-list:after, label#skin-list:after {
 	left: 0;
 }
 
-#touchCircle, #splitBtn, #ejectBtn {
+#touchCircle, #menuBtn, #fullscreenBtn, #splitBtn, #ejectBtn {
 	position: fixed;
 }
 
-#splitBtn, #ejectBtn {
+#menuBtn, #fullscreenBtn, #splitBtn, #ejectBtn {
 	z-index: 2;
 }
 
@@ -306,13 +310,23 @@ label#nick-list:after, label#skin-list:after {
 	z-index: 3;
 }
 
-#splitBtn, #ejectBtn {
+#menuBtn, #fullscreenBtn, #splitBtn, #ejectBtn {
 	width: 12vw;
 	height: 12vw;
 	border-radius: 6vw;
 	background: #fff;
 	opacity: 0.3;
 	filter: invert(1);
+}
+
+#menuBtn {
+	left: 10vw;
+	top: 1vh;
+}
+
+#fullscreenBtn {
+	left: 24vw;
+	top: 1vh;
 }
 
 #splitBtn {
@@ -404,7 +418,7 @@ label#nick-list:after, label#skin-list:after {
 	color: #fff;
 }
 
-.darkTheme #splitBtn, .darkTheme #ejectBtn {
+.darkTheme #menuBtn, .darkTheme #fullscreenBtn, .darkTheme #splitBtn, .darkTheme #ejectBtn {
 	filter: none;
 }
 

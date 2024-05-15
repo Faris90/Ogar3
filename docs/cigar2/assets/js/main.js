@@ -2073,6 +2073,26 @@
 		return banCounter;
 	}
 
+	function openFullscreen(elem) {
+		if (elem.requestFullscreen) {
+			elem.requestFullscreen();
+		} else if (elem.webkitRequestFullscreen) {
+			elem.webkitRequestFullscreen();
+		} else if (elem.msRequestFullscreen) {
+			elem.msRequestFullscreen();
+		}
+	}
+
+	function closeFullscreen() {
+		if (document.exitFullscreen) {
+			document.exitFullscreen();
+		} else if (document.webkitExitFullscreen) {
+			document.webkitExitFullscreen();
+		} else if (document.msExitFullscreen) {
+			document.msExitFullscreen();
+		}
+	}
+
 	function init() {
 		mainCanvas = document.getElementById('canvas');
 		mainCtx = mainCanvas.getContext('2d');
@@ -2112,8 +2132,8 @@
 
 		joystick.on('move', (e, nipple) => {
 			if (settings.useJoystick) {
-				mouseX = innerWidth / 2 + nipple.instance.frontPosition.x * 2;
-				mouseY = innerHeight / 2 + nipple.instance.frontPosition.y * 2;
+				mouseX = innerWidth / 2 + nipple.instance.frontPosition.x * 5;
+				mouseY = innerHeight / 2 + nipple.instance.frontPosition.y * 5;
 			}
 		});
 
@@ -2128,6 +2148,16 @@
 			if (!touched) {
 				touched = true;
 				mobileStuff.show();
+			}
+
+			if (event.target.id === 'menuBtn') {
+				if (!escOverlayShown) {
+					showESCOverlay();
+				}
+			}
+
+			if (event.target.id === 'fullscreenBtn') {
+				byId('toggleFullscreen').click();
 			}
 
 			if (event.target.id === 'splitBtn') {
@@ -2183,6 +2213,11 @@
 			}
 		});
 
+		document.ondblclick = e => {
+			e.preventDefault();
+			return false;
+		}
+
 		const changeDarkTheme = () => {
 			if (settings.darkTheme) {
 				document.documentElement.classList.add('darkTheme');
@@ -2220,6 +2255,22 @@
 
 			e.target.blur();
 		};
+
+		const changeFullscreen = () => {
+			if (!document.fullscreenElement) {
+				openFullscreen(document.documentElement);
+
+				if (byId('fullscreenBtn')) {
+					byId('fullscreenBtn').src = 'assets/img/fullscreen_off.png';
+				}
+			} else {
+				closeFullscreen();
+
+				if (byId('fullscreenBtn')) {
+					byId('fullscreenBtn').src = 'assets/img/fullscreen.png';
+				}
+			}
+		}
 
 		const changeBackgroundColor = e => {
 			settings.bgColor = e.target.value;
@@ -2433,6 +2484,7 @@
 		byId('nick').addEventListener('input', changeNick);
 		byId('nick').addEventListener('change', saveNick);
 		byId('skin').addEventListener('change', changeSkin);
+		byId('toggleFullscreen').addEventListener('change', changeFullscreen);
 		byId('fillSkin').addEventListener('change', changeFillSkin);
 		byId('flipTouchControls').addEventListener('change', changeFlipTouchControls);
 		byId('bgColor').addEventListener('input', changeBackgroundColor);

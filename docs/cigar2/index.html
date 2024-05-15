@@ -3,18 +3,16 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<meta name="description" content="Eat cells smaller than you and don't get eaten by the bigger ones, as an MMO">
 		<meta name="keywords" content="agario, agar, io, cell, cells, virus, bacteria, blob, game, games, web game, html5, fun, flash">
 		<meta name="robots" content="index, follow">
-		<meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<title>Agar.io v2.0</title>
 		<link rel="icon" type="image/png" href="assets/img/favicon.png">
 		<link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet" type="text/css">
 		<link href="assets/css/bootstrap.min.css" rel="stylesheet">
-		<link href="assets/css/index.css?v=20" rel="stylesheet">
+		<link href="assets/css/index.css?v=21" rel="stylesheet">
 		<link href="assets/css/gallery.css" rel="stylesheet">
 	</head>
 
@@ -24,6 +22,8 @@
 		<div id="mobileStuff" style="display: none;">
 			<div id="touch" style="display: none;"></div>
 			<div id="touchCircle" style="display: none;"></div>
+			<img src="assets/img/menu.png" id="menuBtn" alt="" />
+			<!--<img src="assets/img/fullscreen.png" id="fullscreenBtn" alt="" />-->
 			<img src="assets/img/split.png" id="splitBtn" alt="" />
 			<img src="assets/img/eject.png" id="ejectBtn" alt="" />
 		</div>
@@ -81,6 +81,7 @@
 
 					<div id="settings" class="checkbox" style="display: none;">
 						<div style="margin: 6px;">
+							<label><input id="toggleFullscreen" type="checkbox" />Toggle Fullscreen</label>
 							<label><input id="showSkins" type="checkbox" />Skins</label>
 							<label><input id="fillSkin" type="checkbox" />Fill Skin</label>
 							<label><input id="showNames" type="checkbox" />Names</label>
@@ -167,6 +168,8 @@
 								<li>Starting mass was increased, so you can feed from ejected mass faster</li>
 								<li>Now you can push Viruses by ejecting your mass towards them</li>
 								<li>Adjusted AntiSpam measures to be more forgiving in Chat, also re-enabled Pasting messages</li>
+								<li>Added <b>Toggle Fullscreen</b> checkbox in <b>Settings</b></li>
+								<li>Improved Touch controls for mobile (Added Menu Button, fixed Split Distance)</li>
 							</ul>
 							<hr /><b>14/05/2024</b>
 							<ul>
@@ -194,8 +197,8 @@
 							</ul>
 							<hr /><b>28/02/2024</b>
 							<ul>
-								<li>Implemented <b>Virtual Joystick</b> for mobile</li>
-								<li>Added toggle checkbox in <b>Settings</b> for enabling/disabling <b>Virtual Joystick</b></li>
+								<li>Implemented <b>Touch Joystick</b> for mobile</li>
+								<li>Added <b>Touch Joystick</b> checkbox in <b>Settings</b></li>
 								<li>Uploading <kbd>gif</kbd> files is no longer allowed, the animation didn't work anyway, just first frame was shown</li>
 							</ul>
 							<hr /><b>24/02/2024</b>
@@ -204,7 +207,7 @@
 							</ul>
 							<hr /><b>20/02/2024</b>
 							<ul>
-								<li>Added toggle checkbox in <b>Settings</b> for enabling/disabling individual mouse clicks</li>
+								<li>Added toggle <b>Individual Mouse Clicks</b> checkboxes in <b>Settings</b></li>
 								<li>Added custom <b>Background Color</b> picker</li>
 							</ul>
 							<hr /><b>17/02/2024</b>
@@ -262,6 +265,6 @@
 		<script src="assets/js/fp.umd.min.js"></script>
 		<script src="assets/js/nipplejs.js"></script>
 		<script src="assets/js/quadtree.js"></script>
-		<script src="assets/js/main.js?v=87"></script>
+		<script src="assets/js/main.js?v=90"></script>
 	</body>
 </html>
