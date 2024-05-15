@@ -65,6 +65,10 @@ class LegacyProtocol extends Protocol {
 			this.key = reader.readUInt32();
 			this.connection.createPlayer();
 
+			const chatName = readZTString(reader, this.protocol)
+			this.logger.inform(`[CHAT_NAME][${chatName}]`)
+			this.connection.player.chatName = !this.connection.player.hasWorld ? chatName + '(Spectator)' : chatName;
+
 			return;
 		}
 
@@ -156,7 +160,7 @@ class LegacyProtocol extends Protocol {
 
 				reader.skip(skipLen);
 				const message = readZTString(reader, this.protocol);
-				this.logger.inform(`[IP${this.connection.remoteAddress}][SCORE${this.connection.verifyScore}][ID${this.connection.player.id ? this.connection.player.id : 0}][FP${this.connection.player.cellSkin ? this.connection.player.cellSkin.split('|').slice(-1) : ''}] <${this.connection.player.chatName}>: ${message} [SKIN${this.connection.player.cellSkin ? this.connection.player.cellSkin.split('|')[0] : ''}]`);
+				this.logger.inform(`[IP][${this.connection.remoteAddress}][SCORE][${this.connection.verifyScore}][KEY][${this.key}][ID][${this.connection.player.id ? this.connection.player.id : 0}][FP][${this.connection.player.cellSkin ? this.connection.player.cellSkin.split('|').slice(-1) : ''}] <${this.connection.player.chatName}>: ${message} [SKIN][${this.connection.player.cellSkin ? this.connection.player.cellSkin.split('|')[0] : ''}]`);
 				this.connection.onChatMessage(message);
 				break;
 			case 254:
@@ -165,9 +169,7 @@ class LegacyProtocol extends Protocol {
 				}
 				break;
 			case 255:
-				const chatName = readZTString(reader, this.protocol)
-				this.connection.player.chatName = !this.connection.player.hasWorld ? chatName + '(Spectator)' : chatName;
-				break;
+				return void this.fail(1003, "Unexpected message");
 			default:
 				return void this.fail(1003, "Unknown message type");
 		}
