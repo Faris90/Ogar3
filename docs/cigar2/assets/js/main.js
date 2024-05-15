@@ -2434,6 +2434,7 @@
 				case 0:
 					if (settings.leftClick) {
 						if (touched) return;
+						if (byId('overlays').contains(event.target) || byId('chat_textbox').contains(event.target)) return;
 
 						clearInterval(feedMacroIntervalID);
 						let code = UINT8_CACHE[minionControlled ? 0x17 : 0x15];
@@ -2471,12 +2472,14 @@
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 
 			if (settings.rightClick && event.button === 2) {
+				if (byId('overlays').contains(event.target) || byId('chat_textbox').contains(event.target)) return;
+
 				let code = UINT8_CACHE[minionControlled ? 0x16 : 0x11];
 				wsSend(code);
 				wsSend(code);
 			}
 
-			if (!byId('overlays').contains(event.target)) {
+			if (!byId('overlays').contains(event.target) && !byId('chat_textbox').contains(event.target)) {
 				event.preventDefault();
 				return false;
 			}
