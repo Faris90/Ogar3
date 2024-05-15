@@ -336,11 +336,8 @@
 
 	class Cell {
 		static parseName(name, limit = true) { // static method
-			if (typeof name !== 'undefined' && name !== null && name !== '') {
-				name = name.trim().replace(/[<>|]/g, '');
-
-				return limit ? name.substring(0, 16) : name;
-			}
+			if (typeof name !== 'undefined' && name !== null && name !== '')
+				return name.trim().replace(/[<>|]/g, '').substring(0, 16);
 
 			return name;
 		}
@@ -729,7 +726,7 @@
 			writer.setUint8(0);
 			writer.setUint8(0);
 			writer.setUint8(0);
-			writer.setStringUTF8(Cell.parseName(settings.nick, false));
+			writer.setStringUTF8(Cell.parseName(settings.nick));
 			wsSend(writer);
 		} else {
 			wsSend(new Uint8Array([0xFF, 1, 0, 0, 0]));
