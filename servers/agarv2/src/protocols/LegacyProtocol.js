@@ -66,7 +66,7 @@ class LegacyProtocol extends Protocol {
 			this.connection.createPlayer();
 
 			const chatName = readZTString(reader, this.protocol)
-			this.connection.player.chatName = chatName ? chatName + ' (Spectator)' : this.connection.player.chatName;
+			this.connection.player.chatName = chatName ? chatName : this.connection.player.chatName;
 
 			return;
 		}
