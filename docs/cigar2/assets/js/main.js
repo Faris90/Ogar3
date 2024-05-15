@@ -1015,9 +1015,14 @@
 	}
 
 	function sendChat(text) {
+		syncUpdStamp = Date.now();
+
+		const wait = Math.max(3000, 1000 + text.length * 150);
+		chat.waitUntil = syncUpdStamp - chat.waitUntil > 1000 ? syncUpdStamp + wait : chat.waitUntil + wait;
+
 		chat.messages.push({
 			color: settings.nameColor !== '#ffffff' ? Color.fromHex(settings.nameColor) : Color.fromHex('#33ff33'),
-			name: Cell.parseName(settings.nick),
+			name: Cell.parseName(settings.nick) || EMPTY_NAME,
 			message: text,
 			time: Date.now(),
 			server: false,
@@ -1025,7 +1030,7 @@
 			mod: false
 		});
 
-		drawChat();
+		if (settings.showChat) drawChat();
 
 		const writer = new Writer();
 		writer.setUint8(0x63);
@@ -1339,6 +1344,7 @@
 
 			width = Math.max(thisLineWidth, width);
 		}
+
 		canvas.width = width;
 		canvas.height = height;
 
