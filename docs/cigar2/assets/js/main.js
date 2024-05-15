@@ -2486,7 +2486,7 @@
 		byId('nick').addEventListener('change', saveNick);
 		byId('skin').addEventListener('change', changeSkin);
 		byId('toggleFullscreen').addEventListener('change', changeFullscreen);
-		byId('fullscreenBtn').addEventListener('click', changeFullscreen);
+		byId('fullscreenBtn').addEventListener('click', () => byId('toggleFullscreen').click());
 		byId('fillSkin').addEventListener('change', changeFillSkin);
 		byId('flipTouchControls').addEventListener('change', changeFlipTouchControls);
 		byId('bgColor').addEventListener('input', changeBackgroundColor);
