@@ -2089,6 +2089,8 @@
 			elem.requestFullscreen();
 		} else if (elem.webkitRequestFullscreen) {
 			elem.webkitRequestFullscreen();
+		} else if (elem.webkitEnterFullscreen) {
+			elem.webkitEnterFullscreen();
 		} else if (elem.msRequestFullscreen) {
 			elem.msRequestFullscreen();
 		}
