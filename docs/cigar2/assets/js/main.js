@@ -2202,6 +2202,8 @@
 		window.addEventListener('touchend', event => {
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 
+			if (escOverlayShown) return;
+
 			if (touched) {
 				clearInterval(feedMacroIntervalID)
 			}
