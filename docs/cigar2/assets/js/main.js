@@ -2463,18 +2463,9 @@
 				byId('splitBtn').hide();
 				byId('ejectBtn').hide();
 
-				if (typeof joystick.destroy === 'function') {
-					joystick.destroy();
+				if (typeof joystick[0] !== 'undefined') {
+					joystick[0].destroy();
 				}
-			} else {
-				joystick = nipplejs.create(joystickOptions);
-
-				joystick.on('move', (e, nipple) => {
-					if (settings.useJoystick) {
-						mouseX = innerWidth / 2 + nipple.instance.frontPosition.x * 5;
-						mouseY = innerHeight / 2 + nipple.instance.frontPosition.y * 5;
-					}
-				});
 			}
 		}
 
