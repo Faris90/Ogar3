@@ -666,8 +666,9 @@
 		KeyE: 'e',
 		KeyR: 'r',
 		KeyT: 't',
+		KeyZ: 'z',
 		KeyX: 'x',
-		KeyZ: 'z'
+		KeyC: 'c'
 	};
 
 	function wsCleanup() {
@@ -2014,7 +2015,7 @@
 
 			if (typeof code !== 'undefined') wsSend(code);
 
-			if (key === 'w') {
+			if (key === 'w' || key === 'z') {
 				clearInterval(feedMacroIntervalID);
 				code = UINT8_CACHE[minionControlled ? 0x17 : 0x15];
 				let macroCooldown = settings.feedMacro ? 0 : 1000 / 7;
@@ -2033,7 +2034,7 @@
 				wsSend(code);
 			}
 
-			if (key === 'z') {
+			if (key === 'c') {
 				clearInterval(splitMacroIntervalID);
 				code = UINT8_CACHE[minionControlled ? 0x16 : 0x11];
 				let macroCooldown = settings.splitMacro ? 0 : 1000 / 7;
@@ -2055,8 +2056,8 @@
 
 		if (Object.hasOwnProperty.call(pressed, key)) pressed[key] = false;
 
-		if (key === 'w') clearInterval(feedMacroIntervalID);
-		if (key === 'z') clearInterval(splitMacroIntervalID);
+		if (key === 'w' || key === 'z') clearInterval(feedMacroIntervalID);
+		if (key === 'c') clearInterval(splitMacroIntervalID);
 	}
 
 	function handleScroll(event) {
