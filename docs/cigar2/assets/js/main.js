@@ -1199,6 +1199,7 @@
 		leftClick: true,
 		middleClick: true,
 		rightClick: true,
+		disableTouchControls: false,
 		flipTouchControls: false,
 		useJoystick: true,
 		useFilters: true,
@@ -1208,12 +1209,13 @@
 	const pressed = {
 		' ': false,
 		w: false,
+		z: false,
 		e: false,
 		r: false,
 		t: false,
 		q: false,
 		x: false,
-		z: false,
+		c: false,
 		enter: false,
 		escape: false
 	};
@@ -2140,9 +2142,8 @@
 			});
 		}, 10000);
 
-		const mobileStuff = byId('mobileStuff');
-		const options = { zone: byId('touch'), mode: 'semi', dynamicPage: true, catchDistance: 80, color: settings.darkTheme ? 'white' : 'black' };
-		const joystick = nipplejs.create(options);
+		const joystickOptions = { zone: byId('touch'), mode: 'semi', dynamicPage: true, catchDistance: 80, color: settings.darkTheme ? 'white' : 'black' };
+		let joystick = nipplejs.create(joystickOptions);
 
 		joystick.on('move', (e, nipple) => {
 			if (settings.useJoystick) {
@@ -2156,6 +2157,7 @@
 
 		window.addEventListener('touchstart', event => {
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
+			if (settings.disableTouchControls) return;
 
 			if (!touched) {
 				touched = true;
@@ -2194,6 +2196,7 @@
 
 		const touchmove = event => {
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
+			if (settings.disableTouchControls) return;
 
 			if (!settings.useJoystick) {
 				const touch = event.touches[0];
@@ -2210,6 +2213,7 @@
 
 		window.addEventListener('touchend', event => {
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
+			if (settings.disableTouchControls) return;
 
 			if (touched) {
 				clearInterval(feedMacroIntervalID)
@@ -2450,6 +2454,30 @@
 			html.classList.toggle('flipped-controls');
 		}
 
+		const changeDisableTouchControls = () => {
+			if (settings.disableTouchControls) {
+				touched = false;
+
+				byId('menuBtn').hide();
+				byId('fullscreenBtn').hide();
+				byId('splitBtn').hide();
+				byId('ejectBtn').hide();
+
+				if (typeof joystick.destroy === 'function') {
+					joystick.destroy();
+				}
+			} else {
+				joystick = nipplejs.create(joystickOptions);
+
+				joystick.on('move', (e, nipple) => {
+					if (settings.useJoystick) {
+						mouseX = innerWidth / 2 + nipple.instance.frontPosition.x * 5;
+						mouseY = innerHeight / 2 + nipple.instance.frontPosition.y * 5;
+					}
+				});
+			}
+		}
+
 		const overlayClick = event => {
 			if (event.target === byId('overlays')) {
 				event.preventDefault();
@@ -2510,6 +2538,7 @@
 		byId('toggleFullscreen').addEventListener('change', changeFullscreen);
 		byId('fullscreenBtn').addEventListener('click', () => byId('toggleFullscreen').click());
 		byId('fillSkin').addEventListener('change', changeFillSkin);
+		byId('disableTouchControls').addEventListener('change', changeDisableTouchControls);
 		byId('flipTouchControls').addEventListener('change', changeFlipTouchControls);
 		byId('bgColor').addEventListener('input', changeBackgroundColor);
 		byId('bgColor').addEventListener('change', changeBackgroundColor);
