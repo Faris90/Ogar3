@@ -15,25 +15,10 @@
 		document.getElementById("canvas").focus();
 		var isTyping = false;
 		var chattxt;
+
 		mainCanvas = nCanvas = document.getElementById("canvas");
 		ctx = mainCanvas.getContext("2d");
-		/*mainCanvas.onmousedown = function (event) {
-			if (isTouchStart) {
-				var xOffset = event.clientX - (5 + canvasWidth / 5 / 2),
-					yOffset = event.clientY - (5 + canvasWidth / 5 / 2);
-				if (Math.sqrt(xOffset * xOffset + yOffset * yOffset) <= canvasWidth / 5 / 2) {
-					sendMouseMove();
-					sendUint8(17); //split
-					return
-				}
-			}
 
-
-			rawMouseX = event.clientX;
-			rawMouseY = event.clientY;
-			mouseCoordinateChange();
-			sendMouseMove()
-		};*/
 		mainCanvas.onmousemove = function (event) {
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
 			if (touchable) return;
@@ -200,6 +185,28 @@
 		canvasResize();
 	}
 
+	function openFullscreen(elem) {
+		if (elem.requestFullscreen) {
+			elem.requestFullscreen();
+		} else if (elem.webkitRequestFullscreen) {
+			elem.webkitRequestFullscreen();
+		} else if (elem.webkitEnterFullscreen) {
+			elem.webkitEnterFullscreen();
+		} else if (elem.msRequestFullscreen) {
+			elem.msRequestFullscreen();
+		}
+	}
+
+	function closeFullscreen() {
+		if (document.exitFullscreen) {
+			document.exitFullscreen();
+		} else if (document.webkitExitFullscreen) {
+			document.webkitExitFullscreen();
+		} else if (document.msExitFullscreen) {
+			document.msExitFullscreen();
+		}
+	}
+
 	function onTouchStart(e) {
 		if (typeof e['isTrusted'] !== 'boolean' || e['isTrusted'] === false) return;
 
@@ -214,6 +221,7 @@
 			}
 
 			var size = ~~(canvasWidth / 7);
+
 			if ((touch.clientX > canvasWidth - size) && (touch.clientY > canvasHeight - size)) {
 				sendMouseMove();
 				sendUint8(17); //split
@@ -222,6 +230,16 @@
 			if ((touch.clientX > canvasWidth - size) && (touch.clientY > canvasHeight - 2 * size - 10) && (touch.clientY < canvasHeight - size - 10)) {
 				sendMouseMove();
 				sendUint8(21); //eject
+			}
+
+			if ((touch.clientX > canvasWidth - size) && (touch.clientY > canvasHeight - 3 * size - 10) && (touch.clientY < canvasHeight - size - 10)) {
+				sendMouseMove();
+
+				if (!document.fullscreenElement) {
+					openFullscreen(document.documentElement);
+				} else {
+					closeFullscreen();
+				}
 			}
 		}
 		touches = e.touches;
@@ -1023,7 +1041,7 @@
 			ctx.globalAlpha = 1;
 			ctx.drawImage(c, 15, 15);//canvasHeight - 10 - 24 - 5
 		}
-		drawSplitIcon(ctx);
+		drawTouchButtons(ctx);
 		drawTouch(ctx);
 		//drawChatBoard();
 		var deltatime = Date.now() - oldtime;
@@ -1101,7 +1119,7 @@
 		}
 	}
 
-	function drawSplitIcon(ctx) {
+	function drawTouchButtons(ctx) {
 		if (touchable && splitIcon.width) {
 			var size = ~~(canvasWidth / 7);
 			ctx.drawImage(splitIcon, canvasWidth - size, canvasHeight - size, size, size);
@@ -1112,6 +1130,10 @@
 			ctx.drawImage(ejectIcon, canvasWidth - size, canvasHeight - 2 * size - 10, size, size);
 		}
 
+		if (touchable && splitIcon.width) {
+			var size = ~~(canvasWidth / 7);
+			ctx.drawImage(!document.fullscreenElement ? fullscreenIcon : fullscreenOffIcon, canvasWidth - size, canvasHeight - 3 * size - 10, size, size);
+		}
 	}
 
 	function calcUserScore() {
@@ -1295,12 +1317,15 @@
 	teamColor = ["#333333", "#FF3333", "#33FF33", "#3333FF"],
 	xa = false,
 	zoom = 1,
-	isTouchStart = "ontouchstart" in wHandle && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+	fullscreenIcon = new Image,
+	fullscreenOffIcon = new Image,
 	splitIcon = new Image,
 	ejectIcon = new Image,
 	noRanking = false;
-	splitIcon.src = "img/split.png";
-	ejectIcon.src = "img/feed.png";
+	fullscreenIcon.src = 'img/fullscreen.png';
+	fullscreenOffIcon.src = 'img/fullscreen_off.png';
+	splitIcon.src = 'img/split.png';
+	ejectIcon.src = 'img/feed.png';
 	// var wCanvas = document.createElement("canvas");
 	var playerStat = null;
 	wHandle.isSpectating = false;
