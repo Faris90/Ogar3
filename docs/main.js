@@ -220,7 +220,7 @@
 				leftVector.reset(0, 0);
 			}
 
-			var size = ~~(canvasWidth / 7);
+			var size = ~~(canvasWidth / 10);
 
 			if ((touch.clientX > canvasWidth - size) && (touch.clientY > canvasHeight - size)) {
 				sendMouseMove();
@@ -232,7 +232,7 @@
 				sendUint8(21); //eject
 			}
 
-			if ((touch.clientX > canvasWidth - size) && (touch.clientY > canvasHeight - 3 * size - 10) && (touch.clientY < canvasHeight - size - 10)) {
+			if ((touch.clientX > canvasWidth - size) && (touch.clientY > canvasHeight - 3 * size - 20) && (touch.clientY < canvasHeight - 2 * size - 30)) {
 				sendMouseMove();
 
 				if (!document.fullscreenElement) {
@@ -1121,18 +1121,18 @@
 
 	function drawTouchButtons(ctx) {
 		if (touchable && splitIcon.width) {
-			var size = ~~(canvasWidth / 7);
+			var size = ~~(canvasWidth / 10);
 			ctx.drawImage(splitIcon, canvasWidth - size, canvasHeight - size, size, size);
 		}
 
 		if (touchable && splitIcon.width) {
-			var size = ~~(canvasWidth / 7);
+			var size = ~~(canvasWidth / 10);
 			ctx.drawImage(ejectIcon, canvasWidth - size, canvasHeight - 2 * size - 10, size, size);
 		}
 
 		if (touchable && splitIcon.width) {
-			var size = ~~(canvasWidth / 7);
-			ctx.drawImage(!document.fullscreenElement ? fullscreenIcon : fullscreenOffIcon, canvasWidth - size, canvasHeight - 3 * size - 10, size, size);
+			var size = ~~(canvasWidth / 10);
+			ctx.drawImage(!document.fullscreenElement ? fullscreenIcon : fullscreenOffIcon, canvasWidth - size, canvasHeight - 3 * size - 20, size, size);
 		}
 	}
 
@@ -1263,7 +1263,6 @@
 	reconnectTimeout = null,
 	mouseinterval = false,
 	clientData = { // Levels of "permission": 0 = not allowed, 1 = checked off but changeable, 2 = checked on but changeable, 3 = always on
-
 		// Macros
 		sMacro: 0,
 		wMacro: 0,
