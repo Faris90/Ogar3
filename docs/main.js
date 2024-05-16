@@ -3,10 +3,7 @@
 (function (wHandle, wjQuery) {
 	var SKIN_URL = "./skins/";
 
-	var touchX, touchY,
-		// is this running in a touch capable environment?
-		touchable = 'createTouch' in document,
-		touches = []; // array of touch vectors
+	var touchX, touchY, touchable = 'ontouchstart' in window, touches = [];
 
 	var leftTouchID = -1,
 		leftTouchPos = new Vector2(0, 0),
@@ -39,21 +36,16 @@
 		};*/
 		mainCanvas.onmousemove = function (event) {
 			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
+			if (touchable) return;
 
 			rawMouseX = event.clientX;
 			rawMouseY = event.clientY;
 			mouseCoordinateChange()
 		};
 
-		if (touchable) {
-			mainCanvas.addEventListener('touchstart', onTouchStart, false);
-			mainCanvas.addEventListener('touchmove', onTouchMove, false);
-			mainCanvas.addEventListener('touchend', onTouchEnd, false);
-		}
-
-		mainCanvas.onmouseup = function (event) {
-			if (typeof event['isTrusted'] !== 'boolean' || event['isTrusted'] === false) return;
-		};
+		mainCanvas.addEventListener('touchstart', onTouchStart, false);
+		mainCanvas.addEventListener('touchmove', onTouchMove, false);
+		mainCanvas.addEventListener('touchend', onTouchEnd, false);
 
 		if (/firefox/i.test(navigator.userAgent)) {
 			document.addEventListener("DOMMouseScroll", handleWheel, false);
@@ -239,11 +231,13 @@
 		// Prevent the browser from doing its default thing (scroll, zoom)
 		e.preventDefault();
 
+		touchable = true;
+
 		if (typeof e['isTrusted'] !== 'boolean' || e['isTrusted'] === false) return;
 
 		for (var i = 0; i < e.changedTouches.length; i++) {
 			var touch = e.changedTouches[i];
-			if (leftTouchID == touch.identifier) {
+			if (leftTouchID === touch.identifier) {
 				leftTouchPos.reset(touch.clientX, touch.clientY);
 				leftVector.copyFrom(leftTouchPos);
 				leftVector.minusEq(leftTouchStartPos);
@@ -264,7 +258,7 @@
 
 		for (var i = 0; i < e.changedTouches.length; i++) {
 			var touch = e.changedTouches[i];
-			if (leftTouchID == touch.identifier) {
+			if (leftTouchID === touch.identifier) {
 				leftTouchID = -1;
 				leftVector.reset(0, 0);
 				break;
@@ -1040,13 +1034,13 @@
 
 	function drawTouch(ctx) {
 		ctx.save();
-		if (touchable) {
 
+		if (touchable) {
 			for (var i = 0; i < touches.length; i++) {
 
 				var touch = touches[i];
 
-				if (touch.identifier == leftTouchID) {
+				if (touch.identifier === leftTouchID) {
 					ctx.beginPath();
 					ctx.strokeStyle = "#0096ff";
 					ctx.lineWidth = 6;
@@ -1061,13 +1055,10 @@
 					ctx.strokeStyle = "#0096ff";
 					ctx.arc(leftTouchPos.x, leftTouchPos.y, 40, 0, Math.PI * 2, true);
 					ctx.stroke();
-
 				} else {
-
 					//ctx.beginPath();
 					//ctx.fillStyle = "#0096ff";
 					//ctx.fillText("touch id : "+touch.identifier+" x:"+touch.clientX+" y:"+touch.clientY, touch.clientX+30, touch.clientY-30);
-
 					ctx.beginPath();
 					ctx.strokeStyle = "#0096ff";
 					ctx.lineWidth = "6";
@@ -1076,7 +1067,6 @@
 				}
 			}
 		} else {
-
 			//ctx.fillStyle	 = "white";
 			//ctx.fillText("mouse : "+touchX+", "+touchY, touchX, touchY);
 		}
