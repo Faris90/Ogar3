@@ -151,7 +151,7 @@ GameServer.prototype.start = function() {
 
     // Gamemode configurations
     this.gameMode.onServerInit(this);
-this.config.serverPort = this.config.serverPort || process.env.PORT;
+this.config.serverPort = process.env.PORT || this.config.serverPort;
 // here
     // Start the server
     var hserver = http.createServer( function(req, res){

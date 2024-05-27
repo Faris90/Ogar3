@@ -4,13 +4,14 @@ An open source Agar.io server implementation, based on Jaralowell's [Ogarserv](h
 ## Want old version?
 [Here you go!](https://github.com/Faris90/Ogar3/tree/old-ogar3)
 ## Project Status
-The [Server Tracker](http://ogar3tracker.wdr.icu/) is up and running
+The [Server Tracker](https://ogar3tracker.faris90.repl.co/) is down
 
 
 ## How to access server
 Go to localhost if you set the port to 80 go to localhost:80
 ## Demos
-[Replit](https://ogar3.faris90.repl.co)
+[Render](https://ogar3-demo.onrender.com/)
+[Agar.dob.jp](http://agar.dob.jp)
 ## Obtaining and Using
 ## Server tracker
  [Server Tracker](http://ogar3tracker.wdr.icu/)
