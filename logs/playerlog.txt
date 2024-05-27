@@ -1,4 +1,5 @@
-OGar Server - Game Mode: Free For All - Running Time: 8969sec
-ID:    1, Nick: [BOT] Norway   , Score:  11596, Cells: 16, Status: 1 IP: BOT
-ID:    2, Nick: [BOT] Somalia  , Score:   3236, Cells: 16, Status: 1 IP: BOT
-ID:    3, Nick: [BOT] Byzantium, Score:  10123, Cells: 16, Status: 1 IP: BOT
+OGar Server - Game Mode: Free For All - Running Time: 56sec
+ID:    1, Nick: [BOT] Nasa     , Score:    127, Cells:  1, Status: 1 IP: BOT
+ID:    2, Nick: [BOT] Doge     , Score:    118, Cells:  1, Status: 1 IP: BOT
+ID:    3, Nick: [BOT] USA      , Score:    113, Cells:  1, Status: 1 IP: BOT
+ID:    4, Nick: Kyle           , Score:   2123, Cells: 16, Status: 1 IP: 127.0.0.1

@@ -1,1 +1,1 @@
-{"current_players":3,"alive":0,"spectators":0,"max_players":64,"gamemode":"Free For All","start_time":"2024-05-25T23:47:37.812Z","title":"Ogar3 Server"}
+undefined
