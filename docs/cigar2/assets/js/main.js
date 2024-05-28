@@ -2627,6 +2627,10 @@
 
 		window.onkeydown = keydown;
 		window.onkeyup = keyup;
+		window.onblur = () => {
+			clearInterval(feedMacroIntervalID);
+			clearInterval(splitMacroIntervalID);
+		}
 
 		chatBox.onblur = () => {
 			isTyping = false;
