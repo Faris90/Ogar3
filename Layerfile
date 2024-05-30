@@ -1,6 +1,10 @@
 FROM vm/ubuntu:18.04
 
 COPY / /root
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash && \
+    apt install nodejs && \
+    rm -f /etc/apt/sources.list.d/nodesource.list
+RUN npm install -g http-server
 RUN npm install
 RUN BACKGROUND npm start
 EXPOSE WEBSITE localhost:8080
