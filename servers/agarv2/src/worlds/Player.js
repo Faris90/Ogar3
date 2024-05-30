@@ -14,7 +14,7 @@ class Player {
 		this.leaderboardName = null;
 		/** @type {string} */
 		this.cellName = null;
-		this.chatName = "Spectator";
+		this.chatName = this.cellName ? this.cellName + " (Spectator)" : "Spectator";
 		/** @type {string} */
 		this.cellSkin = null;
 		/** @type {number} */

@@ -104,9 +104,15 @@ class Connection extends Router {
 	 * @param {string} message
 	 */
 	onChatMessage(message) {
+		message = message.replace(/  +/g, ' ')
 		message = message.trim()
 
 		if (!message) return
+
+		if (message === '') {
+			this.listener.globalChat.directMessage(null, this, '[AntiSpam] Last message was not sent, cannot send empty message.')
+			return
+		}
 
 		const lastChatTime = this.lastChatTime
 		const lastMessage = this.lastMessage

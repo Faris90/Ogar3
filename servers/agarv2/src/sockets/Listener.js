@@ -126,13 +126,13 @@ class Listener {
 			request(verify_url, { json: true }, (error, response, body) => {
 				if (!error && response.statusCode === 200) {
 					if (body.success === false) {
-						this.logger.inform(`IP '${newConnection.remoteAddress}' Token '${query.token}' Error '${body['error-codes'].join(',')}' failed recaptcha`);
+						this.logger.onAccess(`IP '${newConnection.remoteAddress}' Token '${query.token}' Error '${body['error-codes'].join(',')}' failed recaptcha`);
 						newConnection.closeSocket(1003, "Failed recaptcha verification clientside");
 					} else {
 						newConnection.verifyScore = body.score
 					}
 				} else {
-					this.logger.inform(`IP '${newConnection.remoteAddress}' Token '${query.token}' Error '${error}' failed recaptcha`);
+					this.logger.onAccess(`IP '${newConnection.remoteAddress}' Token '${query.token}' Error '${error}' failed recaptcha`);
 					newConnection.closeSocket(1003, "Failed reacaptha verification serverside");
 				}
 			});

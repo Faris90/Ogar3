@@ -159,7 +159,7 @@ class LegacyProtocol extends Protocol {
 
 				reader.skip(skipLen);
 				const message = readZTString(reader, this.protocol);
-				this.logger.inform(`[IP][${this.connection.remoteAddress}][SCORE][${this.connection.verifyScore}][KEY][${this.key}][ID][${this.connection.player.id ? this.connection.player.id : 0}][FP][${this.connection.player.cellSkin ? this.connection.player.cellSkin.split('|').slice(-1) : ''}] <${this.connection.player.chatName}>: ${message} [SKIN][${this.connection.player.cellSkin ? this.connection.player.cellSkin.split('|')[0] : ''}]`);
+				this.logger.inform(`[${this.connection.remoteAddress}][${this.connection.verifyScore}][${this.connection.player.id ? this.connection.player.id : 0}][${this.connection.player.cellSkin ? this.connection.player.cellSkin.split('|').slice(-1) : ''}] <${this.connection.player.chatName}>: "${message}" [${this.connection.player.cellSkin ? this.connection.player.cellSkin.split('|')[0] : ''}]`);
 				this.connection.onChatMessage(message);
 				break;
 			case 254:

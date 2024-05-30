@@ -62,10 +62,15 @@ class ChatChannel {
 	 */
 	shouldFilter(message) {
 		message = message.toLowerCase()
+		message = message.replace(/  +/g, ' ')
+		message = message.replace(/(.)\1{3,}/gi, '$1')
 
-		for (let i = 0, l = this.settings.chatFilteredPhrases.length; i < l; i++)
-			if (message.indexOf(this.settings.chatFilteredPhrases[i]) !== -1)
+		for (let i = 0, l = this.settings.chatFilteredPhrases.length; i < l; i++) {
+			if (message.indexOf(this.settings.chatFilteredPhrases[i]) !== -1) {
+				this.listener.logger.inform(`MESSAGE REJECTED '${message}' contains '${this.settings.chatFilteredPhrases[i]}'`)
 				return true
+			}
+		}
 
 		return false
 	}
@@ -75,7 +80,7 @@ class ChatChannel {
 	 */
 	broadcast(source, message) {
 		if (this.shouldFilter(message)) {
-			return this.directMessage(null, source, 'Last message was not sent, because it contains banned words.')
+			return source.protocol.onChatMessage(serverSource, 'Last message was not sent, because it contains banned words.')
 		}
 
 		const sourceInfo = source == null ? serverSource : getSourceFromConnection(source)
@@ -95,7 +100,7 @@ class ChatChannel {
 	 */
 	directMessage(source, recipient, message) {
 		if (this.shouldFilter(message)) {
-			return this.directMessage(null, source, 'Last message was not sent, because it contains banned words.')
+			return recipient.protocol.onChatMessage(serverSource, 'Last message was not sent, because it contains banned words.')
 		}
 
 		const sourceInfo = source == null ? serverSource : getSourceFromConnection(source)
