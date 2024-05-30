@@ -1,4 +1,4 @@
-FROM webapp.io/node:16
+FROM vm/ubuntu:18.04
 
 COPY / /root
 RUN npm install
