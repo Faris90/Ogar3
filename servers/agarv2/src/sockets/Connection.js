@@ -111,6 +111,7 @@ class Connection extends Router {
 
 		if (message === '') {
 			this.listener.globalChat.directMessage(null, this, '[AntiSpam] Last message was not sent, cannot send empty message.')
+			this.listener.logger.inform(`MESSAGE REJECTED '${message}' is empty`)
 			return
 		}
 
@@ -129,6 +130,7 @@ class Connection extends Router {
 			if (lastMessage) {
 				if ((lastMessage === message || ~lastMessage.indexOf(message) || ~message.indexOf(lastMessage)) && message.length >= 10) {
 					this.listener.globalChat.directMessage(null, this, '[AntiSpam] Last message was not sent, please don\'t repeat yourself, write something different.')
+					this.listener.logger.inform(`MESSAGE REJECTED '${message}' contains repeated last message '${lastMessage}'`)
 
 					return
 				}
@@ -140,6 +142,7 @@ class Connection extends Router {
 			this.lastMessage = message
 		} else {
 			this.listener.globalChat.directMessage(null, this, '[AntiSpam] Last message was not sent, please don\'t write too fast, wait at least ' + (this.settings.chatCooldown / 1000)  + ' seconds.')
+			this.listener.logger.inform(`MESSAGE REJECTED '${message}' tryied to write too fast`)
 		}
 	}
 	onQPress() {
