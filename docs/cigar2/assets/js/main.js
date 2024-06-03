@@ -743,7 +743,7 @@
 		Logger.debug(`WebSocket disconnected ${e.code} (${e.reason})`);
 		wsCleanup();
 		gameReset();
-		setTimeout(() => window.setserver(wsUrl), reconnectDelay *= 1.5);
+		setTimeout(() => window.setserver(wsUrl), reconnectDelay *= 1.8);
 	}
 
 	function wsSend(data) {

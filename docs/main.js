@@ -372,7 +372,8 @@
 		if (typeof grecaptcha !== 'undefined') {
 			grecaptcha.ready(() => {
 				grecaptcha.execute('6LdxZMspAAAAAOVZOMGJQ_yJo2hBI9QAbShSr_F3', { action: 'connect' }).then(token => {
-					wsConnect('wss://agar.emupedia.net/ws1/?token=' + token);
+					var location = ~window.location.hostname.indexOf('emupedia.net') ? 'emupedia.net' : (~window.location.hostname.indexOf('emupedia.org') ? 'emupedia.org' : (~window.location.hostname.indexOf('emupediat.games') ? 'emupedia.games' : (~window.location.hostname.indexOf('emuos.net') ? 'emuos.net' : (~window.location.hostname.indexOf('emuos.org') ? 'emuos.org' : (~window.location.hostname.indexOf('emuos.games') ? 'emuos.games' : 'emupedia.net')))));
+					wsConnect('wss://agar.' + location + '/ws1/?token=' + token);
 				});
 			});
 		}
@@ -452,7 +453,7 @@
 	function onWsClose() {
 		// console.log('Connection closed!');
 		setTimeout(showConnecting, delay);
-		delay *= 1.5
+		delay *= 1.8
 	}
 
 	function onWsMessage(msg) {
