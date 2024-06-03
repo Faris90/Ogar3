@@ -278,7 +278,7 @@
 		<script src="js/fp.umd.min.js"></script>
 		<script>jQuery.noConflict();</script>
 		<script src="js/vector2.js"></script>
-		<script src="main.js?v=17"></script>
+		<script src="main.js?v=18"></script>
 
 		<script type="text/javascript">
 			var externallyFramed;
@@ -343,7 +343,7 @@
 			}
 
 			jQuery(document).ready(function($) {
-				var location = ~window.location.hostname.indexOf('emupedia.net') ? 'emupedia.net' : (~window.location.hostname.indexOf('emupedia.org') ? 'emupedia.org' : (~window.location.hostname.indexOf('emupediat.games') ? 'emupedia.games' : (~window.location.hostname.indexOf('emuos.net') ? 'emuos.net' : (~window.location.hostname.indexOf('emuos.org') ? 'emuos.org' : (~window.location.hostname.indexOf('emuos.games') ? 'emuos.games' : 'emupedia.net')))));
+				var location = ~window.location.hostname.indexOf('emupedia.net') ? 'emupedia.net' : (~window.location.hostname.indexOf('emupedia.org') ? 'emupedia.org' : (~window.location.hostname.indexOf('emupedia.games') ? 'emupedia.games' : (~window.location.hostname.indexOf('emuos.net') ? 'emuos.net' : (~window.location.hostname.indexOf('emuos.org') ? 'emuos.org' : (~window.location.hostname.indexOf('emuos.games') ? 'emuos.games' : 'emupedia.net')))));
 
 				$.get('skinList.txt', function(data, status) {
 					if (status === 'success') {
