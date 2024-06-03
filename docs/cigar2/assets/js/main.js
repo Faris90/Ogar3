@@ -2676,7 +2676,9 @@
 		gameReset();
 		showESCOverlay();
 
-		window.setserver(byId('gamemode').value);
+		const location = ~window.location.hostname.indexOf('emupedia.net') ? 'emupedia.net' : (~window.location.hostname.indexOf('emupedia.org') ? 'emupedia.org' : (~window.location.hostname.indexOf('emupedia.games') ? 'emupedia.games' : (~window.location.hostname.indexOf('emuos.net') ? 'emuos.net' : (~window.location.hostname.indexOf('emuos.org') ? 'emuos.org' : (~window.location.hostname.indexOf('emuos.games') ? 'emuos.games' : 'emupedia.net')))));
+		// window.setserver(byId('gamemode').value);
+		window.setserver('agar.' + location + '/ws2/');
 
 		drawGame();
 		Logger.info(`Init done in ${Date.now() - LOAD_START}ms`);
