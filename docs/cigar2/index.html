@@ -13,7 +13,7 @@
 		<link rel="icon" type="image/png" href="assets/img/favicon.png">
 		<link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet" type="text/css">
 		<link href="assets/css/bootstrap.min.css" rel="stylesheet">
-		<link href="assets/css/index.css?v=24" rel="stylesheet">
+		<link href="assets/css/index.css?v=25" rel="stylesheet">
 		<link href="assets/css/gallery.css" rel="stylesheet">
 	</head>
 
@@ -41,7 +41,7 @@
 		<div id="overlays" style="display: none;">
 			<div id="helloDialog">
 				<div id="helloDialogContent">
-					<div class="form-group">
+					<div>
 						<h2 class="title">Agar.io v2.0</h2>
 						<hr class="top" />
 						<a class="text-center" style="display: block; color: red;" href="https://discord.gg/emupedia-510149138491506688" target="_blank">Join us on Discord if you have suggestions</a>
@@ -63,21 +63,26 @@
 						<div class="form-label-wrapper">
 							<label><span>Copy</span><button id="copy-btn" class="btn btn-success pull-right" onclick="copyToClipboard(document.getElementById('skin').value, this)"><i class="glyphicon glyphicon-copy"></i></button></label>
 						</div>
-						<select id="gamemode" class="form-control" onchange="setserver(this.value)" required>
-							<option value="agar.emupedia.net/ws2/" selected>Emupedia</option>
-						</select>
 					</div>
 
 					<div class="form-wrapper">
+						<div class="form-label-wrapper" style="width: 100%;">
+							<label id="skin-list"><span>Server</span>
+								<select id="server" class="form-control" onchange="setserver(this.value)" required>
+									<option value="eu" selected>EU</option>
+									<option value="us">US</option>
+								</select>
+							</label>
+						</div>
 						<button id="play-btn" class="btn btn-play btn-primary btn-needs-server pull-left">Play</button>
 						<button id="spectate-btn" onclick="spectate()" class="btn btn-warning btn-spectate btn-needs-server pull-left">Spectate</button>
-						<button class="btn btn-success btn-settings pull-right" onclick="$('#settings').toggle()" ><i class="glyphicon glyphicon-cog"></i></button>
 					</div>
 
 					<div class="form-wrapper">
 						<button id="gallery-btn" onclick="openSkinsList()" class="btn btn-play btn-primary btn-needs-server btn-info">Choose Skin</button>
 						<button id="show-upload-btn" onclick="openUpload()" class="btn btn-play btn-primary btn-needs-server btn-info">Upload Skin</button>
 						<button id="unban-btn" onclick="openUnban()" class="btn btn-play btn-primary btn-needs-server btn-info" style="display: none;">Unban</button>
+						<button class="btn btn-success btn-settings pull-right" onclick="$('#settings').toggle()" ><i class="glyphicon glyphicon-cog"></i></button>
 					</div>
 
 					<div id="settings" class="checkbox" style="display: none;">
@@ -164,7 +169,11 @@
 						<h2 class="title">News</h2>
 						<hr class="top" />
 						<div class="text">
-							<b>16/05/2024</b>
+							<b>06/06/2024</b>
+							<ul>
+								<li>Added <b>US Server</b> for improved latency and ping</li>
+							</ul>
+							<hr /><b>16/05/2024</b>
 							<ul>
 								<li>Fixed <b>AZERTY</b> keyboard mapping now <kbd>W</kbd> and <kbd>Z</kbd> both <b>Feed</b></li>
 								<li>Changed <b>Muti Split</b> to key <kbd>C</kbd> instead of <kbd>Z</kbd></li>
@@ -275,6 +284,6 @@
 		<script src="assets/js/fp.umd.min.js"></script>
 		<script src="assets/js/nipplejs.js"></script>
 		<script src="assets/js/quadtree.js"></script>
-		<script src="assets/js/main.js?v=109"></script>
+		<script src="assets/js/main.js?v=110"></script>
 	</body>
 </html>

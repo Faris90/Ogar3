@@ -167,9 +167,9 @@ label#nick-list:after, label#skin-list:after {
 	margin: auto;
 }
 
-#gamemode {
-	display: none;
-	margin-top: 5px;
+#server {
+	/*display: none;*/
+	/*margin-top: 5px;*/
 	width: 100%;
 }
 

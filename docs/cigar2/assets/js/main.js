@@ -625,7 +625,6 @@
 		for (const i in object) delete object[i];
 	}
 
-	const WEBSOCKET_URL = null;
 	const SKIN_URL = './skins/';
 	const USE_HTTPS = 'https:' === window.location.protocol || window.location.hostname === 'localhost';
 	const EMPTY_NAME = 'An unnamed cell';
@@ -647,6 +646,9 @@
 		0xFE: new Uint8Array([0xFE])
 	};
 	const FP = FingerprintJS.load();
+	const LOCATION = ~window.location.hostname.indexOf('emupedia.net') ? 'emupedia.net' : (~window.location.hostname.indexOf('emupedia.org') ? 'emupedia.org' : (~window.location.hostname.indexOf('emupedia.games') ? 'emupedia.games' : (~window.location.hostname.indexOf('emuos.net') ? 'emuos.net' : (~window.location.hostname.indexOf('emuos.org') ? 'emuos.org' : (~window.location.hostname.indexOf('emuos.games') ? 'emuos.games' : 'emupedia.net')))));
+	const SERVERS = ['agar' + '.' + LOCATION + '/ws2/', 'agar2' + '.' + LOCATION + '/ws2/'];
+	const GEO = {'eu': SERVERS[0], 'us': SERVERS[1]};
 
 	const KEY_TO_OPCODE = {
 		e: UINT8_CACHE[0x16],
@@ -693,7 +695,6 @@
 			grecaptcha.ready(() => {
 				// noinspection JSUnresolvedReference
 				grecaptcha.execute('6LdxZMspAAAAAOVZOMGJQ_yJo2hBI9QAbShSr_F3', { action: 'connectV2' }).then(token => {
-					wsUrl = url;
 					ws = new WebSocket(`ws${USE_HTTPS ? 's' : ''}://${url + '?token=' + token}`);
 					ws.binaryType = 'arraybuffer';
 					ws.onopen = wsOpen;
@@ -703,7 +704,6 @@
 				});
 			});
 		} else {
-			wsUrl = url;
 			ws = new WebSocket(`ws${USE_HTTPS ? 's' : ''}://${url}`);
 			ws.binaryType = 'arraybuffer';
 			ws.onopen = wsOpen;
@@ -743,7 +743,7 @@
 		Logger.debug(`WebSocket disconnected ${e.code} (${e.reason})`);
 		wsCleanup();
 		gameReset();
-		setTimeout(() => window.setserver(wsUrl), reconnectDelay *= 1.8);
+		setTimeout(() => window.setserver(settings.server), reconnectDelay *= 1.8);
 	}
 
 	function wsSend(data) {
@@ -1135,7 +1135,6 @@
 		scale: 1
 	};
 
-	let wsUrl = WEBSOCKET_URL;
 	let ws = null;
 	let reconnectDelay = 1000;
 
@@ -1160,6 +1159,7 @@
 	let interval;
 
 	const settings = {
+		server: 'eu',
 		nick: '',
 		nicknames: [],
 		skin: '',
@@ -2109,6 +2109,15 @@
 		}
 	}
 
+	function getServerPing(url) {
+		const start = performance.now()
+		// TODO
+		return {
+			url,
+			responseTime: Math.floor(performance.now() - start)
+		}
+	}
+
 	function init() {
 		mainCanvas = document.getElementById('canvas');
 		mainCtx = mainCanvas.getContext('2d');
@@ -2676,9 +2685,7 @@
 		gameReset();
 		showESCOverlay();
 
-		const location = ~window.location.hostname.indexOf('emupedia.net') ? 'emupedia.net' : (~window.location.hostname.indexOf('emupedia.org') ? 'emupedia.org' : (~window.location.hostname.indexOf('emupedia.games') ? 'emupedia.games' : (~window.location.hostname.indexOf('emuos.net') ? 'emuos.net' : (~window.location.hostname.indexOf('emuos.org') ? 'emuos.org' : (~window.location.hostname.indexOf('emuos.games') ? 'emuos.games' : 'emupedia.net')))));
-		// window.setserver(byId('gamemode').value);
-		window.setserver('agar.' + location + '/ws2/');
+		window.setserver(settings.server);
 
 		drawGame();
 		Logger.info(`Init done in ${Date.now() - LOAD_START}ms`);
@@ -2795,9 +2802,11 @@
 		}
 	}
 
-	window.setserver = url => {
-		if (url === wsUrl && ws && ws.readyState <= WebSocket.OPEN) return;
-		wsInit(url);
+	window.setserver = geo => {
+		if (GEO[geo] === server.settings && ws && ws.readyState <= WebSocket.OPEN) return;
+		settings.server = geo;
+		storeSettings();
+		wsInit(GEO[geo]);
 	};
 
 	window.spectate = () => {
