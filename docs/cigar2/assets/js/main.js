@@ -193,7 +193,7 @@
 
 	class Logger {
 		static get verbosity() {
-			return 2;
+			return 4;
 		}
 		static error() {
 			if (Logger.verbosity > 0) console.error.apply(null, arguments);
@@ -686,6 +686,7 @@
 		if (ws) {
 			Logger.debug('WebSocket init on existing connection');
 			wsCleanup();
+			gameReset();
 		}
 		byId('connecting').show(0.5);
 
