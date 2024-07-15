@@ -22,7 +22,28 @@
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/log.js"></script>
     <script src="assets/js/vector.js"></script>
-    <script src="assets/js/main_out.js"></script> 
+    <script src="assets/js/main_out.js"></script>
+
+    <style>
+        body {
+          height: 10000vh !important;
+          position: static !important;
+          overscroll-behavior: none;
+        }
+    
+        flutter-view {
+          position: fixed !important;
+          max-width: 100vw !important;
+          max-height: 100vh !important;
+        }
+    
+        /* Safari-specific CSS */
+        @supports (-webkit-touch-callout: inherit) {
+          body {
+            height: 1vh !important;
+          }
+        }
+      </style>
 </head>
 
 <body>
@@ -131,5 +152,8 @@
     <div style="font-family:'Ubuntu'">&nbsp;</div>
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script>
+        window.scroll(0, window.document.body.scrollHeight);
+      </script>
 </body>
 </html>
