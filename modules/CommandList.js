@@ -30,17 +30,17 @@ var seconds2time = function(seconds) {
     var time = "";
 
     if (hours != 0) {
-      time = hours+":";
+        time = hours+":";
     }
     if (minutes != 0 || time !== "") {
-      minutes = (minutes < 10 && time !== "") ? "0"+minutes : String(minutes);
-      time += minutes+":";
+        minutes = (minutes < 10 && time !== "") ? "0"+minutes : String(minutes);
+        time += minutes+":";
     }
     if (time === "") {
-      time = seconds+" seconds";
+        time = seconds+" seconds";
     }
     else {
-      time += (seconds < 10) ? "0"+seconds : String(seconds);
+        time += (seconds < 10) ? "0"+seconds : String(seconds);
     }
     return time;
 };
@@ -64,7 +64,7 @@ Commands.list = {
         console.log("\u001B[36mkill       \u001B[0m: kill cell(s) by client ID");
         console.log("\u001B[36mkillall    \u001B[0m: kill everyone");
         console.log("\u001B[36mmass       \u001B[0m: set cell(s) mass by client ID");
-				console.log("\u001B[36mmerge	    \u001B[0m: force a player to merge");
+        console.log("\u001B[36mmerge	    \u001B[0m: force a player to merge");
         console.log("\u001B[36mname       \u001B[0m: change cell(s) name by client ID");
         console.log("\u001B[36mplayerlist \u001B[0m: get list of players and bots");
         console.log("\u001B[36mpause      \u001B[0m: pause game , freeze all cells");
@@ -75,7 +75,7 @@ Commands.list = {
         console.log("\u001B[36mtp         \u001B[0m: teleport player to specified location");
         console.log("\u001B[36munban      \u001B[0m: un ban a player with IP");
         console.log("\u001B[36mvirus      \u001B[0m: spawn virus at a specified Location");
-				console.log("============================================================");
+        console.log("============================================================");
     },
     addbot: function(gameServer,split) {
         var add = parseInt(split[1]);
@@ -88,6 +88,27 @@ Commands.list = {
         }
         console.log("\u001B[36mServer: \u001B[0mAdded "+add+" player bot(s)");
     },
+    addpoints: function(gameServer, split) {
+        var id = parseInt(split[1]);
+        var points = parseInt(split[2]);
+
+        if (isNaN(id) || isNaN(points)) {
+            console.log("\u001B[36mServer: \u001B[0mPlease specify a valid player ID and points!");
+            return;
+        }
+
+        for (var i in gameServer.clients) {
+            if (gameServer.clients[i].playerTracker.pID == id) {
+                var client = gameServer.clients[i].playerTracker;
+                for (var j in client.cells) {
+                    client.cells[j].mass += points;
+                }
+
+                console.log("\u001B[36mServer: \u001B[0mAdded " + points + " points to " + client.name);
+                break;
+            }
+        }
+    },
     ban: function(gameServer,split) {
         var ip = split[1]; // Get ip
         if (gameServer.banned.indexOf(ip) == -1) {
@@ -97,7 +118,7 @@ Commands.list = {
             for (var i in gameServer.clients) {
                 var c = gameServer.clients[i];
                 if (!c.remoteAddress) {
-                    continue; 
+                    continue;
                 }
                 if (c.remoteAddress == ip) {
                     c.sendPacket(new Packet.ServerMsg(91));
@@ -130,7 +151,7 @@ Commands.list = {
         // Clears the update leaderboard function and replaces it with our own
         gameServer.gameMode.packetLB = 48;
         gameServer.gameMode.specByLeaderboard = false;
-        gameServer.gameMode.updateLB = function(gameServer) {gameServer.leaderboard = newLB}; 
+        gameServer.gameMode.updateLB = function(gameServer) {gameServer.leaderboard = newLB};
         console.log("\u001B[36mServer: \u001B[0mSuccessfully changed leaderboard values");
     },
     boardreset: function(gameServer) {
@@ -139,7 +160,7 @@ Commands.list = {
 
         // Replace functions
         gameServer.gameMode.packetLB = gm.packetLB;
-        gameServer.gameMode.updateLB = gm.updateLB; 
+        gameServer.gameMode.updateLB = gm.updateLB;
         console.log("\u001B[36mServer: \u001B[0mSuccessfully reset leaderboard");
     },
     change: function(gameServer,split) {
@@ -206,7 +227,7 @@ Commands.list = {
         var f = new Entity.Food(gameServer.getNextNodeId(), null, pos, mass);
         f.setColor(gameServer.getRandomColor());
         gameServer.addNode(f);
-        gameServer.currentFood++; 
+        gameServer.currentFood++;
         console.log("\u001B[36mServer: \u001B[0mSpawned 1 food cell at ("+pos.x+" , "+pos.y+")");
     },
     gamemode: function(gameServer,split) {
@@ -277,9 +298,9 @@ Commands.list = {
             }
         }
     },
-		merge: function(gameServer,split) {
-				// Validation checks
-				var id = parseInt(split[1]);
+    merge: function(gameServer,split) {
+        // Validation checks
+        var id = parseInt(split[1]);
         if (isNaN(id)) {
             console.log("\u001B[36mServer: \u001B[0mPlease specify a valid player ID!");
             return;
@@ -291,32 +312,32 @@ Commands.list = {
                 for (var j in client.cells) {
                     client.cells[j].calcMergeTime(-10000);
                 }
-		            console.log("\u001B[36mServer: \u001B[0mForced " + client.name + " to merge cells");
-    		        break;
+                console.log("\u001B[36mServer: \u001B[0mForced " + client.name + " to merge cells");
+                break;
             }
         }
     },
     split: function(gameServer,split) {
-				// Validation checks
-				var id = parseInt(split[1]);
-				var count = parseInt(split[2]);
+        // Validation checks
+        var id = parseInt(split[1]);
+        var count = parseInt(split[2]);
         if (isNaN(id)) {
             console.log("\u001B[36mServer: \u001B[0mPlease specify a valid player ID!");
             return;
         }
         if (isNaN(count)) {
-						//Split into 16 cells
-						count = 4;
+            //Split into 16 cells
+            count = 4;
         }
 
         // Split!
         for (var i in gameServer.clients) {
             if (gameServer.clients[i].playerTracker.pID == id) {
                 var client = gameServer.clients[i].playerTracker;
-								//Split
-								for(var i =0;i<count;i++) {
-										gameServer.splitCells(client);
-								}
+                //Split
+                for(var i =0;i<count;i++) {
+                    gameServer.splitCells(client);
+                }
                 console.log("\u001B[36mServer: \u001B[0mForced " + client.name + " to split cells");
                 break;
             }
@@ -373,14 +394,14 @@ Commands.list = {
                 console.log(" " + id + " | " + ip + " | " + data);
             }
             else if (client.spectate) {
-                try { 
+                try {
                     // Get spectated player
                     if (gameServer.getMode().specByLeaderboard) { // Get spec type
                         nick = gameServer.leaderboard[client.spectatedPlayer].name;
                     } else {
                         nick = gameServer.clients[client.spectatedPlayer].playerTracker.name;
                     }
-                } catch (e) { 
+                } catch (e) {
                     // Specating nobody
                     nick = "";
                 }
@@ -393,7 +414,7 @@ Commands.list = {
                 score = fillChar(client.getScore(true), ' ', 6, true);
                 position = fillChar(client.centerPos.x.toFixed(0), ' ', 5, true) + ', ' + fillChar(client.centerPos.y.toFixed(0), ' ', 5, true);
                 console.log(" "+id+" | "+ip+" | "+nick+" | "+cells+" | "+score+" | "+position);
-            } else { 
+            } else {
                 // No cells = dead player or in-menu
                 data = fillChar('DEAD OR NOT PLAYING', '-', ' | CELLS | SCORE  | POSITION    '.length + ( gameServer.config.playerMaxNickLength + 2 ), true);
                 console.log(" " + id + " | " + ip + " | " + data);
@@ -491,7 +512,7 @@ Commands.list = {
         console.log("\u001B[36mServer: \u001B[0mSpawned 1 virus at ("+pos.x+" , "+pos.y+")");
     },
     exit: function(gameServer,split) {
-				gameServer.exitserver();
+        gameServer.exitserver();
     },
     say: function(gameServer,split) {
         var  message = "";
