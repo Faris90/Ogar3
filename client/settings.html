@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oyun Ayarları</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .settings-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .setting-item label {
+            font-size: 16px;
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .toggle-switch input {
+            display: none;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #28a745;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .danger {
+            background-color: #dc3545;
+        }
+        .status-label {
+            margin-left: 10px;
+            font-size: 16px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<div class="settings-container">
+    <h2>Oyun Ayarları</h2>
+
+    <div class="setting-item">
+        <label for="server-status-toggle">Sunucu Durumu</label>
+		<span id="server-status" class="status-label">Off</span>
+        <label class="toggle-switch">
+            <input type="checkbox" id="server-status-toggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <div class="setting-item">
+        <label for="pause">Oyun Duraklat</label>
+        <label class="toggle-switch">
+            <input type="checkbox" id="pause">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <button onclick="saveSettings()">Ayarları Kaydet</button>
+    <button class="danger" onclick="killAll()">Kill All</button>
+
+    <h3>Leaderboard</h3>
+    <button onclick="fetchLeaderboard()">Yenile</button>
+    <table id="leaderboardTable">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Liderlik tablosu verileri burada listelenecek -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+function saveSettings() {
+    const serverStatus = document.getElementById('server-status-toggle').checked;
+    const pause = document.getElementById('pause').checked;
+
+    const settings = {
+        serverStatus: serverStatus ? "on" : "off",
+        pause: pause
+    };
+
+    fetch('/update-settings', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(settings),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Ayarlar başarıyla güncellendi!');
+            updateServerStatusLabel();
+        } else {
+            alert('Ayarlar güncellenemedi: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Ayarlar güncellenemedi.');
+    });
+}
+
+function killAll() {
+    fetch('/kill-all', {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Tüm oyuncular öldürüldü!');
+        } else {
+            alert('İşlem başarısız: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('İşlem başarısız.');
+    });
+}
+
+function fetchLeaderboard() {
+    fetch('/get-leaderboard', {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+        const tableBody = document.getElementById('leaderboardTable').getElementsByTagName('tbody')[0];
+        tableBody.innerHTML = '';
+
+        data.forEach(player => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${player.rank}</td>
+                <td>${player.name}</td>
+                <td>${player.score}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Liderlik tablosu alınamadı.');
+    });
+}
+
+function updateServerStatusLabel() {
+    const serverStatus = document.getElementById('server-status-toggle').checked;
+    const statusLabel = document.getElementById('server-status');
+    statusLabel.textContent = serverStatus ? 'On' : 'Off';
+}
+
+window.onload = function() {
+    fetch('/get-settings')
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('server-status-toggle').checked = data.serverStatus === "on";
+        document.getElementById('pause').checked = data.pause;
+        updateServerStatusLabel();
+    })
+    .catch(error => {
+        console.error('Hata:', error);
+    });
+
+    fetchLeaderboard(); // Sayfa yüklendiğinde liderlik tablosunu al
+};
+</script>
+
+</body>
+</html>

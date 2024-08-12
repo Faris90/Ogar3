@@ -1,1 +1,5 @@
-{"serverStatus":"on"}
+{
+  "serverStatus": "on",
+  "pause": false,
+  "feature1": true
+}

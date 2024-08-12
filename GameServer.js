@@ -4,6 +4,7 @@ var WebSocket = require('ws');
 var querystring = require("querystring");
 var http = require('http');
 var finalhandler = require('finalhandler');
+var path = require('path');
 var fs = require("fs");
 var myos = require("os");
 
@@ -129,6 +130,11 @@ module.exports = GameServer;
 
 GameServer.prototype.start = function() {
     // Logging
+	 this.serverStartTime = Date.now();
+
+    // Kapanış süresi (milisaniye cinsinden)
+     this.shutdownTime = this.serverStartTime + (this.config.serverResetTime * 1000);
+	
     this.log.setup(this);
 
 		// Rcon Info
@@ -154,11 +160,73 @@ GameServer.prototype.start = function() {
 this.config.serverPort = process.env.PORT || this.config.serverPort;
 // here
     // Start the server
-    var hserver = http.createServer( function(req, res){
-    res.setHeader('Access-Control-Allow-Origin', '*');
-      var done = finalhandler(req, res)
-	 // res.end({title:12})
-      serve(req, res, done)
+	var gameServer = this;
+     var hserver = http.createServer((req, res) => {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+
+        if (req.method === 'POST' && req.url === '/update-settings') {
+            let body = '';
+
+            req.on('data', chunk => {
+                body += chunk.toString();
+            });
+
+            req.on('end', () => {
+                try {
+                    const newSettings = JSON.parse(body);
+                    this.updateSettings(newSettings); // Yeni ayarları uygulayın
+                    res.writeHead(200, {'Content-Type': 'application/json'});
+                    res.end(JSON.stringify({status: 'success', message: 'Settings updated successfully.'}));
+                } catch (error) {
+                    res.writeHead(400, {'Content-Type': 'application/json'});
+                    res.end(JSON.stringify({status: 'error', message: 'Invalid JSON.'}));
+                }
+            });
+        } else if (req.method === 'GET' && req.url === '/get-leaderboard') {
+          const filePath = path.join(__dirname, 'logs', 'leaderboard.json');
+        if (fs.existsSync(filePath)) {
+            const leaderboards = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+            res.writeHead(200, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify(leaderboards));
+        } else {
+            res.writeHead(404, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify({status: 'error', message: 'No leaderboard data found.'}));
+        }
+        } else if (req.method === 'GET' && req.url === '/get-settings') {
+            // Get settings endpoint
+            try {
+                const settings = JSON.parse(fs.readFileSync('./client/settings.json', 'utf8'));
+                res.writeHead(200, {'Content-Type': 'application/json'});
+                res.end(JSON.stringify(settings));
+            } catch (error) {
+                res.writeHead(500, {'Content-Type': 'application/json'});
+                res.end(JSON.stringify({status: 'error', message: 'Could not read settings.'}));
+            }
+        } else if (req.method === 'GET' && req.url === '/playerlist') {
+        const players = gameServer.clients.map(client => {
+            const player = client.playerTracker;
+            const position = player.centerPos;
+            return {
+                id: player.pID,
+                ip: client.remoteAddress || 'BOT',
+                nick: player.name || 'Unnamed',
+                cells: player.cells.length,
+                score: player.getScore(true),
+                position: `${position.x.toFixed(0)}, ${position.y.toFixed(0)}`
+            };
+        });
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({players}));
+    }  else if (req.method === 'POST' && req.url === '/kill-all') {
+            // Kill All işlemi
+            this.killAll();
+            res.writeHead(200, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify({status: 'success', message: 'All players killed.'}));
+        } else {
+            // Diğer istekler için mevcut handler'ı kullanın
+            var done = finalhandler(req, res);
+            serve(req, res, done);
+        }
     });
 hserver.listen(this.config.serverPort,"0.0.0.0",this.onHttpServerOpen.bind(this));
 this.socketServer = new WebSocket.Server({server: hserver, perMessageDeflate: false});
@@ -181,9 +249,11 @@ this.socketServer = new WebSocket.Server({server: hserver, perMessageDeflate: fa
     });
 
     function connectionEstablished(ws) {
-		
+		 const remainingTime = Math.floor((this.shutdownTime - Date.now()) / 1000); // Saniye cinsinden kalan süre
+    ws.send(JSON.stringify({ action: 'shutdownTime', remainingTime }));
+	
 	   if (!this.run) {
-        console.log("Yeni bağlantı denemesi, ancak sunucu kapalı olduğu için reddedildi.");
+       
         ws.close();
         return;
     }
@@ -436,6 +506,69 @@ GameServer.prototype.cellUpdateTick = function() {
     // Update cells
     this.updateCells();
 }
+GameServer.prototype.updateSettings = function(newSettings) {
+    const settingsFilePath = './client/settings.json';
+    
+    // Mevcut ayarları oku
+    let currentSettings;
+    try {
+        currentSettings = JSON.parse(fs.readFileSync(settingsFilePath, 'utf8'));
+    } catch (error) {
+        console.log("Settings dosyası okunamadı: ", error);
+        return;
+    }
+
+    // Yeni ayarları mevcut ayarlara ekle
+    const updatedSettings = { ...currentSettings, ...newSettings };
+
+    // JSON dosyasına geri yaz
+    try {
+        fs.writeFileSync(settingsFilePath, JSON.stringify(updatedSettings, null, 2), 'utf8');
+        console.log("Ayarlar güncellendi ve settings.json dosyasına kaydedildi.");
+    } catch (error) {
+        console.log("Settings dosyası yazılamadı: ", error);
+    }
+};
+
+GameServer.prototype.checkSettings = function() {
+    try {
+        const settings = JSON.parse(fs.readFileSync('./client/settings.json', 'utf8'));
+
+        if (settings.pause === true) {
+            if (this.run) {
+                console.log("Settings'den duraklatma komutu alındı.");
+                this.run = false;
+                console.log("\u001B[36mServer: \u001B[0mPaused the game.");
+            }
+        } else if (settings.serverStatus === "off") {
+            if (this.run) {
+                console.log("Settings'den duraklatma komutu alındı.");
+                this.run = false;
+                console.log("\u001B[36mServer: \u001B[0mPaused the game.");
+                this.killAll();
+            }
+        } else if (settings.serverStatus === "on" && !this.run) {
+            console.log("Settings'den başlatma komutu alındı.");
+            this.run = true;
+            console.log("\u001B[36mServer: \u001B[0mUnpaused the game.");
+        }
+
+    } catch (error) {
+        console.log("Settings dosyası okunamadı: ", error);
+    }
+};
+
+GameServer.prototype.killAll = function() {
+    var count = 0;
+    var len = this.nodesPlayer.length;
+    for (var i = 0; i < len; i++) {
+        this.removeNode(this.nodesPlayer[0]);
+        count++;
+    }
+    console.log("\u001B[36mServer: \u001B[0mRemoved " + count + " cells");
+};
+
+
 
 GameServer.prototype.mainLoop = function() {
     var local = new Date();
@@ -456,50 +589,73 @@ GameServer.prototype.mainLoop = function() {
         if (this.tickMain >= 20) {
             this.cellUpdateTick();
 
+            // Mevcut liderlik tablosunu güncelle
             this.leaderboard = [];
             this.gameMode.updateLB(this);
-            this.lb_packet = new Packet.UpdateLeaderboard(this.leaderboard, this.gameMode.packetLB);
+         const top10Leaderboard = this.leaderboard.slice(0, 10);
+            this.lb_packet = new Packet.UpdateLeaderboard(top10Leaderboard, this.gameMode.packetLB);
+            // Liderlik tablosunu JSON dosyasına kaydet (puan dahil)
+           const leaderboardData = this.leaderboard.map((entry, index) => ({
+                id: entry.pID, // Oyuncu ID'si
+                name: entry.name, // Oyuncu adı
+                score: entry.getScore(true), // Oyuncu skoru
+                rank: index + 1 // Sıralama
+            }));
+
+            const filePath = path.join(__dirname, 'logs', 'leaderboard.json');
+            fs.writeFileSync(filePath, JSON.stringify(leaderboardData, null, 2), 'utf8');
 
             this.tickMain = 0;
         }
 
+        // settings.json'u kontrol et
+        this.checkSettings();
+
         // Sunucu belirli bir süre çalıştıktan sonra oyuncuları oyundan at ve yeni girişleri engelle
-         //if (this.config.serverResetTime > 0 && (local - this.startTime) > (this.config.serverResetTime * 3600000)) {
-			 if (this.config.serverResetTime > 0 && (local - this.startTime) > (this.config.serverResetTime * 1000)) {
-			 if (this.run) {console.log("Süre Doldu");
-            this.exitserver();
-        } 
-		}
+        if (this.config.serverResetTime > 0 && (local - this.startTime) > (this.config.serverResetTime * 1000)) {
+            if (this.run) {
+                this.run = false;
+
+                // settings.json dosyasını güncelle
+                this.updateSettings({pause: true});
+ 
+    const filePath = path.join(__dirname, 'logs', 'leaderboard.json'); // Liderlik tablosu dosya yolu
+                const currentDate = new Date();
+                const timestamp = currentDate.toISOString().replace(/[-T:\.Z]/g, "");
+                const newFileName = `leaderboard_${timestamp}.json`;
+                const newFilePath = path.join(__dirname, 'logs', newFileName);
+
+                fs.rename(filePath, newFilePath, (err) => {
+                    if (err) {
+                        console.log("Liderlik tablosu dosyası yeniden adlandırılamadı:", err);
+                    } else {
+                        console.log(`Liderlik tablosu "${newFileName}" adıyla kaydedildi.`);
+                    }
+                });
+				
+
+                // Oyuncuları bilgilendirme
+                console.log("Sunucu süresi doldu, oyun duraklatıldı.");
+
+               
+            }
+        }
 
         this.tick = 0;
     }
 };
 
+
+
 GameServer.prototype.exitserver = function() {
-	
-    console.log("Sunucu Kapanıyor: Yeni oyuncu girişleri engellenecek ve mevcut oyuncular oyundan çıkarılacak.");
+    // Sunucu duraklatılıyor
+   
+  this.run = false;
 
-
-    // Mevcut tüm oyuncuları oyundan at
-    this.clients.forEach(client => {
-        if (client && client.socket) {
-			 client.socket.send(JSON.stringify({ action: "reload" }));
-            client.socket.close(); // Bağlantıları kapat
-        }
-    });
-
-    // Yeni bağlantıları engelle
-    this.run = false;
-
-    // WebSocket sunucusunu kapatma, sadece yeni bağlantıları reddedecek
-    console.log("Yeni bağlantılar engellendi, ancak sunucu çalışmaya devam ediyor.");
-	
-	
-	const settings = {
-        serverStatus: "off"
-    };
-	fs.writeFileSync('./client/settings.json', JSON.stringify(settings), 'utf8');
+    // Sunucu kapandıktan sonra log kaydı
+    console.log("Yeni bağlantılar engellendi ve mevcut oyuncular oyundan çıkarıldı.");
 };
+
 
 
 
