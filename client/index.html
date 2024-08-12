@@ -4,15 +4,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Eat cells smaller than you and don't get eaten by the bigger ones, as an MMO">
-    <meta name="keywords"
-        content="agario, agar, io, cell, cells, virus, bacteria, blob, game, games, web game, html5, fun, flash">
+    <meta name="description" content="Cenavar bir Cenabet ürünüdür, cenavar'da katıldığınız etkinlikler.">
+    <meta name="keywords" content="Cenavar, cenabet, cenabet etkinlik, cenabet agar.io,">
     <meta name="robots" content="index, follow">
     <meta name="viewport"
         content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <title>Ogar3</title>
+    <title>Cenavar</title>
 
     <link id="favicon" rel="icon" type="image/png" href="assets/img/favicon.png" />
     <link href='https://fonts.googleapis.com/css?family=Ubuntu:700' rel='stylesheet' type='text/css'>
@@ -36,7 +35,17 @@
                 console.error("Ayar dosyası yüklenirken hata oluştu:", error);
             });
     </script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function () {
 
+                        $('#darktm').click();
+                        $('#showms').click();
+                        $('#hidechatt').click();
+
+
+                    });
+                </script>
     <style>
         body {
             height: 10000vh !important;
@@ -64,16 +73,16 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 id="inPageModalTitle" class="modal-title">Failed to Load</h4>
+                    <h4 id="inPageModalTitle" class="modal-title">Yüklenemedi</h4>
                 </div>
                 <div id="inPageModalBody" class="modal-body">
-                    <p>Failed to load. Please check your connection!</p>
+                    <p>üklenemedi. Lütfen bağlantınızı kontrol edin!</p>
                     <div class="center">
                         <div class="loader"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
                 </div>
             </div>
         </div>
@@ -100,8 +109,8 @@
         <div id="helloDialog">
             <form role="form">
                 <div class="form-group">
-                    <h2 id="title">Ogar3</h2>
-                    <h6 id="motd">Based on Ogarserv &amp Cigar!</h6>
+                    <img src="assets/img/logo.png" height="75px" alt="cenavar logo">
+                    <h6 id="motd">bir <b>cenabet</b> ürünüdür.</h6>
                 </div>
 
                 <div class="form-group">
@@ -121,7 +130,7 @@
 
                     <button type="submit" id="play-btn"
                         onclick="setNick(document.getElementById('nick').value); return false;"
-                        class="btn btn-play btn-primary btn-needs-server">Play</button>
+                        class="btn btn-play btn-primary btn-needs-server">OYNA!</button>
                     <button onclick="$('#settings, #instructions').toggle(); return false;"
                         class="btn btn-info btn-settings" id="settings-btn"><i
                             class="glyphicon glyphicon-cog"></i></button>
@@ -164,8 +173,7 @@
                 <hr />
                 <center>
                     <span class="text-muted">
-                        Move your mouse to control your cell<br />
-                        Bölünmek için<b>Boşluk</b><br />
+                        Bölünmek için <b>Boşluk</b> tuşuna basabilirsin.<br />
                         <b>W</b> ile yem atabilirsin<br />
                     </span>
                 </center>
@@ -173,10 +181,8 @@
 
             <hr />
             <div id="footer">
-                <h5><a>CENABET</a> - CENEVAR.COM</h5>
-                <a href="https://github.com/CigarProject/Cigar" class="text-muted">GitHub/CigarProject</a><br>
-                <a href="https://github.com/JaraLowell/Ogarserv" class="text-muted">GitHub/Ogarserv</a><br>
-                <a href="https://github.com/Faris90/Ogar3" class="text-muted">GitHub/Ogar3</a>
+			<a href="https://cenalt.com/guncelgiris" class="text-muted">Cenabet</a><br>
+                <a href="https://cenavar.com" class="text-muted">Cenavar</a>
             </div>
 
         </div>
