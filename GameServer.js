@@ -132,9 +132,13 @@ GameServer.prototype.start = function() {
     // Logging
 	 this.serverStartTime = Date.now();
 
-    // Kapanış süresi (milisaniye cinsinden)
-     this.shutdownTime = this.serverStartTime + (this.config.serverResetTime * 1000);
-	
+    // Dinamik başlangıç süresi
+    const settings = JSON.parse(fs.readFileSync('./client/settings.json', 'utf8'));
+  this.shutdownTime = this.serverStartTime + (this.config.serverResetTime * 1000);
+this.run = true;
+
+	 this.mainLoop();
+	  console.log("Sunucu başlatıldı.");
     this.log.setup(this);
 
 		// Rcon Info
@@ -182,7 +186,52 @@ this.config.serverPort = process.env.PORT || this.config.serverPort;
                     res.end(JSON.stringify({status: 'error', message: 'Invalid JSON.'}));
                 }
             });
-        } else if (req.method === 'GET' && req.url === '/get-leaderboard') {
+        } else if (req.method === 'POST' && req.url === '/start-server') {
+    let body = '';
+
+    req.on('data', chunk => {
+        body += chunk.toString();
+    });
+
+    req.on('end', () => {
+        try {
+            const { serverTimeout } = JSON.parse(body);
+
+            if (typeof serverTimeout === 'number' && serverTimeout > 0) {
+                gameServer.config.serverResetTime = serverTimeout;
+                gameServer.shutdownTime = Date.now() + serverTimeout * 1000;
+
+                gameServer.killAll(); // Tüm oyuncuları öldür
+
+                if (!gameServer.run) {
+                    gameServer.run = true;
+                    console.log("Sunucu tekrar başlatıldı.");
+                }
+
+                // Pause'u kaldır
+                gameServer.updateSettings({ pause: false }); 
+
+                // Eğer WebSocket bağlantısı varsa mesaj gönderin
+                if (ws && ws.readyState === WebSocket.OPEN) {
+                    const remainingTime = Math.floor((gameServer.shutdownTime - Date.now()) / 1000); // Saniye cinsinden kalan süre
+                    ws.send(JSON.stringify({ action: 'shutdownTime', remainingTime }));
+                }
+
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ status: 'success', message: 'Sunucu başlatıldı ve süre uzatıldı.' }));
+            } else {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ status: 'error', message: 'Geçersiz süre.' }));
+            }
+        } catch (error) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ status: 'error', message: 'Geçersiz JSON.' }));
+        }
+    });
+}
+
+
+else if (req.method === 'GET' && req.url === '/get-leaderboard') {
           const filePath = path.join(__dirname, 'logs', 'leaderboard.json');
         if (fs.existsSync(filePath)) {
             const leaderboards = JSON.parse(fs.readFileSync(filePath, 'utf8'));
@@ -217,7 +266,122 @@ this.config.serverPort = process.env.PORT || this.config.serverPort;
         });
         res.writeHead(200, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({players}));
-    }  else if (req.method === 'POST' && req.url === '/kill-all') {
+    }else if (req.method === 'POST' && req.url.startsWith('/kill-player/')) {
+    const playerId = parseInt(req.url.split('/')[2], 10);
+
+    const player = gameServer.clients.find(client => client.playerTracker.pID === playerId);
+
+    if (player) {
+        gameServer.removeNode(player.playerTracker.cells[0]); // Oyuncunun hücresini sil
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'success', message: 'Oyuncu öldürüldü.' }));
+    } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'error', message: 'Oyuncu bulunamadı.' }));
+    }
+} else if (req.method === 'POST' && req.url.startsWith('/ban-player/')) {
+    const playerId = parseInt(req.url.split('/')[2], 10);
+
+    const player = gameServer.clients.find(client => client.playerTracker.pID === playerId);
+
+    if (player) {
+        gameServer.banned.push(player.remoteAddress); // IP adresini banla
+        player.close(); // Oyuncuyu oyundan at
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'success', message: 'Oyuncu banlandı.' }));
+    } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'error', message: 'Oyuncu bulunamadı.' }));
+    }
+}
+
+else if (req.method === 'POST' && req.url.startsWith('/kick-player/')) {
+    const playerId = parseInt(req.url.split('/')[2], 10);
+
+    const player = gameServer.clients.find(client => client.playerTracker.pID === playerId);
+
+    if (player) {
+        try {
+            player.close(); // Oyuncuyu oyundan at
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ status: 'success', message: 'Oyuncu oyundan atıldı.' }));
+        } catch (error) {
+            console.error('Kick işlemi sırasında hata oluştu:', error);
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ status: 'error', message: 'Oyuncu atılamadı.' }));
+        }
+    } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'error', message: 'Oyuncu bulunamadı.' }));
+    }
+}
+
+
+else if (req.method === 'POST' && req.url.startsWith('/merge-player/')) {
+    const playerId = parseInt(req.url.split('/')[2], 10);
+
+    const player = gameServer.clients.find(client => client.playerTracker.pID === playerId);
+
+    if (player) {
+        // Oyuncunun hücrelerini birleştirme işlemi
+        player.playerTracker.cells.forEach(cell => {
+            cell.calcMergeTime(-1000); // Hücrelerin birleştirilme zamanını hemen olacak şekilde ayarlıyoruz
+        });
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'success', message: 'Oyuncu merge edildi.' }));
+    } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'error', message: 'Oyuncu bulunamadı.' }));
+    }
+}
+
+else if (req.method === 'POST' && req.url.startsWith('/split-player/')) {
+    const playerId = parseInt(req.url.split('/')[2], 10);
+
+    const player = gameServer.clients.find(client => client.playerTracker.pID === playerId);
+
+    if (player) {
+        gameServer.splitCells(player.playerTracker); // Oyuncuyu split et
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'success', message: 'Oyuncu split edildi.' }));
+    } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'error', message: 'Oyuncu bulunamadı.' }));
+    }
+}
+
+
+
+else if (req.method === 'POST' && req.url.startsWith('/add-points/')) {
+    const playerId = parseInt(req.url.split('/')[2], 10);
+    let body = '';
+
+    req.on('data', chunk => {
+        body += chunk.toString();
+    });
+
+    req.on('end', () => {
+        try {
+            const { points } = JSON.parse(body);
+
+            const player = gameServer.clients.find(client => client.playerTracker.pID === playerId);
+
+            if (player) {
+                player.playerTracker.cells[0].mass += points; // Oyuncunun hücresine puan ekle
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ status: 'success', message: 'Puan eklendi.' }));
+            } else {
+                res.writeHead(404, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ status: 'error', message: 'Oyuncu bulunamadı.' }));
+            }
+        } catch (error) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ status: 'error', message: 'Geçersiz JSON.' }));
+        }
+    });
+}
+  else if (req.method === 'POST' && req.url === '/kill-all') {
             // Kill All işlemi
             this.killAll();
             res.writeHead(200, {'Content-Type': 'application/json'});
@@ -509,7 +673,6 @@ GameServer.prototype.cellUpdateTick = function() {
 GameServer.prototype.updateSettings = function(newSettings) {
     const settingsFilePath = './client/settings.json';
     
-    // Mevcut ayarları oku
     let currentSettings;
     try {
         currentSettings = JSON.parse(fs.readFileSync(settingsFilePath, 'utf8'));
@@ -518,10 +681,8 @@ GameServer.prototype.updateSettings = function(newSettings) {
         return;
     }
 
-    // Yeni ayarları mevcut ayarlara ekle
     const updatedSettings = { ...currentSettings, ...newSettings };
 
-    // JSON dosyasına geri yaz
     try {
         fs.writeFileSync(settingsFilePath, JSON.stringify(updatedSettings, null, 2), 'utf8');
         console.log("Ayarlar güncellendi ve settings.json dosyasına kaydedildi.");
@@ -592,18 +753,25 @@ GameServer.prototype.mainLoop = function() {
             // Mevcut liderlik tablosunu güncelle
             this.leaderboard = [];
             this.gameMode.updateLB(this);
-         const top10Leaderboard = this.leaderboard.slice(0, 10);
-            this.lb_packet = new Packet.UpdateLeaderboard(top10Leaderboard, this.gameMode.packetLB);
-            // Liderlik tablosunu JSON dosyasına kaydet (puan dahil)
-           const leaderboardData = this.leaderboard.map((entry, index) => ({
-                id: entry.pID, // Oyuncu ID'si
-                name: entry.name, // Oyuncu adı
-                score: entry.getScore(true), // Oyuncu skoru
-                rank: index + 1 // Sıralama
-            }));
+     const top10Leaderboard = this.leaderboard.slice(0, 10);
+this.lb_packet = new Packet.UpdateLeaderboard(top10Leaderboard, this.gameMode.packetLB);
 
-            const filePath = path.join(__dirname, 'logs', 'leaderboard.json');
-            fs.writeFileSync(filePath, JSON.stringify(leaderboardData, null, 2), 'utf8');
+// Liderlik tablosunu JSON dosyasına kaydet (IP dahil)
+const leaderboardData = this.leaderboard.map((entry, index) => {
+    // İlgili client'ı buluyoruz
+    const client = this.clients.find(client => client.playerTracker.pID === entry.pID);
+    
+    return {
+        id: entry.pID, // Oyuncu ID'si
+        name: entry.name, // Oyuncu adı
+        score: entry.getScore(true), // Oyuncu skoru
+        rank: index + 1, // Sıralama
+        ip: client ? client.remoteAddress : 'IP Yok' // IP adresi, bulunamazsa 'IP Yok'
+    };
+});
+
+const filePath = path.join(__dirname, 'logs', 'leaderboard.json');
+fs.writeFileSync(filePath, JSON.stringify(leaderboardData, null, 2), 'utf8');
 
             this.tickMain = 0;
         }
@@ -612,14 +780,13 @@ GameServer.prototype.mainLoop = function() {
         this.checkSettings();
 
         // Sunucu belirli bir süre çalıştıktan sonra oyuncuları oyundan at ve yeni girişleri engelle
-        if (this.config.serverResetTime > 0 && (local - this.startTime) > (this.config.serverResetTime * 1000)) {
+       if (this.config.serverResetTime > 0 && (local - this.startTime) > (this.shutdownTime - this.serverStartTime)) {
             if (this.run) {
                 this.run = false;
-
-                // settings.json dosyasını güncelle
                 this.updateSettings({pause: true});
- 
-    const filePath = path.join(__dirname, 'logs', 'leaderboard.json'); // Liderlik tablosu dosya yolu
+
+                // Liderlik tablosunu kaydet
+                const filePath = path.join(__dirname, 'logs', 'leaderboard.json');
                 const currentDate = new Date();
                 const timestamp = currentDate.toISOString().replace(/[-T:\.Z]/g, "");
                 const newFileName = `leaderboard_${timestamp}.json`;
@@ -632,12 +799,9 @@ GameServer.prototype.mainLoop = function() {
                         console.log(`Liderlik tablosu "${newFileName}" adıyla kaydedildi.`);
                     }
                 });
-				
 
                 // Oyuncuları bilgilendirme
                 console.log("Sunucu süresi doldu, oyun duraklatıldı.");
-
-               
             }
         }
 

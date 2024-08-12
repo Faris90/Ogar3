@@ -508,27 +508,26 @@ Vector2Const = {
     }
 
 function onWsMessage(msg) {
-    // Eğer msg.data bir ArrayBuffer ise
+	
     if (msg.data instanceof ArrayBuffer) {
         handleWsMessage(new DataView(msg.data));
     } else {
-        // JSON olarak parse edilebilen bir string bekliyorsanız
         try {
             const data = JSON.parse(msg.data);
+            console.log("Gelen veri:", data);
 
             if (data.action === 'shutdownTime') {
                 const remainingTime = data.remainingTime;
                 startCountdown(remainingTime);
+            } else if (data.action === 'reloadPage') {
+                location.reload(); // Sayfayı yenile
             }
-
-            // Diğer JSON işlemleme kodlarınız burada yer alabilir...
         } catch (error) {
-            // console.error("JSON parse error:", error); // Bu satırı yorumlayabilirsiniz.
-            // console.error("Received data:", msg.data); // Bu satırı da yorumlayabilirsiniz.
+            console.error("JSON parse error:", error);
+            console.error("Received data:", msg.data);
         }
     }
 }
-
 function startCountdown(remainingTime) {
     const countdownElement = document.createElement('div');
     countdownElement.id = 'countdown';
@@ -552,7 +551,7 @@ function startCountdown(remainingTime) {
         const minutesDisplay = minutes.toString().padStart(2, '0');
         const secondsDisplay = seconds.toString().padStart(2, '0');
 
-        countdownElement.textContent = `Server Shutdown in: ${hoursDisplay}:${minutesDisplay}:${secondsDisplay}`;
+        countdownElement.textContent = `Etkinlik Bitimine : ${hoursDisplay}:${minutesDisplay}:${secondsDisplay} Kaldı`;
 
         // Her saniye remainingTime değerini 1 azaltma
         remainingTime -= 1;
@@ -561,13 +560,12 @@ function startCountdown(remainingTime) {
         if (remainingTime >= 0) {
             setTimeout(updateCountdown, 1000);
         } else {
-            countdownElement.textContent = 'Server is shutting down...';
+            countdownElement.textContent = 'Etkinlik Bitti.';
         }
     }
 
     updateCountdown();
 }
-
 
 
 
