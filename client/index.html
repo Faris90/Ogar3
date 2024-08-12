@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Cenavar bir Cenabet ürünüdür, cenavar'da katıldığınız etkinlikler.">
+    <meta name="description" content="Cenavar bir Cenabet ürünüdür, cenavar'da katıldığınız etkinlikler ile freespinler ve özel hediyeler kazanabilirsiniz!">
     <meta name="keywords" content="Cenavar, cenabet, cenabet etkinlik, cenabet agar.io,">
     <meta name="robots" content="index, follow">
     <meta name="viewport"
@@ -76,13 +76,13 @@
                     <h4 id="inPageModalTitle" class="modal-title">Yüklenemedi</h4>
                 </div>
                 <div id="inPageModalBody" class="modal-body">
-                    <p>üklenemedi. Lütfen bağlantınızı kontrol edin!</p>
+                    <p>Yüklenemedi! Lütfen bağlantınızı kontrol edin!</p>
                     <div class="center">
                         <div class="loader"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Kapat</button>
                 </div>
             </div>
         </div>
@@ -109,7 +109,7 @@
         <div id="helloDialog">
             <form role="form">
                 <div class="form-group">
-                    <img src="assets/img/logo.png" height="75px" alt="cenavar logo">
+                    <center><img src="assets/img/logo.png" height="75px" alt="cenavar logo"></center>
                     <h6 id="motd">bir <b>cenabet</b> ürünüdür.</h6>
                 </div>
 
@@ -125,14 +125,14 @@
                 <div class="form-group">
                     <div class="mb-10">
                         <a data-toggle="modal" data-target="#inPageModal" onclick="openSkinsList();"
-                            class="btn-primary btn btn-info" role="button" style="width: 100%;">Skins Gallery</a>
+                            class="btn-primary btn btn-danger" role="button" style="width: 100%;">Skin Seç!</a>
                     </div>
 
                     <button type="submit" id="play-btn"
                         onclick="setNick(document.getElementById('nick').value); return false;"
                         class="btn btn-play btn-primary btn-needs-server">OYNA!</button>
                     <button onclick="$('#settings, #instructions').toggle(); return false;"
-                        class="btn btn-info btn-settings" id="settings-btn"><i
+                        class="btn btn-danger btn-settings" id="settings-btn"><i
                             class="glyphicon glyphicon-cog"></i></button>
                     <br clear="both" />
                 </div>
@@ -140,32 +140,30 @@
                 <div id="settings" class="checkbox" style="display:none;">
                     <div class="form-group" id="mainform">
                         <button id="spectate-btn" onclick="spectate(); return false;" style="width: 100%"
-                            class="btn btn-warning btn-spectate btn-needs-server">Spectate
+                            class="btn btn-warning btn-spectate btn-needs-server">İzleyici
                         </button>
                         <br clear="both" />
                     </div>
                     <div style="margin: 6px;">
                         <label>
                             <input type="checkbox" class="save" data-box-id="1"
-                                onchange="setSkins(!$(this).is(':checked'));"> No skins</label>
+                                onchange="setSkins(!$(this).is(':checked'));"> Skinleri Gizle</label>
                         <label>
                             <input type="checkbox" class="save" data-box-id="2"
-                                onchange="setNames(!$(this).is(':checked'));"> No names</label>
+                                onchange="setNames(!$(this).is(':checked'));"> İsimleri Gizle</label>
                         <label>
                             <input type="checkbox" id="darktm" class="save" data-box-id="3"
-                                onchange="setDarkTheme($(this).is(':checked'));"> Dark Theme</label>
+                                onchange="setDarkTheme($(this).is(':checked'));"> Karanlık Tema</label>
                         <label>
                             <input type="checkbox" class="save" data-box-id="4"
-                                onchange="setColors($(this).is(':checked'));"> No colors</label>
+                                onchange="setColors($(this).is(':checked'));"> Renkleri Gizle</label>
                         <label>
                             <input type="checkbox" id="showms" class="save" data-box-id="5"
-                                onchange="setShowMass($(this).is(':checked'));"> Show mass</label>
+                                onchange="setShowMass($(this).is(':checked'));"> Puanı Göster</label>
                         <label>
                             <input type="checkbox" class="save" data-box-id="6"
                                 onchange="setSmooth($(this).is(':checked'));"> Smooth Render</label>
-                        <label>
-                            <input type="checkbox" id="hidechatt" class="save" data-box-id="7"
-                                onchange="setChatHide($(this).is(':checked'));"> Hide Chat</label>
+
                     </div>
                 </div>
             </form>
@@ -173,15 +171,15 @@
                 <hr />
                 <center>
                     <span class="text-muted">
-                        Bölünmek için <b>Boşluk</b> tuşuna basabilirsin.<br />
-                        <b>W</b> ile yem atabilirsin<br />
+                        Bölünmek için <b>Boşluk</b> tuşuna basabilirsin!<br />
+                        <b>W</b> ile yem atabilirsin!<br />
                     </span>
                 </center>
             </div>
 
             <hr />
             <div id="footer">
-			<a href="https://cenalt.com/guncelgiris" class="text-muted">Cenabet</a><br>
+			<a href="https://cenalt.com/guncelgiris" class="text-muted">Cenabet</a> - 
                 <a href="https://cenavar.com" class="text-muted">Cenavar</a>
             </div>
 
