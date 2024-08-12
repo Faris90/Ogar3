@@ -1,5 +1,5 @@
 {
   "serverStatus": "on",
-  "pause": false,
+  "pause": true,
   "feature1": true
 }
