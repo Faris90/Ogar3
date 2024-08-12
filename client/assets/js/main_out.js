@@ -899,8 +899,8 @@ Vector2Const = {
 
     function canvasResize() {
         window.scrollTo(0, 0);
-        canvasWidth = wHandle.innerWidth;
-        canvasHeight = wHandle.innerHeight;
+        canvasWidth = document.documentElement.clientWidth;
+        canvasHeight = document.documentElement.clientHeight;
         nCanvas.width = canvasWidth;
         nCanvas.height = canvasHeight;
         drawGameScene()
