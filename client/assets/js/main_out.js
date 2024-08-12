@@ -126,14 +126,14 @@ Vector2Const = {
     ONLY_CLIENT = false;
     setTimeout(() => {
         if (touchDevice) {
-            dynamic.on('move', function (evt, nipple) {
-                rawMouseX = (nipple.vector.x * 100) + canvasWidth / 2;
-                rawMouseY = (nipple.vector.y * -100) + canvasHeight / 2;
-                mouseCoordinateChange();
-                sendMouseMove();
-            }).on('removed', function (evt, nipple) {
-                nipple.off('start move end dir plain');
-            });
+            // dynamic.on('move', function (evt, nipple) {
+            //     rawMouseX = (nipple.vector.x * 100) + canvasWidth / 2;
+            //     rawMouseY = (nipple.vector.y * -100) + canvasHeight / 2;
+            //     mouseCoordinateChange();
+            //     sendMouseMove();
+            // }).on('removed', function (evt, nipple) {
+            //     nipple.off('start move end dir plain');
+            // });
         }
 
     }, 1000)
@@ -333,15 +333,16 @@ Vector2Const = {
 
     function onTouchStart(e) {
         for (var i = 0; i < e.changedTouches.length; i++) {
+            var size = ~~(canvasWidth / 7);
+
             var touch = e.changedTouches[i];
-            if ((leftTouchID < 0) && (touch.clientX < canvasWidth / 2)) {
+            if ((leftTouchID < 0) && (touch.clientX < canvasWidth - size)) {
                 leftTouchID = touch.identifier;
                 leftTouchStartPos.reset(touch.clientX, touch.clientY);
                 leftTouchPos.copyFrom(leftTouchStartPos);
                 leftVector.reset(0, 0);
             }
 
-            var size = ~~(canvasWidth / 7);
             if ((touch.clientX > canvasWidth - size) && (touch.clientY > canvasHeight - size)) {
                 sendMouseMove();
                 sendUint8(17); // split

@@ -23,7 +23,7 @@
     <!--<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>-->
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/log.js"></script>
-    <script src="assets/js/nipple.js"></script>
+    <!-- <script src="assets/js/nipple.js"></script> -->
     <script src="assets/js/main_out.js?v=1"></script>
     <script>
         fetch('settings.json')
@@ -219,9 +219,9 @@
     </div>
 
     <canvas id="canvas" width="800" height="600"></canvas>
-    <div id="nipple_container" style="width: 80%;height: 100%; position: absolute; top: 0;">
+    <!-- <div id="nipple_container" style="width: 80%;height: 100%; position: absolute; top: 0;">
         <div id="nipple" style="width: 100%;height: 100%;"></div>
-    </div>
+    </div> -->
     <input type="text" id="chat_textbox" placeholder="Press enter to chat!" maxlength="200" />
     <div style="font-family:'Ubuntu'">&nbsp;</div>
 
@@ -230,10 +230,10 @@
         var touchDevice = (navigator.maxTouchPoints || 'ontouchstart' in document.documentElement);
 
         window.scroll(0, window.document.body.scrollHeight);
-        var dynamic = nipplejs.create({
-            zone: document.getElementById('nipple'),
-            color: 'blue'
-        });
+        // var dynamic = nipplejs.create({
+        //     zone: document.getElementById('nipple'),
+        //     color: 'blue'
+        // });
         setTimeout(function () {
             if (!touchDevice) {
                 document.getElementById('nipple_container').style.display = 'none';

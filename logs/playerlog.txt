@@ -1,6 +1,5 @@
-OGar Server - Game Mode: Free For All - Running Time: 51sec
-ID:    1, Nick: Hong Kong      , Score:    139, Cells:  1, Status: 1 IP: BOT
-ID:    2, Nick: Prussia        , Score:    152, Cells:  1, Status: 1 IP: BOT
-ID:    3, Nick: Pokerface      , Score:    111, Cells:  1, Status: 1 IP: BOT
-ID:    4, Nick: doge           , Score:     18, Cells:  1, Status: 0 IP: 127.0.0.1
-ID:    5, Nick: asdf           , Score:     33, Cells:  1, Status: 1 IP: 127.0.0.1
+OGar Server - Game Mode: Free For All - Running Time: 447sec
+ID:    1, Nick: Greece         , Score:   1347, Cells: 16, Status: 1 IP: BOT
+ID:    2, Nick: Belarus        , Score:   1343, Cells: 16, Status: 1 IP: BOT
+ID:    3, Nick: Byzantium      , Score:   1507, Cells: 16, Status: 1 IP: BOT
+ID:    5, Nick: asdf           , Score:      9, Cells:  1, Status: 1 IP: 127.0.0.1
