@@ -23,9 +23,20 @@
     <!--<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>-->
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/log.js"></script>
-    <script src="assets/js/vector.js"></script>
-    <script src="assets/js/nipplejs.js"></script>
-    <script src="assets/js/main_out.js"></script>
+    <script src="assets/js/nipple.js"></script>
+    <script src="assets/js/main_out.js?v=1"></script>
+    <script>
+        fetch('settings.json')
+            .then(response => response.json())
+            .then(data => {
+                if (data.serverStatus === "off") {
+                    window.location.href = "maintenance.html";
+                }
+            })
+            .catch(error => {
+                console.error("Ayar dosyası yüklenirken hata oluştu:", error);
+            });
+    </script>
 
     <style>
         body {
@@ -40,7 +51,6 @@
             max-height: 100vh !important;
         }
 
-        /* Safari-specific CSS */
         @supports (-webkit-touch-callout: inherit) {
             body {
                 height: 1vh !important;
@@ -69,6 +79,24 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="couponModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 id="couponModalTitle" class="modal-title">Tebrikler!</h4>
+                </div>
+                <div id="couponModalBody" class="modal-body">
+                    <p>{coupon}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="overlays">
         <div id="helloDialog">
             <form role="form">
@@ -88,7 +116,8 @@
 
                 <div class="form-group">
                     <div class="mb-10">
-                        <!--<a data-toggle="modal" data-target="#inPageModal" onclick="openSkinsList();" class="btn-primary btn btn-info" role="button" style="width: 100%;">Skins Gallery</a>-->
+                        <a data-toggle="modal" data-target="#inPageModal" onclick="openSkinsList();"
+                            class="btn-primary btn btn-info" role="button" style="width: 100%;">Skins Gallery</a>
                     </div>
 
                     <button type="submit" id="play-btn"
@@ -115,23 +144,48 @@
                             <input type="checkbox" class="save" data-box-id="2"
                                 onchange="setNames(!$(this).is(':checked'));"> No names</label>
                         <label>
-                            <input type="checkbox" class="save" data-box-id="3"
+                            <input type="checkbox" id="darktm" class="save" data-box-id="3"
                                 onchange="setDarkTheme($(this).is(':checked'));"> Dark Theme</label>
                         <label>
                             <input type="checkbox" class="save" data-box-id="4"
                                 onchange="setColors($(this).is(':checked'));"> No colors</label>
                         <label>
-                            <input type="checkbox" class="save" data-box-id="5"
+                            <input type="checkbox" id="showms" class="save" data-box-id="5"
                                 onchange="setShowMass($(this).is(':checked'));"> Show mass</label>
                         <label>
                             <input type="checkbox" class="save" data-box-id="6"
                                 onchange="setSmooth($(this).is(':checked'));"> Smooth Render</label>
                         <label>
-                            <input type="checkbox" class="save" data-box-id="7"
+                            <input type="checkbox" id="hidechatt" class="save" data-box-id="7"
                                 onchange="setChatHide($(this).is(':checked'));"> Hide Chat</label>
                     </div>
                 </div>
             </form>
+            <!DOCTYPE html>
+            <html lang="tr">
+
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Butona Tıklama Örneği</title>
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function () {
+
+                        $('#darktm').click();
+                        $('#showms').click();
+                        $('#hidechatt').click();
+
+
+                    });
+                </script>
+            </head>
+
+            <body>
+                <button id="my-button">Butona Tıkla</button>
+            </body>
+
+            </html>
 
             <div id="instructions">
                 <hr />
@@ -165,7 +219,6 @@
     </div>
 
     <canvas id="canvas" width="800" height="600"></canvas>
-
     <div id="nipple_container" style="width: 80%;height: 100%; position: absolute; top: 0;">
         <div id="nipple" style="width: 100%;height: 100%;"></div>
     </div>
@@ -187,6 +240,7 @@
             }
         }, 500);
     </script>
+
 </body>
 
 </html>

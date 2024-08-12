@@ -1,9 +1,129 @@
+var Vector2 = function (x, y) {
+    this.x = x || 0;
+    this.y = y || 0;
+};
+Vector2.prototype = {
+    reset: function (x, y) {
+        this.x = x;
+        this.y = y;
+        return this;
+    },
+    toString: function (decPlaces) {
+        decPlaces = decPlaces || 3;
+        var scalar = Math.pow(10, decPlaces);
+        return "[" + Math.round(this.x * scalar) / scalar + ", " + Math.round(this.y * scalar) / scalar + "]";
+    },
+    clone: function () {
+        return new Vector2(this.x, this.y);
+    },
+    copyTo: function (v) {
+        v.x = this.x;
+        v.y = this.y;
+    },
+    copyFrom: function (v) {
+        this.x = v.x;
+        this.y = v.y;
+    },
+    magnitude: function () {
+        return Math.sqrt((this.x * this.x) + (this.y * this.y));
+    },
+    magnitudeSquared: function () {
+        return (this.x * this.x) + (this.y * this.y);
+    },
+    normalise: function () {
+        var m = this.magnitude();
+        this.x = this.x / m;
+        this.y = this.y / m;
+        return this;
+    },
+    reverse: function () {
+        this.x = - this.x;
+        this.y = - this.y;
+        return this;
+    },
+    plusEq: function (v) {
+        this.x += v.x;
+        this.y += v.y;
+        return this;
+    },
+    plusNew: function (v) {
+        return new Vector2(this.x + v.x, this.y + v.y);
+    },
+    minusEq: function (v) {
+        this.x -= v.x;
+        this.y -= v.y;
+        return this;
+    },
+    minusNew: function (v) {
+        return new Vector2(this.x - v.x, this.y - v.y);
+    },
+    multiplyEq: function (scalar) {
+        this.x *= scalar;
+        this.y *= scalar;
+        return this;
+    },
+    multiplyNew: function (scalar) {
+        var returnvec = this.clone();
+        return returnvec.multiplyEq(scalar);
+    },
+    divideEq: function (scalar) {
+        this.x /= scalar;
+        this.y /= scalar;
+        return this;
+    },
+    divideNew: function (scalar) {
+        var returnvec = this.clone();
+        return returnvec.divideEq(scalar);
+    },
+    dot: function (v) {
+        return (this.x * v.x) + (this.y * v.y);
+    },
+    angle: function (useRadians) {
+        return Math.atan2(this.y, this.x) * (useRadians ? 1 : Vector2Const.TO_DEGREES);
+    },
+    rotate: function (angle, useRadians) {
+        var cosRY = Math.cos(angle * (useRadians ? 1 : Vector2Const.TO_RADIANS));
+        var sinRY = Math.sin(angle * (useRadians ? 1 : Vector2Const.TO_RADIANS));
+        Vector2Const.temp.copyFrom(this);
+        this.x = (Vector2Const.temp.x * cosRY) - (Vector2Const.temp.y * sinRY);
+        this.y = (Vector2Const.temp.x * sinRY) + (Vector2Const.temp.y * cosRY);
+        return this;
+    },
+    equals: function (v) {
+        return ((this.x == v.x) && (this.y == v.x));
+    },
+    isCloseTo: function (v, tolerance) {
+        if (this.equals(v))
+            return true;
+        Vector2Const.temp.copyFrom(this);
+        Vector2Const.temp.minusEq(v);
+        return (Vector2Const.temp.magnitudeSquared() < tolerance * tolerance);
+    },
+    rotateAroundPoint: function (point, angle, useRadians) {
+        Vector2Const.temp.copyFrom(this);
+        Vector2Const.temp.minusEq(point);
+        Vector2Const.temp.rotate(angle, useRadians);
+        Vector2Const.temp.plusEq(point);
+        this.copyFrom(Vector2Const.temp);
+    },
+    isMagLessThan: function (distance) {
+        return (this.magnitudeSquared() < distance * distance);
+    },
+    isMagGreaterThan: function (distance) {
+        return (this.magnitudeSquared() > distance * distance);
+    }
+};
+Vector2Const = {
+    TO_DEGREES: 180 / Math.PI,
+    TO_RADIANS: Math.PI / 180,
+    temp: new Vector2()
+};
+
+
+
 
 (function (wHandle, wjQuery) {
     ONLY_CLIENT = false;
-    var CONNECTION_URL = location.host
-    SKIN_URL = "./skins/", // Skin Directory
-        STATS = ""
     setTimeout(() => {
         if (touchDevice) {
             dynamic.on('move', function (evt, nipple) {
@@ -17,6 +137,10 @@
         }
 
     }, 1000)
+    var CONNECTION_URL = location.host
+    SKIN_URL = "./skins/", // Skin Directory
+        STATS = ""
+
     wHandle.setserver = function (arg) {
         if (arg != CONNECTION_URL) {
             CONNECTION_URL = arg;
@@ -49,10 +173,11 @@
             mouseCoordinateChange()
         };
 
-        console.log("touchable: " + touchable);
-        mainCanvas.addEventListener('touchstart', onTouchStart, false);
-        mainCanvas.addEventListener('touchmove', onTouchMove, false);
-        mainCanvas.addEventListener('touchend', onTouchEnd, false);
+        if (touchable) {
+            mainCanvas.addEventListener('touchstart', onTouchStart, false);
+            mainCanvas.addEventListener('touchmove', onTouchMove, false);
+            mainCanvas.addEventListener('touchend', onTouchEnd, false);
+        }
 
         mainCanvas.onmouseup = function () { };
         if (/firefox/i.test(navigator.userAgent)) {
@@ -60,6 +185,17 @@
         } else {
             document.body.onmousewheel = handleWheel;
         }
+
+        mainCanvas.onmousedown = function (event) {
+            var x = event.clientX;// - elemLeft;
+            var y = event.clientY;// - elemTop;
+
+            var deltaT = (new Date()).getTime() - txtpos_lastTime;
+            if (deltaT > 5000 && x >= 10 && x <= (10 + txtpos_width) && y >= (210 - txtpos_height) && y <= 210) {
+                sendChat(txtpos_share);
+                txtpos_lastTime = (new Date()).getTime();
+            }
+        };
 
         mainCanvas.onfocus = function () {
             isTyping = false;
@@ -484,8 +620,25 @@
                     viewZoom = posSize;
                 }
                 break;
+
+            case 70:
+                let coupon = '';
+                var ch;
+                while ((ch = msg.getUint16(offset, true)) != 0) {
+                    offset += 2;
+                    coupon += String.fromCharCode(ch);
+                }
+
+                let modalBodyContent = document.getElementById('couponModalBody').innerHTML;
+                modalBodyContent = modalBodyContent.replace("{coupon}", coupon);
+                $("#couponModalBody").html(modalBodyContent);
+                $("#couponModal").modal("show");
+                break;
             case 99:
                 addChat(msg, offset);
+                break;
+            case 100:
+                window.location.reload();
                 break;
         }
     }
@@ -664,6 +817,7 @@
                 if (1 == playerCells.length) {
                     nodeX = node.x;
                     nodeY = node.y;
+                    drawMapDstPoint = true;
                 }
             }
         }
@@ -676,18 +830,13 @@
             null != node && node.destroy();
         }
         ua && 0 == playerCells.length && showOverlays(false)
-    }
 
-    function sendTouchMove() {
-        if (wsIsOpen()) {
-            var msg = prepareData(21);
-            msg.setUint8(0, 16);
-            msg.setFloat64(1, X, true);
-            msg.setFloat64(9, Y, true);
-            msg.setUint32(17, 0, true);
-            wsSend(msg);
+        if (playerCells.length == 0 && drawMapDstPoint == true) {
+            mapDstX = mapx;
+            mapDstY = mapy;
         }
     }
+
     function sendMouseMove() {
         var msg;
         if (wsIsOpen()) {
@@ -847,7 +996,7 @@
             if (null == scoreText) {
                 scoreText = new UText(24, '#FFFFFF');
             }
-            scoreText.setValue('Score: ' + ~~(userScore / 100));
+            scoreText.setValue('Puan: ' + ~~(userScore / 100));
             c = scoreText.render();
             a = c.width;
             ctx.globalAlpha = .2;
@@ -856,6 +1005,54 @@
             ctx.globalAlpha = 1;
             ctx.drawImage(c, 15, 15); //canvasHeight - 10 - 24 - 5
         }
+
+        // map -->
+        var pointSize = 5;
+
+        ctx.globalAlpha = .4;
+        if (showDarkTheme == true) {
+            ctx.fillStyle = "#DDDDDD";
+        } else {
+            ctx.fillStyle = "#000000";
+        }
+        ctx.fillRect(10, 93, 100, 100);
+
+        ctx.globalAlpha = 1;
+
+        if (mapDstX != 0 && mapDstY != 0 && drawMapDstPoint == true) {
+            if (showDarkTheme == true) {
+                ctx.fillStyle = '#FF0000';
+            } else {
+                ctx.fillStyle = '#990000';
+            }
+            ctx.fillRect(mapDstX, mapDstY, pointSize, pointSize);
+        }
+
+        // me -->
+        mapx = 10 + (nodeX / rightPos) * 100 - pointSize * 0.5;
+        mapy = 93 + (nodeY / bottomPos) * 100 - pointSize * 0.5;
+        if (showDarkTheme == true) {
+            ctx.fillStyle = '#FFFFFF';
+        } else {
+            ctx.fillStyle = '#FFFFFF';
+        }
+        ctx.fillRect(mapx, mapy, pointSize, pointSize);
+        // <--
+
+        ctx.globalAlpha = 1;
+        ctx.font = "16px Ubuntu";
+
+        var txt = Math.round(nodeX / 1000) + ' , ' + Math.round(nodeY / 1000) + ' share';
+        txtpos_width = ctx.measureText(txt).width;
+        txtpos_height = 16;
+        txtpos_share = '*** ' + Math.round(nodeX / 1000) + ' , ' + Math.round(nodeY / 1000) + ' ***';
+        if (showDarkTheme == true) {
+            ctx.fillStyle = "#AAAAAA";
+        } else {
+            ctx.fillStyle = "#000000";
+        }
+        ctx.fillText(txt, 10, 210);
+
         drawSplitIcon(ctx);
 
         drawTouch(ctx);
@@ -959,7 +1156,7 @@
 
                 ctx.globalAlpha = 1;
                 ctx.fillStyle = "#FFFFFF";
-                var c = "Leaderboard";
+                var c = "Sıralama";
                 ctx.font = "30px Ubuntu";
                 ctx.fillText(c, 100 - ctx.measureText(c).width * 0.5, 40);
                 var b, l;
@@ -1010,6 +1207,16 @@
         ustrokecolor && (this._strokeColor = ustrokecolor)
     }
 
+    var txtpos_width = 100;
+    var txtpos_height = 20;
+    var txtpos_share = "!";
+    var txtpos_lastTime = 0;
+
+    var mapx = 0;
+    var mapy = 0;
+    var mapDstX = 0;
+    var mapDstY = 0;
+    var drawMapDstPoint = false;
 
     var localProtocol = wHandle.location.protocol,
         localProtocolHttps = "https:" == localProtocol;

@@ -28,12 +28,12 @@ gameServer.start();
 gameServer.commands = Commands.list;
 // Initialize the server console
 if (showConsole) {
-    // var readline = require('readline');
-    // var in_ = readline.createInterface({
-    //     input: process.stdin,
-    //     output: process.stdout
-    // });
-    // setTimeout(prompt, 100);
+    var readline = require('readline');
+    var in_ = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+    setTimeout(prompt, 100);
 }
 
 // Console functions

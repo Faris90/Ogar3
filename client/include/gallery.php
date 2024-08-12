@@ -1,20 +1,19 @@
 <link href="assets/css/gallery.css" rel="stylesheet">
 <div class="row center">
     <ul>
-        <?php
-            $dirname = "../skins/";
-            $images = scandir($dirname);
-            $ignore = array(".", "..");
-            foreach($images as $curimg) {
-                if (!in_array($curimg, $ignore) && strtolower(pathinfo($curimg, PATHINFO_EXTENSION)) == "png") {
-        ?>
+        <!-- Aşağıdaki her bir <li> öğesi, bir PHP döngüsünün üretebileceği statik HTML'yi temsil eder -->
         <li class="skin" onclick="$('#nick').val($(this).find('.title').text());" data-dismiss="modal">
-            <div class="circular" style='background-image: url("./<?php echo $dirname.$curimg ?>")'></div>
-            <h4 class="title"><?php echo pathinfo($curimg, PATHINFO_FILENAME); ?></h4>
+            <div class="circular" style='background-image: url("../skins/doge.png")'></div>
+            <h4 class="title">doge</h4>
         </li>
-        <?php
-                }
-            }                 
-        ?>
+        <li class="skin" onclick="$('#nick').val($(this).find('.title').text());" data-dismiss="modal">
+            <div class="circular" style='background-image: url("/skins/doge.png")'></div>
+            <h4 class="title">doge</h4>
+        </li>
+        <li class="skin" onclick="$('#nick').val($(this).find('.title').text());" data-dismiss="modal">
+            <div class="circular" style='background-image: url("/skins/doge.png")'></div>
+            <h4 class="title">doge</h4>
+        </li>
+        <!-- İstediğiniz kadar <li> öğesi ekleyebilirsiniz -->
     </ul>
 </div>

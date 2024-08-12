@@ -181,6 +181,13 @@ this.socketServer = new WebSocket.Server({server: hserver, perMessageDeflate: fa
     });
 
     function connectionEstablished(ws) {
+		
+	   if (!this.run) {
+        console.log("Yeni bağlantı denemesi, ancak sunucu kapalı olduğu için reddedildi.");
+        ws.close();
+        return;
+    }
+
         if (this.clients.length >= this.config.serverMaxConnections) { // Server full
             console.log("\u001B[33mClient tried to connect, but server player limit has been reached!\u001B[0m");
             ws.close();
@@ -431,14 +438,11 @@ GameServer.prototype.cellUpdateTick = function() {
 }
 
 GameServer.prototype.mainLoop = function() {
-    // Timer
     var local = new Date();
     this.tick += (local - this.time);
     this.time = local;
 
-    // Default 50 (aka 50ms) if change here change movespeed as well
     if (this.tick >= 50) {
-        // Loop main functions
         if (this.run) {
             this.cellTick();
             this.spawnTick();
@@ -446,57 +450,59 @@ GameServer.prototype.mainLoop = function() {
             this.MasterPing();
         }
 
-        // Update the client's maps
         this.updateClients();
 
-        // Update cells/leaderboard loop
         this.tickMain++;
-        if (this.tickMain >= 20) { // 1 Second
-          this.cellUpdateTick();
+        if (this.tickMain >= 20) {
+            this.cellUpdateTick();
 
-            // Update leaderboard with the gamemode's method
             this.leaderboard = [];
             this.gameMode.updateLB(this);
-            this.lb_packet = new Packet.UpdateLeaderboard(this.leaderboard,this.gameMode.packetLB);
+            this.lb_packet = new Packet.UpdateLeaderboard(this.leaderboard, this.gameMode.packetLB);
 
-            this.tickMain = 0; // Reset
+            this.tickMain = 0;
         }
 
-        // Check Bot Min Players
-        var players = 0;
-        this.clients.forEach(function(client) {
-            if (client.playerTracker && !client.playerTracker.spectate)
-                players++
-        });
-        if ( players < this.config.serverBots )
-        {
-            this.bots.addBot();
-        }
-
-        // Debug
-        //console.log(this.tick - 50);
-
-        // Auto Server Reset
-        if( this.config.serverResetTime > 0 && ( local - this.startTime ) > ( this.config.serverResetTime * 3600000 ) )
-        {
+        // Sunucu belirli bir süre çalıştıktan sonra oyuncuları oyundan at ve yeni girişleri engelle
+         //if (this.config.serverResetTime > 0 && (local - this.startTime) > (this.config.serverResetTime * 3600000)) {
+			 if (this.config.serverResetTime > 0 && (local - this.startTime) > (this.config.serverResetTime * 1000)) {
+			 if (this.run) {console.log("Süre Doldu");
             this.exitserver();
-        }
+        } 
+		}
 
-        // Reset
         this.tick = 0;
     }
 };
 
 GameServer.prototype.exitserver = function() {
-    console.log("Server Shutdown!");
-    if ( this.sqlconfig.host != '' )
-    {
-        this.mysql.connect();
-		}
-		this.socketServer.close();
-		process.exit(1);
-		window.close();		
-}
+	
+    console.log("Sunucu Kapanıyor: Yeni oyuncu girişleri engellenecek ve mevcut oyuncular oyundan çıkarılacak.");
+
+
+    // Mevcut tüm oyuncuları oyundan at
+    this.clients.forEach(client => {
+        if (client && client.socket) {
+			 client.socket.send(JSON.stringify({ action: "reload" }));
+            client.socket.close(); // Bağlantıları kapat
+        }
+    });
+
+    // Yeni bağlantıları engelle
+    this.run = false;
+
+    // WebSocket sunucusunu kapatma, sadece yeni bağlantıları reddedecek
+    console.log("Yeni bağlantılar engellendi, ancak sunucu çalışmaya devam ediyor.");
+	
+	
+	const settings = {
+        serverStatus: "off"
+    };
+	fs.writeFileSync('./client/settings.json', JSON.stringify(settings), 'utf8');
+};
+
+
+
 
 GameServer.prototype.updateClients = function() {
     for (var i = 0; i < this.clients.length; i++) {
@@ -550,8 +556,8 @@ GameServer.prototype.spawnPlayer = function(player,pos,mass) {
  */
         if( this.config.serverResetTime > 0 )
         {
-            var packet = new Packet.BroadCast("Remember, This server auto restarts after " + this.config.serverResetTime  + " hours uptime!");
-            player.socket.sendPacket(packet);
+            console.log("Remember, This server auto restarts after " + this.config.serverResetTime  + " Minute uptime!")
+       
         }
 
         console.log( "\u001B[36m" + zname + " joined the game\u001B[0m");

@@ -72,6 +72,14 @@ function PlayerTracker(gameServer, socket) {
     this.spectate = true;
     this.spectatedPlayer = -1; // Current player that this player is watching
 
+
+
+	// Kupon
+	this.useFirstCoupon = 0;
+	this.useSecondCoupon = 0;
+	this.useThirdCoupon = 0;
+	this.useFourthCoupon = 0;
+	
     // Viewing box
     this.sightRangeX = 0;
     this.sightRangeY = 0;
@@ -125,6 +133,10 @@ PlayerTracker.prototype.setColor = function(color) {
 
 PlayerTracker.prototype.getTeam = function() {
     return this.team;
+};
+
+PlayerTracker.prototype.sendCoupon = function(str) {
+	this.socket.sendPacket(new Packet.Prize(str));
 };
 
 // Functions
@@ -225,6 +237,41 @@ PlayerTracker.prototype.update = function() {
         this.WriteInfo = 12;
     }
 
+	const coupons = [
+		{
+			enabled: this.gameServer.config.firstCoupon,
+			used: 'useFirstCoupon',
+			score: this.gameServer.config.firstCouponScore,
+			text: this.gameServer.config.firstCouponText
+		},
+		{
+			enabled: this.gameServer.config.secondCoupon,
+			used: 'useSecondCoupon',
+			score: this.gameServer.config.secondCouponScore,
+			text: this.gameServer.config.secondCouponText
+		},
+		{
+			enabled: this.gameServer.config.thirdCoupon,
+			used: 'useThirdCoupon',
+			score: this.gameServer.config.thirdCouponScore,
+			text: this.gameServer.config.thirdCouponText
+		},
+		{
+			enabled: this.gameServer.config.fourthCoupon,
+			used: 'useFourthCoupon',
+			score: this.gameServer.config.fourthCouponScore,
+			text: this.gameServer.config.fourthCouponText
+		}
+	];
+
+	coupons.forEach(coupon => {
+		if (coupon.enabled === 1 && this[coupon.used] === 0 && this.score > coupon.score) {
+			this[coupon.used] = 1;
+			this.sendCoupon(coupon.text);
+		}
+	});
+
+	
     // Handles disconnections
     if ( this.disconnect > 0 ) {
         // Player has disconnected... remove it when the timer hits -1
