@@ -1,5 +1,4 @@
-OGar Server - Game Mode: Free For All - Running Time: 984sec
-ID:    1, Nick: Brazil         , Score:   1697, Cells: 16, Status: 1 IP: BOT
-ID:    2, Nick: Sanik          , Score:   3793, Cells: 16, Status: 1 IP: BOT
-ID:    3, Nick: Ussr           , Score:   2043, Cells: 16, Status: 1 IP: BOT
-ID:   14, Nick: 123            , Score:     56, Cells:  2, Status: 1 IP: 127.0.0.1
+OGar Server - Game Mode: Free For All - Running Time: 216sec
+ID:    1, Nick: Germany        , Score:    470, Cells:  1, Status: 1 IP: BOT
+ID:    2, Nick: Matriarchy     , Score:    542, Cells: 16, Status: 1 IP: BOT
+ID:    3, Nick: Moon           , Score:    450, Cells:  1, Status: 1 IP: BOT
