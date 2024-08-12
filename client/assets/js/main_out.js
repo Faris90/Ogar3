@@ -1,87 +1,87 @@
-var Vector2 = function (x, y) {
+var Vector2 = function(x, y) {
     this.x = x || 0;
     this.y = y || 0;
 };
 Vector2.prototype = {
-    reset: function (x, y) {
+    reset: function(x, y) {
         this.x = x;
         this.y = y;
         return this;
     },
-    toString: function (decPlaces) {
+    toString: function(decPlaces) {
         decPlaces = decPlaces || 3;
         var scalar = Math.pow(10, decPlaces);
-        return "[" + Math.round(this.x * scalar) / scalar + ", " + Math.round(this.y * scalar) / scalar + "]";
+        return "[" + Math.round(this.x * scalar) / scalar + ", " + Math.round (this.y * scalar) / scalar + "]";
     },
-    clone: function () {
+    clone: function() {
         return new Vector2(this.x, this.y);
     },
-    copyTo: function (v) {
+    copyTo: function(v) {
         v.x = this.x;
         v.y = this.y;
     },
-    copyFrom: function (v) {
+    copyFrom: function(v) {
         this.x = v.x;
         this.y = v.y;
     },
-    magnitude: function () {
+    magnitude: function() {
         return Math.sqrt((this.x * this.x) + (this.y * this.y));
     },
-    magnitudeSquared: function () {
+    magnitudeSquared: function() {
         return (this.x * this.x) + (this.y * this.y);
     },
-    normalise: function () {
+    normalise: function() {
         var m = this.magnitude();
         this.x = this.x / m;
         this.y = this.y / m;
         return this;
     },
-    reverse: function () {
-        this.x = - this.x;
-        this.y = - this.y;
+    reverse: function() {
+        this.x =- this.x;
+        this.y =- this.y;
         return this;
     },
-    plusEq: function (v) {
+    plusEq: function(v) {
         this.x += v.x;
         this.y += v.y;
         return this;
     },
-    plusNew: function (v) {
+    plusNew: function(v) {
         return new Vector2(this.x + v.x, this.y + v.y);
     },
-    minusEq: function (v) {
+    minusEq: function(v) {
         this.x -= v.x;
         this.y -= v.y;
         return this;
     },
-    minusNew: function (v) {
+    minusNew: function(v) {
         return new Vector2(this.x - v.x, this.y - v.y);
     },
-    multiplyEq: function (scalar) {
-        this.x *= scalar;
-        this.y *= scalar;
+    multiplyEq: function(scalar) {
+        this.x*=scalar;
+        this.y*=scalar;
         return this;
     },
-    multiplyNew: function (scalar) {
+    multiplyNew: function(scalar) {
         var returnvec = this.clone();
         return returnvec.multiplyEq(scalar);
     },
-    divideEq: function (scalar) {
-        this.x /= scalar;
-        this.y /= scalar;
+    divideEq: function(scalar) {
+        this.x/=scalar;
+        this.y/=scalar;
         return this;
     },
-    divideNew: function (scalar) {
+    divideNew: function(scalar) {
         var returnvec = this.clone();
         return returnvec.divideEq(scalar);
     },
-    dot: function (v) {
+    dot: function(v) {
         return (this.x * v.x) + (this.y * v.y);
     },
-    angle: function (useRadians) {
+    angle: function(useRadians) {
         return Math.atan2(this.y, this.x) * (useRadians ? 1 : Vector2Const.TO_DEGREES);
     },
-    rotate: function (angle, useRadians) {
+    rotate: function(angle, useRadians) {
         var cosRY = Math.cos(angle * (useRadians ? 1 : Vector2Const.TO_RADIANS));
         var sinRY = Math.sin(angle * (useRadians ? 1 : Vector2Const.TO_RADIANS));
         Vector2Const.temp.copyFrom(this);
@@ -89,27 +89,27 @@ Vector2.prototype = {
         this.y = (Vector2Const.temp.x * sinRY) + (Vector2Const.temp.y * cosRY);
         return this;
     },
-    equals: function (v) {
+    equals: function(v) {
         return ((this.x == v.x) && (this.y == v.x));
     },
-    isCloseTo: function (v, tolerance) {
+    isCloseTo: function(v, tolerance) {
         if (this.equals(v))
             return true;
         Vector2Const.temp.copyFrom(this);
         Vector2Const.temp.minusEq(v);
         return (Vector2Const.temp.magnitudeSquared() < tolerance * tolerance);
     },
-    rotateAroundPoint: function (point, angle, useRadians) {
+    rotateAroundPoint: function(point, angle, useRadians) {
         Vector2Const.temp.copyFrom(this);
         Vector2Const.temp.minusEq(point);
         Vector2Const.temp.rotate(angle, useRadians);
         Vector2Const.temp.plusEq(point);
         this.copyFrom(Vector2Const.temp);
     },
-    isMagLessThan: function (distance) {
+    isMagLessThan: function(distance) {
         return (this.magnitudeSquared() < distance * distance);
     },
-    isMagGreaterThan: function (distance) {
+    isMagGreaterThan: function(distance) {
         return (this.magnitudeSquared() > distance * distance);
     }
 };
@@ -122,26 +122,13 @@ Vector2Const = {
 
 
 
-(function (wHandle, wjQuery) {
+(function(wHandle, wjQuery) {
     ONLY_CLIENT = false;
-    setTimeout(() => {
-        if (touchDevice) {
-            // dynamic.on('move', function (evt, nipple) {
-            //     rawMouseX = (nipple.vector.x * 100) + canvasWidth / 2;
-            //     rawMouseY = (nipple.vector.y * -100) + canvasHeight / 2;
-            //     mouseCoordinateChange();
-            //     sendMouseMove();
-            // }).on('removed', function (evt, nipple) {
-            //     nipple.off('start move end dir plain');
-            // });
-        }
-
-    }, 1000)
     var CONNECTION_URL = location.host
-    SKIN_URL = "./skins/", // Skin Directory
+        SKIN_URL = "./skins/", // Skin Directory
         STATS = ""
 
-    wHandle.setserver = function (arg) {
+    wHandle.setserver = function(arg) {
         if (arg != CONNECTION_URL) {
             CONNECTION_URL = arg;
             showConnecting();
@@ -167,7 +154,7 @@ Vector2Const = {
         mainCanvas = nCanvas = document.getElementById("canvas");
         ctx = mainCanvas.getContext("2d");
 
-        mainCanvas.onmousemove = function (event) {
+        mainCanvas.onmousemove = function(event) {
             rawMouseX = event.clientX;
             rawMouseY = event.clientY;
             mouseCoordinateChange()
@@ -179,34 +166,34 @@ Vector2Const = {
             mainCanvas.addEventListener('touchend', onTouchEnd, false);
         }
 
-        mainCanvas.onmouseup = function () { };
+        mainCanvas.onmouseup = function() {};
         if (/firefox/i.test(navigator.userAgent)) {
             document.addEventListener("DOMMouseScroll", handleWheel, false);
         } else {
             document.body.onmousewheel = handleWheel;
         }
 
-        mainCanvas.onmousedown = function (event) {
-            var x = event.clientX;// - elemLeft;
-            var y = event.clientY;// - elemTop;
-
-            var deltaT = (new Date()).getTime() - txtpos_lastTime;
-            if (deltaT > 5000 && x >= 10 && x <= (10 + txtpos_width) && y >= (210 - txtpos_height) && y <= 210) {
-                sendChat(txtpos_share);
-                txtpos_lastTime = (new Date()).getTime();
-            }
+		mainCanvas.onmousedown = function (event) {
+			var x = event.clientX;// - elemLeft;
+			var y = event.clientY;// - elemTop;
+			
+			var deltaT = (new Date()).getTime() - txtpos_lastTime;
+			if ( deltaT>5000 && x>=10 && x<=(10+txtpos_width) && y>=(210-txtpos_height) && y<=210 ){
+				sendChat(txtpos_share);
+				txtpos_lastTime = (new Date()).getTime();
+			}
         };
-
-        mainCanvas.onfocus = function () {
+		
+        mainCanvas.onfocus = function() {
             isTyping = false;
         };
 
-        document.getElementById("chat_textbox").onblur = function () {
+        document.getElementById("chat_textbox").onblur = function() {
             isTyping = false;
         };
 
 
-        document.getElementById("chat_textbox").onfocus = function () {
+        document.getElementById("chat_textbox").onfocus = function() {
             isTyping = true;
         };
 
@@ -217,7 +204,7 @@ Vector2Const = {
             tPressed = false,
             pPressed = false,
             wPressed = false;
-        wHandle.onkeydown = function (event) {
+        wHandle.onkeydown = function(event) {
             switch (event.keyCode) {
                 case 13: // enter
                     if (isTyping || hideChat) {
@@ -285,7 +272,7 @@ Vector2Const = {
                     break;
             }
         };
-        wHandle.onkeyup = function (event) {
+        wHandle.onkeyup = function(event) {
             switch (event.keyCode) {
                 case 32: // space
                     spacePressed = false;
@@ -313,7 +300,7 @@ Vector2Const = {
                     break;
             }
         };
-        wHandle.onblur = function () {
+        wHandle.onblur = function() {
             sendUint8(19);
             wPressed = spacePressed = qPressed = ePressed = rPressed = tPressed = pPressed = false
         };
@@ -333,16 +320,15 @@ Vector2Const = {
 
     function onTouchStart(e) {
         for (var i = 0; i < e.changedTouches.length; i++) {
-            var size = ~~(canvasWidth / 7);
-
             var touch = e.changedTouches[i];
-            if ((leftTouchID < 0) && (touch.clientX < canvasWidth - size)) {
+            if ((leftTouchID < 0) && (touch.clientX < canvasWidth / 2)) {
                 leftTouchID = touch.identifier;
                 leftTouchStartPos.reset(touch.clientX, touch.clientY);
                 leftTouchPos.copyFrom(leftTouchStartPos);
                 leftVector.reset(0, 0);
             }
 
+            var size = ~~(canvasWidth / 7);
             if ((touch.clientX > canvasWidth - size) && (touch.clientY > canvasHeight - size)) {
                 sendMouseMove();
                 sendUint8(17); // split
@@ -460,7 +446,7 @@ Vector2Const = {
             ws.onclose = null;
             try {
                 ws.close()
-            } catch (b) { }
+            } catch (b) {}
             ws = null
         }
         var c = CONNECTION_URL;
@@ -490,11 +476,11 @@ Vector2Const = {
     }
 
     function httpGet(theUrl) {
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", theUrl, false); // false for synchronous request
-        xmlHttp.send(null);
-        return xmlHttp.responseText;
-    }
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
 
 
     function onWsOpen() {
@@ -521,128 +507,188 @@ Vector2Const = {
         delay *= 1.5;
     }
 
-    function onWsMessage(msg) {
+function onWsMessage(msg) {
+    // Eğer msg.data bir ArrayBuffer ise
+    if (msg.data instanceof ArrayBuffer) {
         handleWsMessage(new DataView(msg.data));
-    }
+    } else {
+        // JSON olarak parse edilebilen bir string bekliyorsanız
+        try {
+            const data = JSON.parse(msg.data);
 
-    function handleWsMessage(msg) {
-        function getString() {
-            var text = '',
-                char;
-            while ((char = msg.getUint16(offset, true)) != 0) {
-                offset += 2;
-                text += String.fromCharCode(char);
+            if (data.action === 'shutdownTime') {
+                const remainingTime = data.remainingTime;
+                startCountdown(remainingTime);
             }
-            offset += 2;
-            return text;
-        }
 
-        var offset = 0,
-            setCustomLB = false;
-        240 == msg.getUint8(offset) && (offset += 5);
-        switch (msg.getUint8(offset++)) {
-            case 16: // update nodes
-                updateNodes(msg, offset);
-                break;
-            case 17: // update position
-                posX = msg.getFloat32(offset, true);
-                offset += 4;
-                posY = msg.getFloat32(offset, true);
-                offset += 4;
-                posSize = msg.getFloat32(offset, true);
-                offset += 4;
-                break;
-            case 20: // clear nodes
-                playerCells = [];
-                nodesOnScreen = [];
-                break;
-            case 21: // draw line
-                lineX = msg.getInt16(offset, true);
-                offset += 2;
-                lineY = msg.getInt16(offset, true);
-                offset += 2;
-                if (!drawLine) {
-                    drawLine = true;
-                    drawLineX = lineX;
-                    drawLineY = lineY;
-                }
-                break;
-            case 32: // add node
-                nodesOnScreen.push(msg.getUint32(offset, true));
-                offset += 4;
-                break;
-            case 48: // update leaderboard (custom text)
-                setCustomLB = true;
-                noRanking = true;
-                break;
-            case 49: // update leaderboard (ffa)
-                if (!setCustomLB) {
-                    noRanking = false;
-                }
-                teamScores = null;
-                var LBplayerNum = msg.getUint32(offset, true);
-                offset += 4;
-                leaderBoard = [];
-                for (i = 0; i < LBplayerNum; ++i) {
-                    var nodeId = msg.getUint32(offset, true);
-                    offset += 4;
-                    leaderBoard.push({
-                        id: nodeId,
-                        name: getString()
-                    })
-                }
-                drawLeaderBoard();
-                break;
-            case 50: // update leaderboard (teams)
-                teamScores = [];
-                var LBteamNum = msg.getUint32(offset, true);
-                offset += 4;
-                for (var i = 0; i < LBteamNum; ++i) {
-                    teamScores.push(msg.getFloat32(offset, true));
-                    offset += 4;
-                }
-                drawLeaderBoard();
-                break;
-            case 64: // set border
-                leftPos = msg.getFloat64(offset, true);
-                offset += 8;
-                topPos = msg.getFloat64(offset, true);
-                offset += 8;
-                rightPos = msg.getFloat64(offset, true);
-                offset += 8;
-                bottomPos = msg.getFloat64(offset, true);
-                offset += 8;
-                posX = (rightPos + leftPos) / 2;
-                posY = (bottomPos + topPos) / 2;
-                posSize = 1;
-                if (0 == playerCells.length) {
-                    nodeX = posX;
-                    nodeY = posY;
-                    viewZoom = posSize;
-                }
-                break;
-
-            case 70:
-                let coupon = '';
-                var ch;
-                while ((ch = msg.getUint16(offset, true)) != 0) {
-                    offset += 2;
-                    coupon += String.fromCharCode(ch);
-                }
-
-                let modalBodyContent = document.getElementById('couponModalBody').innerHTML;
-                modalBodyContent = modalBodyContent.replace("{coupon}", coupon);
-                $("#couponModalBody").html(modalBodyContent);
-                $("#couponModal").modal("show");
-                break;
-            case 99:
-                addChat(msg, offset);
-                break;
-            case 100:
-                window.location.reload();
-                break;
+            // Diğer JSON işlemleme kodlarınız burada yer alabilir...
+        } catch (error) {
+            // console.error("JSON parse error:", error); // Bu satırı yorumlayabilirsiniz.
+            // console.error("Received data:", msg.data); // Bu satırı da yorumlayabilirsiniz.
         }
     }
+}
+
+function startCountdown(remainingTime) {
+    const countdownElement = document.createElement('div');
+    countdownElement.id = 'countdown';
+    countdownElement.style.position = 'absolute';
+    countdownElement.style.top = '10px';
+    countdownElement.style.width = '100%';
+    countdownElement.style.textAlign = 'center';
+    countdownElement.style.fontSize = '24px';
+    countdownElement.style.color = '#FFFFFF';
+    countdownElement.style.zIndex = '1000';
+    document.body.appendChild(countdownElement);
+
+    function updateCountdown() {
+        // Saat, dakika ve saniye hesaplamaları
+        const hours = Math.floor(remainingTime / 3600);
+        const minutes = Math.floor((remainingTime % 3600) / 60);
+        const seconds = remainingTime % 60;
+
+        // Tek basamaklı saat, dakika ve saniyeler için başına 0 ekleyerek formatlama
+        const hoursDisplay = hours.toString().padStart(2, '0');
+        const minutesDisplay = minutes.toString().padStart(2, '0');
+        const secondsDisplay = seconds.toString().padStart(2, '0');
+
+        countdownElement.textContent = `Server Shutdown in: ${hoursDisplay}:${minutesDisplay}:${secondsDisplay}`;
+
+        // Her saniye remainingTime değerini 1 azaltma
+        remainingTime -= 1;
+
+        // Geri sayım bitmediği sürece her saniye updateCountdown fonksiyonunu çağırma
+        if (remainingTime >= 0) {
+            setTimeout(updateCountdown, 1000);
+        } else {
+            countdownElement.textContent = 'Server is shutting down...';
+        }
+    }
+
+    updateCountdown();
+}
+
+
+
+
+
+function handleWsMessage(msg) {
+    function getString() {
+        var text = '',
+            char;
+        while ((char = msg.getUint16(offset, true)) != 0) {
+            offset += 2;
+            text += String.fromCharCode(char);
+        }
+        offset += 2;
+        return text;
+    }
+
+    var offset = 0,
+        setCustomLB = false;
+    240 == msg.getUint8(offset) && (offset += 5);
+    switch (msg.getUint8(offset++)) {
+        case 16: // update nodes
+            updateNodes(msg, offset);
+            break;
+        case 17: // update position
+            posX = msg.getFloat32(offset, true);
+            offset += 4;
+            posY = msg.getFloat32(offset, true);
+            offset += 4;
+            posSize = msg.getFloat32(offset, true);
+            offset += 4;
+            break;
+        case 20: // clear nodes
+            playerCells = [];
+            nodesOnScreen = [];
+            break;
+        case 21: // draw line
+            lineX = msg.getInt16(offset, true);
+            offset += 2;
+            lineY = msg.getInt16(offset, true);
+            offset += 2;
+            if (!drawLine) {
+                drawLine = true;
+                drawLineX = lineX;
+                drawLineY = lineY;
+            }
+            break;
+        case 32: // add node
+            nodesOnScreen.push(msg.getUint32(offset, true));
+            offset += 4;
+            break;
+        case 48: // update leaderboard (custom text)
+            setCustomLB = true;
+            noRanking = true;
+            break;
+        case 49: // update leaderboard (ffa)
+            if (!setCustomLB) {
+                noRanking = false;
+            }
+            teamScores = null;
+            var LBplayerNum = msg.getUint32(offset, true);
+            offset += 4;
+            leaderBoard = [];
+            for (i = 0; i < LBplayerNum; ++i) {
+                var nodeId = msg.getUint32(offset, true);
+                offset += 4;
+                leaderBoard.push({
+                    id: nodeId,
+                    name: getString()
+                })
+            }
+            drawLeaderBoard();
+            break;
+        case 50: // update leaderboard (teams)
+            teamScores = [];
+            var LBteamNum = msg.getUint32(offset, true);
+            offset += 4;
+            for (var i = 0; i < LBteamNum; ++i) {
+                teamScores.push(msg.getFloat32(offset, true));
+                offset += 4;
+            }
+            drawLeaderBoard();
+            break;
+        case 64: // set border
+            leftPos = msg.getFloat64(offset, true);
+            offset += 8;
+            topPos = msg.getFloat64(offset, true);
+            offset += 8;
+            rightPos = msg.getFloat64(offset, true);
+            offset += 8;
+            bottomPos = msg.getFloat64(offset, true);
+            offset += 8;
+            posX = (rightPos + leftPos) / 2;
+            posY = (bottomPos + topPos) / 2;
+            posSize = 1;
+            if (0 == playerCells.length) {
+                nodeX = posX;
+                nodeY = posY;
+                viewZoom = posSize;
+            }
+            break;
+        case 70: // received a coupon
+            let coupon = '';
+            var ch;
+            while ((ch = msg.getUint16(offset, true)) != 0) {
+                offset += 2;
+                coupon += String.fromCharCode(ch);
+            }
+            
+            let modalBodyContent = document.getElementById('couponModalBody').innerHTML;
+            modalBodyContent = modalBodyContent.replace("{coupon}", coupon);
+            $("#couponModalBody").html(modalBodyContent);
+            $("#couponModal").modal("show");
+            break;
+        case 99: // chat message
+            addChat(msg, offset);
+            break;
+        case 100: // reload page
+            window.location.reload();
+            break;
+    }
+}
 
     function addChat(view, offset) {
         function getString() {
@@ -657,7 +703,7 @@ Vector2Const = {
         }
 
         var flags = view.getUint8(offset++);
-
+        
         if (flags & 0x80) {
             // SERVER Message
         }
@@ -688,7 +734,7 @@ Vector2Const = {
     }
 
     function drawChatBoard() {
-        if (hideChat) {
+        if (hideChat)  {
             chatCanvas = null;
             return;
         }
@@ -747,7 +793,7 @@ Vector2Const = {
             }
         }
 
-        for (var i = 0; ;) {
+        for (var i = 0;;) {
             var nodeid = view.getUint32(offset, true);
             offset += 4;
             if (0 == nodeid) break;
@@ -761,7 +807,7 @@ Vector2Const = {
             offset += 2;
 
             for (var r = view.getUint8(offset++), g = view.getUint8(offset++), b = view.getUint8(offset++),
-                color = (r << 16 | g << 8 | b).toString(16); 6 > color.length;) color = "0" + color;
+                    color = (r << 16 | g << 8 | b).toString(16); 6 > color.length;) color = "0" + color;
             var colorstr = "#" + color,
                 flags = view.getUint8(offset++),
                 flagVirus = !!(flags & 0x01),
@@ -772,7 +818,7 @@ Vector2Const = {
             flags & 2 && (offset += 4);
 
             if (flags & 4) {
-                for (; ;) { // skin name
+                for (;;) { // skin name
                     t = view.getUint8(offset, true) & 0x7F;
                     offset += 1;
                     if (0 == t) break;
@@ -780,7 +826,7 @@ Vector2Const = {
                 }
             }
 
-            for (var char, name = ""; ;) { // nick name
+            for (var char, name = "";;) { // nick name
                 char = view.getUint16(offset, true);
                 offset += 2;
                 if (0 == char) break;
@@ -818,7 +864,7 @@ Vector2Const = {
                 if (1 == playerCells.length) {
                     nodeX = node.x;
                     nodeY = node.y;
-                    drawMapDstPoint = true;
+					drawMapDstPoint = true;
                 }
             }
         }
@@ -831,11 +877,11 @@ Vector2Const = {
             null != node && node.destroy();
         }
         ua && 0 == playerCells.length && showOverlays(false)
-
-        if (playerCells.length == 0 && drawMapDstPoint == true) {
-            mapDstX = mapx;
-            mapDstY = mapy;
-        }
+		
+		if ( playerCells.length==0 && drawMapDstPoint==true ){
+			mapDstX = mapx;
+			mapDstY = mapy;
+		}
     }
 
     function sendMouseMove() {
@@ -899,8 +945,8 @@ Vector2Const = {
 
     function canvasResize() {
         window.scrollTo(0, 0);
-        canvasWidth = document.documentElement.clientWidth;
-        canvasHeight = document.documentElement.clientHeight;
+        canvasWidth = wHandle.innerWidth;
+        canvasHeight = wHandle.innerHeight;
         nCanvas.width = canvasWidth;
         nCanvas.height = canvasHeight;
         drawGameScene()
@@ -960,7 +1006,7 @@ Vector2Const = {
         } else {
             drawGrid();
         }
-        nodelist.sort(function (a, b) {
+        nodelist.sort(function(a, b) {
             return a.size === b.size ? a.id - b.id : a.size - b.size
         });
         ctx.save();
@@ -1006,54 +1052,54 @@ Vector2Const = {
             ctx.globalAlpha = 1;
             ctx.drawImage(c, 15, 15); //canvasHeight - 10 - 24 - 5
         }
-
-        // map -->
-        var pointSize = 5;
-
-        ctx.globalAlpha = .4;
-        if (showDarkTheme == true) {
-            ctx.fillStyle = "#DDDDDD";
-        } else {
-            ctx.fillStyle = "#000000";
-        }
-        ctx.fillRect(10, 93, 100, 100);
-
-        ctx.globalAlpha = 1;
-
-        if (mapDstX != 0 && mapDstY != 0 && drawMapDstPoint == true) {
-            if (showDarkTheme == true) {
-                ctx.fillStyle = '#FF0000';
-            } else {
-                ctx.fillStyle = '#990000';
-            }
-            ctx.fillRect(mapDstX, mapDstY, pointSize, pointSize);
-        }
-
-        // me -->
-        mapx = 10 + (nodeX / rightPos) * 100 - pointSize * 0.5;
-        mapy = 93 + (nodeY / bottomPos) * 100 - pointSize * 0.5;
-        if (showDarkTheme == true) {
-            ctx.fillStyle = '#FFFFFF';
-        } else {
-            ctx.fillStyle = '#FFFFFF';
-        }
-        ctx.fillRect(mapx, mapy, pointSize, pointSize);
-        // <--
-
-        ctx.globalAlpha = 1;
-        ctx.font = "16px Ubuntu";
-
-        var txt = Math.round(nodeX / 1000) + ' , ' + Math.round(nodeY / 1000) + ' share';
-        txtpos_width = ctx.measureText(txt).width;
-        txtpos_height = 16;
-        txtpos_share = '*** ' + Math.round(nodeX / 1000) + ' , ' + Math.round(nodeY / 1000) + ' ***';
-        if (showDarkTheme == true) {
-            ctx.fillStyle = "#AAAAAA";
-        } else {
-            ctx.fillStyle = "#000000";
-        }
-        ctx.fillText(txt, 10, 210);
-
+		
+		// map -->
+			var pointSize = 5;
+			
+			ctx.globalAlpha = .4;
+			if ( showDarkTheme==true ){
+				ctx.fillStyle = "#DDDDDD";
+			}else{
+				ctx.fillStyle = "#000000";
+			}
+			ctx.fillRect(10, 93, 100, 100);
+			
+			ctx.globalAlpha = 1;
+			
+			if ( mapDstX!=0 && mapDstY!=0 && drawMapDstPoint==true ){
+				if ( showDarkTheme==true ){
+					ctx.fillStyle = '#FF0000';
+				}else{
+					ctx.fillStyle = '#990000';
+				}		
+				ctx.fillRect(mapDstX,mapDstY,pointSize,pointSize);
+			}
+			
+			// me -->
+			mapx = 10 + (nodeX/rightPos)*100 - pointSize*0.5;
+			mapy = 93 + (nodeY/bottomPos)*100 - pointSize*0.5;
+			if ( showDarkTheme==true ){
+				ctx.fillStyle = '#FFFFFF';
+			}else{
+				ctx.fillStyle = '#FFFFFF';
+			}		
+			ctx.fillRect(mapx,mapy,pointSize,pointSize);
+			// <--
+			
+			ctx.globalAlpha = 1;
+			ctx.font = "16px Ubuntu";
+			
+			var txt = Math.round(nodeX/1000)+' , '+Math.round(nodeY/1000)+' share';
+			txtpos_width = ctx.measureText(txt).width;
+			txtpos_height = 16;
+			txtpos_share = '*** '+Math.round(nodeX/1000)+' , '+Math.round(nodeY/1000)+' ***';
+			if ( showDarkTheme==true ){
+				ctx.fillStyle = "#AAAAAA";
+			} else {
+				ctx.fillStyle = "#000000";
+			}	
+			ctx.fillText(txt, 10, 210);
+			
         drawSplitIcon(ctx);
 
         drawTouch(ctx);
@@ -1208,16 +1254,16 @@ Vector2Const = {
         ustrokecolor && (this._strokeColor = ustrokecolor)
     }
 
-    var txtpos_width = 100;
-    var txtpos_height = 20;
-    var txtpos_share = "!";
-    var txtpos_lastTime = 0;
-
-    var mapx = 0;
-    var mapy = 0;
-    var mapDstX = 0;
-    var mapDstY = 0;
-    var drawMapDstPoint = false;
+	var txtpos_width = 100;
+	var txtpos_height = 20;
+	var txtpos_share = "!";
+	var txtpos_lastTime = 0;
+	
+	var mapx = 0;
+	var mapy = 0;
+	var mapDstX = 0;
+	var mapDstY = 0;
+	var drawMapDstPoint = false;
 
     var localProtocol = wHandle.location.protocol,
         localProtocolHttps = "https:" == localProtocol;
@@ -1277,31 +1323,31 @@ Vector2Const = {
     var wCanvas = document.createElement("canvas");
     var playerStat = null;
     wHandle.isSpectating = false;
-    wHandle.setNick = function (arg) {
+    wHandle.setNick = function(arg) {
         hideOverlays();
         userNickName = arg;
         sendNickName();
         userScore = 0
     };
-    wHandle.setSkins = function (arg) {
+    wHandle.setSkins = function(arg) {
         showSkin = arg
     };
-    wHandle.setNames = function (arg) {
+    wHandle.setNames = function(arg) {
         showName = arg
     };
-    wHandle.setDarkTheme = function (arg) {
+    wHandle.setDarkTheme = function(arg) {
         showDarkTheme = arg
     };
-    wHandle.setColors = function (arg) {
+    wHandle.setColors = function(arg) {
         showColor = arg
     };
-    wHandle.setShowMass = function (arg) {
+    wHandle.setShowMass = function(arg) {
         showMass = arg
     };
-    wHandle.setSmooth = function (arg) {
+    wHandle.setSmooth = function(arg) {
         smoothRender = arg ? 2 : .4
     };
-    wHandle.setChatHide = function (arg) {
+    wHandle.setChatHide = function(arg) {
         hideChat = arg;
         if (hideChat) {
             wjQuery('#chat_textbox').hide();
@@ -1309,18 +1355,18 @@ Vector2Const = {
             wjQuery('#chat_textbox').show();
         }
     }
-    wHandle.spectate = function () {
+    wHandle.spectate = function() {
         userNickName = null;
         wHandle.isSpectating = true;
         sendUint8(1);
         hideOverlays()
     };
-    wHandle.setAcid = function (arg) {
+    wHandle.setAcid = function(arg) {
         xa = arg
     };
-    wHandle.openSkinsList = function (arg) {
+    wHandle.openSkinsList = function(arg) {
         if ($('#inPageModalTitle').text() != "Skins") {
-            $.get('include/gallery.php').then(function (data) {
+            $.get('include/gallery.php').then(function(data) {
                 $('#inPageModalTitle').text("Skins");
                 $('#inPageModalBody').html(data);
             });
@@ -1328,8 +1374,8 @@ Vector2Const = {
     };
 
     if (null != wHandle.localStorage) {
-        wjQuery(window).load(function () {
-            wjQuery(".save").each(function () {
+        wjQuery(window).load(function() {
+            wjQuery(".save").each(function() {
                 var id = $(this).data("box-id");
                 var value = wHandle.localStorage.getItem("checkbox-" + id);
                 if (value && value == "true" && 0 != id) {
@@ -1339,7 +1385,7 @@ Vector2Const = {
                     $(this).val(value);
                 }
             });
-            wjQuery(".save").change(function () {
+            wjQuery(".save").change(function() {
                 var id = $(this).data('box-id');
                 var value = (id == 0) ? $(this).val() : $(this).prop('checked');
                 wHandle.localStorage.setItem("checkbox-" + id, value);
@@ -1350,7 +1396,7 @@ Vector2Const = {
         }
     }
 
-    setTimeout(function () { }, 3E5);
+    setTimeout(function() {}, 3E5);
     var T = {
         ZW: "EU-London"
     };
@@ -1361,12 +1407,12 @@ Vector2Const = {
     };
     fetch('skinList.txt').then(resp => resp.text()).then(data => {
         const skins = data.split(',').filter(name => name.length > 0);
-        console.log(skins);
+		console.log(skins);
         for (var i = 0; i < skins.length; i++) {
-            if (-1 == knownNameDict.indexOf(skins[i])) {
-                knownNameDict.push(skins[i]);
-            }
-        }
+                if (-1 == knownNameDict.indexOf(skins[i])) {
+                    knownNameDict.push(skins[i]);
+                }
+		}
     });
 
     var delay = 500,
@@ -1404,7 +1450,7 @@ Vector2Const = {
         isEjected: false,
         isAgitated: false,
         wasSimpleDrawing: true,
-        destroy: function () {
+        destroy: function() {
             var tmp;
             for (tmp = 0, len = nodelist.length; tmp < len; tmp++)
                 if (nodelist[tmp] === this) {
@@ -1422,10 +1468,10 @@ Vector2Const = {
             this.destroyed = true;
             Cells.push(this)
         },
-        getNameSize: function () {
+        getNameSize: function() {
             return Math.max(~~(.3 * this.size), 24)
         },
-        setName: function (a) {
+        setName: function(a) {
             this.name = a;
             if (null == this.nameCache) {
                 this.nameCache = new UText(this.getNameSize(), "#FFFFFF", true, "#000000");
@@ -1435,14 +1481,14 @@ Vector2Const = {
                 this.nameCache.setValue(this.name);
             }
         },
-        setSize: function (a) {
+        setSize: function(a) {
             this.nSize = a;
             var m = ~~(this.size * this.size * 0.01);
             if (null === this.sizeCache)
                 this.sizeCache = new UText(this.getNameSize() * 0.5, "#FFFFFF", true, "#000000");
             else this.sizeCache.setSize(this.getNameSize() * 0.5);
         },
-        createPoints: function () {
+        createPoints: function() {
             for (var samplenum = this.getNumPoints(); this.points.length > samplenum;) {
                 var rand = ~~(Math.random() * this.points.length);
                 this.points.splice(rand, 1);
@@ -1469,18 +1515,18 @@ Vector2Const = {
                 this.pointsAcc.splice(rand2, 0, this.pointsAcc[rand2])
             }
         },
-        getNumPoints: function () {
+        getNumPoints: function() {
             if (0 == this.id) return 16;
             var a = 10;
             if (20 > this.size) a = 0;
             if (this.isVirus) a = 30;
             var b = this.size;
-            if (!this.isVirus) (b *= viewZoom);
+            if (!this.isVirus)(b *= viewZoom);
             b *= z;
-            if (this.flag & 32) (b *= .25);
+            if (this.flag & 32)(b *= .25);
             return ~~Math.max(b, a);
         },
-        movePoints: function () {
+        movePoints: function() {
             this.createPoints();
             for (var points = this.points, pointsacc = this.pointsAcc, numpoints = points.length, i = 0; i < numpoints; ++i) {
                 var pos1 = pointsacc[(i - 1 + numpoints) % numpoints],
@@ -1488,7 +1534,7 @@ Vector2Const = {
                 pointsacc[i] += (Math.random() - .5) * (this.isAgitated ? 3 : 1);
                 pointsacc[i] *= .7;
                 10 < pointsacc[i] && (pointsacc[i] = 10); -
-                    10 > pointsacc[i] && (pointsacc[i] = -10);
+                10 > pointsacc[i] && (pointsacc[i] = -10);
                 pointsacc[i] = (pos1 + pos2 + 8 * pointsacc[i]) / 10
             }
             for (var ref = this, isvirus = this.isVirus ? 0 : (this.id / 1E3 + timestamp / 1E4) % (2 * Math.PI), j = 0; j < numpoints; ++j) {
@@ -1499,7 +1545,7 @@ Vector2Const = {
                     var l = false,
                         n = points[j].x,
                         q = points[j].y;
-                    qTree.retrieve2(n - 5, q - 5, 10, 10, function (a) {
+                    qTree.retrieve2(n - 5, q - 5, 10, 10, function(a) {
                         if (a.ref != ref && 25 > (n - a.x) * (n - a.x) + (q - a.y) * (q - a.y)) {
                             l = true;
                         }
@@ -1525,7 +1571,7 @@ Vector2Const = {
                 points[j].y = this.y + Math.sin(e * j + isvirus) * m
             }
         },
-        updatePos: function () {
+        updatePos: function() {
             if (0 == this.id) return 1;
             var a;
             a = (timestamp - this.updateTime) / 120;
@@ -1534,21 +1580,21 @@ Vector2Const = {
             this.getNameSize();
             if (this.destroyed && 1 <= b) {
                 var c = Cells.indexOf(this); -
-                    1 != c && Cells.splice(c, 1)
+                1 != c && Cells.splice(c, 1)
             }
             this.x = a * (this.nx - this.ox) + this.ox;
             this.y = a * (this.ny - this.oy) + this.oy;
             this.size = b * (this.nSize - this.oSize) + this.oSize;
             return b;
         },
-        shouldRender: function () {
+        shouldRender: function() {
             if (0 == this.id) {
                 return true
             } else {
                 return !(this.x + this.size + 40 < nodeX - canvasWidth / 2 / viewZoom || this.y + this.size + 40 < nodeY - canvasHeight / 2 / viewZoom || this.x - this.size - 40 > nodeX + canvasWidth / 2 / viewZoom || this.y - this.size - 40 > nodeY + canvasHeight / 2 / viewZoom);
             }
         },
-        getStrokeColor: function () {
+        getStrokeColor: function() {
             var r = (~~(parseInt(this.color.substr(1, 2), 16) * 0.9)).toString(16),
                 g = (~~(parseInt(this.color.substr(3, 2), 16) * 0.9)).toString(16),
                 b = (~~(parseInt(this.color.substr(5, 2), 16) * 0.9)).toString(16);
@@ -1557,14 +1603,14 @@ Vector2Const = {
             if (b.length == 1) b = "0" + b;
             return "#" + r + g + b;
         },
-        drawOneCell: function (ctx) {
+        drawOneCell: function(ctx) {
             if (this.shouldRender()) {
                 var b = (0 != this.id && !this.isVirus && !this.isAgitated && smoothRender > viewZoom);
                 if (10 > this.getNumPoints()) b = true;
                 if (this.wasSimpleDrawing && !b)
                     for (var c = 0; c < this.points.length; c++) this.points[c].size = this.size;
                 var bigPointSize = this.size;
-                if (!this.wasSimpleDrawing) {
+                if(!this.wasSimpleDrawing) {
                     for (var c = 0; c < this.points.length; c++) bigPointSize = Math.max(this.points[c].size, bigPointSize);
                 }
                 this.wasSimpleDrawing = b;
@@ -1583,7 +1629,7 @@ Vector2Const = {
                     if (b) ctx.strokeStyle = this.getStrokeColor();
                     else ctx.strokeStyle = this.color;
                 }
-                ctx.beginPath();
+				ctx.beginPath();
                 if (b) {
                     var lw = this.size * 0.03;
                     ctx.lineWidth = lw;
@@ -1613,7 +1659,7 @@ Vector2Const = {
                     if (!skins.hasOwnProperty(skinName)) {
                         skins[skinName] = new Image;
                         skins[skinName].src = SKIN_URL + skinName + '.png';
-                    } else if (skinName.startsWith("i/")) {
+                    } else if(skinName.startsWith("i/")) {
                         skins[skinName] = new Image;
                         skins[skinName].src = "https://i.imgur.com/" + this.name.split("i/")[1] + '.png';
                     }
@@ -1639,7 +1685,7 @@ Vector2Const = {
                     ctx.globalAlpha *= .1;
                     ctx.stroke();
                 }
-                ctx.globalAlpha = 1;
+                ctx.globalAlpha = 1; 
                 c = -1 != playerCells.indexOf(this);
                 var ncache;
                 //draw name
@@ -1688,31 +1734,31 @@ Vector2Const = {
         _ctx: null,
         _dirty: false,
         _scale: 1,
-        setSize: function (a) {
+        setSize: function(a) {
             if (this._size != a) {
                 this._size = a;
                 this._dirty = true;
             }
         },
-        setScale: function (a) {
+        setScale: function(a) {
             if (this._scale != a) {
                 this._scale = a;
                 this._dirty = true;
             }
         },
-        setStrokeColor: function (a) {
+        setStrokeColor: function(a) {
             if (this._strokeColor != a) {
                 this._strokeColor = a;
                 this._dirty = true;
             }
         },
-        setValue: function (a) {
+        setValue: function(a) {
             if (a != this._value) {
                 this._value = a;
                 this._dirty = true;
             }
         },
-        render: function () {
+        render: function() {
             if (null == this._canvas) {
                 this._canvas = document.createElement("canvas");
                 this._ctx = this._canvas.getContext("2d");
@@ -1742,15 +1788,15 @@ Vector2Const = {
             }
             return this._canvas
         },
-        getWidth: function () {
+        getWidth: function() {
             return (ctx.measureText(this._value).width + 6);
         }
     };
-    Date.now || (Date.now = function () {
+    Date.now || (Date.now = function() {
         return (new Date).getTime()
     });
     var Quad = {
-        init: function (args) {
+        init: function(args) {
             function Node(x, y, w, h, depth) {
                 this.x = x;
                 this.y = y;
@@ -1771,29 +1817,29 @@ Vector2Const = {
                 depth: 0,
                 items: null,
                 nodes: null,
-                exists: function (selector) {
+                exists: function(selector) {
                     for (var i = 0; i < this.items.length; ++i) {
                         var item = this.items[i];
                         if (item.x >= selector.x && item.y >= selector.y && item.x < selector.x + selector.w && item.y < selector.y + selector.h) return true
                     }
                     if (0 != this.nodes.length) {
                         var self = this;
-                        return this.findOverlappingNodes(selector, function (dir) {
+                        return this.findOverlappingNodes(selector, function(dir) {
                             return self.nodes[dir].exists(selector)
                         })
                     }
                     return false;
                 },
-                retrieve: function (item, callback) {
+                retrieve: function(item, callback) {
                     for (var i = 0; i < this.items.length; ++i) callback(this.items[i]);
                     if (0 != this.nodes.length) {
                         var self = this;
-                        this.findOverlappingNodes(item, function (dir) {
+                        this.findOverlappingNodes(item, function(dir) {
                             self.nodes[dir].retrieve(item, callback)
                         })
                     }
                 },
-                insert: function (a) {
+                insert: function(a) {
                     if (0 != this.nodes.length) {
                         this.nodes[this.findInsertNode(a)].insert(a);
                     } else {
@@ -1805,13 +1851,13 @@ Vector2Const = {
                         }
                     }
                 },
-                findInsertNode: function (a) {
+                findInsertNode: function(a) {
                     return a.x < this.x + this.w / 2 ? a.y < this.y + this.h / 2 ? 0 : 2 : a.y < this.y + this.h / 2 ? 1 : 3
                 },
-                findOverlappingNodes: function (a, b) {
+                findOverlappingNodes: function(a, b) {
                     return a.x < this.x + this.w / 2 && (a.y < this.y + this.h / 2 && b(0) || a.y >= this.y + this.h / 2 && b(2)) || a.x >= this.x + this.w / 2 && (a.y < this.y + this.h / 2 && b(1) || a.y >= this.y + this.h / 2 && b(3)) ? true : false
                 },
-                devide: function () {
+                devide: function() {
                     var a = this.depth + 1,
                         c = this.w / 2,
                         d = this.h / 2;
@@ -1823,7 +1869,7 @@ Vector2Const = {
                     this.items = [];
                     for (c = 0; c < a.length; c++) this.insert(a[c])
                 },
-                clear: function () {
+                clear: function() {
                     for (var a = 0; a < this.nodes.length; a++) this.nodes[a].clear();
                     this.items.length = 0;
                     this.nodes.length = 0
@@ -1837,29 +1883,29 @@ Vector2Const = {
             };
             return {
                 root: new Node(args.minX, args.minY, args.maxX - args.minX, args.maxY - args.minY, 0),
-                insert: function (a) {
+                insert: function(a) {
                     this.root.insert(a)
                 },
-                retrieve: function (a, b) {
+                retrieve: function(a, b) {
                     this.root.retrieve(a, b)
                 },
-                retrieve2: function (a, b, c, d, callback) {
+                retrieve2: function(a, b, c, d, callback) {
                     internalSelector.x = a;
                     internalSelector.y = b;
                     internalSelector.w = c;
                     internalSelector.h = d;
                     this.root.retrieve(internalSelector, callback)
                 },
-                exists: function (a) {
+                exists: function(a) {
                     return this.root.exists(a)
                 },
-                clear: function () {
+                clear: function() {
                     this.root.clear()
                 }
             }
         }
     };
-    wjQuery(function () {
+    wjQuery(function() {
         function renderFavicon() {
             if (0 < playerCells.length) {
                 redCell.color = playerCells[0].color;

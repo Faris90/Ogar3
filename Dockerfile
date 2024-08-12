@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:14-alpine
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
@@ -9,4 +9,4 @@ COPY . /usr/src/app
 
 CMD [ "npm", "start" ]
 
-EXPOSE 81
+EXPOSE 8080
