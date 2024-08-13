@@ -22,27 +22,81 @@
     <script src="assets/js/log.js"></script>
     <script src="assets/js/main_out.js?v=1"></script>
     <script>
-        fetch('settings.json')
-            .then(response => response.json())
-            .then(data => {
-                if (data.serverStatus === "off") {
-                    window.location.href = "maintenance.html";
-                }
-            })
-            .catch(error => {
-                console.error("Ayar dosyası yüklenirken hata oluştu:", error);
-            });
+// settings.json dosyasını yükleyin
+fetch('settings.json')
+    .then(response => response.json())
+    .then(settingsData => {
+        if (settingsData.serverStatus === "offx") {
+            window.location.href = "maintenance.html";
+        }
+
+        const leaderboardButtonSection = document.querySelector('.bottom-section .lead');
+        
+        if (!settingsData.leaderboardLast) {
+            leaderboardButtonSection.style.display = 'none';
+          
+        }
+
+        const girissection = document.querySelector('.giris');
+        const kurallarsection = document.getElementById('kurallar'); // ID ile doğru şekilde seçildiğinden emin olun
+
+        if (settingsData.serverStatus === 'off') {
+            girissection.style.display = 'none';
+            kurallarsection.style.display = 'none'; // Giriş bölümünü gizlerken aynı anda kuralları da gizleyin
+           
+        }
+
+        const duyuruxd = settingsData.duyurutext;
+        document.getElementById('duyurux').innerText = duyuruxd; 
+		const tablotext = settingsData.tablotext;
+        document.getElementById('winnerButtonText').innerText = tablotext;
+        document.getElementById('winnersModalLabel').innerText = `${tablotext}`;
+
+        return fetch(`/leaderboard/${settingsData.leaderboardLast}`);
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Kazananlar dosyası yüklenemedi.');
+        }
+        return response.json();
+    })
+    .then(winnersData => {
+        const winnersTable = document.getElementById('winnersList');
+        winnersData.forEach(winner => {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${winner.rank}</td><td>${winner.name}</td><td>${winner.score}</td>`;
+            winnersTable.appendChild(row);
+        });
+    })
+    .catch(error => {
+        console.error("Dosya yüklenirken hata oluştu:", error);
+    });
+
+// Arama fonksiyonu
+function searchTable() {
+    const input = document.getElementById("searchInput");
+    const filter = input.value.toLowerCase();
+    const table = document.getElementById("winnersTable");
+    const tr = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < tr.length; i++) {
+        const td = tr[i].getElementsByTagName("td")[1]; // Sadece isim sütununu arar
+        if (td) {
+            const txtValue = td.textContent || td.innerText;
+            if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }       
+    }
+}
+
+
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
 
-            $('#darktm').click();
-            $('#showms').click();
-            $('#hidechatt').click();
-
-
-        });
     </script>
     <style>
         body {
@@ -116,7 +170,7 @@
 		#rules h4 {
             color: #fff;
         }
-        #leaderboard {
+        #kurallar {
             background-color: #1c1c1c;
             border-radius: 10px;
             padding: 10px;
@@ -128,16 +182,16 @@
 			text-align: center; /* Eklendi */
         }
 
-        #leaderboard h4 {
+        #kurallar h4 {
             color: #fff;
         }
 
-        #leaderboard ul {
+        #kurallar ul {
             list-style-type: none;
             padding: 0;
         }
 
-        #leaderboard li {
+        #kurallar li {
             padding: 5px 0;
             border-bottom: 1px solid #ff0000;
         }
@@ -171,7 +225,7 @@
 
         #helloDialog,
         #rules,
-        #leaderboard,
+        #kurallar,
         #footer {
             max-width: 100%;
             margin: 10px;
@@ -181,6 +235,43 @@
 </head>
 
 <body>
+<div class="modal fade" id="winnersModal" tabindex="-1" role="dialog" aria-labelledby="winnersModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="winnersModalLabel"></h4> 
+            </div>
+            <div class="modal-body">
+                <!-- İsim ile arama yapma alanı -->
+                <input type="text" id="searchInput" class="form-control" placeholder="İsim ile ara..." onkeyup="searchTable()">
+                <br>
+                <!-- Kazananlar tablosu -->
+                <div class="table-responsive">
+                    <table class="table table-striped table-dark" id="winnersTable">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>İsim</th>
+                                <th>Puan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="winnersList">
+                            <!-- Kazananlar listesi burada gösterilecek -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
     <div class="modal fade" id="inPageModal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -203,11 +294,13 @@
 
 <div id="overlays">
     <div id="helloDialog" class="dialog">
+	
         <form role="form">
             <div class="form-group">
                 <center><img src="assets/img/logo.png" height="75px" alt="cenavar logo"></center>
                 <h6 id="motd">bir <b>cenabet</b> ürünüdür.</h6>
             </div>
+			<div class="giris" >
             <div class="form-group">
                 <input id="nick" class="form-control save" data-box-id="0" placeholder="Nick" maxlength="10" />
                 <br clear="both" />
@@ -246,11 +339,11 @@
                             onchange="setSmooth($(this).is(':checked'));"> Smooth Render</label>
                 </div>
             </div>
-			
+			</div>
     <div class="bottom-section">
 
-
-        <div id="leaderboard" class="dialog">
+ <center><h6 id="duyurux"></h6>
+       <div id="kurallar" class="dialog">
             <h4>Kurallar</h4>
             <ul>
                 <li>Öldüğünde veya çıktığında Puan Sıfırlanır</li>
@@ -258,14 +351,18 @@
                 <li>3. Kullanıcı: 900</li>
             </ul>
         </div>
-		 <div id="leaderboard" class="dialog">
-            <h4>Leaderboard</h4>
-            <ul>
-                <li>1. Kullanıcı: 1500</li>
-                <li>2. Kullanıcı: 1200</li>
-                <li>3. Kullanıcı: 900</li>
-            </ul>
-        </div>
+		<div class="bottom-section">
+     <div class="dialog lead">
+         <h4 id="winnerButtonText"></h4>
+         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#winnersModal">
+             Kazananları Gör
+         </button>
+     </div>
+ </div>
+
+ <!-- Kazananlar Modali -->
+
+
     </div>
         </form>
 		<div id="footer" class="dialog">
@@ -275,22 +372,18 @@
     </div>
     
 
-    
+     
 </div>
-
-<style>
-
-
-</style>
 
 
     <div id="connecting">
         <div
             style="width: 350px; background-color: #000000;font-text:#ffffff; margin: 100px auto; border-radius: 15px; padding: 5px 15px 5px 15px;">
-            <h2>Bağlanıyor</h2>
-            <p> Bağlantı problemi yaşıyorsanız sayfayı yenileyebilirsiniz veya farklı tarayıcıdan deneyebilirsiniz.</p>
+            <h2>Etkinlik Bitti</h2>
+            <p>Eğer kazananlar gözükmüyor ise sayfayı yenileyerek kazananları görebilirsiniz.</p>
         </div>
     </div>
+
 
     <canvas id="canvas" width="800" height="600"></canvas>
     <input type="text" id="chat_textbox" placeholder="Press enter to chat!" maxlength="200" />
