@@ -1,1 +1,4 @@
-{"serverStatus":"on"}
+{
+  "serverStatus": "on",
+  "pause": false
+}

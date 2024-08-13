@@ -1363,9 +1363,9 @@ function handleWsMessage(msg) {
         xa = arg
     };
     wHandle.openSkinsList = function(arg) {
-        if ($('#inPageModalTitle').text() != "Skins") {
+        if ($('#inPageModalTitle').text() != "Skinler") {
             $.get('include/gallery.php').then(function(data) {
-                $('#inPageModalTitle').text("Skins");
+                $('#inPageModalTitle').text("Skinler");
                 $('#inPageModalBody').html(data);
             });
         }
