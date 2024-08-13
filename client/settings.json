@@ -1,4 +1,7 @@
 {
-  "serverStatus": "on",
-  "pause": false
+    "serverStatus": "off",
+    "pause": true,
+    "tablotext": "13.08.2024 18:00 - 19:00 Kazananları",
+    "leaderboardLast": "leaderboard_20240813154618892.json",
+    "duyurutext": "Sıradaki Etkinliklerde Görüşmek üzere"
 }

@@ -432,11 +432,20 @@ Vector2Const = {
         wjQuery("#overlays").fadeIn(arg ? 200 : 3E3);
     }
 
+var sunucuDurumu = 'on'; 
     function showConnecting() {
-        if (ma) {
-            wjQuery("#connecting").show();
-            wsConnect((useHttps ? "wss://" : "ws://") + CONNECTION_URL)
-        }
+    if (sunucuDurumu === 'on' && ma) {
+      
+        wsConnect((useHttps ? "wss://" : "ws://") + CONNECTION_URL)
+    } else {
+        console.log("Sunucu durumu: " + sunucuDurumu + ". Bağlantı denemesi durduruldu.");
+    }
+}
+	 function showConnecting2() {
+      
+            wjQuery("#etkinlikbitti").show();
+            
+    
     }
 
     function wsConnect(wsUrl) {
@@ -529,17 +538,34 @@ function onWsMessage(msg) {
     }
 }
 function startCountdown(remainingTime) {
-    const countdownElement = document.createElement('div');
-    countdownElement.id = 'countdown';
-    countdownElement.style.position = 'absolute';
-    countdownElement.style.bottom = '10px';  // Sayfanın altına taşır
-    countdownElement.style.width = '100%';
-    countdownElement.style.textAlign = 'center';
-    countdownElement.style.fontSize = '3vw'; // Responsive font size
-    countdownElement.style.color = '#FFFFFF';
-    countdownElement.style.zIndex = '1000';
-    document.body.appendChild(countdownElement);
+ const countdownElement = document.createElement('div');
+countdownElement.id = 'countdown';
+countdownElement.style.position = 'absolute';
+countdownElement.style.bottom = '10px';  // Sayfanın altına taşır
+countdownElement.style.width = '100%';
+countdownElement.style.textAlign = 'center';
+countdownElement.style.fontSize = '1vw'; // Responsive font size
+countdownElement.style.color = '#FFFFFF';
+countdownElement.style.zIndex = '1000';
+countdownElement.style.pointerEvents = 'none';  // Tıklanabilir alanları etkilememesi için
+document.body.appendChild(countdownElement);
 
+// Medya sorgusu ile mobil stil ayarla
+function applyMobileStyles() {
+    if (window.matchMedia("(max-width: 768px)").matches) {
+        countdownElement.style.fontSize = '3vw';
+        countdownElement.style.top = '20px';  // Sadece bottom'u kullanın
+    } else {
+        countdownElement.style.fontSize = '1vw';
+        countdownElement.style.top = '10px';  // Sadece bottom'u kullanın
+    }
+}
+
+// Sayfa yüklenirken stil uygula
+applyMobileStyles();
+
+// Ekran boyutu değiştiğinde stili güncelle
+window.addEventListener('resize', applyMobileStyles);
     function updateCountdown() {
         const hours = Math.floor(remainingTime / 3600);
         const minutes = Math.floor((remainingTime % 3600) / 60);
@@ -556,7 +582,10 @@ function startCountdown(remainingTime) {
         if (remainingTime >= 0) {
             setTimeout(updateCountdown, 1000);
         } else {
-            countdownElement.textContent = 'Etkinlik Bitti.';
+			  wjQuery("#connecting").show();
+             countdownElement.textContent = ``;
+            sunucuDurumu = 'off'; // Sunucunun bağlantısını kes
+           
         }
     }
 

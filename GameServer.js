@@ -136,7 +136,6 @@ GameServer.prototype.start = function() {
     const settings = JSON.parse(fs.readFileSync('./client/settings.json', 'utf8'));
   this.shutdownTime = this.serverStartTime + (this.config.serverResetTime * 1000);
 this.run = true;
-
 	 this.mainLoop();
 	  console.log("Sunucu başlatıldı.");
     this.log.setup(this);
@@ -165,6 +164,7 @@ this.config.serverPort = process.env.PORT || this.config.serverPort;
 // here
     // Start the server
 	var gameServer = this;
+	
      var hserver = http.createServer((req, res) => {
         res.setHeader('Access-Control-Allow-Origin', '*');
 
@@ -210,7 +210,31 @@ this.config.serverPort = process.env.PORT || this.config.serverPort;
 
                 // Pause'u kaldır
                 gameServer.updateSettings({ pause: false }); 
+				 try {
+                        // JSON'u parse et
+						 const settingsFilePath = path.join(__dirname, 'client', 'settings.json');
+                
+                // settings.json dosyasını oku
+                fs.readFile(settingsFilePath, 'utf8', (readErr, data) => {
+                    if (readErr) {
+                        console.log("Settings dosyası okunamadı:", readErr);
+                        return;
+                    }
+				
 
+                        const settings = JSON.parse(data);
+
+                        // leaderboardLast alanını güncelle
+                        settings.pause = false;
+						   settings.serverStatus = "on";
+                        // Güncellenmiş JSON'u dosyaya yaz
+                        fs.writeFile(settingsFilePath, JSON.stringify(settings, null, 4), 'utf8', (writeErr) => {
+                          
+                        });
+						});
+                    } catch (jsonErr) {
+                        console.log("Settings dosyası parse edilemedi:", jsonErr);
+                    }
                 // Eğer WebSocket bağlantısı varsa mesaj gönderin
                 if (ws && ws.readyState === WebSocket.OPEN) {
                     const remainingTime = Math.floor((gameServer.shutdownTime - Date.now()) / 1000); // Saniye cinsinden kalan süre
@@ -232,7 +256,7 @@ this.config.serverPort = process.env.PORT || this.config.serverPort;
 
 
 else if (req.method === 'GET' && req.url === '/get-leaderboard') {
-          const filePath = path.join(__dirname, 'logs', 'leaderboard.json');
+          const filePath = path.join(__dirname, 'client/leaderboard', 'leaderboard.json');
         if (fs.existsSync(filePath)) {
             const leaderboards = JSON.parse(fs.readFileSync(filePath, 'utf8'));
             res.writeHead(200, {'Content-Type': 'application/json'});
@@ -770,7 +794,7 @@ const leaderboardData = this.leaderboard.map((entry, index) => {
     };
 });
 
-const filePath = path.join(__dirname, 'logs', 'leaderboard.json');
+const filePath = path.join(__dirname, 'client/leaderboard', 'leaderboard.json');
 fs.writeFileSync(filePath, JSON.stringify(leaderboardData, null, 2), 'utf8');
 
             this.tickMain = 0;
@@ -780,30 +804,61 @@ fs.writeFileSync(filePath, JSON.stringify(leaderboardData, null, 2), 'utf8');
         this.checkSettings();
 
         // Sunucu belirli bir süre çalıştıktan sonra oyuncuları oyundan at ve yeni girişleri engelle
-       if (this.config.serverResetTime > 0 && (local - this.startTime) > (this.shutdownTime - this.serverStartTime)) {
-            if (this.run) {
-                this.run = false;
-                this.updateSettings({pause: true});
+     if (this.config.serverResetTime > 0 && (local - this.startTime) > (this.shutdownTime - this.serverStartTime)) {
+    if (this.run) {
+        this.run = false;
+        this.updateSettings({pause: true});
 
-                // Liderlik tablosunu kaydet
-                const filePath = path.join(__dirname, 'logs', 'leaderboard.json');
-                const currentDate = new Date();
-                const timestamp = currentDate.toISOString().replace(/[-T:\.Z]/g, "");
-                const newFileName = `leaderboard_${timestamp}.json`;
-                const newFilePath = path.join(__dirname, 'logs', newFileName);
+        // Liderlik tablosunu kaydet
+        const filePath = path.join(__dirname, 'client/leaderboard', 'leaderboard.json');
+        const currentDate = new Date();
+        const timestamp = currentDate.toISOString().replace(/[-T:\.Z]/g, "");
+        const newFileName = `leaderboard_${timestamp}.json`;
+        const newFilePath = path.join(__dirname, 'client/leaderboard', newFileName);
 
-                fs.rename(filePath, newFilePath, (err) => {
-                    if (err) {
-                        console.log("Liderlik tablosu dosyası yeniden adlandırılamadı:", err);
-                    } else {
-                        console.log(`Liderlik tablosu "${newFileName}" adıyla kaydedildi.`);
+        fs.rename(filePath, newFilePath, (err) => {
+            if (err) {
+                console.log("Liderlik tablosu dosyası yeniden adlandırılamadı:", err);
+            } else {
+                console.log(`Liderlik tablosu "${newFileName}" adıyla kaydedildi.`);
+
+                // client/settings.json dosyasını güncelle
+                const settingsFilePath = path.join(__dirname, 'client', 'settings.json');
+                
+                // settings.json dosyasını oku
+                fs.readFile(settingsFilePath, 'utf8', (readErr, data) => {
+                    if (readErr) {
+                        console.log("Settings dosyası okunamadı:", readErr);
+                        return;
+                    }
+
+                    try {
+                        // JSON'u parse et
+                        const settings = JSON.parse(data);
+
+                        // leaderboardLast alanını güncelle
+                        settings.leaderboardLast = newFileName;
+						   settings.serverStatus = "off";
+                        // Güncellenmiş JSON'u dosyaya yaz
+                        fs.writeFile(settingsFilePath, JSON.stringify(settings, null, 4), 'utf8', (writeErr) => {
+                            if (writeErr) {
+                                console.log("Settings dosyası güncellenirken hata oluştu:", writeErr);
+                            } else {
+                                console.log(`Settings dosyası güncellendi: leaderboardLast = "${newFileName}"`);
+                            }
+                        });
+                    } catch (jsonErr) {
+                        console.log("Settings dosyası parse edilemedi:", jsonErr);
                     }
                 });
-
-                // Oyuncuları bilgilendirme
-                console.log("Sunucu süresi doldu, oyun duraklatıldı.");
             }
-        }
+        });
+
+        // Oyuncuları bilgilendirme
+        console.log("Sunucu süresi doldu, oyun duraklatıldı.");
+    }
+}
+
 
         this.tick = 0;
     }

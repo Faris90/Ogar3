@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="robots" content="noindex, nofollow">
     <title>Oyun Ayarları</title>
     <style>
         body {
@@ -178,7 +179,15 @@
             <span class="slider"></span>
         </label>
     </div>
+ <div class="setting-item">
+        <label for="tablotext">Kazananlar Yazısı</label>
+        <input type="text" id="tablotext" placeholder="Tablo başlığı girin">
+    </div>
 
+    <div class="setting-item">
+        <label for="duyurutext">Duyuru Metni</label>
+        <input type="text" id="duyurutext" placeholder="Duyuru metni girin">
+    </div>
     <button onclick="saveSettings()">Ayarları Kaydet</button>
     <button class="danger" onclick="killAll()">Kill All</button>
 
@@ -213,11 +222,16 @@
 <script>
 let selectedPlayerId = null;
 
+
 function saveSettings() {
     const pause = document.getElementById('pause').checked;
+    const tablotext = document.getElementById('tablotext').value;
+    const duyurutext = document.getElementById('duyurutext').value;
 
     const settings = {
-        pause: pause
+        pause: pause,
+        tablotext: tablotext,
+        duyurutext: duyurutext
     };
 
     fetch('/update-settings', {
@@ -533,6 +547,8 @@ window.onload = function() {
     .then(response => response.json())
     .then(data => {
         document.getElementById('pause').checked = data.pause;
+        document.getElementById('tablotext').value = data.tablotext; // Tablo metnini doldur
+        document.getElementById('duyurutext').value = data.duyurutext; // Duyuru metnini doldur
     })
     .catch(error => {
         console.error('Hata:', error);
@@ -540,6 +556,7 @@ window.onload = function() {
 
     fetchLeaderboard(); // Sayfa yüklendiğinde liderlik tablosunu al
 };
+
 </script>
 
 </body>
