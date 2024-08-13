@@ -59,19 +59,33 @@ body {
 }
 
 #helloDialog {
-    width: 400px;
+    width: 700px; /* Genişliği artırıldı */
     background-color: #FFFFFF;
     margin: 10px auto;
     border-radius: 15px;
-    padding: 5px 15px 5px 15px;
+    padding: 15px; /* İç padding artırıldı */
     position: absolute;
     top: 50%;
     left: 50%;
-    margin-right: -50%;
-    -webkit-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+    display: flex; /* Flexbox ile yerleştirme */
+    justify-content: space-between;
 }
+
+#leaderboard {
+    width: 250px; /* Leaderboard genişliği */
+}
+
+#leaderboard h4 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#leaderboard table {
+    width: 100%;
+    text-align: left;
+}
+
 
 #chat_textbox {
     -webkit-transition: all .5s ease-in-out;
