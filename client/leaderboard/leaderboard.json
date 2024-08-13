@@ -1,74 +1,74 @@
 [
   {
-    "id": 1,
-    "name": "Sir",
-    "score": 22,
+    "id": 7,
+    "name": "Ussr",
+    "score": 49,
     "rank": 1
   },
   {
-    "id": 2,
-    "name": "Japan",
-    "score": 22,
+    "id": 6,
+    "name": "Lithuania",
+    "score": 45,
     "rank": 2
   },
   {
-    "id": 12,
-    "name": "Thailand",
-    "score": 21,
+    "id": 5,
+    "name": "Sanik",
+    "score": 42,
     "rank": 3
   },
   {
-    "id": 9,
-    "name": "4chan",
-    "score": 20,
+    "id": 11,
+    "name": "Yaranaika",
+    "score": 40,
     "rank": 4
   },
   {
-    "id": 10,
-    "name": "Indiana",
-    "score": 20,
+    "id": 3,
+    "name": "Moon",
+    "score": 38,
     "rank": 5
   },
   {
-    "id": 4,
-    "name": "KC",
-    "score": 19,
+    "id": 1,
+    "name": "Mexico",
+    "score": 36,
     "rank": 6
   },
   {
-    "id": 11,
-    "name": "Turkey",
-    "score": 18,
+    "id": 8,
+    "name": "Switzerland",
+    "score": 36,
     "rank": 7
   },
   {
-    "id": 3,
-    "name": "Denmark",
-    "score": 17,
+    "id": 10,
+    "name": "Cambodia",
+    "score": 36,
     "rank": 8
   },
   {
-    "id": 5,
-    "name": "Indonesia",
-    "score": 17,
+    "id": 12,
+    "name": "Feminism",
+    "score": 35,
     "rank": 9
   },
   {
-    "id": 8,
-    "name": "Jamaica",
-    "score": 17,
+    "id": 9,
+    "name": "Mars",
+    "score": 30,
     "rank": 10
   },
   {
-    "id": 6,
-    "name": "9gag",
-    "score": 16,
+    "id": 2,
+    "name": "Doge",
+    "score": 26,
     "rank": 11
   },
   {
-    "id": 7,
-    "name": "Ireland",
-    "score": 11,
+    "id": 4,
+    "name": "Norway",
+    "score": 17,
     "rank": 12
   }
 ]

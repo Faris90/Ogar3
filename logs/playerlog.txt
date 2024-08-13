@@ -1,13 +1,13 @@
-OGar Server - Game Mode: Free For All - Running Time: 240sec
-ID:    1, Nick: Sir            , Score:     22, Cells:  1, Status: 1 IP: BOT
-ID:    2, Nick: Japan          , Score:     22, Cells:  1, Status: 1 IP: BOT
-ID:    3, Nick: Denmark        , Score:     26, Cells:  1, Status: 1 IP: BOT
-ID:    4, Nick: KC             , Score:     20, Cells:  1, Status: 1 IP: BOT
-ID:    5, Nick: Indonesia      , Score:     17, Cells:  1, Status: 1 IP: BOT
-ID:    6, Nick: 9gag           , Score:     19, Cells:  1, Status: 1 IP: BOT
-ID:    7, Nick: Ireland        , Score:     20, Cells:  1, Status: 1 IP: BOT
-ID:    8, Nick: Jamaica        , Score:     19, Cells:  1, Status: 1 IP: BOT
-ID:    9, Nick: 4chan          , Score:     20, Cells:  1, Status: 1 IP: BOT
-ID:   10, Nick: Indiana        , Score:     20, Cells:  1, Status: 1 IP: BOT
-ID:   11, Nick: Turkey         , Score:     20, Cells:  1, Status: 1 IP: BOT
-ID:   12, Nick: Thailand       , Score:     24, Cells:  1, Status: 1 IP: BOT
+OGar Server - Game Mode: Free For All - Running Time: 8sec
+ID:    1, Nick: Mexico         , Score:     29, Cells:  1, Status: 1 IP: BOT
+ID:    2, Nick: Doge           , Score:     17, Cells:  1, Status: 1 IP: BOT
+ID:    3, Nick: Moon           , Score:     23, Cells:  1, Status: 1 IP: BOT
+ID:    4, Nick: Norway         , Score:     14, Cells:  1, Status: 1 IP: BOT
+ID:    5, Nick: Sanik          , Score:     31, Cells:  1, Status: 1 IP: BOT
+ID:    6, Nick: Lithuania      , Score:     30, Cells:  1, Status: 1 IP: BOT
+ID:    7, Nick: Ussr           , Score:     34, Cells:  1, Status: 1 IP: BOT
+ID:    8, Nick: Switzerland    , Score:     21, Cells:  1, Status: 1 IP: BOT
+ID:    9, Nick: Mars           , Score:     20, Cells:  1, Status: 1 IP: BOT
+ID:   10, Nick: Cambodia       , Score:     27, Cells:  1, Status: 1 IP: BOT
+ID:   11, Nick: Yaranaika      , Score:     28, Cells:  1, Status: 1 IP: BOT
+ID:   12, Nick: Feminism       , Score:     31, Cells:  1, Status: 1 IP: BOT

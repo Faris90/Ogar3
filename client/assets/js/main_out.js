@@ -582,7 +582,7 @@ window.addEventListener('resize', applyMobileStyles);
         if (remainingTime >= 0) {
             setTimeout(updateCountdown, 1000);
         } else {
-			  wjQuery("#connecting").show();
+			showConnecting();
              countdownElement.textContent = ``;
             sunucuDurumu = 'off'; // Sunucunun bağlantısını kes
            
