@@ -532,31 +532,27 @@ function startCountdown(remainingTime) {
     const countdownElement = document.createElement('div');
     countdownElement.id = 'countdown';
     countdownElement.style.position = 'absolute';
-    countdownElement.style.top = '10px';
+    countdownElement.style.bottom = '10px';  // Sayfanın altına taşır
     countdownElement.style.width = '100%';
     countdownElement.style.textAlign = 'center';
-    countdownElement.style.fontSize = '24px';
+    countdownElement.style.fontSize = '3vw'; // Responsive font size
     countdownElement.style.color = '#FFFFFF';
     countdownElement.style.zIndex = '1000';
     document.body.appendChild(countdownElement);
 
     function updateCountdown() {
-        // Saat, dakika ve saniye hesaplamaları
         const hours = Math.floor(remainingTime / 3600);
         const minutes = Math.floor((remainingTime % 3600) / 60);
         const seconds = remainingTime % 60;
 
-        // Tek basamaklı saat, dakika ve saniyeler için başına 0 ekleyerek formatlama
         const hoursDisplay = hours.toString().padStart(2, '0');
         const minutesDisplay = minutes.toString().padStart(2, '0');
         const secondsDisplay = seconds.toString().padStart(2, '0');
 
         countdownElement.textContent = `Etkinlik Bitimine : ${hoursDisplay}:${minutesDisplay}:${secondsDisplay} Kaldı`;
 
-        // Her saniye remainingTime değerini 1 azaltma
         remainingTime -= 1;
 
-        // Geri sayım bitmediği sürece her saniye updateCountdown fonksiyonunu çağırma
         if (remainingTime >= 0) {
             setTimeout(updateCountdown, 1000);
         } else {
@@ -566,8 +562,6 @@ function startCountdown(remainingTime) {
 
     updateCountdown();
 }
-
-
 
 
 function handleWsMessage(msg) {
