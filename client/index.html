@@ -306,7 +306,7 @@ function searchTable() {
                 <br clear="both" />
             </div>
             <div class="form-group">
-                <div class="mb-10">
+               <div class="mb-10">
                     <a data-toggle="modal" data-target="#inPageModal" onclick="openSkinsList();"
                         class="btn-primary btn btn-danger" role="button" style="width: 100%;">Skin Seç!</a>
                 </div>
@@ -327,12 +327,10 @@ function searchTable() {
                 <div style="margin: 6px;">
                     <label><input type="checkbox" class="save" data-box-id="1"
                             onchange="setSkins(!$(this).is(':checked'));"> Skinleri Gizle</label>
-                    <label><input type="checkbox" class="save" data-box-id="2"
-                            onchange="setNames(!$(this).is(':checked'));"> İsimleri Gizle</label>
+                   
                     <label><input type="checkbox" id="darktm" class="save" data-box-id="3"
                             onchange="setDarkTheme($(this).is(':checked'));"> Karanlık Tema</label>
-                    <label><input type="checkbox" class="save" data-box-id="4"
-                            onchange="setColors($(this).is(':checked'));"> Renkleri Gizle</label>
+                
                     <label><input type="checkbox" id="showms" class="save" data-box-id="5"
                             onchange="setShowMass($(this).is(':checked'));"> Puanı Göster</label>
                     <label><input type="checkbox" class="save" data-box-id="6"
@@ -400,6 +398,11 @@ function searchTable() {
                 document.getElementById('nipple_container').style.display = 'none';
             }
         }, 500);
+		   $(document).ready(function () {
+            $('#darktm').click();
+            $('#showms').click();
+            $('#hidechatt').click();
+        });
     </script>
 
 </body>
