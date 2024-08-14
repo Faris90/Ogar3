@@ -176,14 +176,14 @@ Vector2Const = {
 		mainCanvas.onmousedown = function (event) {
 			var x = event.clientX;// - elemLeft;
 			var y = event.clientY;// - elemTop;
-			
+
 			var deltaT = (new Date()).getTime() - txtpos_lastTime;
 			if ( deltaT>5000 && x>=10 && x<=(10+txtpos_width) && y>=(210-txtpos_height) && y<=210 ){
 				sendChat(txtpos_share);
 				txtpos_lastTime = (new Date()).getTime();
 			}
         };
-		
+
         mainCanvas.onfocus = function() {
             isTyping = false;
         };
@@ -321,14 +321,15 @@ Vector2Const = {
     function onTouchStart(e) {
         for (var i = 0; i < e.changedTouches.length; i++) {
             var touch = e.changedTouches[i];
-            if ((leftTouchID < 0) && (touch.clientX < canvasWidth / 2)) {
+            var size = ~~(canvasWidth / 7);
+
+            if ((leftTouchID < 0) && (touch.clientX < canvasWidth - size)) {
                 leftTouchID = touch.identifier;
                 leftTouchStartPos.reset(touch.clientX, touch.clientY);
                 leftTouchPos.copyFrom(leftTouchStartPos);
                 leftVector.reset(0, 0);
             }
 
-            var size = ~~(canvasWidth / 7);
             if ((touch.clientX > canvasWidth - size) && (touch.clientY > canvasHeight - size)) {
                 sendMouseMove();
                 sendUint8(17); // split
@@ -432,20 +433,20 @@ Vector2Const = {
         wjQuery("#overlays").fadeIn(arg ? 200 : 3E3);
     }
 
-var sunucuDurumu = 'on'; 
+var sunucuDurumu = 'on';
     function showConnecting() {
     if (sunucuDurumu === 'on' && ma) {
-      
+
         wsConnect((useHttps ? "wss://" : "ws://") + CONNECTION_URL)
     } else {
         console.log("Sunucu durumu: " + sunucuDurumu + ". Bağlantı denemesi durduruldu.");
     }
 }
 	 function showConnecting2() {
-      
+
             wjQuery("#etkinlikbitti").show();
-            
-    
+
+
     }
 
     function wsConnect(wsUrl) {
@@ -517,7 +518,7 @@ var sunucuDurumu = 'on';
     }
 
 function onWsMessage(msg) {
-	
+
     if (msg.data instanceof ArrayBuffer) {
         handleWsMessage(new DataView(msg.data));
     } else {
@@ -585,7 +586,7 @@ window.addEventListener('resize', applyMobileStyles);
 			showConnecting();
              countdownElement.textContent = ``;
             sunucuDurumu = 'off'; // Sunucunun bağlantısını kes
-           
+
         }
     }
 
@@ -696,7 +697,7 @@ function handleWsMessage(msg) {
                 offset += 2;
                 coupon += String.fromCharCode(ch);
             }
-            
+
             let modalBodyContent = document.getElementById('couponModalBody').innerHTML;
             modalBodyContent = modalBodyContent.replace("{coupon}", coupon);
             $("#couponModalBody").html(modalBodyContent);
@@ -724,7 +725,7 @@ function handleWsMessage(msg) {
         }
 
         var flags = view.getUint8(offset++);
-        
+
         if (flags & 0x80) {
             // SERVER Message
         }
@@ -826,7 +827,6 @@ function handleWsMessage(msg) {
             offset += 4;
             size = view.getInt16(offset, true);
             offset += 2;
-
             for (var r = view.getUint8(offset++), g = view.getUint8(offset++), b = view.getUint8(offset++),
                     color = (r << 16 | g << 8 | b).toString(16); 6 > color.length;) color = "0" + color;
             var colorstr = "#" + color,
@@ -853,6 +853,13 @@ function handleWsMessage(msg) {
                 if (0 == char) break;
                 name += String.fromCharCode(char);
             }
+            // for (var char, skin = "";;) { // nick name
+            //     char = view.getUint16(offset, true);
+            //     offset += 2;
+            //     if (0 == char) break;
+            //     skin += String.fromCharCode(char);
+            // }
+            // console.log(skin);
 
             var node = null;
             if (nodes.hasOwnProperty(nodeid)) {
@@ -862,6 +869,7 @@ function handleWsMessage(msg) {
                 node.oy = node.y;
                 node.oSize = node.size;
                 node.color = colorstr;
+                node.skin = _skin;
             } else {
                 node = new Cell(nodeid, posX, posY, size, colorstr, name, _skin);
                 nodelist.push(node);
@@ -878,6 +886,8 @@ function handleWsMessage(msg) {
             node.updateCode = code;
             node.updateTime = timestamp;
             node.flag = flags;
+
+            // node.skin = _skin;
             name && node.setName(name);
             if (-1 != nodesOnScreen.indexOf(nodeid) && -1 == playerCells.indexOf(node)) {
                 document.getElementById("overlays").style.display = "none";
@@ -898,7 +908,7 @@ function handleWsMessage(msg) {
             null != node && node.destroy();
         }
         ua && 0 == playerCells.length && showOverlays(false)
-		
+
 		if ( playerCells.length==0 && drawMapDstPoint==true ){
 			mapDstX = mapx;
 			mapDstY = mapy;
@@ -928,6 +938,14 @@ function handleWsMessage(msg) {
             var msg = prepareData(1 + 2 * userNickName.length);
             msg.setUint8(0, 0);
             for (var i = 0; i < userNickName.length; ++i) msg.setUint16(1 + 2 * i, userNickName.charCodeAt(i), true);
+            wsSend(msg)
+        }
+    }
+    function sendSkin() {
+        if (wsIsOpen() && null != skin) {
+            var msg = prepareData(1 + 2 * skin.length);
+            msg.setUint8(0, 12);
+            for (var i = 0; i < skin.length; ++i) msg.setUint16(1 + 2 * i, skin.charCodeAt(i), true);
             wsSend(msg)
         }
     }
@@ -1073,10 +1091,10 @@ function handleWsMessage(msg) {
             ctx.globalAlpha = 1;
             ctx.drawImage(c, 15, 15); //canvasHeight - 10 - 24 - 5
         }
-		
+
 		// map -->
 			var pointSize = 5;
-			
+
 			ctx.globalAlpha = .4;
 			if ( showDarkTheme==true ){
 				ctx.fillStyle = "#DDDDDD";
@@ -1084,18 +1102,18 @@ function handleWsMessage(msg) {
 				ctx.fillStyle = "#000000";
 			}
 			ctx.fillRect(10, 93, 100, 100);
-			
+
 			ctx.globalAlpha = 1;
-			
+
 			if ( mapDstX!=0 && mapDstY!=0 && drawMapDstPoint==true ){
 				if ( showDarkTheme==true ){
 					ctx.fillStyle = '#FF0000';
 				}else{
 					ctx.fillStyle = '#990000';
-				}		
+				}
 				ctx.fillRect(mapDstX,mapDstY,pointSize,pointSize);
 			}
-			
+
 			// me -->
 			mapx = 10 + (nodeX/rightPos)*100 - pointSize*0.5;
 			mapy = 93 + (nodeY/bottomPos)*100 - pointSize*0.5;
@@ -1103,13 +1121,13 @@ function handleWsMessage(msg) {
 				ctx.fillStyle = '#FFFFFF';
 			}else{
 				ctx.fillStyle = '#FFFFFF';
-			}		
+			}
 			ctx.fillRect(mapx,mapy,pointSize,pointSize);
 			// <--
-			
+
 			ctx.globalAlpha = 1;
 			ctx.font = "16px Ubuntu";
-			
+
 			var txt = Math.round(nodeX/1000)+' , '+Math.round(nodeY/1000)+' share';
 			txtpos_width = ctx.measureText(txt).width;
 			txtpos_height = 16;
@@ -1118,9 +1136,9 @@ function handleWsMessage(msg) {
 				ctx.fillStyle = "#AAAAAA";
 			} else {
 				ctx.fillStyle = "#000000";
-			}	
+			}
 			ctx.fillText(txt, 10, 210);
-			
+
         drawSplitIcon(ctx);
 
         drawTouch(ctx);
@@ -1138,12 +1156,12 @@ function handleWsMessage(msg) {
                 var touch = touches[i];
                 if (touch.identifier == leftTouchID) {
                     ctx.beginPath();
-                    ctx.strokeStyle = "#0096ff";
-                    ctx.lineWidth = 6;
-                    ctx.arc(leftTouchStartPos.x, leftTouchStartPos.y, 40, 0, Math.PI * 2, true);
-                    ctx.stroke();
-                    ctx.beginPath();
-                    ctx.strokeStyle = "#0096ff";
+                    // ctx.strokeStyle = "#0096ff";
+                    // ctx.lineWidth = 6;
+                    // ctx.arc(leftTouchStartPos.x, leftTouchStartPos.y, 40, 0, Math.PI * 2, true);
+                    // ctx.stroke();
+                    // ctx.beginPath();
+                    ctx.strokeStyle = "#0096af";
                     ctx.lineWidth = 2;
                     ctx.arc(leftTouchStartPos.x, leftTouchStartPos.y, 60, 0, Math.PI * 2, true);
                     ctx.stroke();
@@ -1279,7 +1297,7 @@ function handleWsMessage(msg) {
 	var txtpos_height = 20;
 	var txtpos_share = "!";
 	var txtpos_lastTime = 0;
-	
+
 	var mapx = 0;
 	var mapy = 0;
 	var mapDstX = 0;
@@ -1306,6 +1324,7 @@ function handleWsMessage(msg) {
         cb = 0,
         timestamp = 0,
         userNickName = null,
+        skin = null,
         leftPos = 0,
         topPos = 0,
         rightPos = 1E4,
@@ -1350,7 +1369,11 @@ function handleWsMessage(msg) {
         sendNickName();
         userScore = 0
     };
-    wHandle.setSkins = function(arg) {
+    wHandle.setSkin = function (arg) {
+        skin = arg
+        sendSkin();
+    };
+    wHandle.setSkins = function (arg) {
         showSkin = arg
     };
     wHandle.setNames = function(arg) {
@@ -1428,7 +1451,6 @@ function handleWsMessage(msg) {
     };
     fetch('skinList.txt').then(resp => resp.text()).then(data => {
         const skins = data.split(',').filter(name => name.length > 0);
-		console.log(skins);
         for (var i = 0; i < skins.length; i++) {
                 if (-1 == knownNameDict.indexOf(skins[i])) {
                     knownNameDict.push(skins[i]);
@@ -1451,6 +1473,7 @@ function handleWsMessage(msg) {
         points: null,
         pointsAcc: null,
         name: null,
+        skin: null,
         nameCache: null,
         sizeCache: null,
         x: 0,
@@ -1502,7 +1525,10 @@ function handleWsMessage(msg) {
                 this.nameCache.setValue(this.name);
             }
         },
-        setSize: function(a) {
+        setSkin: function (a) {
+            this.skin = a;
+        },
+        setSize: function (a) {
             this.nSize = a;
             var m = ~~(this.size * this.size * 0.01);
             if (null === this.sizeCache)
@@ -1677,15 +1703,20 @@ function handleWsMessage(msg) {
                 }
 
                 if (showSkin && skinName || skinName.startsWith("i/") != '' && -1 != knownNameDict.indexOf(skinName)) {
-                    if (!skins.hasOwnProperty(skinName)) {
-                        skins[skinName] = new Image;
-                        skins[skinName].src = SKIN_URL + skinName + '.png';
-                    } else if(skinName.startsWith("i/")) {
-                        skins[skinName] = new Image;
-                        skins[skinName].src = "https://i.imgur.com/" + this.name.split("i/")[1] + '.png';
+                    if (skin) {
+                        skins[this.id] = new Image;
+                        skins[this.id].src = skin;
+                    } else if (!skins.hasOwnProperty(skinName)) {
+                        skins[this.id] = new Image;
+                        skins[this.id].src = SKIN_URL + skinName + '.png';
+                    } else if (skinName.startsWith("i/")) {
+                        skins[this.id] = new Image;
+                        skins[this.id].src = "https://i.imgur.com/" + this.name.split("i/")[1] + '.png';
                     }
-                    if (0 != skins[skinName].width && skins[skinName].complete) {
-                        c = skins[skinName];
+
+
+                    if (0 != skins[this.id].width && skins[this.id].complete) {
+                        c = skins[this.id];
                     } else {
                         c = null;
                     }
@@ -1706,7 +1737,7 @@ function handleWsMessage(msg) {
                     ctx.globalAlpha *= .1;
                     ctx.stroke();
                 }
-                ctx.globalAlpha = 1; 
+                ctx.globalAlpha = 1;
                 c = -1 != playerCells.indexOf(this);
                 var ncache;
                 //draw name

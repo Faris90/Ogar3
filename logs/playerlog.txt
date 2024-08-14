@@ -1,13 +1,17 @@
-OGar Server - Game Mode: Free For All - Running Time: 47sec
-ID:    1, Nick: Mexico         , Score:     88, Cells:  1, Status: 1 IP: BOT
-ID:    2, Nick: Doge           , Score:     81, Cells:  1, Status: 1 IP: BOT
-ID:    3, Nick: Moon           , Score:     97, Cells:  1, Status: 1 IP: BOT
-ID:    4, Nick: Norway         , Score:     84, Cells:  1, Status: 1 IP: BOT
-ID:    5, Nick: Sanik          , Score:     97, Cells:  1, Status: 1 IP: BOT
-ID:    6, Nick: Lithuania      , Score:     96, Cells:  1, Status: 1 IP: BOT
-ID:    7, Nick: Ussr           , Score:    108, Cells:  1, Status: 1 IP: BOT
-ID:    8, Nick: Switzerland    , Score:     92, Cells:  1, Status: 1 IP: BOT
-ID:    9, Nick: Mars           , Score:     89, Cells:  1, Status: 1 IP: BOT
-ID:   10, Nick: Cambodia       , Score:     95, Cells:  1, Status: 1 IP: BOT
-ID:   11, Nick: Yaranaika      , Score:    100, Cells:  1, Status: 1 IP: BOT
-ID:   12, Nick: Feminism       , Score:     92, Cells:  1, Status: 1 IP: BOT
+OGar Server - Game Mode: Free For All - Running Time: 43sec
+ID:    1, Nick: Peru           , Score:    127, Cells:  1, Status: 1 IP: BOT
+ID:    2, Nick: Chile          , Score:    116, Cells:  1, Status: 1 IP: BOT
+ID:    3, Nick: Confederate    , Score:    119, Cells:  1, Status: 1 IP: BOT
+ID:    4, Nick: Moon           , Score:    108, Cells:  1, Status: 1 IP: BOT
+ID:    5, Nick: Australia      , Score:    137, Cells:  1, Status: 1 IP: BOT
+ID:    6, Nick: Estonia        , Score:    132, Cells:  1, Status: 1 IP: BOT
+ID:    7, Nick: India          , Score:    118, Cells:  1, Status: 1 IP: BOT
+ID:    8, Nick: Ireland        , Score:    137, Cells:  1, Status: 1 IP: BOT
+ID:    9, Nick: Hong Kong      , Score:    138, Cells:  1, Status: 1 IP: BOT
+ID:   10, Nick: Portugal       , Score:    137, Cells:  1, Status: 1 IP: BOT
+ID:   11, Nick: Bulgaria       , Score:    123, Cells:  1, Status: 1 IP: BOT
+ID:   12, Nick: Satanist       , Score:    136, Cells:  1, Status: 1 IP: BOT
+ID:   13, Nick: dogeas         , Score:     14, Cells:  1, Status: 0 IP: 127.0.0.1
+ID:   14, Nick: dogeas         , Score:     26, Cells:  1, Status: 0 IP: 127.0.0.1
+ID:   15, Nick: dogeas         , Score:     11, Cells:  1, Status: 0 IP: 127.0.0.1
+ID:   16, Nick: dogeas         , Score:     12, Cells:  1, Status: 1 IP: 127.0.0.1

@@ -5,8 +5,8 @@ function Prize(coupon) {
 module.exports = Prize;
 
 Prize.prototype.build = function () {
-    var buf = new ArrayBuffer(9+2*this.coupon.length);
-	var view = new DataView(buf);
+    var buf = new ArrayBuffer(9 + 2 * this.coupon.length);
+    var view = new DataView(buf);
     view.setUint8(0, 70);
     var offset = 1;
     // Send coupon
