@@ -517,7 +517,7 @@ var sunucuDurumu = 'on';
         delay *= 1.5;
     }
 
-function onWsMessage(msg) {
+function onWsMessage(msg) {	
 
     if (msg.data instanceof ArrayBuffer) {
         handleWsMessage(new DataView(msg.data));
@@ -530,7 +530,8 @@ function onWsMessage(msg) {
                 const remainingTime = data.remainingTime;
                 startCountdown(remainingTime);
             } else if (data.action === 'reloadPage') {
-                location.reload(); // Sayfayı yenile
+                location.reload(); 
+				
             }
         } catch (error) {
             console.error("JSON parse error:", error);
@@ -585,7 +586,8 @@ window.addEventListener('resize', applyMobileStyles);
         } else {
 			showConnecting();
              countdownElement.textContent = ``;
-            sunucuDurumu = 'off'; // Sunucunun bağlantısını kes
+            sunucuDurumu = 'off'; 
+			 
 
         }
     }
