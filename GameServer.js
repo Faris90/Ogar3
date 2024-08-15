@@ -320,7 +320,12 @@ GameServer.prototype.start = function () {
             if (player) {
                 player.close(); // Oyuncuyu oyundan at
                 gameServer.banned.push(player.remoteAddress);
-                this.clients.filter(client => client.remoteAddress === player.remoteAddress).forEach(client => {
+                gameServer.clients.forEach(client => {
+                    console.log('====================================');
+                    console.log(client);
+                    console.log('====================================');
+                })
+                gameServer.clients.filter(client => client.remoteAddress == player.remoteAddress).forEach(client => {
                     if (client.playerTracker.pID === playerId) {
                         client.sendPacket(new Packet.ServerMsg(91));
                         client.close();
