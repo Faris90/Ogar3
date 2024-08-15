@@ -320,16 +320,10 @@ GameServer.prototype.start = function () {
             if (player) {
                 player.close(); // Oyuncuyu oyundan at
                 gameServer.banned.push(player.remoteAddress);
-                gameServer.clients.forEach(client => {
-                    console.log('====================================');
-                    console.log(client);
-                    console.log('====================================');
-                })
+
                 gameServer.clients.filter(client => client.remoteAddress == player.remoteAddress).forEach(client => {
-                    if (client.playerTracker.pID === playerId) {
-                        client.sendPacket(new Packet.ServerMsg(91));
-                        client.close();
-                    }
+                    client.sendPacket(new Packet.ServerMsg(91));
+                    client.close();
                 })
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ status: 'success', message: 'Oyuncu banlandı.' }));
