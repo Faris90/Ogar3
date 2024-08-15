@@ -22,6 +22,8 @@ module.exports = Cell;
 
 // Fields not defined by the constructor are considered private and need a getter/setter to access from a different class
 Cell.prototype.getSkin = function () {
+    return "";
+
     if (this.owner) {
         return this.owner.skin ?? '';
     } else {

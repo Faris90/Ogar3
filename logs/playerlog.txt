@@ -1,0 +1,12 @@
+OGar Server - Game Mode: Free For All - Running Time: 70sec
+ID:    1, Nick: ertandac       , Score:    122, Cells:  1, Status: 1 IP: BOT
+ID:    2, Nick: badboooy126    , Score:    130, Cells:  1, Status: 1 IP: BOT
+ID:    3, Nick: razesusur      , Score:    114, Cells:  1, Status: 1 IP: BOT
+ID:    4, Nick: delikanlim00   , Score:    111, Cells:  1, Status: 1 IP: BOT
+ID:    5, Nick: alicandar      , Score:    120, Cells:  1, Status: 1 IP: BOT
+ID:    6, Nick: k4sirg4        , Score:    138, Cells:  1, Status: 1 IP: BOT
+ID:    7, Nick: selamikisik0   , Score:    115, Cells:  1, Status: 1 IP: BOT
+ID:    8, Nick: lind45         , Score:    113, Cells:  1, Status: 1 IP: BOT
+ID:    9, Nick: servet0gunay   , Score:    134, Cells:  1, Status: 1 IP: BOT
+ID:   10, Nick: erhan218       , Score:    202, Cells:  1, Status: 1 IP: BOT
+ID:   13, Nick: sss            , Score:     85, Cells:  4, Status: 0 IP: 127.0.0.1

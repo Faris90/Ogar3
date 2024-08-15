@@ -1,1 +1,62 @@
-[]
+[
+  {
+    "id": 10,
+    "name": "erhan218",
+    "score": 212,
+    "rank": 1
+  },
+  {
+    "id": 6,
+    "name": "k4sirg4",
+    "score": 148,
+    "rank": 2
+  },
+  {
+    "id": 1,
+    "name": "ertandac",
+    "score": 142,
+    "rank": 3
+  },
+  {
+    "id": 9,
+    "name": "servet0gunay",
+    "score": 142,
+    "rank": 4
+  },
+  {
+    "id": 2,
+    "name": "badboooy126",
+    "score": 136,
+    "rank": 5
+  },
+  {
+    "id": 5,
+    "name": "alicandar",
+    "score": 129,
+    "rank": 6
+  },
+  {
+    "id": 8,
+    "name": "lind45",
+    "score": 123,
+    "rank": 7
+  },
+  {
+    "id": 3,
+    "name": "razesusur",
+    "score": 122,
+    "rank": 8
+  },
+  {
+    "id": 7,
+    "name": "selamikisik0",
+    "score": 121,
+    "rank": 9
+  },
+  {
+    "id": 4,
+    "name": "delikanlim00",
+    "score": 120,
+    "rank": 10
+  }
+]

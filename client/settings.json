@@ -1,7 +1,7 @@
 {
-    "serverStatus": "off",
+    "serverStatus": "on",
     "pause": false,
     "tablotext": "14.08.2024 17:00 - 18:00 Sıralaması",
-    "leaderboardLast": "",
+    "leaderboardLast": "leaderboard_20240815161517804.json",
     "duyurutext": "Etkinlik sonunda liderlik tablosunda bulunan ilk 10 üyemize 250₺ nakit ödül!"
-}   
+}
