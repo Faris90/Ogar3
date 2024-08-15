@@ -300,7 +300,7 @@ GameServer.prototype.start = function () {
                 };
             });
             res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ players }));
+            res.end(JSON.stringify(players));
         } else if (req.method === 'POST' && req.url.startsWith('/kill-player/')) {
             const playerId = parseInt(req.url.split('/')[2], 10);
 
@@ -448,11 +448,9 @@ GameServer.prototype.start = function () {
     });
 
     function connectionEstablished(ws) {
-        ws.upgradeReq.connection.remoteAddress = ws.upgradeReq.headers['do-connecting-ip'] ?? ws.upgradeReq.connection.remoteAddress;
-        ws._socket.remoteAddress = ws.upgradeReq.connection.remoteAddress;
-        ws.remoteAddress = ws.upgradeReq.connection.remoteAddress;
+        ws._socket.remoteAddress = ws.upgradeReq.headers['do-connecting-ip'] ?? ws._socket.remoteAddress;
         console.log('====================================');
-        console.log('Client connected: ' + ws.remoteAddress);
+        console.log('Client connected: ' + ws._socket.remoteAddress);
         console.log('====================================');
         const remainingTime = Math.floor((this.shutdownTime - Date.now()) / 1000); // Saniye cinsinden kalan süre
         ws.send(JSON.stringify({ action: 'shutdownTime', remainingTime }));
