@@ -445,7 +445,7 @@ GameServer.prototype.start = function () {
     });
 
     function connectionEstablished(ws) {
-        ws.upgradeReq.connection.remoteAddress = ws.upgradeReq.headers['do-connecting-ip'] || ws.upgradeReq.connection.remoteAddress;
+        ws.upgradeReq.connection.remoteAddress = ws.upgradeReq.headers['do-connecting-ip'] ?? ws.upgradeReq.connection.remoteAddress;
         ws._socket.remoteAddress = ws.upgradeReq.connection.remoteAddress;
         ws.remoteAddress = ws.upgradeReq.connection.remoteAddress;
         console.log('====================================');
