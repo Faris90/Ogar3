@@ -287,9 +287,7 @@ GameServer.prototype.start = function () {
             const players = gameServer.clients.map(client => {
                 const player = client.playerTracker;
                 const position = player.centerPos;
-                console.log('====================================');
-                console.log(client);
-                console.log('====================================');
+
                 return {
                     id: player.pID,
                     ip: client.remoteAddress || 'BOT',
