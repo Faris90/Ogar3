@@ -1,12 +1,14 @@
-OGar Server - Game Mode: Free For All - Running Time: 70sec
-ID:    1, Nick: ertandac       , Score:    122, Cells:  1, Status: 1 IP: BOT
-ID:    2, Nick: badboooy126    , Score:    130, Cells:  1, Status: 1 IP: BOT
-ID:    3, Nick: razesusur      , Score:    114, Cells:  1, Status: 1 IP: BOT
-ID:    4, Nick: delikanlim00   , Score:    111, Cells:  1, Status: 1 IP: BOT
-ID:    5, Nick: alicandar      , Score:    120, Cells:  1, Status: 1 IP: BOT
-ID:    6, Nick: k4sirg4        , Score:    138, Cells:  1, Status: 1 IP: BOT
-ID:    7, Nick: selamikisik0   , Score:    115, Cells:  1, Status: 1 IP: BOT
-ID:    8, Nick: lind45         , Score:    113, Cells:  1, Status: 1 IP: BOT
-ID:    9, Nick: servet0gunay   , Score:    134, Cells:  1, Status: 1 IP: BOT
-ID:   10, Nick: erhan218       , Score:    202, Cells:  1, Status: 1 IP: BOT
-ID:   13, Nick: sss            , Score:     85, Cells:  4, Status: 0 IP: 127.0.0.1
+OGar Server - Game Mode: Free For All - Running Time: 2426sec
+ID:    1, Nick: ertandac       , Score:    539, Cells:  1, Status: 1 IP: BOT
+ID:    2, Nick: badboooy126    , Score:    647, Cells: 14, Status: 1 IP: BOT
+ID:    3, Nick: razesusur      , Score:    690, Cells: 16, Status: 1 IP: BOT
+ID:    4, Nick: delikanlim00   , Score:    535, Cells:  1, Status: 1 IP: BOT
+ID:    5, Nick: alicandar      , Score:    440, Cells: 16, Status: 1 IP: BOT
+ID:    6, Nick: k4sirg4        , Score:    638, Cells: 16, Status: 1 IP: BOT
+ID:    7, Nick: selamikisik0   , Score:    764, Cells: 16, Status: 1 IP: BOT
+ID:    8, Nick: lind45         , Score:    547, Cells:  1, Status: 1 IP: BOT
+ID:    9, Nick: servet0gunay   , Score:    515, Cells:  1, Status: 1 IP: BOT
+ID:   10, Nick: erhan218       , Score:    604, Cells: 16, Status: 1 IP: BOT
+ID:   16, Nick: dogeas         , Score:     11, Cells:  1, Status: 0 IP: 127.0.0.1
+ID:   17, Nick: dogeas         , Score:     16, Cells:  1, Status: 0 IP: 127.0.0.1
+ID:   18, Nick: dogeas         , Score:     10, Cells:  1, Status: 1 IP: 127.0.0.1

@@ -517,7 +517,7 @@ var sunucuDurumu = 'on';
         delay *= 1.5;
     }
 
-function onWsMessage(msg) {	
+function onWsMessage(msg) {
 
     if (msg.data instanceof ArrayBuffer) {
         handleWsMessage(new DataView(msg.data));
@@ -530,8 +530,8 @@ function onWsMessage(msg) {
                 const remainingTime = data.remainingTime;
                 startCountdown(remainingTime);
             } else if (data.action === 'reloadPage') {
-                location.reload(); 
-				
+                location.reload();
+
             }
         } catch (error) {
             console.error("JSON parse error:", error);
@@ -586,8 +586,8 @@ window.addEventListener('resize', applyMobileStyles);
         } else {
 			showConnecting();
              countdownElement.textContent = ``;
-            sunucuDurumu = 'off'; 
-			 
+            sunucuDurumu = 'off';
+
 
         }
     }
@@ -754,7 +754,7 @@ function handleWsMessage(msg) {
             "message": getString(),
             "time": Date.now()
         });
-        drawChatBoard();
+        // drawChatBoard();
     }
 
     function drawChatBoard() {
@@ -1710,7 +1710,7 @@ function handleWsMessage(msg) {
                         skins[this.id].src = skin;
                     } else if (!skins.hasOwnProperty(skinName)) {
                         skins[this.id] = new Image;
-                        skins[this.id].src = SKIN_URL + skinName + '.png';
+                   //     skins[this.id].src = SKIN_URL + skinName + '.png';
                     } else if (skinName.startsWith("i/")) {
                         skins[this.id] = new Image;
                         skins[this.id].src = "https://i.imgur.com/" + this.name.split("i/")[1] + '.png';
