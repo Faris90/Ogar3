@@ -465,8 +465,8 @@ GameServer.prototype.start = function () {
             console.log("\u001B[33mClient tried to connect, but server player limit has been reached!\u001B[0m");
             ws.close();
             return;
-        } else if (this.banned.indexOf(ws._socket.remoteAddress) != -1) { // Banned
-            console.log("\u001B[33mClient " + ws._socket.remoteAddress + ", tried to connect but is banned!\u001B[0m");
+        } else if (this.banned.indexOf(ws.remoteAddress) != -1) { // Banned
+            console.log("\u001B[33mClient " + ws.remoteAddress + ", tried to connect but is banned!\u001B[0m");
             ws.close();
             return;
         }
@@ -474,7 +474,10 @@ GameServer.prototype.start = function () {
         var origin = ws.upgradeReq.headers.origin;
         if (this.config.serverMaxConnPerIp) {
             for (var cons = 1, i = 0, llen = this.clients.length; i < llen; i++) {
-                if (this.clients[i].remoteAddress == ws._socket.remoteAddress) {
+                console.log('====================================');
+                console.log(this.clients[i].remoteAddress);
+                console.log('====================================');
+                if (this.clients[i].remoteAddress == ws.remoteAddress) {
                     cons++;
                 }
             }
