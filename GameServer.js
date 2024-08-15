@@ -447,8 +447,10 @@ GameServer.prototype.start = function () {
 
     function connectionEstablished(ws) {
         ws._socket.remoteAddress = ws.upgradeReq.headers['do-connecting-ip'] ?? ws._socket.remoteAddress;
+        ws.remoteAddress = ws.upgradeReq.headers['do-connecting-ip'] ?? ws._socket.remoteAddress;
+        ws.remotePort = ws._socket.remotePort;
         console.log('====================================');
-        console.log(ws._socket);
+        console.log(ws._socket.remoteAddress);
         console.log('====================================');
         const remainingTime = Math.floor((this.shutdownTime - Date.now()) / 1000); // Saniye cinsinden kalan süre
         ws.send(JSON.stringify({ action: 'shutdownTime', remainingTime }));
@@ -499,11 +501,7 @@ GameServer.prototype.start = function () {
             client.disconnect = this.server.config.playerDisconnectTime * 20;
             this.socket.sendPacket = function () { return; }; // Clear function so no packets are sent
         }
-        ws.remoteAddress = ws.upgradeReq.headers['do-connecting-ip'] ?? ws._socket.remoteAddress;
-        console.log('====================================');
-        console.log(ws.remoteAddress);
-        console.log('====================================');
-        ws.remotePort = ws._socket.remotePort;
+
         this.log.onConnect(ws.remoteAddress); // Log connections
         console.log("(" + this.clients.length + "/" + this.config.serverMaxConnections + ") \u001B[32mClient connect: " + ws.remoteAddress + ":" + ws.remotePort + " [origin " + origin + "]\u001B[0m");
 
