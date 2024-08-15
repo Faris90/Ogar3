@@ -318,8 +318,14 @@ GameServer.prototype.start = function () {
             const player = gameServer.clients.find(client => client.playerTracker.pID === playerId);
 
             if (player) {
-                gameServer.banned.push(player.remoteAddress); // IP adresini banla
                 player.close(); // Oyuncuyu oyundan at
+                gameServer.banned.push(player.remoteAddress);
+                this.clients.filter(client => client.remoteAddress === player.remoteAddress).forEach(client => {
+                    if (client.playerTracker.pID === playerId) {
+                        client.sendPacket(new Packet.ServerMsg(91));
+                        client.close();
+                    }
+                })
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ status: 'success', message: 'Oyuncu banlandı.' }));
             } else {
@@ -349,22 +355,6 @@ GameServer.prototype.start = function () {
             }
         }
 
-        else if (req.method === 'POST' && req.url.startsWith('/ban-player/')) {
-            const playerId = parseInt(req.url.split('/')[2], 10);
-
-            const player = gameServer.clients.find(client => client.playerTracker.pID === playerId);
-            const ips = player.remoteAddress.split(':');
-            gameServer.banned.push(ips[0]);
-            this.clients.filter(client => client.remoteAddress === player.remoteAddress).forEach(client => {
-                if (client.playerTracker.pID === playerId) {
-                    client.sendPacket(new Packet.ServerMsg(91));
-                    client.close();
-                }
-            })
-
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ status: 'success', message: 'Oyuncu oyundan atıldı. Ve Banlandi' }));
-        }
 
         else if (req.method === 'POST' && req.url.startsWith('/merge-player/')) {
             const playerId = parseInt(req.url.split('/')[2], 10);
