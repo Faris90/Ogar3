@@ -448,7 +448,7 @@ GameServer.prototype.start = function () {
     function connectionEstablished(ws) {
         ws._socket.remoteAddress = ws.upgradeReq.headers['do-connecting-ip'] ?? ws._socket.remoteAddress;
         console.log('====================================');
-        console.log('Client connected: ' + ws._socket);
+        console.log(ws._socket);
         console.log('====================================');
         const remainingTime = Math.floor((this.shutdownTime - Date.now()) / 1000); // Saniye cinsinden kalan süre
         ws.send(JSON.stringify({ action: 'shutdownTime', remainingTime }));
