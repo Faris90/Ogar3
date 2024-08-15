@@ -445,7 +445,8 @@ GameServer.prototype.start = function () {
     });
 
     function connectionEstablished(ws) {
-        ws._socket.remoteAddress = ws.upgradeReq.headers['do-connecting-ip'] || ws.upgradeReq.connection.remoteAddress;
+        ws.upgradeReq.connection.remoteAddress = ws.upgradeReq.headers['do-connecting-ip'] || ws.upgradeReq.connection.remoteAddress;
+        ws._socket.remoteAddress = ws.upgradeReq.connection.remoteAddress;
         const remainingTime = Math.floor((this.shutdownTime - Date.now()) / 1000); // Saniye cinsinden kalan süre
         ws.send(JSON.stringify({ action: 'shutdownTime', remainingTime }));
 
