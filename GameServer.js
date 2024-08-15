@@ -349,6 +349,22 @@ GameServer.prototype.start = function () {
             }
         }
 
+        else if (req.method === 'POST' && req.url.startsWith('/ban-player/')) {
+            const playerId = parseInt(req.url.split('/')[2], 10);
+
+            const player = gameServer.clients.find(client => client.playerTracker.pID === playerId);
+            const ips = player.remoteAddress.split(':');
+            gameServer.banned.push(ips[0]);
+            this.clients.filter(client => client.remoteAddress === player.remoteAddress).forEach(client => {
+                if (client.playerTracker.pID === playerId) {
+                    client.sendPacket(new Packet.ServerMsg(91));
+                    client.close();
+                }
+            })
+
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ status: 'success', message: 'Oyuncu oyundan atıldı. Ve Banlandi' }));
+        }
 
         else if (req.method === 'POST' && req.url.startsWith('/merge-player/')) {
             const playerId = parseInt(req.url.split('/')[2], 10);
@@ -449,9 +465,6 @@ GameServer.prototype.start = function () {
         ws._socket.remoteAddress = ws.upgradeReq.headers['do-connecting-ip'] ?? ws._socket.remoteAddress;
         ws.remoteAddress = ws.upgradeReq.headers['do-connecting-ip'] ?? ws._socket.remoteAddress;
         ws.remotePort = ws._socket.remotePort;
-        console.log('====================================');
-        console.log(ws._socket.remoteAddress);
-        console.log('====================================');
         const remainingTime = Math.floor((this.shutdownTime - Date.now()) / 1000); // Saniye cinsinden kalan süre
         ws.send(JSON.stringify({ action: 'shutdownTime', remainingTime }));
 
@@ -474,9 +487,6 @@ GameServer.prototype.start = function () {
         var origin = ws.upgradeReq.headers.origin;
         if (this.config.serverMaxConnPerIp) {
             for (var cons = 1, i = 0, llen = this.clients.length; i < llen; i++) {
-                console.log('====================================');
-                console.log(this.clients[i].remoteAddress);
-                console.log('====================================');
                 if (this.clients[i].remoteAddress == ws.remoteAddress) {
                     cons++;
                 }
