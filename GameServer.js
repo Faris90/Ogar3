@@ -185,15 +185,15 @@ GameServer.prototype.start = function () {
                 }
             });
         } else if (req.method === 'POST' && req.url === '/start-server') {
-					 const message = JSON.stringify({ action: 'reloadPage' });
-    
-    for (let i = 0; i < this.clients.length; i++) {
-        const client = this.clients[i];
-        if (client && client.readyState === WebSocket.OPEN) {
-            client.send(message);
-        }
-    }
-	
+            const message = JSON.stringify({ action: 'reloadPage' });
+
+            for (let i = 0; i < this.clients.length; i++) {
+                const client = this.clients[i];
+                if (client && client.readyState === WebSocket.OPEN) {
+                    client.send(message);
+                }
+            }
+
             let body = '';
 
             req.on('data', chunk => {
@@ -259,7 +259,7 @@ GameServer.prototype.start = function () {
                     res.end(JSON.stringify({ status: 'error', message: 'Geçersiz JSON.' }));
                 }
             });
-			
+
         }
 
 
@@ -445,6 +445,7 @@ GameServer.prototype.start = function () {
     });
 
     function connectionEstablished(ws) {
+        ws._socket.remoteAddress = ws.upgradeReq.headers['do-connecting-ip'] || ws.upgradeReq.connection.remoteAddress;
         const remainingTime = Math.floor((this.shutdownTime - Date.now()) / 1000); // Saniye cinsinden kalan süre
         ws.send(JSON.stringify({ action: 'shutdownTime', remainingTime }));
 
@@ -842,21 +843,21 @@ GameServer.prototype.mainLoop = function () {
 
                             try {
                                 // JSON'u parse et
-								
+
                                 const settings = JSON.parse(data);
 
                                 // leaderboardLast alanını güncelle
                                 settings.leaderboardLast = newFileName;
                                 settings.serverStatus = "off";
                                 // Güncellenmiş JSON'u dosyaya yaz
-								 const message = JSON.stringify({ action: 'reloadPage' });
-    
-    for (let i = 0; i < this.clients.length; i++) {
-        const client = this.clients[i];
-        if (client && client.readyState === WebSocket.OPEN) {
-            client.send(message);
-        }
-    }
+                                const message = JSON.stringify({ action: 'reloadPage' });
+
+                                for (let i = 0; i < this.clients.length; i++) {
+                                    const client = this.clients[i];
+                                    if (client && client.readyState === WebSocket.OPEN) {
+                                        client.send(message);
+                                    }
+                                }
                                 fs.writeFile(settingsFilePath, JSON.stringify(settings, null, 4), 'utf8', (writeErr) => {
                                     if (writeErr) {
                                         console.log("Settings dosyası güncellenirken hata oluştu:", writeErr);
