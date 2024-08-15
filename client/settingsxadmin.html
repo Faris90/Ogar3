@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="robots" content="noindex, nofollow">
+    <meta name="robots" content="noindex, nofollow">
     <title>Oyun Ayarları</title>
     <style>
         body {
@@ -12,6 +13,7 @@
             margin: 0;
             padding: 20px;
         }
+
         .settings-container {
             background: #fff;
             padding: 20px;
@@ -20,24 +22,29 @@
             max-width: 800px;
             margin: 0 auto;
         }
+
         .setting-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
         }
+
         .setting-item label {
             font-size: 16px;
         }
+
         .toggle-switch {
             position: relative;
             display: inline-block;
             width: 60px;
             height: 34px;
         }
+
         .toggle-switch input {
             display: none;
         }
+
         .slider {
             position: absolute;
             cursor: pointer;
@@ -49,6 +56,7 @@
             transition: .4s;
             border-radius: 34px;
         }
+
         .slider:before {
             position: absolute;
             content: "";
@@ -60,12 +68,15 @@
             transition: .4s;
             border-radius: 50%;
         }
-        input:checked + .slider {
+
+        input:checked+.slider {
             background-color: #2196F3;
         }
-        input:checked + .slider:before {
+
+        input:checked+.slider:before {
             transform: translateX(26px);
         }
+
         button {
             padding: 10px 20px;
             border: none;
@@ -77,40 +88,52 @@
             margin-top: 10px;
             margin-right: 10px;
         }
+
         .danger {
             background-color: #dc3545;
         }
+
         .status-label {
             margin-left: 10px;
             font-size: 16px;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        table, th, td {
+
+        table,
+        th,
+        td {
             border: 1px solid #ddd;
         }
-        th, td {
+
+        th,
+        td {
             padding: 8px;
             text-align: left;
         }
+
         th {
             background-color: #f2f2f2;
         }
+
         .dropdown {
             position: relative;
             display: inline-block;
         }
+
         .dropdown-content {
             display: none;
             position: absolute;
             background-color: #f9f9f9;
             min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
             z-index: 1;
         }
+
         .dropdown-content button {
             color: black;
             padding: 12px 16px;
@@ -121,12 +144,15 @@
             text-align: left;
             width: 100%;
         }
+
         .dropdown-content button:hover {
             background-color: #f1f1f1;
         }
+
         .dropdown:hover .dropdown-content {
             display: block;
         }
+
         #modal {
             display: none;
             position: fixed;
@@ -136,8 +162,9 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.4);
+            background-color: rgba(0, 0, 0, 0.4);
         }
+
         #modal-content {
             background-color: #fefefe;
             margin: 15% auto;
@@ -146,12 +173,14 @@
             width: 80%;
             max-width: 500px;
         }
+
         #modal input {
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
             font-size: 16px;
         }
+
         #modal button {
             width: 100%;
             padding: 10px;
@@ -160,404 +189,462 @@
     </style>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
 
-<div class="settings-container">
-    <h2>Oyun Ayarları</h2>
+    <div class="settings-container">
+        <h2>Oyun Ayarları</h2>
 
-    <div class="setting-item">
-        <label for="server-timeout">Sunucu Çalışma Süresi (saniye)</label>
-        <input type="number" id="server-timeout" min="1" value="300">
+        <div class="setting-item">
+            <label for="server-timeout">Sunucu Çalışma Süresi (saniye)</label>
+            <input type="number" id="server-timeout" min="1" value="300">
+        </div>
+
+        <button onclick="startServerWithTimeout()">Başlat</button>
+
+        <div class="setting-item">
+            <label for="pause">Oyun Duraklat</label>
+            <label class="toggle-switch">
+                <input type="checkbox" id="pause">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="setting-item">
+            <label for="tablotext">Kazananlar Yazısı</label>
+            <input type="text" id="tablotext" placeholder="Tablo başlığı girin">
+        </div>
+
+        <div class="setting-item">
+            <label for="duyurutext">Duyuru Metni</label>
+            <input type="text" id="duyurutext" placeholder="Duyuru metni girin">
+        </div>
+        <button onclick="saveSettings()">Ayarları Kaydet</button>
+        <button class="danger" onclick="killAll()">Kill All</button>
+
+        <h3>Leaderboard</h3>
+        <button onclick="fetchLeaderboard()">Yenile</button>
+        <table id="leaderboardTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Sıra</th>
+                    <th>İsim</th>
+                    <th>Puan</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Liderlik tablosu verileri burada listelenecek -->
+            </tbody>
+        </table>
+        <button onclick="getAllPlayers()">Tum Oyuncular</button>
+        <table id="playerList">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Sıra</th>
+                    <th>İsim</th>
+                    <th>Puan</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Liderlik tablosu verileri burada listelenecek -->
+            </tbody>
+        </table>
     </div>
 
-    <button onclick="startServerWithTimeout()">Başlat</button>
-
-    <div class="setting-item">
-        <label for="pause">Oyun Duraklat</label>
-        <label class="toggle-switch">
-            <input type="checkbox" id="pause">
-            <span class="slider"></span>
-        </label>
-    </div>
- <div class="setting-item">
-        <label for="tablotext">Kazananlar Yazısı</label>
-        <input type="text" id="tablotext" placeholder="Tablo başlığı girin">
+    <!-- Modal for adding points -->
+    <div id="modal">
+        <div id="modal-content">
+            <h2>Puan Ekle</h2>
+            <input type="number" id="point-input" min="1" placeholder="Puan">
+            <button onclick="addPoints()">Puan Ekle</button>
+            <button class="danger" onclick="closeModal()">İptal</button>
+        </div>
     </div>
 
-    <div class="setting-item">
-        <label for="duyurutext">Duyuru Metni</label>
-        <input type="text" id="duyurutext" placeholder="Duyuru metni girin">
-    </div>
-    <button onclick="saveSettings()">Ayarları Kaydet</button>
-    <button class="danger" onclick="killAll()">Kill All</button>
-
-    <h3>Leaderboard</h3>
-    <button onclick="fetchLeaderboard()">Yenile</button>
-    <table id="leaderboardTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Sıra</th>
-                <th>İsim</th>
-                <th>Puan</th>
-                <th>İşlemler</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Liderlik tablosu verileri burada listelenecek -->
-        </tbody>
-    </table>
-</div>
-
-<!-- Modal for adding points -->
-<div id="modal">
-    <div id="modal-content">
-        <h2>Puan Ekle</h2>
-        <input type="number" id="point-input" min="1" placeholder="Puan">
-        <button onclick="addPoints()">Puan Ekle</button>
-        <button class="danger" onclick="closeModal()">İptal</button>
-    </div>
-</div>
-
-<script>
-let selectedPlayerId = null;
+    <script>
+        let selectedPlayerId = null;
 
 
-function saveSettings() {
-    const pause = document.getElementById('pause').checked;
-    const tablotext = document.getElementById('tablotext').value;
-    const duyurutext = document.getElementById('duyurutext').value;
+        function saveSettings() {
+            const pause = document.getElementById('pause').checked;
+            const tablotext = document.getElementById('tablotext').value;
+            const duyurutext = document.getElementById('duyurutext').value;
 
-    const settings = {
-        pause: pause,
-        tablotext: tablotext,
-        duyurutext: duyurutext
-    };
+            const settings = {
+                pause: pause,
+                tablotext: tablotext,
+                duyurutext: duyurutext
+            };
 
-    fetch('/update-settings', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(settings),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            Swal.fire('Başarılı!', 'Ayarlar başarıyla güncellendi!', 'success');
-        } else {
-            Swal.fire('Hata!', 'Ayarlar güncellenemedi: ' + data.message, 'error');
+            fetch('/update-settings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(settings),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        Swal.fire('Başarılı!', 'Ayarlar başarıyla güncellendi!', 'success');
+                    } else {
+                        Swal.fire('Hata!', 'Ayarlar güncellenemedi: ' + data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire('Hata!', 'Ayarlar güncellenemedi.', 'error');
+                });
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        Swal.fire('Hata!', 'Ayarlar güncellenemedi.', 'error');
-    });
-}
 
-function killAll() {
-    Swal.fire({
-        title: 'Emin misiniz?',
-        text: "Bu işlem tüm oyuncuları öldürecek!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#dc3545',
-        cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Evet, öldür!',
-        cancelButtonText: 'İptal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            fetch('/kill-all', {
-                method: 'POST'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    Swal.fire('Öldürüldü!', 'Tüm oyuncular öldürüldü.', 'success');
-                } else {
-                    Swal.fire('Hata!', 'İşlem başarısız: ' + data.message, 'error');
+        function killAll() {
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Bu işlem tüm oyuncuları öldürecek!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Evet, öldür!',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('/kill-all', {
+                        method: 'POST'
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                Swal.fire('Öldürüldü!', 'Tüm oyuncular öldürüldü.', 'success');
+                            } else {
+                                Swal.fire('Hata!', 'İşlem başarısız: ' + data.message, 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire('Hata!', 'İşlem başarısız.', 'error');
+                        });
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                Swal.fire('Hata!', 'İşlem başarısız.', 'error');
             });
         }
-    });
-}
 
-function fetchLeaderboard() {
-    fetch('/get-leaderboard', {
-        method: 'GET'
-    })
-    .then(response => response.json())
-    .then(data => {
-        const tableBody = document.getElementById('leaderboardTable').getElementsByTagName('tbody')[0];
-        tableBody.innerHTML = '';
+        function fetchLeaderboard() {
+            fetch('/get-leaderboard', {
+                method: 'GET'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('leaderboardTable').getElementsByTagName('tbody')[0];
+                    tableBody.innerHTML = '';
 
-        data.forEach(player => {
-            const row = document.createElement('tr');
-			 if (!player.ip) {
-                player.ip = 'BOT';
-            }
-            row.innerHTML = `
-                <td>${player.id}</td>
-                <td>${player.rank}</td>
-                <td>${player.name}</td>
-                <td>${player.score}</td>
-				<td>${player.ip}</td>
+                    data.forEach(player => {
+                        const row = document.createElement('tr');
+                        if (!player.ip) {
+                            player.ip = 'BOT';
+                        }
+                        row.innerHTML = `
+                <td>${ player.id }</td>
+                <td>${ player.rank }</td>
+                <td>${ player.name }</td>
+                <td>${ player.score }</td>
+				<td>${ player.ip }</td>
                 <td>
                     <div class="dropdown">
                         <button>Ayarlar</button>
                         <div class="dropdown-content">
-                            <button onclick="confirmKill(${player.id})">Kill</button>
-                            <button onclick="openModal(${player.id})">Puan Ekle</button>
-                            <button onclick="banPlayer(${player.id})">Banla</button>
-                        <button onclick="kickPlayer(${player.id})">Kick</button>
-                            <button onclick="mergePlayer(${player.id})">Merge</button>
-                            <button onclick="splitPlayer(${player.id})">Split</button>
+                            <button onclick="confirmKill(${ player.id })">Kill</button>
+                            <button onclick="openModal(${ player.id })">Puan Ekle</button>
+                            <button onclick="banPlayer(${ player.id })">Banla</button>
+                        <button onclick="kickPlayer(${ player.id })">Kick</button>
+                            <button onclick="mergePlayer(${ player.id })">Merge</button>
+                            <button onclick="splitPlayer(${ player.id })">Split</button>
                         </div>
                     </div>
                 </td>
             `;
-            tableBody.appendChild(row);
-        });
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        Swal.fire('Hata!', 'Liderlik tablosu alınamadı.', 'error');
-    });
-}
-
-function confirmKill(playerId) {
-    Swal.fire({
-        title: 'Emin misiniz?',
-        text: "Bu oyuncuyu öldürmek istiyor musunuz?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#dc3545',
-        cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Evet, öldür!',
-        cancelButtonText: 'İptal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            killPlayer(playerId);
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire('Hata!', 'Liderlik tablosu alınamadı.', 'error');
+                });
         }
-    });
-}
 
-function killPlayer(playerId) {
-    fetch(`/kill-player/${playerId}`, { method: 'POST' })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                Swal.fire('Öldürüldü!', 'Oyuncu öldürüldü.', 'success');
-                fetchLeaderboard(); // Refresh leaderboard
-            } else {
-                Swal.fire('Hata!', 'Oyuncu öldürülemedi: ' + data.message, 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            Swal.fire('Hata!', 'Oyuncu öldürülemedi.', 'error');
-        });
-}
-
-function openModal(playerId) {
-    selectedPlayerId = playerId;
-    document.getElementById('modal').style.display = 'block';
-}
-
-function closeModal() {
-    document.getElementById('modal').style.display = 'none';
-}
-
-function addPoints() {
-    const points = parseInt(document.getElementById('point-input').value, 10);
-
-    if (isNaN(points) || points < 1) {
-        Swal.fire('Hata!', 'Geçerli bir puan girin.', 'error');
-        return;
-    }
-
-    fetch(`/add-points/${selectedPlayerId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ points: points })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            Swal.fire('Başarılı!', 'Puan eklendi.', 'success');
-            fetchLeaderboard(); // Refresh leaderboard
-        } else {
-            Swal.fire('Hata!', 'Puan eklenemedi: ' + data.message, 'error');
+        function confirmKill(playerId) {
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Bu oyuncuyu öldürmek istiyor musunuz?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Evet, öldür!',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    killPlayer(playerId);
+                }
+            });
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        Swal.fire('Hata!', 'Puan eklenemedi.', 'error');
-    })
-    .finally(() => {
-        closeModal();
-    });
-}
 
-function banPlayer(playerId) {
-    Swal.fire({
-        title: 'Emin misiniz?',
-        text: "Bu oyuncuyu banlamak istiyor musunuz?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#dc3545',
-        cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Evet, banla!',
-        cancelButtonText: 'İptal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Banlama işlemi burada yapılacak
-            console.log('Oyuncu banlandı: ' + playerId);
-        }
-    });
-}
-
-function kickPlayer(playerId) {
-    Swal.fire({
-        title: 'Emin misiniz?',
-        text: "Bu oyuncuyu oyundan atmak istiyor musunuz?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#dc3545',
-        cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Evet, at!',
-        cancelButtonText: 'İptal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            fetch(`/kick-player/${playerId}`, { method: 'POST' })
+        function killPlayer(playerId) {
+            fetch(`/kill-player/${ playerId }`, { method: 'POST' })
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
-                        Swal.fire('Atıldı!', 'Oyuncu oyundan atıldı.', 'success');
+                        Swal.fire('Öldürüldü!', 'Oyuncu öldürüldü.', 'success');
                         fetchLeaderboard(); // Refresh leaderboard
                     } else {
-                        Swal.fire('Hata!', 'Oyuncu atılamadı: ' + data.message, 'error');
+                        Swal.fire('Hata!', 'Oyuncu öldürülemedi: ' + data.message, 'error');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    Swal.fire('Hata!', 'Oyuncu atılamadı.', 'error');
+                    Swal.fire('Hata!', 'Oyuncu öldürülemedi.', 'error');
                 });
         }
-    });
-}
 
+        function openModal(playerId) {
+            selectedPlayerId = playerId;
+            document.getElementById('modal').style.display = 'block';
+        }
+        function getAllPlayers() {
+            fetch('/playerlist', {
+                method: 'GET'
+            }).then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('playerList').getElementsByTagName('tbody')[0];
+                    tableBody.innerHTML = '';
 
-function mergePlayer(playerId) {
-    Swal.fire({
-        title: 'Emin misiniz?',
-        text: "Bu oyuncunun hücrelerini birleştirmek istiyor musunuz?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#28a745',
-        cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Evet, birleştir!',
-        cancelButtonText: 'İptal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            fetch(`/merge-player/${playerId}`, { method: 'POST' })
+                    data.forEach(player => {
+                        const row = document.createElement('tr');
+                        if (!player.ip) {
+                            player.ip = 'BOT';
+                        }
+                        row.innerHTML = `
+                <td>${ player.id }</td>
+                <td>${ player.rank }</td>
+                <td>${ player.name }</td>
+                <td>${ player.score }</td>
+				<td>${ player.ip }</td>
+                <td>
+                    <div class="dropdown">
+                        <button>Ayarlar</button>
+                        <div class="dropdown-content">
+                            <button onclick="confirmKill(${ player.id })">Kill</button>
+                            <button onclick="openModal(${ player.id })">Puan Ekle</button>
+                            <button onclick="banPlayer(${ player.id })">Banla</button>
+                        <button onclick="kickPlayer(${ player.id })">Kick</button>
+                            <button onclick="mergePlayer(${ player.id })">Merge</button>
+                            <button onclick="splitPlayer(${ player.id })">Split</button>
+                        </div>
+                    </div>
+                </td>
+            `;
+                        tableBody.appendChild(row);
+                    });
+                })
+
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+        }
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function addPoints() {
+            const points = parseInt(document.getElementById('point-input').value, 10);
+
+            if (isNaN(points) || points < 1) {
+                Swal.fire('Hata!', 'Geçerli bir puan girin.', 'error');
+                return;
+            }
+
+            fetch(`/add-points/${ selectedPlayerId }`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ points: points })
+            })
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
-                        Swal.fire('Başarılı!', 'Oyuncunun hücreleri birleştirildi.', 'success');
-                        fetchLeaderboard(); // Liderlik tablosunu yenile
+                        Swal.fire('Başarılı!', 'Puan eklendi.', 'success');
+                        fetchLeaderboard(); // Refresh leaderboard
                     } else {
-                        Swal.fire('Hata!', 'Oyuncunun hücreleri birleştirilemedi: ' + data.message, 'error');
+                        Swal.fire('Hata!', 'Puan eklenemedi: ' + data.message, 'error');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    Swal.fire('Hata!', 'Oyuncunun hücreleri birleştirilemedi.', 'error');
+                    Swal.fire('Hata!', 'Puan eklenemedi.', 'error');
+                })
+                .finally(() => {
+                    closeModal();
                 });
         }
-    });
-}
 
-function splitPlayer(playerId) {
-    Swal.fire({
-        title: 'Emin misiniz?',
-        text: "Bu oyuncunun hücrelerini bölmek istiyor musunuz?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#28a745',
-        cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Evet, böl!',
-        cancelButtonText: 'İptal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            fetch(`/split-player/${playerId}`, { method: 'POST' })
+        function banPlayer(playerId) {
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Bu oyuncuyu banlamak istiyor musunuz?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Evet, banla!',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Banlama işlemi burada yapılacak
+                    console.log('Oyuncu banlandı: ' + playerId);
+                }
+            });
+        }
+
+        function kickPlayer(playerId) {
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Bu oyuncuyu oyundan atmak istiyor musunuz?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Evet, at!',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/kick-player/${ playerId }`, { method: 'POST' })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                Swal.fire('Atıldı!', 'Oyuncu oyundan atıldı.', 'success');
+                                fetchLeaderboard(); // Refresh leaderboard
+                            } else {
+                                Swal.fire('Hata!', 'Oyuncu atılamadı: ' + data.message, 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire('Hata!', 'Oyuncu atılamadı.', 'error');
+                        });
+                }
+            });
+        }
+
+
+        function mergePlayer(playerId) {
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Bu oyuncunun hücrelerini birleştirmek istiyor musunuz?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Evet, birleştir!',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/merge-player/${ playerId }`, { method: 'POST' })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                Swal.fire('Başarılı!', 'Oyuncunun hücreleri birleştirildi.', 'success');
+                                fetchLeaderboard(); // Liderlik tablosunu yenile
+                            } else {
+                                Swal.fire('Hata!', 'Oyuncunun hücreleri birleştirilemedi: ' + data.message, 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire('Hata!', 'Oyuncunun hücreleri birleştirilemedi.', 'error');
+                        });
+                }
+            });
+        }
+
+        function splitPlayer(playerId) {
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Bu oyuncunun hücrelerini bölmek istiyor musunuz?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Evet, böl!',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/split-player/${ playerId }`, { method: 'POST' })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                Swal.fire('Başarılı!', 'Oyuncunun hücreleri bölündü.', 'success');
+                                fetchLeaderboard(); // Liderlik tablosunu yenile
+                            } else {
+                                Swal.fire('Hata!', 'Oyuncunun hücreleri bölünemedi: ' + data.message, 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire('Hata!', 'Oyuncunun hücreleri bölünemedi.', 'error');
+                        });
+                }
+            });
+        }
+
+
+        function startServerWithTimeout() {
+            const timeout = parseInt(document.getElementById('server-timeout').value, 10);
+
+            if (isNaN(timeout) || timeout < 1) {
+                Swal.fire('Hata!', "Lütfen geçerli bir süre girin.", 'error');
+                return;
+            }
+
+            fetch('/start-server', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ serverTimeout: timeout }),
+            })
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
-                        Swal.fire('Başarılı!', 'Oyuncunun hücreleri bölündü.', 'success');
-                        fetchLeaderboard(); // Liderlik tablosunu yenile
+                        Swal.fire('Başarılı!', 'Sunucu başlatıldı ve tüm oyuncular sıfırlandı!', 'success');
                     } else {
-                        Swal.fire('Hata!', 'Oyuncunun hücreleri bölünemedi: ' + data.message, 'error');
+                        Swal.fire('Başarılı!', 'Sunucu başlatıldı ve tüm oyuncular sıfırlandı!', 'success');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    Swal.fire('Hata!', 'Oyuncunun hücreleri bölünemedi.', 'error');
+                    Swal.fire('Hata!', 'Sunucu başlatılamadı.', 'error');
                 });
         }
-    });
-}
 
+        window.onload = function () {
+            fetch('/get-settings')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('pause').checked = data.pause;
+                    document.getElementById('tablotext').value = data.tablotext; // Tablo metnini doldur
+                    document.getElementById('duyurutext').value = data.duyurutext; // Duyuru metnini doldur
+                })
+                .catch(error => {
+                    console.error('Hata:', error);
+                });
 
-function startServerWithTimeout() {
-    const timeout = parseInt(document.getElementById('server-timeout').value, 10);
+            fetchLeaderboard(); // Sayfa yüklendiğinde liderlik tablosunu al
+        };
 
-    if (isNaN(timeout) || timeout < 1) {
-        Swal.fire('Hata!', "Lütfen geçerli bir süre girin.", 'error');
-        return;
-    }
-
-    fetch('/start-server', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ serverTimeout: timeout }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            Swal.fire('Başarılı!', 'Sunucu başlatıldı ve tüm oyuncular sıfırlandı!', 'success');
-        } else {
-               Swal.fire('Başarılı!', 'Sunucu başlatıldı ve tüm oyuncular sıfırlandı!', 'success');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        Swal.fire('Hata!', 'Sunucu başlatılamadı.', 'error');
-    });
-}
-
-window.onload = function() {
-    fetch('/get-settings')
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('pause').checked = data.pause;
-        document.getElementById('tablotext').value = data.tablotext; // Tablo metnini doldur
-        document.getElementById('duyurutext').value = data.duyurutext; // Duyuru metnini doldur
-    })
-    .catch(error => {
-        console.error('Hata:', error);
-    });
-
-    fetchLeaderboard(); // Sayfa yüklendiğinde liderlik tablosunu al
-};
-
-</script>
+    </script>
 
 </body>
+
 </html>
