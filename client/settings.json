@@ -1,7 +1,7 @@
 {
-    "serverStatus": "on",
+    "serverStatus": "off",
     "pause": false,
     "tablotext": "XX Sıralaması",
-    "leaderboardLast": "leaderboard_20240818180135423.json",
+    "leaderboardLast": "",
     "duyurutext": "^_^"
 }
