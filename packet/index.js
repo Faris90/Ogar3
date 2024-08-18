@@ -10,6 +10,7 @@ module.exports = {
     BroadCast: require('./BroadCast.js'),
     ServerInfo: require('./ServerInfo.js'),
     ServerMsg: require('./ServerMsg.js'),
-	Prize: require('./Prize.js')
+	Prize: require('./Prize.js'),
+	UpdateSkin: require('./UpdateSkin.js'),
 };
 

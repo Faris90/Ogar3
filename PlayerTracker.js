@@ -71,7 +71,7 @@ function PlayerTracker(gameServer, socket) {
     this.team = 0;
     this.spectate = true;
     this.spectatedPlayer = -1; // Current player that this player is watching
-    this.skin = '';
+    this.skin = 0;
 
 
     // Kupon
@@ -213,7 +213,10 @@ PlayerTracker.prototype.update = function () {
         if (node.sendUpdate()) {
             // Sends an update if cell is moving
             updateNodes.push(node);
+            this.socket.sendPacket(new Packet.UpdateSkin(node));
         }
+
+
     }
 
     // Send packet
@@ -402,6 +405,6 @@ PlayerTracker.prototype.getSpectateNodes = function () {
 PlayerTracker.prototype.setSkin = function (skin) {
     this.skin = skin;
 };
-PlayerTracker.prototype.getSkin = function (skin) {
+PlayerTracker.prototype.getSkin = function () {
     return this.skin;
 };

@@ -58,7 +58,6 @@ UpdateNodes.prototype.build = function () {
             view.setInt32(offset + 4, node.position.x, true);
             view.setInt32(offset + 8, node.position.y, true);
             view.setUint16(offset + 12, node.getSize(), true);
-            //    view.setUint8(offset + 14, node.getSkin(), true);
             view.setUint8(offset + 14, node.color.r, true);
             view.setUint8(offset + 15, node.color.g, true);
             view.setUint8(offset + 16, node.color.b, true);

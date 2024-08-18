@@ -50,16 +50,8 @@ PacketHandler.prototype.handleMessage = function (message) {
             break;
         case 12:
             // Set skin
-            var skin = "";
-            var maxLen = this.gameServer.config.playerMaxNickLength * 2; // 2 bytes per char
-            for (var i = 1; i < view.byteLength; i += 2) {
-                var charCode = view.getUint16(i, true);
-                if (charCode == 0) {
-                    break;
-                }
-                skin += String.fromCharCode(charCode);
-            }
-            this.setSkin(skin);
+            var skinCode = view.getUint16(1, true);
+            this.setSkin(skinCode);
             break;
 
         case 1:

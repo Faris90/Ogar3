@@ -638,6 +638,12 @@ GameServer.prototype.addNode = function (node) {
         node.setColor(node.owner.color);
         node.owner.cells.push(node);
         node.owner.socket.sendPacket(new Packet.AddNode(node));
+
+        if (node.owner.skin){
+            node.setSkin(node.owner.skin);
+            console.log("Skin set to " + node.owner.skin);
+            node.owner.socket.sendPacket(new Packet.UpdateSkin(node));
+        }
     }
 
     // Special on-add actions

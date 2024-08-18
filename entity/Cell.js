@@ -14,22 +14,13 @@ function Cell(nodeId, owner, position, mass, gameServer) {
     this.moveEngineSpeed = 0;
     this.moveDecay = .75;
     this.angle = 0; // Angle of movement
-    this.skin;
 
 }
 
 module.exports = Cell;
 
 // Fields not defined by the constructor are considered private and need a getter/setter to access from a different class
-Cell.prototype.getSkin = function () {
-    return "";
 
-    if (this.owner) {
-        return this.owner.skin ?? '';
-    } else {
-        return "";
-    }
-}
 Cell.prototype.getName = function () {
     if (this.owner) {
         return this.owner.name;
