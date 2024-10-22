@@ -1,8 +1,8 @@
 {
-    "serverStatus": "on",
-    "pause": false,
-    "tablotext": "XX Sıralaması",
-    "leaderboardLast": "leaderboard_20240818203453144.json",
+    "serverStatus": "off",
+    "pause": true,
+    "tablotext": "22.10.2024 Sıralaması",
+    "leaderboardLast": "",
     "duyurutext": "^_^",
     "adminPass": "33cena33",
     "serverTimeout": "300"
