@@ -1,602 +1,69 @@
 [
   {
-    "id": 100,
-    "name": "stormvengeful89",
-    "score": 203,
+    "id": 6,
+    "name": "ironwolf07",
+    "score": 132,
     "rank": 1
   },
   {
-    "id": 70,
-    "name": "bloodrider38",
-    "score": 184,
+    "id": 8,
+    "name": "vengefulfang55",
+    "score": 128,
     "rank": 2
   },
   {
-    "id": 75,
-    "name": "vengeancefire92",
-    "score": 181,
+    "id": 3,
+    "name": "shadowhunter11",
+    "score": 127,
     "rank": 3
   },
   {
-    "id": 83,
-    "name": "ghostvengeful15",
-    "score": 161,
+    "id": 4,
+    "name": "ironshadow83",
+    "score": 124,
     "rank": 4
   },
   {
-    "id": 1,
-    "name": "silentfang69",
-    "score": 155,
+    "id": 10,
+    "name": "stormvengeful23",
+    "score": 123,
     "rank": 5
   },
   {
-    "id": 31,
-    "name": "ironvengeful14",
-    "score": 149,
+    "id": 7,
+    "name": "darkclaw19",
+    "score": 121,
     "rank": 6
   },
   {
-    "id": 44,
-    "name": "ertandac",
-    "score": 148,
+    "id": 2,
+    "name": "vengeancerider10",
+    "score": 115,
     "rank": 7
   },
   {
-    "id": 14,
-    "name": "vengefulvengeful45",
-    "score": 145,
+    "id": 9,
+    "name": "shadowwarrior30",
+    "score": 112,
     "rank": 8
   },
   {
-    "id": 24,
-    "name": "nightstrike09",
-    "score": 144,
+    "id": 1,
+    "name": "ghostvengeful62",
+    "score": 109,
     "rank": 9
   },
   {
-    "id": 9,
-    "name": "a1mert12",
-    "score": 143,
-    "rank": 10
-  },
-  {
-    "id": 54,
-    "name": "vengefulvengeful29",
-    "score": 143,
-    "rank": 11
-  },
-  {
-    "id": 66,
-    "name": "vengefulvengeful79",
-    "score": 143,
-    "rank": 12
-  },
-  {
-    "id": 12,
-    "name": "vengefulvengeful52",
-    "score": 142,
-    "rank": 13
-  },
-  {
     "id": 13,
-    "name": "steelvengeful55",
-    "score": 141,
-    "rank": 14
-  },
-  {
-    "id": 21,
-    "name": "steelvengeful83",
-    "score": 140,
-    "rank": 15
-  },
-  {
-    "id": 7,
-    "name": "stormvengeful23",
-    "score": 139,
-    "rank": 16
-  },
-  {
-    "id": 37,
-    "name": "k4sirg4",
-    "score": 138,
-    "rank": 17
-  },
-  {
-    "id": 27,
-    "name": "silentstorm34",
-    "score": 137,
-    "rank": 18
-  },
-  {
-    "id": 32,
-    "name": "steelwolf93",
-    "score": 137,
-    "rank": 19
-  },
-  {
-    "id": 25,
-    "name": "ironstorm90",
-    "score": 135,
-    "rank": 20
-  },
-  {
-    "id": 15,
-    "name": "vengefulspirit38",
-    "score": 134,
-    "rank": 21
-  },
-  {
-    "id": 64,
-    "name": "ghostshadow27",
-    "score": 134,
-    "rank": 22
-  },
-  {
-    "id": 40,
-    "name": "vengefulwarrior51",
-    "score": 133,
-    "rank": 23
-  },
-  {
-    "id": 73,
-    "name": "thunderwolf07",
-    "score": 133,
-    "rank": 24
-  },
-  {
-    "id": 35,
-    "name": "erhan218",
-    "score": 131,
-    "rank": 25
-  },
-  {
-    "id": 20,
-    "name": "darkclaw19",
-    "score": 130,
-    "rank": 26
-  },
-  {
-    "id": 22,
-    "name": "venomspike60",
-    "score": 130,
-    "rank": 27
-  },
-  {
-    "id": 33,
-    "name": "silentwolf14",
-    "score": 130,
-    "rank": 28
-  },
-  {
-    "id": 43,
-    "name": "silentvengeful24",
-    "score": 130,
-    "rank": 29
-  },
-  {
-    "id": 59,
-    "name": "vengefulvengeful05",
-    "score": 130,
-    "rank": 30
-  },
-  {
-    "id": 46,
-    "name": "shadowvengeance26",
-    "score": 129,
-    "rank": 31
-  },
-  {
-    "id": 52,
-    "name": "thundervengeance18",
-    "score": 129,
-    "rank": 32
-  },
-  {
-    "id": 78,
-    "name": "vengefulvengeful09",
-    "score": 128,
-    "rank": 33
-  },
-  {
-    "id": 85,
-    "name": "shadowvengeful27",
-    "score": 128,
-    "rank": 34
-  },
-  {
-    "id": 71,
-    "name": "ironstorm67",
-    "score": 127,
-    "rank": 35
-  },
-  {
-    "id": 6,
-    "name": "stormshadow24",
-    "score": 125,
-    "rank": 36
-  },
-  {
-    "id": 48,
-    "name": "skullreaper06",
-    "score": 125,
-    "rank": 37
-  },
-  {
-    "id": 69,
-    "name": "silentvengeful46",
-    "score": 125,
-    "rank": 38
-  },
-  {
-    "id": 82,
-    "name": "ironvengeful20",
-    "score": 125,
-    "rank": 39
-  },
-  {
-    "id": 93,
-    "name": "shadowblade13",
-    "score": 125,
-    "rank": 40
-  },
-  {
-    "id": 17,
-    "name": "stealthwarrior02",
-    "score": 124,
-    "rank": 41
-  },
-  {
-    "id": 95,
-    "name": "steelvengeful52",
-    "score": 124,
-    "rank": 42
-  },
-  {
-    "id": 19,
-    "name": "vengefulstorm54",
-    "score": 123,
-    "rank": 43
-  },
-  {
-    "id": 65,
-    "name": "venomhunter15",
-    "score": 123,
-    "rank": 44
-  },
-  {
-    "id": 60,
-    "name": "stormwolf23",
-    "score": 121,
-    "rank": 45
-  },
-  {
-    "id": 72,
-    "name": "darkvengeful11",
-    "score": 120,
-    "rank": 46
-  },
-  {
-    "id": 77,
-    "name": "silentdagger50",
-    "score": 120,
-    "rank": 47
-  },
-  {
-    "id": 23,
-    "name": "selamikisik0",
-    "score": 119,
-    "rank": 48
-  },
-  {
-    "id": 62,
-    "name": "ghostrider26",
-    "score": 119,
-    "rank": 49
-  },
-  {
-    "id": 94,
-    "name": "crazyboy002",
-    "score": 119,
-    "rank": 50
-  },
-  {
-    "id": 2,
-    "name": "razesusur",
-    "score": 117,
-    "rank": 51
-  },
-  {
-    "id": 49,
-    "name": "silentstorm05",
-    "score": 117,
-    "rank": 52
-  },
-  {
-    "id": 67,
-    "name": "darkvengeful60",
-    "score": 117,
-    "rank": 53
-  },
-  {
-    "id": 86,
-    "name": "steelclaw42",
-    "score": 117,
-    "rank": 54
-  },
-  {
-    "id": 18,
-    "name": "firestorm66",
-    "score": 116,
-    "rank": 55
-  },
-  {
-    "id": 28,
-    "name": "darkstorm59",
-    "score": 116,
-    "rank": 56
-  },
-  {
-    "id": 36,
-    "name": "venomblade16",
-    "score": 116,
-    "rank": 57
-  },
-  {
-    "id": 58,
-    "name": "bloodstorm77",
-    "score": 116,
-    "rank": 58
-  },
-  {
-    "id": 91,
-    "name": "venomstorm20",
-    "score": 116,
-    "rank": 59
-  },
-  {
-    "id": 34,
-    "name": "bloodvengeful36",
-    "score": 115,
-    "rank": 60
-  },
-  {
-    "id": 41,
-    "name": "stormstrike45",
-    "score": 115,
-    "rank": 61
-  },
-  {
-    "id": 57,
-    "name": "darkshadow49",
-    "score": 115,
-    "rank": 62
-  },
-  {
-    "id": 99,
-    "name": "shadowvengeful16",
-    "score": 115,
-    "rank": 63
-  },
-  {
-    "id": 10,
-    "name": "silentrevenge37",
-    "score": 113,
-    "rank": 64
-  },
-  {
-    "id": 50,
-    "name": "ghostfang11",
-    "score": 113,
-    "rank": 65
-  },
-  {
-    "id": 87,
-    "name": "darkphantom28",
-    "score": 113,
-    "rank": 66
-  },
-  {
-    "id": 4,
-    "name": "silentvengeful43",
-    "score": 112,
-    "rank": 67
-  },
-  {
-    "id": 26,
-    "name": "thunderslayer65",
-    "score": 112,
-    "rank": 68
-  },
-  {
-    "id": 47,
-    "name": "0orhanuslu",
-    "score": 111,
-    "rank": 69
-  },
-  {
-    "id": 55,
-    "name": "warlock44",
-    "score": 109,
-    "rank": 70
-  },
-  {
-    "id": 56,
-    "name": "steelshadow95",
-    "score": 109,
-    "rank": 71
-  },
-  {
-    "id": 98,
-    "name": "skullblade18",
-    "score": 109,
-    "rank": 72
-  },
-  {
-    "id": 42,
-    "name": "shadowknight53",
-    "score": 106,
-    "rank": 73
-  },
-  {
-    "id": 84,
-    "name": "ironvengeful02",
-    "score": 106,
-    "rank": 74
-  },
-  {
-    "id": 89,
-    "name": "vengefulvengeful58",
+    "name": "fntr",
     "score": 103,
-    "rank": 75
-  },
-  {
-    "id": 3,
-    "name": "shadowstrike09",
-    "score": 102,
-    "rank": 76
-  },
-  {
-    "id": 30,
-    "name": "stormclaw13",
-    "score": 101,
-    "rank": 77
-  },
-  {
-    "id": 76,
-    "name": "thunderstrike17",
-    "score": 100,
-    "rank": 78
-  },
-  {
-    "id": 8,
-    "name": "steelvengeful75",
-    "score": 99,
-    "rank": 79
-  },
-  {
-    "id": 45,
-    "name": "shadowblade04",
-    "score": 97,
-    "rank": 80
-  },
-  {
-    "id": 68,
-    "name": "silentvengeful50",
-    "score": 96,
-    "rank": 81
+    "rank": 10,
+    "ip": "127.0.0.1"
   },
   {
     "id": 5,
-    "name": "badboooy126",
-    "score": 93,
-    "rank": 82
-  },
-  {
-    "id": 53,
-    "name": "vengefulrider39",
-    "score": 93,
-    "rank": 83
-  },
-  {
-    "id": 16,
-    "name": "bloodclaw80",
-    "score": 92,
-    "rank": 84
-  },
-  {
-    "id": 74,
-    "name": "shadowhunter11",
-    "score": 89,
-    "rank": 85
-  },
-  {
-    "id": 79,
-    "name": "shadowvengeful63",
-    "score": 89,
-    "rank": 86
-  },
-  {
-    "id": 97,
-    "name": "shadowvengeful84",
-    "score": 88,
-    "rank": 87
-  },
-  {
-    "id": 39,
-    "name": "stormfang74",
-    "score": 86,
-    "rank": 88
-  },
-  {
-    "id": 90,
-    "name": "darkvenom12",
-    "score": 84,
-    "rank": 89
-  },
-  {
-    "id": 81,
-    "name": "ghostclaw46",
-    "score": 83,
-    "rank": 90
-  },
-  {
-    "id": 11,
-    "name": "darkvengeful04",
-    "score": 82,
-    "rank": 91
-  },
-  {
-    "id": 29,
-    "name": "venomvengeful10",
-    "score": 80,
-    "rank": 92
-  },
-  {
-    "id": 61,
-    "name": "lind45",
-    "score": 80,
-    "rank": 93
-  },
-  {
-    "id": 92,
-    "name": "darkvengeful13",
-    "score": 78,
-    "rank": 94
-  },
-  {
-    "id": 96,
-    "name": "silentvengeful56",
-    "score": 77,
-    "rank": 95
-  },
-  {
-    "id": 88,
-    "name": "vengefulstorm01",
-    "score": 64,
-    "rank": 96
-  },
-  {
-    "id": 80,
-    "name": "darkfang21",
-    "score": 60,
-    "rank": 97
-  },
-  {
-    "id": 38,
-    "name": "vengefulshadow22",
-    "score": 58,
-    "rank": 98
-  },
-  {
-    "id": 63,
-    "name": "darkvengeful65",
-    "score": 58,
-    "rank": 99
-  },
-  {
-    "id": 51,
-    "name": "bloodhunter03",
-    "score": 44,
-    "rank": 100
+    "name": "venomblade16",
+    "score": 91,
+    "rank": 11
   }
 ]
