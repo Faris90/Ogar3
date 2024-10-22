@@ -7,7 +7,7 @@ function UpdateNodes(destroyQueue, nodes, nonVisibleNodes, serverVersion) {
 
 module.exports = UpdateNodes;
 
-UpdateNodes.prototype.build = function () {
+UpdateNodes.prototype.build = function() {
     // Calculate nodes sub packet size before making the data view
     var nodesLength = 0;
     for (var i = 0; i < this.nodes.length; i++) {
@@ -16,10 +16,10 @@ UpdateNodes.prototype.build = function () {
         if (typeof node == "undefined") {
             continue;
         }
-        if (this.serverVersion == 1)
-            nodesLength = nodesLength + 20 + (node.getName().length * 2);
+        if( this.serverVersion == 1 )
+        	nodesLength = nodesLength + 20 + (node.getName().length * 2);
         else
-            nodesLength = nodesLength + 16 + (node.getName().length * 2);
+        	nodesLength = nodesLength + 16 + (node.getName().length * 2);
     }
 
     var buf = new ArrayBuffer(3 + (this.destroyQueue.length * 12) + (this.nonVisibleNodes.length * 4) + nodesLength + 8);
@@ -53,33 +53,33 @@ UpdateNodes.prototype.build = function () {
         if (typeof node == "undefined") {
             continue;
         }
-        if (this.serverVersion == 1) {
-            view.setUint32(offset, node.nodeId, true);
-            view.setInt32(offset + 4, node.position.x, true);
-            view.setInt32(offset + 8, node.position.y, true);
-            view.setUint16(offset + 12, node.getSize(), true);
-            view.setUint8(offset + 14, node.color.r, true);
-            view.setUint8(offset + 15, node.color.g, true);
-            view.setUint8(offset + 16, node.color.b, true);
-            view.setUint8(offset + 17, node.spiked, true);
-            offset += 18;
+        if( this.serverVersion == 1 ) {
+        		view.setUint32(offset, node.nodeId, true);
+        		view.setInt32(offset + 4, node.position.x, true);
+        		view.setInt32(offset + 8, node.position.y, true);
+        		view.setUint16(offset + 12, node.getSize(), true);
+        		view.setUint8(offset + 14, node.color.r, true);
+        		view.setUint8(offset + 15, node.color.g, true);
+        		view.setUint8(offset + 16, node.color.b, true);
+        		view.setUint8(offset + 17, node.spiked, true);
+        		offset += 18;
         } else {
-            view.setUint32(offset, node.nodeId, true);
-            view.setUint16(offset + 4, node.position.x, true);
-            view.setUint16(offset + 6, node.position.y, true);
-            view.setUint16(offset + 8, node.getSize(), true);
-            view.setUint8(offset + 10, node.color.r, true);
-            view.setUint8(offset + 11, node.color.g, true);
-            view.setUint8(offset + 12, node.color.b, true);
-            view.setUint8(offset + 13, node.spiked, true);
-            offset += 14;
-        }
+		        view.setUint32(offset, node.nodeId, true);
+		        view.setUint16(offset + 4, node.position.x, true);
+		        view.setUint16(offset + 6, node.position.y, true);
+		        view.setUint16(offset + 8, node.getSize(), true);
+		        view.setUint8(offset + 10, node.color.r, true);
+		        view.setUint8(offset + 11, node.color.g, true);
+		        view.setUint8(offset + 12, node.color.b, true);
+		        view.setUint8(offset + 13, node.spiked, true);
+		        offset += 14;
+      	}
 
         var name = node.getName();
         if (name) {
             for (var j = 0; j < name.length; j++) {
                 var c = name.charCodeAt(j);
-                if (c) {
+                if (c){
                     view.setUint16(offset, c, true);
                 }
                 offset += 2;
