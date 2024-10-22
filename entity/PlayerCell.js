@@ -3,14 +3,17 @@ var Cell = require('./Cell');
 function PlayerCell() {
     Cell.apply(this, Array.prototype.slice.call(arguments));
     this.cellType = 0;
-    this.recombineTicks = 0; // Ticks until the cell can recombine with other cells 
+    this.recombineTicks = 0; // Ticks until the cell can recombine with other cells
     this.ignoreCollision = false;// This is used by player cells so that they dont cause any problems when splitting
 	this.restoreCollisionTicks = 0;
+    this.skin = 0;
 }
 
 module.exports = PlayerCell;
 PlayerCell.prototype = new Cell();
-
+PlayerCell.prototype.setSkin = function (skin) {
+    this.skin = skin;
+}
 // Main Functions
 
 PlayerCell.prototype.visibleCheck = function(box,centerPos) {
@@ -122,7 +125,7 @@ PlayerCell.prototype.onConsume = function(consumer,gameServer) {
 	if(!consumer.owner.nofood) {
     consumer.addMass(this.mass);
 	}
-	
+
 };
 
 PlayerCell.prototype.onAdd = function(gameServer) {

@@ -1,5 +1,12 @@
-OGar Server - Game Mode: Free For All - Running Time: 56sec
-ID:    1, Nick: [BOT] Nasa     , Score:    127, Cells:  1, Status: 1 IP: BOT
-ID:    2, Nick: [BOT] Doge     , Score:    118, Cells:  1, Status: 1 IP: BOT
-ID:    3, Nick: [BOT] USA      , Score:    113, Cells:  1, Status: 1 IP: BOT
-ID:    4, Nick: Kyle           , Score:   2123, Cells: 16, Status: 1 IP: 127.0.0.1
+OGar Server - Game Mode: Free For All - Running Time: 266sec
+ID:    1, Nick: ghostvengeful62, Score:     90, Cells:  1, Status: 1 IP: BOT
+ID:    2, Nick: vengeancerider10, Score:    101, Cells:  1, Status: 1 IP: BOT
+ID:    3, Nick: shadowhunter11 , Score:    111, Cells:  1, Status: 1 IP: BOT
+ID:    4, Nick: ironshadow83   , Score:    116, Cells:  1, Status: 1 IP: BOT
+ID:    5, Nick: venomblade16   , Score:     88, Cells:  1, Status: 1 IP: BOT
+ID:    6, Nick: ironwolf07     , Score:    128, Cells:  1, Status: 1 IP: BOT
+ID:    7, Nick: darkclaw19     , Score:    111, Cells:  1, Status: 1 IP: BOT
+ID:    8, Nick: vengefulfang55 , Score:    112, Cells:  1, Status: 1 IP: BOT
+ID:    9, Nick: shadowwarrior30, Score:    110, Cells:  1, Status: 1 IP: BOT
+ID:   10, Nick: stormvengeful23, Score:    111, Cells:  1, Status: 1 IP: BOT
+ID:   13, Nick: fntr           , Score:    103, Cells:  1, Status: 1 IP: 127.0.0.1

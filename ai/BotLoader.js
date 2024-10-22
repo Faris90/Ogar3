@@ -22,7 +22,7 @@ BotLoader.prototype.getName = function() {
         name = "bot" + ++this.nameIndex;
     }
 
-    return "[BOT] " + name;
+    return "" + name;
 };
 
 BotLoader.prototype.loadNames = function() {
