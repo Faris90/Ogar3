@@ -1,102 +1,103 @@
-OGar Server - Game Mode: Free For All - Running Time: 187sec
-ID:    1, Nick: vengefulvengeful05, Score:    285, Cells:  1, Status: 1 IP: BOT
-ID:    2, Nick: stormshadow24  , Score:    395, Cells:  1, Status: 1 IP: BOT
-ID:    3, Nick: stormvenom31   , Score:    201, Cells:  1, Status: 1 IP: BOT
-ID:    4, Nick: thunderstrike17, Score:    210, Cells:  1, Status: 1 IP: BOT
-ID:    5, Nick: ironblade35    , Score:    237, Cells:  1, Status: 1 IP: BOT
-ID:    6, Nick: shadowvengeful22, Score:    287, Cells:  1, Status: 1 IP: BOT
-ID:    7, Nick: stormfang74    , Score:    267, Cells:  1, Status: 1 IP: BOT
-ID:    8, Nick: ironstorm90    , Score:    328, Cells:  1, Status: 1 IP: BOT
-ID:    9, Nick: vengefulwarrior51, Score:    250, Cells:  1, Status: 1 IP: BOT
-ID:   10, Nick: stormvengeful41, Score:    248, Cells:  1, Status: 1 IP: BOT
-ID:   11, Nick: vengefulvengeful58, Score:    324, Cells:  2, Status: 1 IP: BOT
-ID:   12, Nick: vengefulvengeful66, Score:    220, Cells:  1, Status: 1 IP: BOT
-ID:   13, Nick: shadowwarrior30, Score:    213, Cells:  1, Status: 1 IP: BOT
-ID:   14, Nick: vengefulvengeful52, Score:   1087, Cells:  2, Status: 1 IP: BOT
-ID:   15, Nick: venomvengeful10, Score:    593, Cells:  1, Status: 1 IP: BOT
-ID:   16, Nick: ertandac       , Score:    372, Cells:  1, Status: 1 IP: BOT
-ID:   17, Nick: firefist01     , Score:    240, Cells:  1, Status: 1 IP: BOT
-ID:   18, Nick: stormstrike45  , Score:    251, Cells:  1, Status: 1 IP: BOT
-ID:   19, Nick: stormclaw13    , Score:    220, Cells:  1, Status: 1 IP: BOT
-ID:   20, Nick: shadowvengeful16, Score:    265, Cells:  1, Status: 1 IP: BOT
-ID:   21, Nick: crazyboy002    , Score:    239, Cells:  1, Status: 1 IP: BOT
-ID:   22, Nick: thunderwolf07  , Score:    220, Cells:  1, Status: 1 IP: BOT
-ID:   23, Nick: shadowvengeful71, Score:    226, Cells:  1, Status: 1 IP: BOT
-ID:   24, Nick: firestorm66    , Score:    221, Cells:  1, Status: 1 IP: BOT
-ID:   25, Nick: silentclaw58   , Score:    445, Cells: 16, Status: 1 IP: BOT
-ID:   26, Nick: shadowwolf61   , Score:    182, Cells:  1, Status: 1 IP: BOT
-ID:   27, Nick: darkvengeful04 , Score:    377, Cells:  2, Status: 1 IP: BOT
-ID:   28, Nick: ironshadow83   , Score:    264, Cells:  1, Status: 1 IP: BOT
-ID:   29, Nick: darkvenom12    , Score:    913, Cells:  2, Status: 1 IP: BOT
-ID:   30, Nick: thundervengeance18, Score:    148, Cells:  1, Status: 1 IP: BOT
-ID:   31, Nick: ironstorm67    , Score:    331, Cells:  1, Status: 1 IP: BOT
-ID:   32, Nick: silentvengeful87, Score:    300, Cells:  1, Status: 1 IP: BOT
-ID:   33, Nick: stormvengeful76, Score:    173, Cells:  1, Status: 1 IP: BOT
-ID:   34, Nick: vengefulvengeful88, Score:    225, Cells:  1, Status: 1 IP: BOT
-ID:   35, Nick: darkphantom28  , Score:    196, Cells:  1, Status: 1 IP: BOT
-ID:   36, Nick: vengefulvengeful29, Score:    251, Cells:  1, Status: 1 IP: BOT
-ID:   37, Nick: darkstrike48   , Score:    393, Cells:  1, Status: 1 IP: BOT
-ID:   38, Nick: silentstorm05  , Score:    166, Cells:  1, Status: 1 IP: BOT
-ID:   39, Nick: silentvengeful64, Score:    260, Cells:  1, Status: 1 IP: BOT
-ID:   40, Nick: ironvengeful14 , Score:    243, Cells:  1, Status: 1 IP: BOT
-ID:   41, Nick: shadowknight53 , Score:    220, Cells:  1, Status: 1 IP: BOT
-ID:   42, Nick: 0orhanuslu     , Score:    277, Cells:  1, Status: 1 IP: BOT
-ID:   43, Nick: steelvengeful67, Score:    193, Cells:  1, Status: 1 IP: BOT
-ID:   44, Nick: vengefulvengeful44, Score:    148, Cells:  1, Status: 1 IP: BOT
-ID:   45, Nick: vengefulvengeful30, Score:    157, Cells:  1, Status: 1 IP: BOT
-ID:   46, Nick: darkvengeful60 , Score:    275, Cells: 10, Status: 1 IP: BOT
-ID:   47, Nick: vengefulvengeful06, Score:    433, Cells:  2, Status: 1 IP: BOT
-ID:   48, Nick: steelvengeful40, Score:    318, Cells:  9, Status: 1 IP: BOT
-ID:   49, Nick: ironvengeful25 , Score:    331, Cells:  1, Status: 1 IP: BOT
-ID:   50, Nick: stormvengeful90, Score:    202, Cells:  1, Status: 1 IP: BOT
-ID:   51, Nick: venomhunter15  , Score:    224, Cells:  1, Status: 1 IP: BOT
-ID:   52, Nick: venomvengeance53, Score:    179, Cells:  1, Status: 1 IP: BOT
-ID:   53, Nick: darkfang21     , Score:    163, Cells:  1, Status: 1 IP: BOT
-ID:   54, Nick: vengefulvengeful09, Score:    886, Cells:  1, Status: 1 IP: BOT
-ID:   55, Nick: silentstrike79 , Score:    228, Cells:  1, Status: 1 IP: BOT
-ID:   56, Nick: lind45         , Score:    235, Cells:  1, Status: 1 IP: BOT
-ID:   57, Nick: vengefulvengeful26, Score:    173, Cells:  1, Status: 1 IP: BOT
-ID:   58, Nick: ghostfang11    , Score:    292, Cells:  1, Status: 1 IP: BOT
-ID:   59, Nick: silentrider02  , Score:    349, Cells:  1, Status: 1 IP: BOT
-ID:   60, Nick: ironvengeful37 , Score:    156, Cells:  1, Status: 1 IP: BOT
-ID:   61, Nick: vengeancespike21, Score:   1090, Cells: 12, Status: 1 IP: BOT
-ID:   62, Nick: shadowvengeful72, Score:    309, Cells:  1, Status: 1 IP: BOT
-ID:   63, Nick: k4sirg4        , Score:    177, Cells:  1, Status: 1 IP: BOT
-ID:   64, Nick: bloodrider38   , Score:    202, Cells:  1, Status: 1 IP: BOT
-ID:   65, Nick: ironvenom17    , Score:    805, Cells:  2, Status: 1 IP: BOT
-ID:   66, Nick: stormvengeful23, Score:    322, Cells:  1, Status: 1 IP: BOT
-ID:   67, Nick: thundershadow20, Score:    314, Cells:  8, Status: 1 IP: BOT
-ID:   68, Nick: vengefulshadow22, Score:    309, Cells:  1, Status: 1 IP: BOT
-ID:   69, Nick: steelrider70   , Score:    209, Cells:  1, Status: 1 IP: BOT
-ID:   70, Nick: silentstorm47  , Score:    299, Cells:  1, Status: 1 IP: BOT
-ID:   71, Nick: erhan218       , Score:    166, Cells:  1, Status: 1 IP: BOT
-ID:   72, Nick: vengefulvengeful28, Score:    153, Cells:  1, Status: 1 IP: BOT
-ID:   73, Nick: shadowblade04  , Score:    331, Cells:  1, Status: 1 IP: BOT
-ID:   74, Nick: bloodwolf77    , Score:    674, Cells:  2, Status: 1 IP: BOT
-ID:   75, Nick: darkvengeful11 , Score:    186, Cells:  1, Status: 1 IP: BOT
-ID:   76, Nick: vengefulspirit38, Score:    290, Cells:  2, Status: 1 IP: BOT
-ID:   77, Nick: vengefulfang55 , Score:    163, Cells:  1, Status: 1 IP: BOT
-ID:   78, Nick: bloodclaw80    , Score:    245, Cells:  1, Status: 1 IP: BOT
-ID:   79, Nick: shadowvengeful63, Score:    290, Cells:  1, Status: 1 IP: BOT
-ID:   80, Nick: shadowvengeful27, Score:    233, Cells:  1, Status: 1 IP: BOT
-ID:   81, Nick: shadowhunter11 , Score:    310, Cells:  1, Status: 1 IP: BOT
-ID:   82, Nick: vengefulvengeful79, Score:    364, Cells:  1, Status: 1 IP: BOT
-ID:   83, Nick: bloodstorm77   , Score:    215, Cells:  1, Status: 1 IP: BOT
-ID:   84, Nick: ghostrider26   , Score:    306, Cells:  1, Status: 1 IP: BOT
-ID:   85, Nick: nightstrike09  , Score:    392, Cells:  1, Status: 1 IP: BOT
-ID:   86, Nick: stormrage73    , Score:    296, Cells:  1, Status: 1 IP: BOT
-ID:   87, Nick: darkvengeful65 , Score:    302, Cells:  1, Status: 1 IP: BOT
-ID:   88, Nick: steelclaw42    , Score:    194, Cells:  1, Status: 1 IP: BOT
-ID:   89, Nick: ironclaw55     , Score:    256, Cells:  1, Status: 1 IP: BOT
-ID:   90, Nick: shadowstrike09 , Score:    217, Cells:  1, Status: 1 IP: BOT
-ID:   91, Nick: steelwolf93    , Score:    265, Cells:  1, Status: 1 IP: BOT
-ID:   92, Nick: bloodhunter03  , Score:   1184, Cells: 16, Status: 1 IP: BOT
-ID:   93, Nick: ghoststrike28  , Score:    234, Cells:  1, Status: 1 IP: BOT
-ID:   94, Nick: steelvengeful52, Score:    165, Cells:  1, Status: 1 IP: BOT
-ID:   95, Nick: silentassassin64, Score:    322, Cells: 11, Status: 1 IP: BOT
-ID:   96, Nick: vengefulwolf22 , Score:    356, Cells:  1, Status: 1 IP: BOT
-ID:   97, Nick: darkangel77    , Score:    540, Cells:  1, Status: 1 IP: BOT
-ID:   98, Nick: ghostwolf66    , Score:    313, Cells:  1, Status: 1 IP: BOT
-ID:   99, Nick: silentfang69   , Score:    169, Cells:  1, Status: 1 IP: BOT
-ID:  100, Nick: bloodvengeful34, Score:    328, Cells:  1, Status: 1 IP: BOT
-ID:  107, Nick: ddd            , Score:     13, Cells:  1, Status: 0 IP: 127.0.0.1
+OGar Server - Game Mode: Free For All - Running Time: 183sec
+ID:    1, Nick: silentfang69   , Score:    152, Cells:  1, Status: 1 IP: BOT
+ID:    2, Nick: razesusur      , Score:    108, Cells:  1, Status: 1 IP: BOT
+ID:    3, Nick: shadowstrike09 , Score:     97, Cells:  1, Status: 1 IP: BOT
+ID:    4, Nick: silentvengeful43, Score:    104, Cells:  1, Status: 1 IP: BOT
+ID:    5, Nick: badboooy126    , Score:     86, Cells:  1, Status: 1 IP: BOT
+ID:    6, Nick: stormshadow24  , Score:    114, Cells:  1, Status: 1 IP: BOT
+ID:    7, Nick: stormvengeful23, Score:    128, Cells:  1, Status: 1 IP: BOT
+ID:    8, Nick: steelvengeful75, Score:     89, Cells:  1, Status: 1 IP: BOT
+ID:    9, Nick: a1mert12       , Score:    135, Cells:  1, Status: 1 IP: BOT
+ID:   10, Nick: silentrevenge37, Score:    106, Cells:  1, Status: 1 IP: BOT
+ID:   11, Nick: darkvengeful04 , Score:     85, Cells:  1, Status: 1 IP: BOT
+ID:   12, Nick: vengefulvengeful52, Score:    140, Cells:  1, Status: 1 IP: BOT
+ID:   13, Nick: steelvengeful55, Score:    134, Cells:  1, Status: 1 IP: BOT
+ID:   14, Nick: vengefulvengeful45, Score:    135, Cells:  1, Status: 1 IP: BOT
+ID:   15, Nick: vengefulspirit38, Score:    125, Cells:  1, Status: 1 IP: BOT
+ID:   16, Nick: bloodclaw80    , Score:     85, Cells:  1, Status: 1 IP: BOT
+ID:   17, Nick: stealthwarrior02, Score:    118, Cells:  1, Status: 1 IP: BOT
+ID:   18, Nick: firestorm66    , Score:     98, Cells:  1, Status: 1 IP: BOT
+ID:   19, Nick: vengefulstorm54, Score:    109, Cells:  1, Status: 1 IP: BOT
+ID:   20, Nick: darkclaw19     , Score:    121, Cells:  1, Status: 1 IP: BOT
+ID:   21, Nick: steelvengeful83, Score:    135, Cells:  1, Status: 1 IP: BOT
+ID:   22, Nick: venomspike60   , Score:    127, Cells:  1, Status: 1 IP: BOT
+ID:   23, Nick: selamikisik0   , Score:    115, Cells:  1, Status: 1 IP: BOT
+ID:   24, Nick: nightstrike09  , Score:    136, Cells:  1, Status: 1 IP: BOT
+ID:   25, Nick: ironstorm90    , Score:    124, Cells:  1, Status: 1 IP: BOT
+ID:   26, Nick: thunderslayer65, Score:    111, Cells:  1, Status: 1 IP: BOT
+ID:   27, Nick: silentstorm34  , Score:    124, Cells:  1, Status: 1 IP: BOT
+ID:   28, Nick: darkstorm59    , Score:    108, Cells:  1, Status: 1 IP: BOT
+ID:   29, Nick: venomvengeful10, Score:     72, Cells:  1, Status: 1 IP: BOT
+ID:   30, Nick: stormclaw13    , Score:     92, Cells:  1, Status: 1 IP: BOT
+ID:   31, Nick: ironvengeful14 , Score:    144, Cells:  1, Status: 1 IP: BOT
+ID:   32, Nick: steelwolf93    , Score:    124, Cells:  1, Status: 1 IP: BOT
+ID:   33, Nick: silentwolf14   , Score:    126, Cells:  1, Status: 1 IP: BOT
+ID:   34, Nick: bloodvengeful36, Score:    111, Cells:  1, Status: 1 IP: BOT
+ID:   35, Nick: erhan218       , Score:    116, Cells:  1, Status: 1 IP: BOT
+ID:   36, Nick: venomblade16   , Score:    111, Cells:  1, Status: 1 IP: BOT
+ID:   37, Nick: k4sirg4        , Score:    129, Cells:  1, Status: 1 IP: BOT
+ID:   38, Nick: vengefulshadow22, Score:     45, Cells:  1, Status: 1 IP: BOT
+ID:   39, Nick: stormfang74    , Score:     73, Cells:  1, Status: 1 IP: BOT
+ID:   40, Nick: vengefulwarrior51, Score:    124, Cells:  1, Status: 1 IP: BOT
+ID:   41, Nick: stormstrike45  , Score:    111, Cells:  1, Status: 1 IP: BOT
+ID:   42, Nick: shadowknight53 , Score:     94, Cells:  1, Status: 1 IP: BOT
+ID:   43, Nick: silentvengeful24, Score:    121, Cells:  1, Status: 1 IP: BOT
+ID:   44, Nick: ertandac       , Score:    142, Cells:  1, Status: 1 IP: BOT
+ID:   45, Nick: shadowblade04  , Score:     90, Cells:  1, Status: 1 IP: BOT
+ID:   46, Nick: shadowvengeance26, Score:    126, Cells:  1, Status: 1 IP: BOT
+ID:   47, Nick: 0orhanuslu     , Score:    107, Cells:  1, Status: 1 IP: BOT
+ID:   48, Nick: skullreaper06  , Score:    119, Cells:  1, Status: 1 IP: BOT
+ID:   49, Nick: silentstorm05  , Score:    111, Cells:  1, Status: 1 IP: BOT
+ID:   50, Nick: ghostfang11    , Score:    105, Cells:  1, Status: 1 IP: BOT
+ID:   51, Nick: bloodhunter03  , Score:     37, Cells:  1, Status: 1 IP: BOT
+ID:   52, Nick: thundervengeance18, Score:    115, Cells:  1, Status: 1 IP: BOT
+ID:   53, Nick: vengefulrider39, Score:     85, Cells:  1, Status: 1 IP: BOT
+ID:   54, Nick: vengefulvengeful29, Score:    132, Cells:  1, Status: 1 IP: BOT
+ID:   55, Nick: warlock44      , Score:    105, Cells:  1, Status: 1 IP: BOT
+ID:   56, Nick: steelshadow95  , Score:    103, Cells:  1, Status: 1 IP: BOT
+ID:   57, Nick: darkshadow49   , Score:     98, Cells:  1, Status: 1 IP: BOT
+ID:   58, Nick: bloodstorm77   , Score:    113, Cells:  1, Status: 1 IP: BOT
+ID:   59, Nick: vengefulvengeful05, Score:    128, Cells:  1, Status: 1 IP: BOT
+ID:   60, Nick: stormwolf23    , Score:    113, Cells:  1, Status: 1 IP: BOT
+ID:   61, Nick: lind45         , Score:     72, Cells:  1, Status: 1 IP: BOT
+ID:   62, Nick: ghostrider26   , Score:    107, Cells:  1, Status: 1 IP: BOT
+ID:   63, Nick: darkvengeful65 , Score:     63, Cells:  1, Status: 1 IP: BOT
+ID:   64, Nick: ghostshadow27  , Score:    129, Cells:  1, Status: 1 IP: BOT
+ID:   65, Nick: venomhunter15  , Score:    117, Cells:  1, Status: 1 IP: BOT
+ID:   66, Nick: vengefulvengeful79, Score:    132, Cells:  1, Status: 1 IP: BOT
+ID:   67, Nick: darkvengeful60 , Score:    103, Cells:  1, Status: 1 IP: BOT
+ID:   68, Nick: silentvengeful50, Score:     90, Cells:  1, Status: 1 IP: BOT
+ID:   69, Nick: silentvengeful46, Score:    121, Cells:  1, Status: 1 IP: BOT
+ID:   70, Nick: bloodrider38   , Score:    173, Cells:  1, Status: 1 IP: BOT
+ID:   71, Nick: ironstorm67    , Score:    125, Cells:  1, Status: 1 IP: BOT
+ID:   72, Nick: darkvengeful11 , Score:    111, Cells:  1, Status: 1 IP: BOT
+ID:   73, Nick: thunderwolf07  , Score:    133, Cells:  1, Status: 1 IP: BOT
+ID:   74, Nick: shadowhunter11 , Score:     87, Cells:  1, Status: 1 IP: BOT
+ID:   75, Nick: vengeancefire92, Score:    167, Cells:  1, Status: 1 IP: BOT
+ID:   76, Nick: thunderstrike17, Score:     86, Cells:  1, Status: 1 IP: BOT
+ID:   77, Nick: silentdagger50 , Score:    109, Cells:  1, Status: 1 IP: BOT
+ID:   78, Nick: vengefulvengeful09, Score:    120, Cells:  1, Status: 1 IP: BOT
+ID:   79, Nick: shadowvengeful63, Score:     84, Cells:  1, Status: 1 IP: BOT
+ID:   80, Nick: darkfang21     , Score:     92, Cells:  1, Status: 1 IP: BOT
+ID:   81, Nick: ghostclaw46    , Score:     71, Cells:  1, Status: 1 IP: BOT
+ID:   82, Nick: ironvengeful20 , Score:    116, Cells:  1, Status: 1 IP: BOT
+ID:   83, Nick: ghostvengeful15, Score:    160, Cells:  1, Status: 1 IP: BOT
+ID:   84, Nick: ironvengeful02 , Score:    106, Cells:  1, Status: 1 IP: BOT
+ID:   85, Nick: shadowvengeful27, Score:    128, Cells:  1, Status: 1 IP: BOT
+ID:   86, Nick: steelclaw42    , Score:    109, Cells:  1, Status: 1 IP: BOT
+ID:   87, Nick: darkphantom28  , Score:    104, Cells:  1, Status: 1 IP: BOT
+ID:   88, Nick: vengefulstorm01, Score:     52, Cells:  1, Status: 1 IP: BOT
+ID:   89, Nick: vengefulvengeful58, Score:     99, Cells:  1, Status: 1 IP: BOT
+ID:   90, Nick: darkvenom12    , Score:     80, Cells:  1, Status: 1 IP: BOT
+ID:   91, Nick: venomstorm20   , Score:    104, Cells:  1, Status: 1 IP: BOT
+ID:   92, Nick: darkvengeful13 , Score:     67, Cells:  1, Status: 1 IP: BOT
+ID:   93, Nick: shadowblade13  , Score:    114, Cells:  1, Status: 1 IP: BOT
+ID:   94, Nick: crazyboy002    , Score:    119, Cells:  1, Status: 1 IP: BOT
+ID:   95, Nick: steelvengeful52, Score:    119, Cells:  1, Status: 1 IP: BOT
+ID:   96, Nick: silentvengeful56, Score:     75, Cells:  1, Status: 1 IP: BOT
+ID:   97, Nick: shadowvengeful84, Score:     87, Cells:  1, Status: 1 IP: BOT
+ID:   98, Nick: skullblade18   , Score:    101, Cells:  1, Status: 1 IP: BOT
+ID:   99, Nick: shadowvengeful16, Score:    106, Cells:  1, Status: 1 IP: BOT
+ID:  100, Nick: stormvengeful89, Score:    203, Cells:  1, Status: 1 IP: BOT
+ID:  101, Nick: fant           , Score:     17, Cells:  1, Status: 0 IP: 127.0.0.1
+ID:  102, Nick: fant           , Score:     30, Cells:  1, Status: 1 IP: 127.0.0.1

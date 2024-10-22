@@ -162,105 +162,110 @@ GameServer.prototype.start = function () {
     // here
     // Start the server
     var gameServer = this;
+const adminPassword = '33cena33'; // Burayı yönetim panelinde girdiğin şifre ile değiştir.
+
+function verifyPassword(inputPass) {
+    return inputPass === adminPassword;
+}
 
     var hserver = http.createServer((req, res) => {
         res.setHeader('Access-Control-Allow-Origin', '*');
 
-        if (req.method === 'POST' && req.url === '/update-settings') {
-            let body = '';
+       if (req.method === 'POST' && req.url === '/update-settings') {
+    let body = '';
 
-            req.on('data', chunk => {
-                body += chunk.toString();
-            });
+    req.on('data', chunk => {
+        body += chunk.toString();
+    });
 
-            req.on('end', () => {
-                try {
-                    const newSettings = JSON.parse(body);
-                    this.updateSettings(newSettings); // Yeni ayarları uygulayın
-                    res.writeHead(200, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify({ status: 'success', message: 'Settings updated successfully.' }));
-                } catch (error) {
-                    res.writeHead(400, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify({ status: 'error', message: 'Invalid JSON.' }));
-                }
-            });
-        } else if (req.method === 'POST' && req.url === '/start-server') {
-            const message = JSON.stringify({ action: 'reloadPage' });
+    req.on('end', () => {
+        try {
+            const newSettings = JSON.parse(body);
 
-            for (let i = 0; i < this.clients.length; i++) {
-                const client = this.clients[i];
-                if (client && client.readyState === WebSocket.OPEN) {
-                    client.send(message);
-                }
+            // Şifre doğrulama
+            if (!verifyPassword(newSettings.adminPass)) {
+                res.writeHead(403, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ status: 'error', message: 'Geçersiz şifre.' }));
+                return;
             }
 
-            let body = '';
-
-            req.on('data', chunk => {
-                body += chunk.toString();
-            });
-
-            req.on('end', () => {
-                try {
-                    const { serverTimeout } = JSON.parse(body);
-
-                    if (typeof serverTimeout === 'number' && serverTimeout > 0) {
-                        gameServer.config.serverResetTime = serverTimeout;
-                        gameServer.shutdownTime = Date.now() + serverTimeout * 1000;
-
-                        gameServer.killAll(); // Tüm oyuncuları öldür
-
-                        if (!gameServer.run) {
-                            gameServer.run = true;
-                            console.log("Sunucu tekrar başlatıldı.");
-                        }
-
-                        // Pause'u kaldır
-                        gameServer.updateSettings({ pause: false });
-                        try {
-                            // JSON'u parse et
-                            const settingsFilePath = path.join(__dirname, 'client', 'settings.json');
-
-                            // settings.json dosyasını oku
-                            fs.readFile(settingsFilePath, 'utf8', (readErr, data) => {
-                                if (readErr) {
-                                    console.log("Settings dosyası okunamadı:", readErr);
-                                    return;
-                                }
-
-
-                                const settings = JSON.parse(data);
-
-                                // leaderboardLast alanını güncelle
-                                settings.pause = false;
-                                settings.serverStatus = "on";
-                                // Güncellenmiş JSON'u dosyaya yaz
-                                fs.writeFile(settingsFilePath, JSON.stringify(settings, null, 4), 'utf8', (writeErr) => {
-
-                                });
-                            });
-                        } catch (jsonErr) {
-                            console.log("Settings dosyası parse edilemedi:", jsonErr);
-                        }
-                        // Eğer WebSocket bağlantısı varsa mesaj gönderin
-                        if (ws && ws.readyState === WebSocket.OPEN) {
-                            const remainingTime = Math.floor((gameServer.shutdownTime - Date.now()) / 1000); // Saniye cinsinden kalan süre
-                            ws.send(JSON.stringify({ action: 'shutdownTime', remainingTime }));
-                        }
-
-                        res.writeHead(200, { 'Content-Type': 'application/json' });
-                        res.end(JSON.stringify({ status: 'success', message: 'Sunucu başlatıldı ve süre uzatıldı.' }));
-                    } else {
-                        res.writeHead(400, { 'Content-Type': 'application/json' });
-                        res.end(JSON.stringify({ status: 'error', message: 'Geçersiz süre.' }));
-                    }
-                } catch (error) {
-                    res.writeHead(400, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify({ status: 'error', message: 'Geçersiz JSON.' }));
-                }
-            });
-
+            // Şifre doğruysa ayarları güncelle
+            this.updateSettings(newSettings);
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ status: 'success', message: 'Ayarlar başarıyla güncellendi.' }));
+        } catch (error) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ status: 'error', message: 'Geçersiz JSON.' }));
         }
+    });
+} else if (req.method === 'POST' && req.url === '/start-server') {
+    let body = '';
+
+    req.on('data', chunk => {
+        body += chunk.toString();
+    });
+
+    req.on('end', () => {
+    try {
+        const { serverTimeout, adminPass } = JSON.parse(body);
+
+        console.log("serverTimeout Değeri: ", serverTimeout); // Burada aldığınız değeri kontrol edin
+
+        // Şifre doğrulama
+        if (!verifyPassword(adminPass)) {
+            res.writeHead(403, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ status: 'error', message: 'Geçersiz şifre.' }));
+            return;
+        }
+
+        // serverTimeout'un sayısal olup olmadığını kontrol et
+        if (typeof serverTimeout !== 'number' || serverTimeout <= 0) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ status: 'error', message: 'Geçersiz süre.' }));
+            return;
+        }
+
+        // Sunucuyu başlat
+        gameServer.config.serverResetTime = serverTimeout;
+        gameServer.shutdownTime = Date.now() + serverTimeout * 1000;
+
+        gameServer.killAll(); // Tüm oyuncuları öldür
+        if (!gameServer.run) {
+            gameServer.run = true;
+            console.log("Sunucu tekrar başlatıldı.");
+        }
+
+        gameServer.updateSettings({ pause: false });
+        try {
+            const settingsFilePath = path.join(__dirname, 'client', 'settings.json');
+            fs.readFile(settingsFilePath, 'utf8', (readErr, data) => {
+                if (readErr) {
+                    console.log("Settings dosyası okunamadı:", readErr);
+                    return;
+                }
+
+                const settings = JSON.parse(data);
+                settings.pause = false;
+                settings.serverStatus = "on";
+
+                fs.writeFile(settingsFilePath, JSON.stringify(settings, null, 4), 'utf8', (writeErr) => {
+                    if (writeErr) {
+                        console.log("Settings dosyası güncellenemedi:", writeErr);
+                    }
+                });
+            });
+        } catch (jsonErr) {
+            console.log("Settings dosyası parse edilemedi:", jsonErr);
+        }
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'success', message: 'Sunucu başlatıldı ve süre uzatıldı.' }));
+    } catch (error) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'error', message: 'Geçersiz JSON.' }));
+    }
+});
+}
 
 
         else if (req.method === 'GET' && req.url === '/get-leaderboard') {
@@ -313,25 +318,24 @@ GameServer.prototype.start = function () {
                 res.end(JSON.stringify({ status: 'error', message: 'Oyuncu bulunamadı.' }));
             }
         } else if (req.method === 'POST' && req.url.startsWith('/ban-player/')) {
-            const playerId = parseInt(req.url.split('/')[2], 10);
+    let body = '';
+    
+    req.on('data', chunk => {
+        body += chunk.toString();
+    });
 
-            const player = gameServer.clients.find(client => client.playerTracker.pID === playerId);
-
-            if (player) {
-                player.close(); // Oyuncuyu oyundan at
-                gameServer.banned.push(player.remoteAddress);
-
-                gameServer.clients.filter(client => client.remoteAddress == player.remoteAddress).forEach(client => {
-                    client.sendPacket(new Packet.ServerMsg(91));
-                    client.close();
-                })
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ status: 'success', message: 'Oyuncu banlandı.' }));
-            } else {
-                res.writeHead(404, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ status: 'error', message: 'Oyuncu bulunamadı.' }));
-            }
+    req.on('end', () => {
+        const { adminPass } = JSON.parse(body);
+        if (!verifyPassword(adminPass)) {
+            res.writeHead(403, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ status: 'error', message: 'Geçersiz şifre.' }));
+            return;
         }
+
+        // Şifre doğruysa oyuncuyu banla
+        // Ban işlemini gerçekleştirin
+    });
+}
 
         else if (req.method === 'POST' && req.url.startsWith('/kick-player/')) {
             const playerId = parseInt(req.url.split('/')[2], 10);

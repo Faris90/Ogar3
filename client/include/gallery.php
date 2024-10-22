@@ -1,19 +1,30 @@
 <link href="assets/css/gallery.css" rel="stylesheet">
 <div class="row center">
-    <ul>
-        <!-- Aşağıdaki her bir <li> öğesi, bir PHP döngüsünün üretebileceği statik HTML'yi temsil eder -->
-        <li class="skin" onclick="setSkin(2)" data-dismiss="modal">
-            <div class="circular" style='background-image: url("/skins/doge.png")'></div>
-            <h4 class="title">doge</h4>
-        </li>
-        <li class="skin" onclick="setSkin(1)" data-dismiss="modal">
-            <div class="circular" style='background-image: url("/skins/doge.png")'></div>
-            <h4 class="title">doge</h4>
-        </li>
-        <li class="skin" onclick="$('#nick').val($(this).find('.title').text());" data-dismiss="modal">
-            <div class="circular" style='background-image: url("/skins/doge.png")'></div>
-            <h4 class="title">doge</h4>
-        </li>
-        <!-- İstediğiniz kadar <li> öğesi ekleyebilirsiniz -->
-    </ul>
+    <ul id="skinList">
+            
+        </ul>
 </div>
+ <script>
+        // JSON dosyasını çek ve işle
+        fetch('skinlist.json')
+            .then(response => response.json())
+            .then(data => {
+                const skinList = document.getElementById('skinList');
+                
+                // Her bir skin için li oluştur ve ekle
+                data.skins.forEach(skin => {
+                    const li = document.createElement('li');
+                    li.className = 'skin';
+                    li.setAttribute('onclick', `setSkin(${skin.id})`);
+                    li.setAttribute('data-dismiss', 'modal');
+                    
+                    li.innerHTML = `
+                        <div class="circular" style='background-image: url("${skin.image}")'></div>
+                        <h4 class="title">${skin.name}</h4>
+                    `;
+
+                    skinList.appendChild(li);
+                });
+            })
+            .catch(error => console.error('Error loading skin list:', error));
+    </script>
