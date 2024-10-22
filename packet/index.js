@@ -9,8 +9,6 @@ module.exports = {
     Chat: require('./Chat'),
     BroadCast: require('./BroadCast.js'),
     ServerInfo: require('./ServerInfo.js'),
-    ServerMsg: require('./ServerMsg.js'),
-	Prize: require('./Prize.js'),
-	UpdateSkin: require('./UpdateSkin.js'),
+    ServerMsg: require('./ServerMsg.js')
 };
 

@@ -1,13 +1,13 @@
 var Cell = require('../entity/Cell');
 function Mode() {
     this.ID = -1;
-
+	
     this.name = "Blank";
     this.decayMod = 1.0; // Modifier for decay rate (Multiplier)
     this.packetLB = 49; // Packet id for leaderboard packet (48 = Text List, 49 = List, 50 = Pie chart)
     this.haveTeams = false; // True = gamemode uses teams, false = gamemode doesnt use teams
  this.nodesMother = [];
-    this.tickMother = 0;
+    this.tickMother = 0; 
     this.tickMotherS = 0;
 
     // Config
@@ -16,7 +16,7 @@ function Mode() {
     this.motherSpawnInterval = 100; // How many ticks it takes to spawn another mother cell - Currently 5 seconds
     this.motherMinAmount = 5;
     this.specByLeaderboard = false; // false = spectate from player list instead of leaderboard
-
+	
 }
 
 module.exports = Mode;
@@ -29,7 +29,7 @@ Mode.prototype.onServerInit = function(gameServer) {
 };
 
 Mode.prototype.onTick = function(gameServer) {
-    // Called on every game tick
+    // Called on every game tick 
 };
 Mode.prototype.updateViruses = function(gameServer) {
     for (var i in gameServer.nodesVirus) {
@@ -41,11 +41,11 @@ Mode.prototype.updateViruses = function(gameServer) {
     }
 }
 Mode.prototype.onTick = function(gameServer) {
-    // Called on every game tick
-
+    // Called on every game tick 
+	
 };
 Mode.prototype.virusTick = function(gameServer) {
-    // Called on every game tick
+    // Called on every game tick 
 	    // virus Cell updates
     if (this.tickvirus >= this.virusUpdateInterval) {
         this.updateViruses(gameServer);
@@ -120,7 +120,7 @@ Mode.prototype.spawnMotherCell = function(gameServer) {
 
         // Spawn if no cells are colliding
         var m = new MotherCell(gameServer.getNextNodeId(), null, pos, this.motherCellMass);
-        gameServer.addNode(m);
+        gameServer.addNode(m); 
     }
 };
 // new cell
@@ -150,7 +150,7 @@ MotherCell.prototype.checkEat = function(gameServer) {
         }
 
         // Calculations
-        var len = r - (check.getSize() / 2) >> 0;
+        var len = r - (check.getSize() / 2) >> 0; 
         if ((this.abs(this.position.x - check.position.x) < len) && (this.abs(this.position.y - check.position.y) < len)) {
             // A second, more precise check
             var xs = Math.pow(check.position.x - this.position.x, 2);
@@ -193,7 +193,7 @@ MotherCell.prototype.update = function(gameServer) {
 			this.mass--;
         }
         // Incrementers
-
+        
         i++;
     }
 }

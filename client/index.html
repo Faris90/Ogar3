@@ -1,427 +1,159 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html>
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description"
-        content="Cenavar bir Cenabet ürünüdür, cenavar'da katıldığınız etkinlikler ile freespinler ve özel hediyeler kazanabilirsiniz!">
-    <meta name="keywords" content="Cenavar, cenabet, cenabet etkinlik, cenabet agar.io,">
+    <meta name="description" content="Eat cells smaller than you and don't get eaten by the bigger ones, as an MMO">
+    <meta name="keywords" content="agario, agar, io, cell, cells, virus, bacteria, blob, game, games, web game, html5, fun, flash">
     <meta name="robots" content="index, follow">
-    <meta name="viewport"
-        content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <title>Cenavar</title>
+    <title>Ogar3</title>
 
     <link id="favicon" rel="icon" type="image/png" href="assets/img/favicon.png" />
     <link href='https://fonts.googleapis.com/css?family=Ubuntu:700' rel='stylesheet' type='text/css'>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/index.css" rel="stylesheet">
+
+    <!--<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>-->
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/log.js"></script>
-    <script src="assets/js/main_out.js?v=1"></script>
-    <script>
-        // settings.json dosyasını yükleyin
-        fetch('settings.json')
-            .then(response => response.json())
-            .then(settingsData => {
-                if (settingsData.serverStatus === "offx") {
-                    window.location.href = "maintenance.html";
-                }
+    <script src="assets/js/vector.js"></script>
+    <script src="assets/js/main_out.js"></script>
 
-                const leaderboardButtonSection = document.querySelector('.bottom-section .lead');
-
-                if (!settingsData.leaderboardLast) {
-                    leaderboardButtonSection.style.display = 'none';
-
-                }
-
-                const girissection = document.querySelector('.giris');
-                const kurallarsection = document.getElementById('kurallar'); // ID ile doğru şekilde seçildiğinden emin olun
-
-                if (settingsData.serverStatus === 'off') {
-                    girissection.style.display = 'none';
-                    kurallarsection.style.display = 'none'; // Giriş bölümünü gizlerken aynı anda kuralları da gizleyin
-
-                }
-
-                const duyuruxd = settingsData.duyurutext;
-                document.getElementById('duyurux').innerText = duyuruxd;
-                const tablotext = settingsData.tablotext;
-                document.getElementById('winnerButtonText').innerText = tablotext;
-                document.getElementById('winnersModalLabel').innerText = `${ tablotext }`;
-
-                return fetch(`/leaderboard/${ settingsData.leaderboardLast }`);
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Kazananlar dosyası yüklenemedi.');
-                }
-                return response.json();
-            })
-            .then(winnersData => {
-                const winnersTable = document.getElementById('winnersList');
-                winnersData.forEach(winner => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `<td>${ winner.rank }</td><td>${ winner.name }</td><td>${ winner.score }</td>`;
-                    winnersTable.appendChild(row);
-                });
-            })
-            .catch(error => {
-                console.error("Dosya yüklenirken hata oluştu:", error);
-            });
-
-        // Arama fonksiyonu
-        function searchTable() {
-            const input = document.getElementById("searchInput");
-            const filter = input.value.toLowerCase();
-            const table = document.getElementById("winnersTable");
-            const tr = table.getElementsByTagName("tr");
-
-            for (let i = 1; i < tr.length; i++) {
-                const td = tr[i].getElementsByTagName("td")[1]; // Sadece isim sütununu arar
-                if (td) {
-                    const txtValue = td.textContent || td.innerText;
-                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
-                }
-            }
-        }
-
-
-    </script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-
-    </script>
     <style>
         body {
-            height: 10000vh !important;
-            position: static !important;
-            overscroll-behavior: none;
+          height: 10000vh !important;
+          position: static !important;
+          overscroll-behavior: none;
         }
-
+    
         flutter-view {
-            position: fixed !important;
-            max-width: 100vw !important;
-            max-height: 100vh !important;
+          position: fixed !important;
+          max-width: 100vw !important;
+          max-height: 100vh !important;
         }
-
+    
+        /* Safari-specific CSS */
         @supports (-webkit-touch-callout: inherit) {
-            body {
-                height: 1vh !important;
-            }
+          body {
+            height: 1vh !important;
+          }
         }
-
-        #helloDialog {
-            background-color: #2e2e2e;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
-            max-width: 550px;
-            margin: 0 auto;
-            color: #fff;
-            display: flex;
-            /* Eklendi */
-            flex-direction: column;
-            /* Eklendi */
-            align-items: center;
-            /* Eklendi */
-            text-align: center;
-            /* Eklendi */
-        }
-
-        #helloDialog h6 {
-            color: #fff;
-            font-weight: bold;
-        }
-
-        #helloDialog .form-control {
-            border-radius: 5px;
-            background-color: #1c1c1c;
-            color: #fff;
-            border: 1px solid #ec3e19;
-        }
-
-        #helloDialog .btn-primary {
-            background-color: #ec3e19;
-            border-color: #ec3e19;
-            width: 100%;
-        }
-
-        #helloDialog .btn-danger {
-            background-color: #000;
-            border-color: #ec3e19;
-            color: #ec3e19;
-        }
-
-        #footer a {
-            color: #ec3e19;
-        }
-
-        #rules {
-            background-color: #1c1c1c;
-            border-radius: 10px;
-            padding: 10px;
-            margin-top: 15px;
-            color: #ec3e19;
-        }
-
-        #rules h4 {
-            color: #fff;
-        }
-
-        #kurallar {
-            background-color: #1c1c1c;
-            border-radius: 10px;
-            padding: 10px;
-            max-width: 300px;
-            margin-top: 15px;
-            color: #ec3e19;
-            flex-direction: column;
-            /* Eklendi */
-            align-items: center;
-            /* Eklendi */
-            text-align: center;
-            /* Eklendi */
-        }
-
-        #kurallar h4 {
-            color: #fff;
-        }
-
-        #kurallar ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        #kurallar li {
-            padding: 5px 0;
-            border-bottom: 1px solid #ff0000;
-        }
-
-        .dialog {
-            background-color: #1c1c1c;
-            padding: 5px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
-            color: #fff;
-            margin: 20px auto;
-            max-width: 450px;
-        }
-
-        .bottom-section {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        #footer {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        @media screen and (max-width: 768px) {
-            .bottom-section {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            #helloDialog,
-            #rules,
-            #kurallar,
-            #footer {
-                max-width: 100%;
-                margin: 10px;
-            }
-        }
-    </style>
+      </style>
 </head>
 
 <body>
-    <div class="modal fade" id="winnersModal" tabindex="-1" role="dialog" aria-labelledby="winnersModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title" id="winnersModalLabel"></h4>
-                </div>
-                <div class="modal-body">
-                    <!-- İsim ile arama yapma alanı -->
-                    <input type="text" id="searchInput" class="form-control" placeholder="İsim ile ara..."
-                        onkeyup="searchTable()">
-                    <br>
-                    <!-- Kazananlar tablosu -->
-                    <div class="table-responsive">
-                        <table class="table table-striped table-dark" id="winnersTable">
-                            <thead>
-                                <tr>
-                                    <th>Sıra</th>
-                                    <th>İsim</th>
-                                    <th>Puan</th>
-                                </tr>
-                            </thead>
-                            <tbody id="winnersList">
-                                <!-- Kazananlar listesi burada gösterilecek -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     <div class="modal fade" id="inPageModal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 id="inPageModalTitle" class="modal-title">Yüklenemedi</h4>
+                    <h4 id="inPageModalTitle" class="modal-title">Failed to Load</h4>
                 </div>
                 <div id="inPageModalBody" class="modal-body">
-                    <p>Yüklenemedi! Lütfen bağlantınızı kontrol edin!</p>
+                    <p>Failed to load. Please check your connection!</p>
                     <div class="center">
                         <div class="loader"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
-
     <div id="overlays">
-        <div id="helloDialog" class="dialog">
-
+        <div id="helloDialog">
             <form role="form">
                 <div class="form-group">
-                    <center><img src="assets/img/logo-2.png" height="75px" alt="cenavar logo"></center>
-                    <h6 id="motd">bir <b>cenabet</b> ürünüdür.</h6>
+                    <h2 id="title">Ogar3</h2>
+					<h6 id="motd">Based on Ogarserv &amp Cigar!</h6>
                 </div>
-                <div class="giris">
-                    <div class="form-group">
-                        <input id="nick" class="form-control save" data-box-id="0" placeholder="Nick" maxlength="10" />
+
+                <div class="form-group">
+                    <input id="nick" class="form-control save" data-box-id="0" placeholder="Nick" maxlength="15" />
+                   <!-- <select id="gamemode" class="form-control" onchange="setserver($(this).val());" required>
+                        <option selected disabled>Gamemode:</option>
+                        <option value="">Server</option>
+                    </select>-->
+                    <br clear="both" />
+                </div>
+
+                <div class="form-group">
+                    <div class="mb-10">
+                        <!--<a data-toggle="modal" data-target="#inPageModal" onclick="openSkinsList();" class="btn-primary btn btn-info" role="button" style="width: 100%;">Skins Gallery</a>-->
+                    </div>
+
+                    <button type="submit" id="play-btn" onclick="setNick(document.getElementById('nick').value); return false;" class="btn btn-play btn-primary btn-needs-server">Play</button>
+                    <button onclick="$('#settings, #instructions').toggle(); return false;" class="btn btn-info btn-settings" id="settings-btn"><i class="glyphicon glyphicon-cog"></i></button>
+                    <br clear="both" />
+                </div>
+
+                <div id="settings" class="checkbox" style="display:none;">
+                    <div class="form-group" id="mainform">
+                        <button id="spectate-btn" onclick="spectate(); return false;" style="width: 100%" class="btn btn-warning btn-spectate btn-needs-server">Spectate
+                        </button>
                         <br clear="both" />
                     </div>
-                    <div class="form-group">
-                     <div class="mb-10">
-                            <a data-toggle="modal" data-target="#inPageModal" onclick="openSkinsList();"
-                                class="btn-primary btn btn-danger" role="button" style="width: 100%;">Skin Seç!</a>
-                        </div>
-                        <button type="submit" id="play-btn"
-                            onclick="setNick(document.getElementById('nick').value); return false;"
-                            class="btn btn-play btn-primary btn-needs-server">OYNA!</button>
-                        <button onclick="$('#settings, #instructions').toggle(); return false;"
-                            class="btn btn-danger btn-settings" id="settings-btn"><i
-                                class="glyphicon glyphicon-cog"></i></button>
-                        <br clear="both" />
+                    <div style="margin: 6px;">
+                        <label>
+                            <input type="checkbox" class="save" data-box-id="1" onchange="setSkins(!$(this).is(':checked'));"> No skins</label>
+                        <label>
+                            <input type="checkbox" class="save" data-box-id="2" onchange="setNames(!$(this).is(':checked'));"> No names</label>
+                        <label>
+                            <input type="checkbox" class="save" data-box-id="3" onchange="setDarkTheme($(this).is(':checked'));"> Dark Theme</label>
+                        <label>
+                            <input type="checkbox" class="save" data-box-id="4" onchange="setColors($(this).is(':checked'));"> No colors</label>
+                        <label>
+                            <input type="checkbox" class="save" data-box-id="5" onchange="setShowMass($(this).is(':checked'));"> Show mass</label>
+                        <label>
+                            <input type="checkbox" class="save" data-box-id="6" onchange="setSmooth($(this).is(':checked'));"> Smooth Render</label>
+                        <label>
+                            <input type="checkbox" class="save" data-box-id="7" onchange="setChatHide($(this).is(':checked'));"> Hide Chat</label>
                     </div>
-                    <div id="settings" class="checkbox" style="display:none;">
-                        <div class="form-group" id="mainform">
-                            <button id="spectate-btn" onclick="spectate(); return false;" style="width: 100%"
-                                class="btn btn-warning btn-spectate btn-needs-server">İzleyici
-                            </button>
-                            <br clear="both" />
-                        </div>
-                        <div style="margin: 6px;">
-                           <!-- <label><input type="checkbox" class="save" data-box-id="1"
-                                    onchange="setSkins(!$(this).is(':checked'));"> Skinleri Gizle</label> -->
-
-                            <label><input type="checkbox" id="darktm" class="save" data-box-id="3"
-                                    onchange="setDarkTheme($(this).is(':checked'));"> Karanlık Tema</label>
-
-                            <label><input type="checkbox" id="showms" class="save" data-box-id="5"
-                                    onchange="setShowMass($(this).is(':checked'));"> Puanı Göster</label>
-                            <label><input type="checkbox" class="save" data-box-id="6"
-                                    onchange="setSmooth($(this).is(':checked'));"> Smooth Render</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="bottom-section">
-
-                    <center>
-                        <h4 id="duyurux"></h4>
-                        <div id="kurallar" class="dialog">
-                            <h4>Kurallar</h4>
-                            <ul>
-							    <li>Kullanıcı Adı yerine Cenabet Kullanıcı adınızı giriniz.</li>
-                                <li>Öldüğünde veya çıktığında puanınız sıfırlanır.</li>
-                                <li>Süre bitiminde puan hesaplanır süreden önce çıkar veya ölürseniz puanınız sıfırlanır.
-                                </li>
-
-                            </ul>
-                        </div>
-                        <div class="bottom-section">
-                            <div class="dialog lead">
-                                <h4 id="winnerButtonText"></h4>
-                                <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#winnersModal">
-                                    Sıralamayı Gör
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Kazananlar Modali -->
-
-
                 </div>
             </form>
-            <div id="footer" class="dialog">
-                <a href="https://cenalt.com/guncelgiris" class="text-muted">Cenabet</a> - <a target="_blank"
-                    href="https://cenavar.com" class="text-muted" target="_blank">Cenavar</a>
+
+            <div id="instructions">
+                <hr/>
+                <center>
+                    <span class="text-muted">
+                        Move your mouse to control your cell<br/>
+                        Press <b>Space</b> to split<br/>
+                        Press <b>W</b> to eject some mass<br/>
+                    </span>
+                </center>
             </div>
+
+            <hr />
+            <div id="footer">
+				<h5>Credit to</h5>
+                <a href="https://github.com/CigarProject/Cigar" class="text-muted">GitHub/CigarProject</a><br>
+				<a href="https://github.com/JaraLowell/Ogarserv" class="text-muted">GitHub/Ogarserv</a><br>
+				<a href="https://github.com/Faris90/Ogar3" class="text-muted">GitHub/Ogar3</a>
+            </div>
+
         </div>
-
-
-
     </div>
-
 
     <div id="connecting">
-        <div
-            style="width: 350px; background-color: #000000;font-text:#ffffff; margin: 100px auto; border-radius: 15px; padding: 5px 15px 5px 15px;">
-            <h2>Etkinlik Bitti</h2>
-            <p>Eğer kazananlar gözükmüyor ise sayfayı yenileyerek kazananları görebilirsiniz.</p>
+        <div style="width: 350px; background-color: #FFFFFF; margin: 100px auto; border-radius: 15px; padding: 5px 15px 5px 15px;">
+            <h2>Connecting</h2>
+            <p> If you cannot connect to the servers, check if you have some anti virus or firewall blocking the connection.</p>
         </div>
     </div>
 
-
     <canvas id="canvas" width="800" height="600"></canvas>
-    <input type="text" id="chat_textbox" placeholder="Press enter to chat!" maxlength="200" style="display:none;" />
+    <input type="text" id="chat_textbox" placeholder="Press enter to chat!" maxlength="200" />
     <div style="font-family:'Ubuntu'">&nbsp;</div>
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script>
-        var touchDevice = (navigator.maxTouchPoints || 'ontouchstart' in document.documentElement);
-
         window.scroll(0, window.document.body.scrollHeight);
-
-        setTimeout(function () {
-            if (!touchDevice) {
-                document.getElementById('nipple_container').style.display = 'none';
-            }
-        }, 500);
-        $(document).ready(function () {
-            $('#darktm').click();
-
-            $('#showms').click();
-
-        });
-    </script>
-
+      </script>
 </body>
-
 </html>
